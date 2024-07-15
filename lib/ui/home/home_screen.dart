@@ -7,6 +7,9 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/ui/utils/colors.dart';
+import 'package:swfl/ui/utils/icons_constants.dart';
+import 'package:swfl/ui/utils/loader_utils.dart';
+import 'package:swfl/ui/utils/utils.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -61,7 +64,7 @@ class HomeScreen extends ConsumerWidget {
                   height: 10,
                 ),
                 Text(
-                  "$currencyRupee 2100000000.00".formatNumberWithComma(),
+                  "${currencyFormat.format(21000000.00)}",
                   style: TextStyle(
                       shadows: const [
                         Shadow(color: Colors.black, blurRadius: 2.0),
@@ -76,7 +79,7 @@ class HomeScreen extends ConsumerWidget {
           SizedBox(
             height: 10,
           ),
-          homeLayoutWidget(Iconsax.framer_outline, 'Commodity Wise \nLoan', '6',
+          homeLayoutWidget(null, 'Commodity Wise \nLoan', '6',
               callback: () {
             showModalBottomSheet(
                 isScrollControlled: true,
@@ -89,25 +92,53 @@ class HomeScreen extends ConsumerWidget {
                 builder: (context) => ListView(
                       padding: const Pad(all: 10),
                       children: [
+                        Container(
+                          padding: Pad(all: 10),
+                          color: ColorsConstant.secondColorDark,
+                          child: 
                         RowSuper(fill: true, children: [
                           Text(
                             'Commodity',
+                          
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: Adaptive.sp(16)),
+                                  fontSize: Adaptive.sp(16),
+                                  color: Colors.white,
+                                  shadows: const [
+                                    Shadow(color: Colors.black, blurRadius: 1),
+                                    Shadow(color: Colors.white, blurRadius: 1)
+                                  ]),
                           ),
                           Text('Amount'.formatNumberWithComma(),
                               textAlign: TextAlign.end,
                               style: TextStyle(
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: Adaptive.sp(16)))
-                        ]),
-                        ListView.builder(
+                                  fontSize: Adaptive.sp(16),
+                                  shadows: const [
+                                    Shadow(color: Colors.black, blurRadius: 1),
+                                    Shadow(color: Colors.white, blurRadius: 1)
+                                  ]),
+                            )
+                          ]),
+                        ),
+                        ListView.separated(
+                            separatorBuilder: (context, index) => Container(
+                                  color: Colors.black,
+                                  height: 1,
+                                ),
                             itemCount: 50,
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) =>
-                                RowSuper(fill: true, children: [
+                                Container(
+                                  padding: Pad(all: 10),
+                                  color: index % 2 == 0
+                                      ? ColorsConstant.primaryColor
+                                          .withOpacity(0.1)
+                                      : ColorsConstant.secondColorSuperDark
+                                          .withOpacity(0.1),
+                                  child: RowSuper(fill: true, children: [
                                   Text(
                                     'Barley',
                                     style: TextStyle(
@@ -119,18 +150,21 @@ class HomeScreen extends ConsumerWidget {
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: Adaptive.sp(16)))
-                                ]))
+                                  ]),
+                                ))
                       ],
                     ));
-          }),
+          }, imagePath: IconsConstant.loan),
           SizedBox(
             height: 10,
           ),
-          homeLayoutWidget(Iconsax.money_remove_outline, 'Unfunded WR', '32'),
+          homeLayoutWidget(null, 'Unfunded WR', '32',
+              imagePath: IconsConstant.unfunded),
           SizedBox(
             height: 10,
           ),
-          homeLayoutWidget(LineAwesome.business_time_solid, 'Due Loans', '0'),
+          homeLayoutWidget(null, 'Due Loans', '0',
+              imagePath: IconsConstant.dueLoan),
           SizedBox(
             height: 10,
           ),
@@ -141,8 +175,8 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  homeLayoutWidget(IconData iconData, String text, String number,
-          {VoidCallback? callback}) =>
+  homeLayoutWidget(IconData? iconData, String text, String number,
+          {VoidCallback? callback, String? imagePath}) =>
       InkWell(
         onTap: callback,
         child: Card(
@@ -168,7 +202,13 @@ class HomeScreen extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(10)),
               child: Padding(
                 padding: Pad(all: 25),
-                child: Icon(
+                child: iconData == null
+                    ? Image.asset(
+                        imagePath ?? "",
+                        fit: BoxFit.fill,
+                        color: Colors.white,
+                      )
+                    : Icon(
                   iconData,
                   color: Colors.white,
                 ),
