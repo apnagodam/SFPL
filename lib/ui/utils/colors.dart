@@ -5,4 +5,6 @@ class ColorsConstant {
   static const Color secondaryColor = Color(0xfff4bb23);
   static const Color secondColorDark = Color(0xfff4bb23);
   static const Color secondColorSuperDark = Color.fromARGB(255, 244, 183, 15);
+  static const Color secondColorUltraDark = Color.fromARGB(255, 193, 142, 6);
+
 }

@@ -1,13 +1,16 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/ui/utils/colors.dart';
 
+var currencyFormat =
+    NumberFormat.currency(locale: 'HI', symbol: '\u{20B9}', decimalDigits: 2);
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -22,7 +25,7 @@ class HomeScreen extends ConsumerWidget {
             height: Adaptive.sh(2),
           ),
           Container(
-              width: context.width(),
+              width: MediaQuery.of(context).size.width,
               margin: const Pad(all: 10),
               decoration: BoxDecoration(
                   border: Border.all(
@@ -54,9 +57,10 @@ class HomeScreen extends ConsumerWidget {
                         Shadow(color: Colors.black, blurRadius: 2.0),
                         Shadow(color: Colors.black, blurRadius: 2.0)
                       ],
+                    color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: Adaptive.sp(18),
-                      color: Colors.white),
+                      ),
                 ),
                 const SizedBox(
                   height: 10,
@@ -77,97 +81,10 @@ class HomeScreen extends ConsumerWidget {
           SizedBox(
             height: 10,
           ),
-          homeLayoutWidget(null, 'Commodity Wise \nLoan', '6',
-              callback: () {
-            showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                backgroundColor: Colors.white,
-                showDragHandle: true,
-                useSafeArea: true,
-                shape: BeveledRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                builder: (context) => ListView(
-                      padding: const Pad(all: 10),
-                      children: [
-                        Container(
-                          padding: Pad(all: 10),
-                          color: ColorsConstant.secondColorDark,
-                          child: 
-                        RowSuper(fill: true, children: [
-                          Text(
-                            'Commodity',
-                          
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                  fontSize: Adaptive.sp(16),
-                                  color: Colors.white,
-                                  shadows: const [
-                                    Shadow(color: Colors.black, blurRadius: 1),
-                                    Shadow(color: Colors.white, blurRadius: 1)
-                                  ]),
-                          ),
-                          Text('Amount'.formatNumberWithComma(),
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Adaptive.sp(16),
-                                  shadows: const [
-                                    Shadow(color: Colors.black, blurRadius: 1),
-                                    Shadow(color: Colors.white, blurRadius: 1)
-                                  ]),
-                            )
-                          ]),
-                        ),
-                        ListView.separated(
-                            separatorBuilder: (context, index) => Container(
-                                  color: Colors.black,
-                                  height: 1,
-                                ),
-                            itemCount: 50,
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) =>
-                                Container(
-                                  padding: Pad(all: 10),
-                                  color: index % 2 == 0
-                                      ? ColorsConstant.primaryColor
-                                          .withOpacity(0.1)
-                                      : ColorsConstant.secondColorSuperDark
-                                          .withOpacity(0.1),
-                                  child: RowSuper(fill: true, children: [
-                                  Text(
-                                    'Barley',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: Adaptive.sp(16)),
-                                  ),
-                                  Text('2000000'.formatNumberWithComma(),
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: Adaptive.sp(16)))
-                                  ]),
-                                ))
-                      ],
-                    ));
-          }, imagePath: IconsConstant.loan),
-          SizedBox(
-            height: 10,
-          ),
-          homeLayoutWidget(null, 'Unfunded WR', '32',
-              imagePath: IconsConstant.unfunded),
-          SizedBox(
-            height: 10,
-          ),
-          homeLayoutWidget(null, 'Due Loans', '0',
-              imagePath: IconsConstant.dueLoan),
-          SizedBox(
-            height: 10,
-          ),
-          homeLayoutWidget(
-              LineAwesome.business_time_solid, 'M2M Shortfalls', '0')
+          homeLayoutWidget(LucideIcons.workflow, 'M2M Shortfalls', '0'),
+          homeLayoutWidget(LucideIcons.workflow, 'M2M Shortfalls', '0'),
+          homeLayoutWidget(LucideIcons.workflow, 'M2M Shortfalls', '0'),
+          homeLayoutWidget(LucideIcons.workflow, 'M2M Shortfalls', '0')
         ],
       )),
     );
@@ -185,9 +102,10 @@ class HomeScreen extends ConsumerWidget {
               side: BorderSide(color: ColorsConstant.secondColorSuperDark),
               borderRadius: BorderRadius.circular(10)),
           surfaceTintColor: Colors.white,
-          child: Row(children: [
+          child: RowSuper(fill: true, children: [
             Container(
               height: Adaptive.sw(15),
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                   gradient: LinearGradient(
                       begin: Alignment.topLeft,
@@ -199,7 +117,7 @@ class HomeScreen extends ConsumerWidget {
                   color: ColorsConstant.primaryColor,
                   borderRadius: BorderRadius.circular(10)),
               child: Padding(
-                padding: Pad(all: 25),
+                padding: Pad(all: 20),
                 child: iconData == null
                     ? Image.asset(
                         imagePath ?? "",
@@ -207,24 +125,22 @@ class HomeScreen extends ConsumerWidget {
                         color: Colors.white,
                       )
                     : Icon(
-                  iconData,
-                  color: Colors.white,
-                ),
+                        iconData,
+                        color: Colors.white,
+                      ),
               ),
             ),
             SizedBox(
               width: 10,
             ),
-            Expanded(
-                flex: 1,
-                child: Text(
-                  text,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: Adaptive.sp(19)),
-                )),
+            Text(
+              text,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: Adaptive.sp(19)),
+            ),
             Container(
+              padding: Pad(all: 10),
               height: Adaptive.sw(15),
-              width: 80,
               decoration: BoxDecoration(
                   color: ColorsConstant.primaryColor,
                   borderRadius: BorderRadius.only(

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:swfl/ui/auth/login_screen.dart';
 import 'package:swfl/ui/utils/colors.dart';
+import 'package:swfl/ui/utils/routes_strings.dart';
 
 class OnBoardingScreen extends ConsumerWidget {
   const OnBoardingScreen({super.key});
@@ -17,7 +17,7 @@ class OnBoardingScreen extends ConsumerWidget {
           hasSkip: true,
           skipTextButton: TextButton(
               onPressed: () {
-                LoginScreen().launch(context);
+                context.go(RoutesStrings.login);
               },
               child: Text(
                 'Skip',
@@ -38,7 +38,7 @@ class OnBoardingScreen extends ConsumerWidget {
             )
           ],
           onFinish: () {
-            LoginScreen().launch(context);
+            context.go(RoutesStrings.login);
           },
           finishButtonText: "Login",
           speed: 0.3,

@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:swfl/ui/home/dashboard_screen.dart';
+import 'package:swfl/Domain/Dio/DioProvider.dart';
 import 'package:swfl/ui/utils/colors.dart';
+import 'package:swfl/ui/utils/debouncer.dart';
+import 'package:swfl/ui/utils/routes_strings.dart';
 
-class VerifyOtpScreen extends ConsumerWidget {
-  const VerifyOtpScreen({super.key});
+import '../../Data/SharedPrefs/SharedUtility.dart';
+import '../../Domain/AuthenticationService/AuthenticationService.dart';
+
+class VerifyOtpScreen extends ConsumerStatefulWidget {
+  const VerifyOtpScreen({super.key, required this.panCard});
+
+  final String panCard;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<VerifyOtpScreen> createState() => _VerifyOtpScreenState();
+}
+
+class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
       child: Padding(
@@ -52,7 +64,7 @@ class VerifyOtpScreen extends ConsumerWidget {
             ),
             Center(
               child: Text(
-                "+91-9001155788",
+                "${widget.panCard}",
                 style: TextStyle(
                     color: ColorsConstant.primaryColor,
                     fontWeight: FontWeight.bold,
@@ -84,33 +96,49 @@ class VerifyOtpScreen extends ConsumerWidget {
                           color: ColorsConstant.primaryColor.withOpacity(0.1),
                           border: Border.all(
                               color: ColorsConstant.secondColorDark))),
-                  onCompleted: (pin) => print(pin),
+                  onCompleted: (pin) {
+                    if (pin.length == 6) {
+                      Debouncer(delay: const Duration(milliseconds: 500))
+                          .call(() {
+                        ref
+                            .watch(verifyOtpProvider(
+                                    panCard: widget.panCard, otp: pin)
+                                .future)
+                            .then((value) {
+                          if (value.status.toString() == "1") {
+
+                            context.go(RoutesStrings.dashboard);
+                          }
+                        });
+                      });
+                    }
+                  },
                 ),
               ),
             ),
             const SizedBox(
               height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: ElevatedButton(
-                  onPressed: () {
-                    DashboardScreen().launch(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: ColorsConstant.secondColorDark,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8))),
-                  child: Text(
-                    "Verify Otp",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
-                  ),
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 10),
+            //   child: SizedBox(
+            //     width: MediaQuery.of(context).size.width,
+            //     child: ElevatedButton(
+            //       onPressed: () {
+            //         context.go(RoutesStrings.dashboard);
+            //       },
+            //       style: ElevatedButton.styleFrom(
+            //           backgroundColor: ColorsConstant.secondColorDark,
+            //           shape: RoundedRectangleBorder(
+            //               borderRadius: BorderRadius.circular(8))),
+            //       child: Text(
+            //         "Verify Otp",
+            //         style: TextStyle(
+            //             fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Center(
                 child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -123,7 +151,12 @@ class VerifyOtpScreen extends ConsumerWidget {
                       fontSize: Adaptive.sp(16)),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    ref
+                        .watch(loginProvider(panNumber: widget.panCard).future)
+                        .then((value) {})
+                        .onError((e, s) {});
+                  },
                   child: Text(
                     "Resend OTP",
                     style: TextStyle(
