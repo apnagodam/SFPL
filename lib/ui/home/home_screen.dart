@@ -7,9 +7,7 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/ui/utils/colors.dart';
-import 'package:swfl/ui/utils/icons_constants.dart';
-import 'package:swfl/ui/utils/loader_utils.dart';
-import 'package:swfl/ui/utils/utils.dart';
+
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
