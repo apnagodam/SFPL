@@ -16,4 +16,6 @@ class RoutesStrings {
   static const moneyRequests = 'moneyRequests';
 
   static const withdrawMoney = 'withdrawMoney';
+  static const withdrawRequests = 'withdrawRequests';
+
 }

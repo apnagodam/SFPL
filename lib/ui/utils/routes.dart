@@ -12,6 +12,7 @@ import 'package:swfl/ui/home/DashboardMenu/SanctionedAmount/SanctionedAmountScre
 import 'package:swfl/ui/home/DashboardMenu/Wallet/AddMoney.dart';
 import 'package:swfl/ui/home/DashboardMenu/Wallet/MoneyRequest.dart';
 import 'package:swfl/ui/home/DashboardMenu/Wallet/WithdrawMoney.dart';
+import 'package:swfl/ui/home/DashboardMenu/Wallet/WithdrawRequests.dart';
 import 'package:swfl/ui/home/dashboard_screen.dart';
 import 'package:swfl/ui/profile/ProfileScreen.dart';
 import 'package:swfl/ui/splash/onboarding_screen.dart';
@@ -70,6 +71,11 @@ GoRouter goRouter(GoRouterRef ref) {
                 path: RoutesStrings.withdrawMoney,
                 name: RoutesStrings.withdrawMoney,
                 builder: (context, state) => const Withdrawmoney(),
+              ),
+              GoRoute(
+                path: RoutesStrings.withdrawRequests,
+                name: RoutesStrings.withdrawRequests,
+                builder: (context, state) => const Withdrawrequests(),
               ),
             ],
             builder: (context, state) => const DashboardScreen()),

@@ -188,6 +188,153 @@ class _AddMoneyProviderElement
   File? get image => (origin as AddMoneyProvider).image;
 }
 
+String _$withdrawMoneyHash() => r'2265863b6a1f887118f01c06ce7d31294ac94c3f';
+
+/// See also [withdrawMoney].
+@ProviderFor(withdrawMoney)
+const withdrawMoneyProvider = WithdrawMoneyFamily();
+
+/// See also [withdrawMoney].
+class WithdrawMoneyFamily extends Family<AsyncValue<Map<String, dynamic>>> {
+  /// See also [withdrawMoney].
+  const WithdrawMoneyFamily();
+
+  /// See also [withdrawMoney].
+  WithdrawMoneyProvider call({
+    String? amount,
+    String? remark,
+  }) {
+    return WithdrawMoneyProvider(
+      amount: amount,
+      remark: remark,
+    );
+  }
+
+  @override
+  WithdrawMoneyProvider getProviderOverride(
+    covariant WithdrawMoneyProvider provider,
+  ) {
+    return call(
+      amount: provider.amount,
+      remark: provider.remark,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'withdrawMoneyProvider';
+}
+
+/// See also [withdrawMoney].
+class WithdrawMoneyProvider
+    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+  /// See also [withdrawMoney].
+  WithdrawMoneyProvider({
+    String? amount,
+    String? remark,
+  }) : this._internal(
+          (ref) => withdrawMoney(
+            ref as WithdrawMoneyRef,
+            amount: amount,
+            remark: remark,
+          ),
+          from: withdrawMoneyProvider,
+          name: r'withdrawMoneyProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$withdrawMoneyHash,
+          dependencies: WithdrawMoneyFamily._dependencies,
+          allTransitiveDependencies:
+              WithdrawMoneyFamily._allTransitiveDependencies,
+          amount: amount,
+          remark: remark,
+        );
+
+  WithdrawMoneyProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.amount,
+    required this.remark,
+  }) : super.internal();
+
+  final String? amount;
+  final String? remark;
+
+  @override
+  Override overrideWith(
+    FutureOr<Map<String, dynamic>> Function(WithdrawMoneyRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: WithdrawMoneyProvider._internal(
+        (ref) => create(ref as WithdrawMoneyRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        amount: amount,
+        remark: remark,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
+    return _WithdrawMoneyProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is WithdrawMoneyProvider &&
+        other.amount == amount &&
+        other.remark == remark;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, amount.hashCode);
+    hash = _SystemHash.combine(hash, remark.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin WithdrawMoneyRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
+  /// The parameter `amount` of this provider.
+  String? get amount;
+
+  /// The parameter `remark` of this provider.
+  String? get remark;
+}
+
+class _WithdrawMoneyProviderElement
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with WithdrawMoneyRef {
+  _WithdrawMoneyProviderElement(super.provider);
+
+  @override
+  String? get amount => (origin as WithdrawMoneyProvider).amount;
+  @override
+  String? get remark => (origin as WithdrawMoneyProvider).remark;
+}
+
 String _$moneyRequestListHash() => r'd87cd00b9af4794f5115603dc7e852390745e9a6';
 
 /// See also [moneyRequestList].
@@ -204,5 +351,22 @@ final moneyRequestListProvider =
 );
 
 typedef MoneyRequestListRef = AutoDisposeFutureProviderRef<MoneyRequestModel>;
+String _$withdrawlRequestsHash() => r'd021e126d3f08bb14c8019c04d404b0498e08d83';
+
+/// See also [withdrawlRequests].
+@ProviderFor(withdrawlRequests)
+final withdrawlRequestsProvider =
+    AutoDisposeFutureProvider<WithdrawlResponseModel>.internal(
+  withdrawlRequests,
+  name: r'withdrawlRequestsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$withdrawlRequestsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef WithdrawlRequestsRef
+    = AutoDisposeFutureProviderRef<WithdrawlResponseModel>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

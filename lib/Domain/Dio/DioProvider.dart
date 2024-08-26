@@ -62,4 +62,6 @@ Wallet api
 */
   static const addMoney = 'add-money-request';
   static const moneyRequestList = 'add-money-list';
+  static const withdrawMoney = 'add-withdrawal-request';
+  static const withdrawlList = 'add-withdrawal-list';
 }

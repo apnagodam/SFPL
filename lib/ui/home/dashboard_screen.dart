@@ -90,8 +90,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ],
             ),
             CupertinoActionSheet(
-              title:  Center(child: Text('Loan',style: TextStyle(fontWeight: FontWeight.bold,fontSize: Adaptive.sp(16)),),),
-
+              title: Center(
+                child: Text(
+                  'Loan',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+                ),
+              ),
               actions: [
                 CupertinoActionSheetAction(
                   onPressed: () {
@@ -135,7 +140,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ],
             ),
             CupertinoActionSheet(
-              title:  Center(child: Text('Wallet',style: TextStyle(fontWeight: FontWeight.bold,fontSize: Adaptive.sp(16)),),),
+              title: Center(
+                child: Text(
+                  'Wallet',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+                ),
+              ),
               actions: [
                 CupertinoActionSheetAction(
                     onPressed: () {
@@ -189,6 +200,25 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       // }
                     },
                     child: Text('Withdraw Money',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: Adaptive.sp(16),
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500))),
+                CupertinoActionSheetAction(
+                    onPressed: () {
+                      context.goNamed(RoutesStrings.withdrawRequests);
+                      // if (ref
+                      //         .watch(sharedUtilityProvider)
+                      //         .getUser()
+                      //         ?.tryPartyStatus !=
+                      //     2) {
+                      //   tripartyDialog(context, ref);
+                      // } else {
+                      //   context.goNamed(RoutesStrings.sanctionedAmount);
+                      // }
+                    },
+                    child: Text('Withdraw Requests',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: Adaptive.sp(16),

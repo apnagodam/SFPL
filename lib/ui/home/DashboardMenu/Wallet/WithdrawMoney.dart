@@ -3,9 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:swfl/Domain/WalletService/WalletService.dart';
 
 import '../../../../Data/SharedPrefs/SharedUtility.dart';
 import '../../../utils/colors.dart';
+import '../../../utils/routes.dart';
+import '../../../utils/widgets.dart';
 
 class Withdrawmoney extends ConsumerStatefulWidget {
   const Withdrawmoney({super.key});
@@ -65,7 +68,7 @@ class _WithdrawmoneyState extends ConsumerState<Withdrawmoney> {
                     ),
                     TextFormField(
                       keyboardType: TextInputType.number,
-                      controller: amountController,
+                      controller: remarkController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter remark';
@@ -89,7 +92,31 @@ class _WithdrawmoneyState extends ConsumerState<Withdrawmoney> {
                         ? CupertinoActivityIndicator()
                         : ElevatedButton(
                             onPressed: () {
-                              if (moneyForm.currentState!.validate()) {}
+                              if (moneyForm.currentState!.validate()) {
+                                ref.watch(isLoading.notifier).state = true;
+
+                                ref
+                                    .watch(withdrawMoneyProvider(
+                                            amount: amountController.text
+                                                .toString(),
+                                            remark: remarkController.text
+                                                .toString())
+                                        .future)
+                                    .then((value) {
+                                  ref.watch(isLoading.notifier).state = false;
+                                  if (value['status'].toString() == "1") {
+                                    ref.watch(goRouterProvider).pop();
+                                    successToast(
+                                        context, value['message'].toString());
+                                  } else {
+                                    errorToast(
+                                        context, value['message'].toString());
+                                  }
+                                }).onError((e, s) {
+                                  ref.watch(isLoading.notifier).state = false;
+                                  errorToast(context, e.toString());
+                                });
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: ColorsConstant.secondColorDark,
