@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:swfl/Domain/Dio/DioProvider.dart';
-import 'package:swfl/ui/utils/colors.dart';
-import 'package:swfl/ui/utils/debouncer.dart';
-import 'package:swfl/ui/utils/routes_strings.dart';
+import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
+import 'package:swfl/Domain/AuthenticationService/AuthenticationService.dart';
 
-import '../../Data/SharedPrefs/SharedUtility.dart';
-import '../../Domain/AuthenticationService/AuthenticationService.dart';
+import '../utils/colors.dart';
+import '../utils/routes_strings.dart';
 
-class VerifyOtpScreen extends ConsumerStatefulWidget {
-  const VerifyOtpScreen({super.key, required this.panCard});
+class Registrationverifyotp extends ConsumerStatefulWidget {
+  const Registrationverifyotp({super.key, required this.panCard});
 
   final String panCard;
 
   @override
-  ConsumerState<VerifyOtpScreen> createState() => _VerifyOtpScreenState();
+  ConsumerState<Registrationverifyotp> createState() =>
+      _RegistrationverifyotpState();
 }
 
-class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
+class _RegistrationverifyotpState extends ConsumerState<Registrationverifyotp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +52,7 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
             ),
             Center(
               child: Text(
-                "Enter the code sent to the number",
+                "Enter the code sent to your number",
                 style: TextStyle(
                     color: ColorsConstant.primaryColor,
                     fontWeight: FontWeight.w500,
@@ -62,18 +62,18 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
             const SizedBox(
               height: 10,
             ),
-            Center(
-              child: Text(
-                "${widget.panCard}",
-                style: TextStyle(
-                    color: ColorsConstant.primaryColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: Adaptive.sp(16)),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
+            // Center(
+            //   child: Text(
+            //     "+91-9001155788",
+            //     style: TextStyle(
+            //         color: ColorsConstant.primaryColor,
+            //         fontWeight: FontWeight.bold,
+            //         fontSize: Adaptive.sp(16)),
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
             SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Padding(
@@ -98,18 +98,18 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
                               color: ColorsConstant.secondColorDark))),
                   onCompleted: (pin) {
                     if (pin.length == 6) {
-                      Debouncer(delay: const Duration(milliseconds: 500))
-                          .call(() {
-                        ref
-                            .watch(verifyOtpProvider(
-                                    panCard: widget.panCard, otp: pin)
-                                .future)
-                            .then((value) {
-                          if (value.status.toString() == "1") {
-
-                            context.go(RoutesStrings.dashboard);
-                          }
-                        });
+                      ref
+                          .watch(verifyOtpProvider(
+                                  panCard: widget.panCard, otp: pin)
+                              .future)
+                          .then((value) {
+                        if (value.status.toString() == "1") {
+                          ref
+                              .watch(sharedUtilityProvider)
+                              .setToken(value.data?.token ?? "");
+                          ref.watch(sharedUtilityProvider).setUser(value.data);
+                          context.go(RoutesStrings.dashboard);
+                        }
                       });
                     }
                   },
@@ -119,26 +119,7 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
             const SizedBox(
               height: 10,
             ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 10),
-            //   child: SizedBox(
-            //     width: MediaQuery.of(context).size.width,
-            //     child: ElevatedButton(
-            //       onPressed: () {
-            //         context.go(RoutesStrings.dashboard);
-            //       },
-            //       style: ElevatedButton.styleFrom(
-            //           backgroundColor: ColorsConstant.secondColorDark,
-            //           shape: RoundedRectangleBorder(
-            //               borderRadius: BorderRadius.circular(8))),
-            //       child: Text(
-            //         "Verify Otp",
-            //         style: TextStyle(
-            //             fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
-            //       ),
-            //     ),
-            //   ),
-            // ),
+
             Center(
                 child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
