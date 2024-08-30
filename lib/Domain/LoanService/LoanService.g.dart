@@ -328,5 +328,297 @@ class _ApplyForLoanProviderElement
   @override
   File? get bs3 => (origin as ApplyForLoanProvider).bs3;
 }
+
+String _$wspAgreementListHash() => r'db09e024522d17b350c1f811c8d2f7e81bd5863b';
+
+/// See also [wspAgreementList].
+@ProviderFor(wspAgreementList)
+final wspAgreementListProvider =
+    AutoDisposeFutureProvider<WspListModel>.internal(
+  wspAgreementList,
+  name: r'wspAgreementListProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$wspAgreementListHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef WspAgreementListRef = AutoDisposeFutureProviderRef<WspListModel>;
+String _$wspAgreementHash() => r'798c6f66b87f9116b5b8e7f2bfc9f097dbbe0a09';
+
+/// See also [wspAgreement].
+@ProviderFor(wspAgreement)
+const wspAgreementProvider = WspAgreementFamily();
+
+/// See also [wspAgreement].
+class WspAgreementFamily extends Family<AsyncValue<TripartyAgreementModel>> {
+  /// See also [wspAgreement].
+  const WspAgreementFamily();
+
+  /// See also [wspAgreement].
+  WspAgreementProvider call({
+    String? wspId,
+  }) {
+    return WspAgreementProvider(
+      wspId: wspId,
+    );
+  }
+
+  @override
+  WspAgreementProvider getProviderOverride(
+    covariant WspAgreementProvider provider,
+  ) {
+    return call(
+      wspId: provider.wspId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'wspAgreementProvider';
+}
+
+/// See also [wspAgreement].
+class WspAgreementProvider
+    extends AutoDisposeFutureProvider<TripartyAgreementModel> {
+  /// See also [wspAgreement].
+  WspAgreementProvider({
+    String? wspId,
+  }) : this._internal(
+          (ref) => wspAgreement(
+            ref as WspAgreementRef,
+            wspId: wspId,
+          ),
+          from: wspAgreementProvider,
+          name: r'wspAgreementProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$wspAgreementHash,
+          dependencies: WspAgreementFamily._dependencies,
+          allTransitiveDependencies:
+              WspAgreementFamily._allTransitiveDependencies,
+          wspId: wspId,
+        );
+
+  WspAgreementProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.wspId,
+  }) : super.internal();
+
+  final String? wspId;
+
+  @override
+  Override overrideWith(
+    FutureOr<TripartyAgreementModel> Function(WspAgreementRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: WspAgreementProvider._internal(
+        (ref) => create(ref as WspAgreementRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        wspId: wspId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<TripartyAgreementModel> createElement() {
+    return _WspAgreementProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is WspAgreementProvider && other.wspId == wspId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, wspId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin WspAgreementRef on AutoDisposeFutureProviderRef<TripartyAgreementModel> {
+  /// The parameter `wspId` of this provider.
+  String? get wspId;
+}
+
+class _WspAgreementProviderElement
+    extends AutoDisposeFutureProviderElement<TripartyAgreementModel>
+    with WspAgreementRef {
+  _WspAgreementProviderElement(super.provider);
+
+  @override
+  String? get wspId => (origin as WspAgreementProvider).wspId;
+}
+
+String _$uploadPdfHash() => r'a799e050f6d24f3797dd7bdb86c371ffd095075c';
+
+/// See also [uploadPdf].
+@ProviderFor(uploadPdf)
+const uploadPdfProvider = UploadPdfFamily();
+
+/// See also [uploadPdf].
+class UploadPdfFamily extends Family<AsyncValue<Map<String, dynamic>>> {
+  /// See also [uploadPdf].
+  const UploadPdfFamily();
+
+  /// See also [uploadPdf].
+  UploadPdfProvider call({
+    File? agreementFile,
+    String? wspId,
+  }) {
+    return UploadPdfProvider(
+      agreementFile: agreementFile,
+      wspId: wspId,
+    );
+  }
+
+  @override
+  UploadPdfProvider getProviderOverride(
+    covariant UploadPdfProvider provider,
+  ) {
+    return call(
+      agreementFile: provider.agreementFile,
+      wspId: provider.wspId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'uploadPdfProvider';
+}
+
+/// See also [uploadPdf].
+class UploadPdfProvider
+    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+  /// See also [uploadPdf].
+  UploadPdfProvider({
+    File? agreementFile,
+    String? wspId,
+  }) : this._internal(
+          (ref) => uploadPdf(
+            ref as UploadPdfRef,
+            agreementFile: agreementFile,
+            wspId: wspId,
+          ),
+          from: uploadPdfProvider,
+          name: r'uploadPdfProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$uploadPdfHash,
+          dependencies: UploadPdfFamily._dependencies,
+          allTransitiveDependencies: UploadPdfFamily._allTransitiveDependencies,
+          agreementFile: agreementFile,
+          wspId: wspId,
+        );
+
+  UploadPdfProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.agreementFile,
+    required this.wspId,
+  }) : super.internal();
+
+  final File? agreementFile;
+  final String? wspId;
+
+  @override
+  Override overrideWith(
+    FutureOr<Map<String, dynamic>> Function(UploadPdfRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: UploadPdfProvider._internal(
+        (ref) => create(ref as UploadPdfRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        agreementFile: agreementFile,
+        wspId: wspId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
+    return _UploadPdfProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UploadPdfProvider &&
+        other.agreementFile == agreementFile &&
+        other.wspId == wspId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, agreementFile.hashCode);
+    hash = _SystemHash.combine(hash, wspId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin UploadPdfRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
+  /// The parameter `agreementFile` of this provider.
+  File? get agreementFile;
+
+  /// The parameter `wspId` of this provider.
+  String? get wspId;
+}
+
+class _UploadPdfProviderElement
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with UploadPdfRef {
+  _UploadPdfProviderElement(super.provider);
+
+  @override
+  File? get agreementFile => (origin as UploadPdfProvider).agreementFile;
+  @override
+  String? get wspId => (origin as UploadPdfProvider).wspId;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

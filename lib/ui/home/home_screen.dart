@@ -1,10 +1,8 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
-import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/ui/utils/colors.dart';
@@ -53,14 +51,14 @@ class HomeScreen extends ConsumerWidget {
                 Text(
                   "Outstanding Amount".toUpperCase(),
                   style: TextStyle(
-                      shadows: const [
-                        Shadow(color: Colors.black, blurRadius: 2.0),
-                        Shadow(color: Colors.black, blurRadius: 2.0)
-                      ],
+                    shadows: const [
+                      Shadow(color: Colors.black, blurRadius: 2.0),
+                      Shadow(color: Colors.black, blurRadius: 2.0)
+                    ],
                     color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: Adaptive.sp(18),
-                      ),
+                    fontWeight: FontWeight.bold,
+                    fontSize: Adaptive.sp(18),
+                  ),
                 ),
                 const SizedBox(
                   height: 10,
@@ -81,10 +79,18 @@ class HomeScreen extends ConsumerWidget {
           SizedBox(
             height: 10,
           ),
-          homeLayoutWidget(LucideIcons.workflow, 'M2M Shortfalls', '0'),
-          homeLayoutWidget(LucideIcons.workflow, 'M2M Shortfalls', '0'),
-          homeLayoutWidget(LucideIcons.workflow, 'M2M Shortfalls', '0'),
-          homeLayoutWidget(LucideIcons.workflow, 'M2M Shortfalls', '0')
+          homeLayoutWidget(LucideIcons.banknote, 'Commodity Wise Loan', '0',
+              imagePath:
+                  'https://cdn.iconscout.com/icon/premium/png-512-thumb/loan-2014155-1711062.png?f=webp&w=256'),
+          homeLayoutWidget(LucideIcons.hand_coins, 'Unfunded SR', '0',
+              imagePath:
+                  'https://cdn.iconscout.com/icon/premium/png-512-thumb/loan-82-1066968.png?f=webp&w=256'),
+          homeLayoutWidget(LucideIcons.percent, 'Due Loans', '0',
+              imagePath:
+                  'https://cdn.iconscout.com/icon/premium/png-512-thumb/due-date-10983830-8792274.png?f=webp&w=256'),
+          homeLayoutWidget(LucideIcons.workflow, 'M2M Shortfalls', '0',
+              imagePath:
+                  'https://cdn.iconscout.com/icon/premium/png-512-thumb/trading-3256014-2712970.png?f=webp&w=256')
         ],
       )),
     );
@@ -102,7 +108,7 @@ class HomeScreen extends ConsumerWidget {
               side: BorderSide(color: ColorsConstant.secondColorSuperDark),
               borderRadius: BorderRadius.circular(10)),
           surfaceTintColor: Colors.white,
-          child: RowSuper(fill: true, children: [
+          child: Row(children: [
             Container(
               height: Adaptive.sw(15),
               alignment: Alignment.center,
@@ -117,27 +123,23 @@ class HomeScreen extends ConsumerWidget {
                   color: ColorsConstant.primaryColor,
                   borderRadius: BorderRadius.circular(10)),
               child: Padding(
-                padding: Pad(all: 20),
-                child: iconData == null
-                    ? Image.asset(
-                        imagePath ?? "",
-                        fit: BoxFit.fill,
-                        color: Colors.white,
-                      )
-                    : Icon(
-                        iconData,
-                        color: Colors.white,
-                      ),
-              ),
+                  padding: Pad(all: 20),
+                  child: Image.network(
+                    imagePath ?? "",
+                    fit: BoxFit.contain,
+                    width: 20,
+                    color: Colors.white,
+                  )),
             ),
             SizedBox(
               width: 10,
             ),
-            Text(
+            Expanded(
+                child: Text(
               text,
               style: TextStyle(
                   fontWeight: FontWeight.bold, fontSize: Adaptive.sp(19)),
-            ),
+            )),
             Container(
               padding: Pad(all: 10),
               height: Adaptive.sw(15),

@@ -64,4 +64,15 @@ Wallet api
   static const moneyRequestList = 'add-money-list';
   static const withdrawMoney = 'add-withdrawal-request';
   static const withdrawlList = 'add-withdrawal-list';
+
+/*
+verification api
+*
+*
+*
+*/
+
+  static const wspAgreementList = 'wsp_list';
+  static const wspTripartyAgreement = 'triparty-agreement';
+  static const uploadAggrement = 'triparty-upload-pdf';
 }

@@ -17,6 +17,7 @@ import 'package:swfl/ui/home/dashboard_screen.dart';
 import 'package:swfl/ui/profile/ProfileScreen.dart';
 import 'package:swfl/ui/splash/onboarding_screen.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
+import 'package:swfl/ui/verification/Verification.dart';
 
 import '../../Data/SharedPrefs/SharedUtility.dart';
 
@@ -38,10 +39,17 @@ GoRouter goRouter(GoRouterRef ref) {
             path: RoutesStrings.onBoarding,
             name: RoutesStrings.onBoarding,
             builder: (context, state) => const OnBoardingScreen()),
+
+
+
         GoRoute(
             path: RoutesStrings.dashboard,
             name: RoutesStrings.dashboard,
             routes: [
+              GoRoute(
+                  path: RoutesStrings.verfication,
+                  name: RoutesStrings.verfication,
+                  builder: (context, state) => const Verification()),
               GoRoute(
                 path: RoutesStrings.applyForLoan,
                 name: RoutesStrings.applyForLoan,

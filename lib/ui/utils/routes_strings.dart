@@ -18,4 +18,5 @@ class RoutesStrings {
   static const withdrawMoney = 'withdrawMoney';
   static const withdrawRequests = 'withdrawRequests';
 
+  static const verfication = 'verification';
 }

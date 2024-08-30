@@ -1,23 +1,19 @@
 import 'dart:io';
 
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
-import 'package:dotted_border/dotted_border.dart' as dotted;
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:material_dialogs/dialogs.dart';
-import 'package:material_dialogs/widgets/buttons/icon_button.dart';
-import 'package:path/path.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
 import 'package:swfl/ui/home/home_screen.dart';
 import 'package:swfl/ui/utils/colors.dart';
 import 'package:swfl/ui/utils/routes.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
+import 'package:swfl/ui/utils/widgets.dart';
 
 import '../../Domain/AuthenticationService/AuthenticationService.dart';
 
@@ -39,6 +35,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       ref.watch(loginInfoProvider.future).then((value) async {
         if (value.data?.isLogin != false) {
           ref.watch(sharedUtilityProvider).setUser(value.data);
+        } else {
+          ref.watch(sharedPreferencesProvider).clear();
         }
       });
     });
@@ -53,8 +51,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           fit: BoxFit.contain,
           height: Adaptive.h(2.5),
         ),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.help))],
-        iconTheme: IconThemeData(color: ColorsConstant.secondColorSuperDark),
+        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.help))],
+        iconTheme:
+            const IconThemeData(color: ColorsConstant.secondColorSuperDark),
       ),
       drawer: Drawer(
         child: ListView(
@@ -75,7 +74,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                   ?.profileImage ??
                               ""),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Text(
@@ -100,16 +99,24 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               actions: [
                 CupertinoActionSheetAction(
                   onPressed: () {
-                    context.goNamed(RoutesStrings.applyForLoan);
-                    // if (ref
-                    //         .watch(sharedUtilityProvider)
-                    //         .getUser()
-                    //         ?.tryPartyStatus !=
-                    //     2) {
-                    //   tripartyDialog(context, ref);
-                    // } else {
-                    //
-                    // }
+                    if (ref
+                            .watch(sharedUtilityProvider)
+                            .getUser()
+                            ?.tryPartyStatus !=
+                        2) {
+                      if (ref
+                              .watch(sharedUtilityProvider)
+                              .getUser()
+                              ?.tryPartyStatus ==
+                          1) {
+                        errorToast(context,
+                            "You already have a pending request for verification!");
+                      } else {
+                        context.goNamed(RoutesStrings.verfication);
+                      }
+                    } else {
+                      context.goNamed(RoutesStrings.applyForLoan);
+                    }
                   },
                   child: Text('Apply For Loan',
                       textAlign: TextAlign.start,
@@ -120,16 +127,24 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 ),
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      context.goNamed(RoutesStrings.sanctionedAmount);
-                      // if (ref
-                      //         .watch(sharedUtilityProvider)
-                      //         .getUser()
-                      //         ?.tryPartyStatus !=
-                      //     2) {
-                      //   tripartyDialog(context, ref);
-                      // } else {
-                      //   context.goNamed(RoutesStrings.sanctionedAmount);
-                      // }
+                      if (ref
+                              .watch(sharedUtilityProvider)
+                              .getUser()
+                              ?.tryPartyStatus !=
+                          2) {
+                        if (ref
+                                .watch(sharedUtilityProvider)
+                                .getUser()
+                                ?.tryPartyStatus ==
+                            1) {
+                          errorToast(context,
+                              "You already have a pending request for verification!");
+                        } else {
+                          context.goNamed(RoutesStrings.verfication);
+                        }
+                      } else {
+                        context.goNamed(RoutesStrings.sanctionedAmount);
+                      }
                     },
                     child: Text('Sanctioned Amount',
                         textAlign: TextAlign.start,
@@ -150,16 +165,24 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               actions: [
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      context.goNamed(RoutesStrings.addMoney);
-                      // if (ref
-                      //         .watch(sharedUtilityProvider)
-                      //         .getUser()
-                      //         ?.tryPartyStatus !=
-                      //     2) {
-                      //   tripartyDialog(context, ref);
-                      // } else {
-                      //   context.goNamed(RoutesStrings.sanctionedAmount);
-                      // }
+                      if (ref
+                              .watch(sharedUtilityProvider)
+                              .getUser()
+                              ?.tryPartyStatus !=
+                          2) {
+                        if (ref
+                                .watch(sharedUtilityProvider)
+                                .getUser()
+                                ?.tryPartyStatus ==
+                            1) {
+                          errorToast(context,
+                              "You already have a pending request for verification!");
+                        } else {
+                          context.goNamed(RoutesStrings.verfication);
+                        }
+                      } else {
+                        context.goNamed(RoutesStrings.addMoney);
+                      }
                     },
                     child: Text('Add Money',
                         textAlign: TextAlign.start,
@@ -169,16 +192,24 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             fontWeight: FontWeight.w500))),
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      context.goNamed(RoutesStrings.moneyRequests);
-                      // if (ref
-                      //         .watch(sharedUtilityProvider)
-                      //         .getUser()
-                      //         ?.tryPartyStatus !=
-                      //     2) {
-                      //   tripartyDialog(context, ref);
-                      // } else {
-                      //   context.goNamed(RoutesStrings.sanctionedAmount);
-                      // }
+                      if (ref
+                              .watch(sharedUtilityProvider)
+                              .getUser()
+                              ?.tryPartyStatus !=
+                          2) {
+                        if (ref
+                                .watch(sharedUtilityProvider)
+                                .getUser()
+                                ?.tryPartyStatus ==
+                            1) {
+                          errorToast(context,
+                              "You already have a pending request for verification!");
+                        } else {
+                          context.goNamed(RoutesStrings.verfication);
+                        }
+                      } else {
+                        context.goNamed(RoutesStrings.moneyRequests);
+                      }
                     },
                     child: Text('Add Money Requests',
                         textAlign: TextAlign.start,
@@ -188,16 +219,24 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             fontWeight: FontWeight.w500))),
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      context.goNamed(RoutesStrings.withdrawMoney);
-                      // if (ref
-                      //         .watch(sharedUtilityProvider)
-                      //         .getUser()
-                      //         ?.tryPartyStatus !=
-                      //     2) {
-                      //   tripartyDialog(context, ref);
-                      // } else {
-                      //   context.goNamed(RoutesStrings.sanctionedAmount);
-                      // }
+                      if (ref
+                              .watch(sharedUtilityProvider)
+                              .getUser()
+                              ?.tryPartyStatus !=
+                          2) {
+                        if (ref
+                                .watch(sharedUtilityProvider)
+                                .getUser()
+                                ?.tryPartyStatus ==
+                            1) {
+                          errorToast(context,
+                              "You already have a pending request for verification!");
+                        } else {
+                          context.goNamed(RoutesStrings.verfication);
+                        }
+                      } else {
+                        context.goNamed(RoutesStrings.withdrawMoney);
+                      }
                     },
                     child: Text('Withdraw Money',
                         textAlign: TextAlign.start,
@@ -207,16 +246,24 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             fontWeight: FontWeight.w500))),
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      context.goNamed(RoutesStrings.withdrawRequests);
-                      // if (ref
-                      //         .watch(sharedUtilityProvider)
-                      //         .getUser()
-                      //         ?.tryPartyStatus !=
-                      //     2) {
-                      //   tripartyDialog(context, ref);
-                      // } else {
-                      //   context.goNamed(RoutesStrings.sanctionedAmount);
-                      // }
+                      if (ref
+                              .watch(sharedUtilityProvider)
+                              .getUser()
+                              ?.tryPartyStatus !=
+                          2) {
+                        if (ref
+                                .watch(sharedUtilityProvider)
+                                .getUser()
+                                ?.tryPartyStatus ==
+                            1) {
+                          errorToast(context,
+                              "You already have a pending request for verification!");
+                        } else {
+                          context.goNamed(RoutesStrings.verfication);
+                        }
+                      } else {
+                        context.goNamed(RoutesStrings.withdrawRequests);
+                      }
                     },
                     child: Text('Withdraw Requests',
                         textAlign: TextAlign.start,
@@ -255,163 +302,71 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   }
 
   var activeStepProvider = StateProvider((ref) => 0);
-
-  tripartyDialog(BuildContext context, WidgetRef ref) =>
-      Dialogs.bottomMaterialDialog(
-          context: context,
-          title: 'Upload Documents',
-          msg: "Please verify your account by uploading documents",
-          titleStyle:
-              TextStyle(fontWeight: FontWeight.bold, fontSize: Adaptive.sp(18)),
-          msgStyle:
-              TextStyle(fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
-          actions: [
-            Consumer(
-                builder: (context, ref, child) => Column(
-                      children: [
-                        RowSuper(fill: true, children: [
-                          ColumnSuper(children: [
-                            CircleButton(
-                              onTap: () async {},
-                              icon: Icon(
-                                LucideIcons.file_down,
-                              ),
-                              border: Border.all(
-                                  color: ColorsConstant.primaryColor),
-                            ),
-                            Text(
-                              'Download \nAgreement',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: Adaptive.sp(14),
-                                  fontWeight: FontWeight.w700),
-                            )
-                          ]),
-                          Divider(
-                            thickness: 1.0,
-                          ),
-                          ColumnSuper(children: [
-                            CircleButton(
-                              icon: Icon(
-                                LucideIcons.stamp,
-                              ),
-                              border: Border.all(
-                                  color: ColorsConstant.primaryColor),
-                            ),
-                            Text('Stamp \nAgreement',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: Adaptive.sp(14),
-                                    fontWeight: FontWeight.w700))
-                          ]),
-                          Divider(
-                            thickness: 1.0,
-                          ),
-                          ColumnSuper(children: [
-                            CircleButton(
-                              icon: Icon(
-                                LucideIcons.cloud_upload,
-                              ),
-                              border: Border.all(
-                                  color: ColorsConstant.primaryColor),
-                            ),
-                            Text('Upload \nAgreement',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: Adaptive.sp(14),
-                                    fontWeight: FontWeight.w700))
-                          ]),
-                        ]),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            FilePickerResult? result = await FilePicker.platform
-                                .pickFiles(
-                                    type: FileType.custom,
-                                    allowedExtensions: ['pdf']);
-
-                            if (result != null) {
-                              File file = File(result.files.single.path!);
-                              ref.watch(triPartyImageProvider.notifier).state =
-                                  file;
-                            } else {}
-                          },
-                          child: dotted.DottedBorder(
-                              borderType: dotted.BorderType.RRect,
-                              dashPattern: const [6, 6, 6, 6],
-                              color: ColorsConstant.primaryColor,
-                              child: Padding(
-                                padding: const Pad(all: 20),
-                                child: Center(
-                                  child: ref.watch(triPartyImageProvider) !=
-                                          null
-                                      ? ColumnSuper(
-                                          alignment: Alignment.center,
-                                          children: [
-                                              const Icon(
-                                                LucideIcons.file,
-                                                color:
-                                                    ColorsConstant.primaryColor,
-                                              ),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              Center(
-                                                child: Text(
-                                                  "${basename(ref.watch(triPartyImageProvider)?.path ?? "")}",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize:
-                                                          Adaptive.sp(14)),
-                                                  textAlign: TextAlign.center,
-                                                  maxLines: 2,
-                                                ),
-                                              )
-                                            ])
-                                      : ColumnSuper(children: [
-                                          const Icon(LucideIcons.file),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text('Tri Party Doc*',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: Adaptive.sp(14)))
-                                        ]),
-                                ),
-                              )),
-                        ),
-                        IconsButton(
-                          onPressed: () async {},
-                          text: 'Upload',
-                          iconData: Icons.cloud_upload,
-                          color: ColorsConstant.primaryColor,
-                          textStyle: TextStyle(color: Colors.white),
-                          iconColor: Colors.white,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text.rich(TextSpan(
-                            text: 'Having trouble uploading docs?',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: Adaptive.sp(15)),
-                            children: [
-                              TextSpan(
-                                  text: 'click here',
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () => print('Tap Here onTap'),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      color:
-                                          ColorsConstant.secondColorSuperDark,
-                                      fontSize: Adaptive.sp(15)))
-                            ])),
-                      ],
-                    ))
-          ]);
 }
+
+tripartyDialog(BuildContext context, WidgetRef ref) => showBarModalBottomSheet(
+    context: context,
+    builder: (context) => ColumnSuper(children: [
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            'How to Verify?',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: Adaptive.sp(18), fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          RowSuper(fill: true, children: [
+            ColumnSuper(children: [
+              CircleButton(
+                onTap: () async {},
+                icon: const Icon(
+                  LucideIcons.file_down,
+                ),
+                border: Border.all(color: ColorsConstant.primaryColor),
+              ),
+              Text(
+                'Download \nAgreement',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: Adaptive.sp(14), fontWeight: FontWeight.w700),
+              )
+            ]),
+            const Divider(
+              thickness: 1.0,
+            ),
+            ColumnSuper(children: [
+              CircleButton(
+                icon: const Icon(
+                  LucideIcons.stamp,
+                ),
+                border: Border.all(color: ColorsConstant.primaryColor),
+              ),
+              Text('Stamp \nAgreement',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: Adaptive.sp(14), fontWeight: FontWeight.w700))
+            ]),
+            const Divider(
+              thickness: 1.0,
+            ),
+            ColumnSuper(children: [
+              CircleButton(
+                icon: const Icon(
+                  LucideIcons.cloud_upload,
+                ),
+                border: Border.all(color: ColorsConstant.primaryColor),
+              ),
+              Text('Upload \nAgreement',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: Adaptive.sp(14), fontWeight: FontWeight.w700))
+            ]),
+          ]),
+          const SizedBox(
+            height: 10,
+          ),
+        ]));
