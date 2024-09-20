@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:swfl/Data/Model/DistrictsResponseModel.dart';
 import 'package:swfl/Data/Model/StatesResponseModel.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:swfl/Domain/Dio/DioProvider.dart';
 
 part 'StateService.g.dart';

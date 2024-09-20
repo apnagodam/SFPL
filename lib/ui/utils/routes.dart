@@ -1,6 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:swfl/ui/BNPL/BnplScreen.dart';
+import 'package:swfl/ui/BNPL/BnplStatement.dart';
+import 'package:swfl/ui/auth/BnplAadharRegistration.dart';
+import 'package:swfl/ui/auth/BnplRegistration.dart';
+import 'package:swfl/ui/auth/BnplUpdateAddress.dart';
 import 'package:swfl/ui/auth/IndividualRegistration.dart';
 import 'package:swfl/ui/auth/PropRegistration.dart';
 import 'package:swfl/ui/auth/RegistrationScreen.dart';
@@ -40,12 +45,20 @@ GoRouter goRouter(GoRouterRef ref) {
             name: RoutesStrings.onBoarding,
             builder: (context, state) => const OnBoardingScreen()),
 
-
-
         GoRoute(
             path: RoutesStrings.dashboard,
             name: RoutesStrings.dashboard,
             routes: [
+
+              GoRoute(
+                  path: RoutesStrings.bnpl,
+                  name: RoutesStrings.bnpl,
+                  builder: (context, state) => const Bnplscreen()),
+
+              GoRoute(
+                  path: RoutesStrings.bnplStatement,
+                  name: RoutesStrings.bnplStatement,
+                  builder: (context, state) => const Bnplstatement()),
               GoRoute(
                   path: RoutesStrings.verfication,
                   name: RoutesStrings.verfication,
@@ -105,6 +118,28 @@ GoRouter goRouter(GoRouterRef ref) {
                   name: RoutesStrings.register,
                   builder: (context, state) => const Registrationscreen(),
                   routes: [
+                    GoRoute(
+                        path: RoutesStrings.bnplRegistration,
+                        name: RoutesStrings.bnplRegistration,
+                        builder: (context, state) {
+                          final data = state.extra! as Map<String, dynamic>;
+                          return Bnplregistration(
+                            typeOfRegistration: data['reg_type'],
+                            constitutiontype: data['cons_type'],
+                          );
+                        },
+                        routes: [
+                          GoRoute(
+                              path: RoutesStrings.bnplAadharRegistration,
+                              name: RoutesStrings.bnplAadharRegistration,
+                              builder: (context, state) =>
+                                  const Bnplaadharregistration()),
+                          GoRoute(
+                              path: RoutesStrings.bnplUpdateAddress,
+                              name: RoutesStrings.bnplUpdateAddress,
+                              builder: (context, state) =>
+                                  const Bnplupdateaddress()),
+                        ]),
                     GoRoute(
                         path: RoutesStrings.individualRegistration,
                         name: RoutesStrings.individualRegistration,

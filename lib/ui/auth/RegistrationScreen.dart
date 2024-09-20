@@ -5,11 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
-import 'package:toastification/toastification.dart';
+import 'package:swfl/ui/utils/widgets.dart';
 
 import '../../Data/Model/DistrictsResponseModel.dart';
 import '../../Data/Model/StatesResponseModel.dart';
 import '../utils/colors.dart';
+import '../utils/enums.dart';
 
 class Registrationscreen extends ConsumerStatefulWidget {
   const Registrationscreen({super.key});
@@ -23,7 +24,12 @@ var statesProvider = StateProvider<Datum?>((ref) => null);
 var districtProvider = StateProvider<StateDatum?>((ref) => null);
 var propProvider = StateProvider<int?>((ref) => null);
 var propNameProvider = StateProvider((ref) => "Select Constitution");
-var propTypeList = ['Individual', "Proprietorship Firm"];
+var propTypeList = ['Individual', "Proprietorship Firm", "Partnership Firm"];
+var regTypeList = ['Commodity Finance', "BNPL"];
+var regNameProvider = StateProvider((ref) => "Select Registration type");
+
+var registrationTypeProvider = StateProvider<RegistrationType?>((ref) => null);
+var constitutionTypeProvider = StateProvider<ConstitutionType?>((ref) => null);
 
 class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
   @override
@@ -59,7 +65,7 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
           const SizedBox(
             height: 10,
           ),
-          DropdownSearch<String>(
+          DropdownSearch<RegistrationType?>(
             popupProps: PopupProps.menu(
                 searchFieldProps: const TextFieldProps(
                     autofocus: true,
@@ -102,7 +108,90 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                       Padding(
                         padding: const Pad(all: 10),
                         child: Text(
-                          "${terminal}",
+                          "${terminal?.label}",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: Adaptive.sp(16)),
+                        ),
+                      ),
+                      Container(
+                        height: 1,
+                        color: Colors.grey.withOpacity(0.3),
+                      ),
+                    ]),
+                isFilterOnline: true,
+                title: Padding(
+                  padding: const Pad(all: 10),
+                  child: Text(
+                    'Select Product Type',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: Adaptive.sp(16), fontWeight: FontWeight.bold),
+                  ),
+                ),
+                showSearchBox: true,
+                searchDelay: const Duration(microseconds: 500)),
+            items: RegistrationType.values,
+            itemAsString: (RegistrationType? u) => u!.label,
+            onChanged: (RegistrationType? data) =>
+                ref.watch(registrationTypeProvider.notifier).state = data,
+            dropdownDecoratorProps: const DropDownDecoratorProps(
+              dropdownSearchDecoration: InputDecoration(
+                  contentPadding: Pad(left: 10, bottom: 5, top: 5),
+                  hintText: "Select Product Type",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      borderSide: BorderSide(
+                          color: ColorsConstant.secondColorUltraDark))),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          DropdownSearch<ConstitutionType?>(
+            popupProps: PopupProps.menu(
+                searchFieldProps: const TextFieldProps(
+                    autofocus: true,
+                    cursorColor: ColorsConstant.primaryColor,
+                    padding: Pad(left: 10, right: 10),
+                    decoration: InputDecoration(
+                      contentPadding: Pad(left: 10, right: 10),
+                      focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              style: BorderStyle.solid,
+                              color: ColorsConstant.primaryColor)),
+                      disabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              style: BorderStyle.solid,
+                              color: ColorsConstant.primaryColor)),
+                      errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              style: BorderStyle.solid,
+                              color: ColorsConstant.primaryColor)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              style: BorderStyle.solid,
+                              color: ColorsConstant.primaryColor)),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              style: BorderStyle.solid,
+                              color: ColorsConstant.primaryColor)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              style: BorderStyle.solid,
+                              color: ColorsConstant.primaryColor)),
+                    )),
+                menuProps: MenuProps(
+                    shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                            color: ColorsConstant.primaryColor),
+                        borderRadius: BorderRadius.circular(8))),
+                itemBuilder: (context, terminal, isVisible) =>
+                    ColumnSuper(alignment: Alignment.centerLeft, children: [
+                      Padding(
+                        padding: const Pad(all: 10),
+                        child: Text(
+                          "${terminal?.label}",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: Adaptive.sp(16)),
@@ -125,10 +214,10 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                 ),
                 showSearchBox: true,
                 searchDelay: const Duration(microseconds: 500)),
-            items: propTypeList ?? [],
-            itemAsString: (String? u) => u ?? "",
-            onChanged: (String? data) =>
-                ref.watch(propNameProvider.notifier).state = data ?? "",
+            items: ConstitutionType.values ?? [],
+            itemAsString: (ConstitutionType? u) => u!.label,
+            onChanged: (ConstitutionType? data) =>
+                ref.watch(constitutionTypeProvider.notifier).state = data,
             dropdownDecoratorProps: const DropDownDecoratorProps(
               dropdownSearchDecoration: InputDecoration(
                   contentPadding: Pad(left: 10, bottom: 5, top: 5),
@@ -146,17 +235,28 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
             width: MediaQuery.of(context).size.width,
             child: ElevatedButton(
               onPressed: () async {
-                if (ref.watch(propNameProvider) == 'Select Constitution') {
-                  toastification.show(
-                    style: ToastificationStyle.fillColored,
-                    title: Text('Please select firm type'),
-                    backgroundColor: Colors.red,
-                  );
+                if (ref.watch(registrationTypeProvider) ==
+                    RegistrationType.defaultType) {
+                  errorToast(context, 'Please select Registration type');
+                }
+                if (ref.watch(constitutionTypeProvider) ==
+                    ConstitutionType.defaultType) {
+                  errorToast(context, 'Please select Constitution');
                 } else {
-                  if (ref.watch(propNameProvider) == 'Individual Firm') {
-                    context.goNamed(RoutesStrings.individualRegistration);
+                  if (ref.watch(registrationTypeProvider) ==
+                      RegistrationType.bnpl) {
+                    context.goNamed(RoutesStrings.bnplRegistration, extra: {
+                      'reg_type':
+                          "${ref.watch(registrationTypeProvider)?.type}",
+                      'cons_type': "${ref.watch(constitutionTypeProvider)?.type}"
+                    });
                   } else {
-                    context.goNamed(RoutesStrings.propRegistration);
+                    if (ref.watch(constitutionTypeProvider) ==
+                        ConstitutionType.individual) {
+                      context.goNamed(RoutesStrings.individualRegistration);
+                    } else {
+                      context.goNamed(RoutesStrings.propRegistration);
+                    }
                   }
                 }
               },
@@ -166,7 +266,7 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10))),
               child: Text(
-                "Register",
+                "Next",
                 style: TextStyle(
                     color: Colors.white,
                     shadows: const [

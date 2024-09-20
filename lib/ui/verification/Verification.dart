@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
-import 'package:dotted_border/dotted_border.dart' as dotted;
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:file_picker/file_picker.dart';

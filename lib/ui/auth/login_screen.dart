@@ -5,8 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Domain/AuthenticationService/AuthenticationService.dart';
-import 'package:swfl/ui/auth/verify_otp_screen.dart';
-import 'package:swfl/ui/home/dashboard_screen.dart';
 import 'package:swfl/ui/utils/colors.dart';
 import 'package:swfl/ui/utils/extensions.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';

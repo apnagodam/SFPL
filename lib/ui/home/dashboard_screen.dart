@@ -5,10 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:swfl/Data/Model/TermsModel.dart';
 import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
+import 'package:swfl/Domain/BnplService/BnplService.dart';
 import 'package:swfl/ui/home/home_screen.dart';
 import 'package:swfl/ui/utils/colors.dart';
 import 'package:swfl/ui/utils/routes.dart';
@@ -27,6 +30,8 @@ class DashboardScreen extends ConsumerStatefulWidget {
 var triPartyImageProvider = StateProvider<File?>((ref) => null);
 
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
+  var checkBoxValueProvider = StateProvider((ref) => false);
+
   @override
   void initState() {
     // TODO: implement initState
@@ -34,6 +39,12 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ref.watch(loginInfoProvider.future).then((value) async {
         if (value.data?.isLogin != false) {
+          if (value.data?.type == "BNPL" && value.data?.aadharVerify == "0") {
+            showVerificationDialog(context,
+                titleText: "Verify Aadhar",
+                messageText: "Your Aadhar verification is pending");
+          }
+
           ref.watch(sharedUtilityProvider).setUser(value.data);
         } else {
           ref.watch(sharedPreferencesProvider).clear();
@@ -91,7 +102,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             CupertinoActionSheet(
               title: Center(
                 child: Text(
-                  'Loan',
+                  'Buy Now Pay Later',
                   style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
                 ),
@@ -99,26 +110,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               actions: [
                 CupertinoActionSheetAction(
                   onPressed: () {
-                    if (ref
-                            .watch(sharedUtilityProvider)
-                            .getUser()
-                            ?.tryPartyStatus !=
-                        2) {
-                      if (ref
-                              .watch(sharedUtilityProvider)
-                              .getUser()
-                              ?.tryPartyStatus ==
-                          1) {
-                        errorToast(context,
-                            "You already have a pending request for verification!");
-                      } else {
-                        context.goNamed(RoutesStrings.verfication);
-                      }
-                    } else {
-                      context.goNamed(RoutesStrings.applyForLoan);
-                    }
+                    context.goNamed(RoutesStrings.bnpl);
                   },
-                  child: Text('Apply For Loan',
+                  child: Text('Apply ',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                           fontSize: Adaptive.sp(16),
@@ -127,24 +121,49 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 ),
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      if (ref
-                              .watch(sharedUtilityProvider)
-                              .getUser()
-                              ?.tryPartyStatus !=
-                          2) {
-                        if (ref
-                                .watch(sharedUtilityProvider)
-                                .getUser()
-                                ?.tryPartyStatus ==
-                            1) {
-                          errorToast(context,
-                              "You already have a pending request for verification!");
-                        } else {
-                          context.goNamed(RoutesStrings.verfication);
-                        }
-                      } else {
-                        context.goNamed(RoutesStrings.sanctionedAmount);
-                      }
+                      context.goNamed(RoutesStrings.bnplStatement);
+
+                      // if (ref.watch(sharedUtilityProvider).getUser()?.aadharVerify == "0") {
+                      //   showVerificationDialog(context,
+                      //       titleText: "Verify Aadhar",
+                      //       messageText: "Your Aadhar verification is pending");
+                      // }
+                      // else{
+                      //   context.goNamed(RoutesStrings.sanctionedAmount);
+                      //
+                      // }
+                    },
+                    child: Text('Statement',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: Adaptive.sp(16),
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500))),
+              ],
+            ),
+            CupertinoActionSheet(
+              title: Center(
+                child: Text(
+                  'Commodity Pledge Loan',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+                ),
+              ),
+              actions: [
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    context.goNamed(RoutesStrings.applyForLoan);
+                  },
+                  child: Text('Apply',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontSize: Adaptive.sp(16),
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500)),
+                ),
+                CupertinoActionSheetAction(
+                    onPressed: () {
+                      context.goNamed(RoutesStrings.sanctionedAmount);
                     },
                     child: Text('Sanctioned Amount',
                         textAlign: TextAlign.start,
@@ -165,24 +184,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               actions: [
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      if (ref
-                              .watch(sharedUtilityProvider)
-                              .getUser()
-                              ?.tryPartyStatus !=
-                          2) {
-                        if (ref
-                                .watch(sharedUtilityProvider)
-                                .getUser()
-                                ?.tryPartyStatus ==
-                            1) {
-                          errorToast(context,
-                              "You already have a pending request for verification!");
-                        } else {
-                          context.goNamed(RoutesStrings.verfication);
-                        }
-                      } else {
-                        context.goNamed(RoutesStrings.addMoney);
-                      }
+                      context.goNamed(RoutesStrings.addMoney);
                     },
                     child: Text('Add Money',
                         textAlign: TextAlign.start,
@@ -192,24 +194,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             fontWeight: FontWeight.w500))),
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      if (ref
-                              .watch(sharedUtilityProvider)
-                              .getUser()
-                              ?.tryPartyStatus !=
-                          2) {
-                        if (ref
-                                .watch(sharedUtilityProvider)
-                                .getUser()
-                                ?.tryPartyStatus ==
-                            1) {
-                          errorToast(context,
-                              "You already have a pending request for verification!");
-                        } else {
-                          context.goNamed(RoutesStrings.verfication);
-                        }
-                      } else {
-                        context.goNamed(RoutesStrings.moneyRequests);
-                      }
+                      context.goNamed(RoutesStrings.moneyRequests);
                     },
                     child: Text('Add Money Requests',
                         textAlign: TextAlign.start,
@@ -219,24 +204,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             fontWeight: FontWeight.w500))),
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      if (ref
-                              .watch(sharedUtilityProvider)
-                              .getUser()
-                              ?.tryPartyStatus !=
-                          2) {
-                        if (ref
-                                .watch(sharedUtilityProvider)
-                                .getUser()
-                                ?.tryPartyStatus ==
-                            1) {
-                          errorToast(context,
-                              "You already have a pending request for verification!");
-                        } else {
-                          context.goNamed(RoutesStrings.verfication);
-                        }
-                      } else {
-                        context.goNamed(RoutesStrings.withdrawMoney);
-                      }
+                      context.goNamed(RoutesStrings.withdrawMoney);
                     },
                     child: Text('Withdraw Money',
                         textAlign: TextAlign.start,
@@ -246,24 +214,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             fontWeight: FontWeight.w500))),
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      if (ref
-                              .watch(sharedUtilityProvider)
-                              .getUser()
-                              ?.tryPartyStatus !=
-                          2) {
-                        if (ref
-                                .watch(sharedUtilityProvider)
-                                .getUser()
-                                ?.tryPartyStatus ==
-                            1) {
-                          errorToast(context,
-                              "You already have a pending request for verification!");
-                        } else {
-                          context.goNamed(RoutesStrings.verfication);
-                        }
-                      } else {
-                        context.goNamed(RoutesStrings.withdrawRequests);
-                      }
+                      context.goNamed(RoutesStrings.withdrawRequests);
+
+                      // context.goNamed(RoutesStrings.verfication);
                     },
                     child: Text('Withdraw Requests',
                         textAlign: TextAlign.start,
@@ -277,13 +230,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               actions: [
                 CupertinoActionSheetAction(
                     onPressed: () async {
-                      ref.watch(logoutProvider.future).then((value) async {
-                        await ref.watch(sharedPreferencesProvider).clear();
-                        setState(() {});
-                        ref
-                            .watch(goRouterProvider)
-                            .goNamed(RoutesStrings.login);
-                      });
+                      await ref.watch(sharedPreferencesProvider).clear();
+                      ref.watch(goRouterProvider).goNamed(RoutesStrings.login);
+                      ref.watch(logoutProvider.future).then((value) async {});
                     },
                     child: Text(
                       'Logout',
@@ -301,6 +250,84 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     );
   }
 
+  termsLayout(BuildContext context, WidgetRef ref, TermsModel data) =>
+      showBarModalBottomSheet(
+          context: context,
+          expand: true,
+          builder: (context) => Consumer(
+              builder: (context, ref, child) => Padding(
+                    padding: const Pad(all: 10),
+                    child: ListView(
+                      children: [
+                        HtmlWidget(data.view ?? ""),
+                        RowSuper(children: [
+                          Checkbox(
+                              value: ref.watch(checkBoxValueProvider),
+                              onChanged: (value) {
+                                ref
+                                    .watch(checkBoxValueProvider.notifier)
+                                    .state = value ?? false;
+                              }),
+                          Text(
+                              'By proceeding, you agree to our Term and Conditions',
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(15),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w800)),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ]),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              if (ref.watch(checkBoxValueProvider)) {
+                                showloader(context);
+                                ref
+                                    .watch(bnplRequestProvider.future)
+                                    .then((value) {
+                                  hideLoader(context);
+                                  if (value.status.toString() == "1") {
+                                    hideLoader(context);
+                                    successToast(
+                                        context, value.message.toString());
+                                  } else {
+                                    context.pop();
+                                    errorToast(
+                                        context, value.message.toString());
+                                  }
+                                }).onError((e, s) {
+                                  hideLoader(context);
+                                  showErrorDialog(context,
+                                      titleText: "Exception!",
+                                      messageText: e.toString());
+                                });
+                              } else {
+                                errorToast(
+                                    context, 'Please agree to terms first');
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: ColorsConstant.secondColorDark,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10))),
+                            child: Text(
+                              "Submit",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  shadows: [
+                                    const Shadow(
+                                        color: Colors.white, blurRadius: 0.3)
+                                  ],
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: Adaptive.sp(16)),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )));
   var activeStepProvider = StateProvider((ref) => 0);
 }
 

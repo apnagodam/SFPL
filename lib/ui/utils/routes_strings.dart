@@ -5,10 +5,18 @@ class RoutesStrings {
   static const onBoarding = '/onBoarding';
   static const register = 'register';
   static const individualRegistration = 'individualRegistration';
+  static const bnplRegistration = 'bnplRegistration';
+  static const bnplAadharRegistration = 'bnplAadharRegistration';
+
+  static const bnplUpdateAddress = 'bnplUpdateAddress';
+
   static const propRegistration = 'propRegistration';
   static const registrationOtp = 'registrationOtp';
 
   static const applyForLoan = 'applyForLoan';
+
+  static const bnpl = 'bnpl';
+  static const bnplStatement = 'bnplStatement';
 
   static const profile = 'profile';
   static const sanctionedAmount = 'sanctionedAmount';

@@ -654,6 +654,299 @@ class _VerifyOtpProviderElement
   String? get otp => (origin as VerifyOtpProvider).otp;
 }
 
+String _$sendAadharOtpHash() => r'30449f729c1ec65a914c9497cec4a422905fd287';
+
+/// See also [sendAadharOtp].
+@ProviderFor(sendAadharOtp)
+const sendAadharOtpProvider = SendAadharOtpFamily();
+
+/// See also [sendAadharOtp].
+class SendAadharOtpFamily extends Family<AsyncValue<AadharResponseModel>> {
+  /// See also [sendAadharOtp].
+  const SendAadharOtpFamily();
+
+  /// See also [sendAadharOtp].
+  SendAadharOtpProvider call({
+    String? aadharNo,
+  }) {
+    return SendAadharOtpProvider(
+      aadharNo: aadharNo,
+    );
+  }
+
+  @override
+  SendAadharOtpProvider getProviderOverride(
+    covariant SendAadharOtpProvider provider,
+  ) {
+    return call(
+      aadharNo: provider.aadharNo,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'sendAadharOtpProvider';
+}
+
+/// See also [sendAadharOtp].
+class SendAadharOtpProvider
+    extends AutoDisposeFutureProvider<AadharResponseModel> {
+  /// See also [sendAadharOtp].
+  SendAadharOtpProvider({
+    String? aadharNo,
+  }) : this._internal(
+          (ref) => sendAadharOtp(
+            ref as SendAadharOtpRef,
+            aadharNo: aadharNo,
+          ),
+          from: sendAadharOtpProvider,
+          name: r'sendAadharOtpProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$sendAadharOtpHash,
+          dependencies: SendAadharOtpFamily._dependencies,
+          allTransitiveDependencies:
+              SendAadharOtpFamily._allTransitiveDependencies,
+          aadharNo: aadharNo,
+        );
+
+  SendAadharOtpProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.aadharNo,
+  }) : super.internal();
+
+  final String? aadharNo;
+
+  @override
+  Override overrideWith(
+    FutureOr<AadharResponseModel> Function(SendAadharOtpRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SendAadharOtpProvider._internal(
+        (ref) => create(ref as SendAadharOtpRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        aadharNo: aadharNo,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<AadharResponseModel> createElement() {
+    return _SendAadharOtpProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SendAadharOtpProvider && other.aadharNo == aadharNo;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, aadharNo.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin SendAadharOtpRef on AutoDisposeFutureProviderRef<AadharResponseModel> {
+  /// The parameter `aadharNo` of this provider.
+  String? get aadharNo;
+}
+
+class _SendAadharOtpProviderElement
+    extends AutoDisposeFutureProviderElement<AadharResponseModel>
+    with SendAadharOtpRef {
+  _SendAadharOtpProviderElement(super.provider);
+
+  @override
+  String? get aadharNo => (origin as SendAadharOtpProvider).aadharNo;
+}
+
+String _$verifyAadharOtpHash() => r'6040b1dbb81d895f4f8421ba16dc07036be638ae';
+
+/// See also [verifyAadharOtp].
+@ProviderFor(verifyAadharOtp)
+const verifyAadharOtpProvider = VerifyAadharOtpFamily();
+
+/// See also [verifyAadharOtp].
+class VerifyAadharOtpFamily extends Family<AsyncValue<AdharVerifyOtpModel>> {
+  /// See also [verifyAadharOtp].
+  const VerifyAadharOtpFamily();
+
+  /// See also [verifyAadharOtp].
+  VerifyAadharOtpProvider call({
+    String? clientId,
+    String? otp,
+    String? aadharNumber,
+  }) {
+    return VerifyAadharOtpProvider(
+      clientId: clientId,
+      otp: otp,
+      aadharNumber: aadharNumber,
+    );
+  }
+
+  @override
+  VerifyAadharOtpProvider getProviderOverride(
+    covariant VerifyAadharOtpProvider provider,
+  ) {
+    return call(
+      clientId: provider.clientId,
+      otp: provider.otp,
+      aadharNumber: provider.aadharNumber,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'verifyAadharOtpProvider';
+}
+
+/// See also [verifyAadharOtp].
+class VerifyAadharOtpProvider
+    extends AutoDisposeFutureProvider<AdharVerifyOtpModel> {
+  /// See also [verifyAadharOtp].
+  VerifyAadharOtpProvider({
+    String? clientId,
+    String? otp,
+    String? aadharNumber,
+  }) : this._internal(
+          (ref) => verifyAadharOtp(
+            ref as VerifyAadharOtpRef,
+            clientId: clientId,
+            otp: otp,
+            aadharNumber: aadharNumber,
+          ),
+          from: verifyAadharOtpProvider,
+          name: r'verifyAadharOtpProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$verifyAadharOtpHash,
+          dependencies: VerifyAadharOtpFamily._dependencies,
+          allTransitiveDependencies:
+              VerifyAadharOtpFamily._allTransitiveDependencies,
+          clientId: clientId,
+          otp: otp,
+          aadharNumber: aadharNumber,
+        );
+
+  VerifyAadharOtpProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.clientId,
+    required this.otp,
+    required this.aadharNumber,
+  }) : super.internal();
+
+  final String? clientId;
+  final String? otp;
+  final String? aadharNumber;
+
+  @override
+  Override overrideWith(
+    FutureOr<AdharVerifyOtpModel> Function(VerifyAadharOtpRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: VerifyAadharOtpProvider._internal(
+        (ref) => create(ref as VerifyAadharOtpRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        clientId: clientId,
+        otp: otp,
+        aadharNumber: aadharNumber,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<AdharVerifyOtpModel> createElement() {
+    return _VerifyAadharOtpProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is VerifyAadharOtpProvider &&
+        other.clientId == clientId &&
+        other.otp == otp &&
+        other.aadharNumber == aadharNumber;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, clientId.hashCode);
+    hash = _SystemHash.combine(hash, otp.hashCode);
+    hash = _SystemHash.combine(hash, aadharNumber.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin VerifyAadharOtpRef on AutoDisposeFutureProviderRef<AdharVerifyOtpModel> {
+  /// The parameter `clientId` of this provider.
+  String? get clientId;
+
+  /// The parameter `otp` of this provider.
+  String? get otp;
+
+  /// The parameter `aadharNumber` of this provider.
+  String? get aadharNumber;
+}
+
+class _VerifyAadharOtpProviderElement
+    extends AutoDisposeFutureProviderElement<AdharVerifyOtpModel>
+    with VerifyAadharOtpRef {
+  _VerifyAadharOtpProviderElement(super.provider);
+
+  @override
+  String? get clientId => (origin as VerifyAadharOtpProvider).clientId;
+  @override
+  String? get otp => (origin as VerifyAadharOtpProvider).otp;
+  @override
+  String? get aadharNumber => (origin as VerifyAadharOtpProvider).aadharNumber;
+}
+
 String _$loginHash() => r'759668ab01a83f8765bb1f01961fbb0fe0aceb51';
 
 /// See also [login].
@@ -810,5 +1103,376 @@ final loginInfoProvider = AutoDisposeFutureProvider<OtpVerifyModel>.internal(
 );
 
 typedef LoginInfoRef = AutoDisposeFutureProviderRef<OtpVerifyModel>;
+String _$registerBnplHash() => r'9ddbe3357f1c0e3e554e60ff977e0074455a0683';
+
+/// See also [registerBnpl].
+@ProviderFor(registerBnpl)
+const registerBnplProvider = RegisterBnplFamily();
+
+/// See also [registerBnpl].
+class RegisterBnplFamily extends Family<AsyncValue<BaseApiResponse>> {
+  /// See also [registerBnpl].
+  const RegisterBnplFamily();
+
+  /// See also [registerBnpl].
+  RegisterBnplProvider call({
+    String? constitution,
+    String? type,
+    String? pancardNo,
+    String? bnplName,
+    String? phoneNo,
+  }) {
+    return RegisterBnplProvider(
+      constitution: constitution,
+      type: type,
+      pancardNo: pancardNo,
+      bnplName: bnplName,
+      phoneNo: phoneNo,
+    );
+  }
+
+  @override
+  RegisterBnplProvider getProviderOverride(
+    covariant RegisterBnplProvider provider,
+  ) {
+    return call(
+      constitution: provider.constitution,
+      type: provider.type,
+      pancardNo: provider.pancardNo,
+      bnplName: provider.bnplName,
+      phoneNo: provider.phoneNo,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'registerBnplProvider';
+}
+
+/// See also [registerBnpl].
+class RegisterBnplProvider extends AutoDisposeFutureProvider<BaseApiResponse> {
+  /// See also [registerBnpl].
+  RegisterBnplProvider({
+    String? constitution,
+    String? type,
+    String? pancardNo,
+    String? bnplName,
+    String? phoneNo,
+  }) : this._internal(
+          (ref) => registerBnpl(
+            ref as RegisterBnplRef,
+            constitution: constitution,
+            type: type,
+            pancardNo: pancardNo,
+            bnplName: bnplName,
+            phoneNo: phoneNo,
+          ),
+          from: registerBnplProvider,
+          name: r'registerBnplProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$registerBnplHash,
+          dependencies: RegisterBnplFamily._dependencies,
+          allTransitiveDependencies:
+              RegisterBnplFamily._allTransitiveDependencies,
+          constitution: constitution,
+          type: type,
+          pancardNo: pancardNo,
+          bnplName: bnplName,
+          phoneNo: phoneNo,
+        );
+
+  RegisterBnplProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.constitution,
+    required this.type,
+    required this.pancardNo,
+    required this.bnplName,
+    required this.phoneNo,
+  }) : super.internal();
+
+  final String? constitution;
+  final String? type;
+  final String? pancardNo;
+  final String? bnplName;
+  final String? phoneNo;
+
+  @override
+  Override overrideWith(
+    FutureOr<BaseApiResponse> Function(RegisterBnplRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: RegisterBnplProvider._internal(
+        (ref) => create(ref as RegisterBnplRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        constitution: constitution,
+        type: type,
+        pancardNo: pancardNo,
+        bnplName: bnplName,
+        phoneNo: phoneNo,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<BaseApiResponse> createElement() {
+    return _RegisterBnplProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is RegisterBnplProvider &&
+        other.constitution == constitution &&
+        other.type == type &&
+        other.pancardNo == pancardNo &&
+        other.bnplName == bnplName &&
+        other.phoneNo == phoneNo;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, constitution.hashCode);
+    hash = _SystemHash.combine(hash, type.hashCode);
+    hash = _SystemHash.combine(hash, pancardNo.hashCode);
+    hash = _SystemHash.combine(hash, bnplName.hashCode);
+    hash = _SystemHash.combine(hash, phoneNo.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin RegisterBnplRef on AutoDisposeFutureProviderRef<BaseApiResponse> {
+  /// The parameter `constitution` of this provider.
+  String? get constitution;
+
+  /// The parameter `type` of this provider.
+  String? get type;
+
+  /// The parameter `pancardNo` of this provider.
+  String? get pancardNo;
+
+  /// The parameter `bnplName` of this provider.
+  String? get bnplName;
+
+  /// The parameter `phoneNo` of this provider.
+  String? get phoneNo;
+}
+
+class _RegisterBnplProviderElement
+    extends AutoDisposeFutureProviderElement<BaseApiResponse>
+    with RegisterBnplRef {
+  _RegisterBnplProviderElement(super.provider);
+
+  @override
+  String? get constitution => (origin as RegisterBnplProvider).constitution;
+  @override
+  String? get type => (origin as RegisterBnplProvider).type;
+  @override
+  String? get pancardNo => (origin as RegisterBnplProvider).pancardNo;
+  @override
+  String? get bnplName => (origin as RegisterBnplProvider).bnplName;
+  @override
+  String? get phoneNo => (origin as RegisterBnplProvider).phoneNo;
+}
+
+String _$updateAddressHash() => r'a2b0950360d672ac3e51933dab2bef89598e7726';
+
+/// See also [updateAddress].
+@ProviderFor(updateAddress)
+const updateAddressProvider = UpdateAddressFamily();
+
+/// See also [updateAddress].
+class UpdateAddressFamily extends Family<AsyncValue<BaseApiResponse>> {
+  /// See also [updateAddress].
+  const UpdateAddressFamily();
+
+  /// See also [updateAddress].
+  UpdateAddressProvider call({
+    String? address,
+    String? stateAddress,
+    String? district,
+    String? pincode,
+  }) {
+    return UpdateAddressProvider(
+      address: address,
+      stateAddress: stateAddress,
+      district: district,
+      pincode: pincode,
+    );
+  }
+
+  @override
+  UpdateAddressProvider getProviderOverride(
+    covariant UpdateAddressProvider provider,
+  ) {
+    return call(
+      address: provider.address,
+      stateAddress: provider.stateAddress,
+      district: provider.district,
+      pincode: provider.pincode,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'updateAddressProvider';
+}
+
+/// See also [updateAddress].
+class UpdateAddressProvider extends AutoDisposeFutureProvider<BaseApiResponse> {
+  /// See also [updateAddress].
+  UpdateAddressProvider({
+    String? address,
+    String? stateAddress,
+    String? district,
+    String? pincode,
+  }) : this._internal(
+          (ref) => updateAddress(
+            ref as UpdateAddressRef,
+            address: address,
+            stateAddress: stateAddress,
+            district: district,
+            pincode: pincode,
+          ),
+          from: updateAddressProvider,
+          name: r'updateAddressProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$updateAddressHash,
+          dependencies: UpdateAddressFamily._dependencies,
+          allTransitiveDependencies:
+              UpdateAddressFamily._allTransitiveDependencies,
+          address: address,
+          stateAddress: stateAddress,
+          district: district,
+          pincode: pincode,
+        );
+
+  UpdateAddressProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.address,
+    required this.stateAddress,
+    required this.district,
+    required this.pincode,
+  }) : super.internal();
+
+  final String? address;
+  final String? stateAddress;
+  final String? district;
+  final String? pincode;
+
+  @override
+  Override overrideWith(
+    FutureOr<BaseApiResponse> Function(UpdateAddressRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: UpdateAddressProvider._internal(
+        (ref) => create(ref as UpdateAddressRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        address: address,
+        stateAddress: stateAddress,
+        district: district,
+        pincode: pincode,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<BaseApiResponse> createElement() {
+    return _UpdateAddressProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UpdateAddressProvider &&
+        other.address == address &&
+        other.stateAddress == stateAddress &&
+        other.district == district &&
+        other.pincode == pincode;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, address.hashCode);
+    hash = _SystemHash.combine(hash, stateAddress.hashCode);
+    hash = _SystemHash.combine(hash, district.hashCode);
+    hash = _SystemHash.combine(hash, pincode.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin UpdateAddressRef on AutoDisposeFutureProviderRef<BaseApiResponse> {
+  /// The parameter `address` of this provider.
+  String? get address;
+
+  /// The parameter `stateAddress` of this provider.
+  String? get stateAddress;
+
+  /// The parameter `district` of this provider.
+  String? get district;
+
+  /// The parameter `pincode` of this provider.
+  String? get pincode;
+}
+
+class _UpdateAddressProviderElement
+    extends AutoDisposeFutureProviderElement<BaseApiResponse>
+    with UpdateAddressRef {
+  _UpdateAddressProviderElement(super.provider);
+
+  @override
+  String? get address => (origin as UpdateAddressProvider).address;
+  @override
+  String? get stateAddress => (origin as UpdateAddressProvider).stateAddress;
+  @override
+  String? get district => (origin as UpdateAddressProvider).district;
+  @override
+  String? get pincode => (origin as UpdateAddressProvider).pincode;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

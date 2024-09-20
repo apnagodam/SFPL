@@ -3,13 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
 
 import '../utils/colors.dart';
-import '../utils/routes_strings.dart';
 
 class Profilescreen extends ConsumerStatefulWidget {
   const Profilescreen({super.key});

@@ -13,7 +13,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:path/path.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Domain/LoanService/LoanService.dart';
-import 'package:swfl/ui/utils/StringUtils.dart';
 import 'package:swfl/ui/utils/routes.dart';
 import 'package:swfl/ui/utils/widgets.dart';
 

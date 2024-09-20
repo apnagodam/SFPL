@@ -69,6 +69,11 @@ dependencies:
   path_provider: ^2.1.4
   htmltopdfwidgets: ^1.0.3
   open_file: ^3.4.0
+  pretty_dio_logger: ^1.4.0
+  quickalert: ^1.1.0
+  flutter_flip_card: ^0.0.6
+  tab_container: ^3.5.3
+  shimmer: ^3.0.0
 
 
 

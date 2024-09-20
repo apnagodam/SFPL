@@ -1,20 +1,37 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_flip_card/flutter_flip_card.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/ui/utils/colors.dart';
+import 'package:tab_container/tab_container.dart';
 
 var currencyFormat =
     NumberFormat.currency(locale: 'HI', symbol: '\u{20B9}', decimalDigits: 2);
+final flipController = FlipCardController();
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+late final TabController _controller;
+
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller = TabController(vsync: this, length: 2);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
           child: ListView(
@@ -22,60 +39,198 @@ class HomeScreen extends ConsumerWidget {
           SizedBox(
             height: Adaptive.sh(2),
           ),
-          Container(
-              width: MediaQuery.of(context).size.width,
-              margin: const Pad(all: 10),
-              decoration: BoxDecoration(
-                  border: Border.all(
-                      color: ColorsConstant.secondColorSuperDark, width: 2),
-                  borderRadius: BorderRadius.circular(10),
-                  gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      stops: const [
-                        0,
-                        0,
-                        1,
-                        2,
-                        3
-                      ],
-                      colors: [
-                        Colors.transparent.withOpacity(0.8),
-                        ColorsConstant.primaryColor.withOpacity(0.8),
-                        ColorsConstant.secondColorDark,
-                        ColorsConstant.secondColorSuperDark,
-                        ColorsConstant.primaryColor.withOpacity(0.8),
-                      ])),
-              padding: const Pad(all: 25),
-              child: ColumnSuper(alignment: Alignment.topLeft, children: [
-                Text(
-                  "Outstanding Amount".toUpperCase(),
-                  style: TextStyle(
-                    shadows: const [
-                      Shadow(color: Colors.black, blurRadius: 2.0),
-                      Shadow(color: Colors.black, blurRadius: 2.0)
-                    ],
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: Adaptive.sp(18),
+          Padding(
+            padding: Pad(all: 10),
+            child: TabContainer(
+              controller: _controller,
+              borderRadius: BorderRadius.circular(20),
+              tabEdge: TabEdge.top,
+              curve: Curves.easeIn,
+              transitionBuilder: (child, animation) {
+                animation =
+                    CurvedAnimation(curve: Curves.easeIn, parent: animation);
+                return SlideTransition(
+                  position: Tween(
+                    begin: const Offset(0.2, 0.0),
+                    end: const Offset(0.0, 0.0),
+                  ).animate(animation),
+                  child: FadeTransition(
+                    opacity: animation,
+                    child: child,
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
+                );
+              },
+              colors: const <Color>[
+                ColorsConstant.primaryColor,
+                ColorsConstant.secondColorDark,
+              ],
+
+              selectedTextStyle: TextStyle(
+                  color: Colors.white,
+                  shadows: [const Shadow(color: Colors.white, blurRadius: 0.3)],
+                  fontWeight: FontWeight.w700,
+                  fontSize: Adaptive.sp(16)),
+              unselectedTextStyle: TextStyle(
+                  color: Colors.black,
+                  shadows: [const Shadow(color: Colors.white, blurRadius: 0.3)],
+                  fontWeight: FontWeight.w700,
+                  fontSize: Adaptive.sp(16)),
+              tabs: [
+                Text(
+                  'Outstanding Limit',
+                  style: TextStyle(
+
+                      fontWeight: FontWeight.w700,
+                      fontSize: Adaptive.sp(16)),
                 ),
                 Text(
-                  "${currencyFormat.format(21000000.00)}",
+                  'BNPL Limit',
                   style: TextStyle(
-                      shadows: const [
-                        Shadow(color: Colors.black, blurRadius: 2.0),
-                        Shadow(color: Colors.black, blurRadius: 2.0)
-                      ],
-                      fontWeight: FontWeight.bold,
-                      fontFamily: GoogleFonts.manrope().fontFamily,
-                      fontSize: Adaptive.sp(22),
-                      color: Colors.white),
+
+                      fontWeight: FontWeight.w700,
+                      fontSize: Adaptive.sp(16)),
                 ),
-              ])),
+              ],
+              children: [
+                Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: const Pad(all: 10),
+                    padding: const Pad(all: 25),
+                    child: RowSuper(fill: true, children: [
+                      ColumnSuper(alignment: Alignment.centerLeft, children: [
+                        Text(
+                          "OutStanding Limit".toUpperCase(),
+                          style: TextStyle(
+                            shadows: const [
+                              Shadow(color: Colors.black, blurRadius: 2.0),
+                              Shadow(color: Colors.black, blurRadius: 2.0)
+                            ],
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,fontFamily: GoogleFonts.manrope().fontFamily,
+
+                            fontSize: Adaptive.sp(18),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "${currencyFormat.format(21000000.00)}",
+                          style: TextStyle(
+                              shadows: const [
+                                Shadow(color: Colors.black, blurRadius: 2.0),
+                                Shadow(color: Colors.black, blurRadius: 2.0)
+                              ],
+                              fontWeight: FontWeight.bold,
+                              fontFamily: GoogleFonts.manrope().fontFamily,
+                              fontSize: Adaptive.sp(22),
+                              color: Colors.white),
+                        ),
+                      ]),
+                    ])),
+                Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: const Pad(all: 10),
+                    padding: const Pad(all: 25),
+                    child: RowSuper(fill: true, children: [
+                      ColumnSuper(alignment: Alignment.centerLeft, children: [
+                        Text(
+                          "BNPL Limit".toUpperCase(),
+                          style: TextStyle(
+                            shadows: const [
+                              Shadow(color: Colors.black, blurRadius: 2.0),
+                              Shadow(color: Colors.black, blurRadius: 2.0)
+                            ],
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: GoogleFonts.manrope().fontFamily,
+                            fontSize: Adaptive.sp(18),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "${currencyFormat.format(21000000.00)}",
+                          style: TextStyle(
+                              shadows: const [
+                                Shadow(color: Colors.black, blurRadius: 2.0),
+                                Shadow(color: Colors.black, blurRadius: 2.0)
+                              ],
+                              fontWeight: FontWeight.bold,
+                              fontFamily: GoogleFonts.manrope().fontFamily,
+                              fontSize: Adaptive.sp(22),
+                              color: Colors.white),
+                        ),
+                      ]),
+                    ])),
+              ],
+            ),
+          ),
+          // Container(
+          //     width: MediaQuery.of(context).size.width,
+          //     margin: const Pad(all: 10),
+          //     decoration: BoxDecoration(
+          //         border: Border.all(
+          //             color: ColorsConstant.secondColorSuperDark, width: 2),
+          //         borderRadius: BorderRadius.circular(10),
+          //         gradient: LinearGradient(
+          //             begin: Alignment.topLeft,
+          //             end: Alignment.bottomRight,
+          //             stops: const [
+          //               0,
+          //               0,
+          //               1,
+          //               2,
+          //               3
+          //             ],
+          //             colors: [
+          //               Colors.transparent.withOpacity(0.8),
+          //               ColorsConstant.primaryColor.withOpacity(0.8),
+          //               ColorsConstant.secondColorDark,
+          //               ColorsConstant.secondColorSuperDark,
+          //               ColorsConstant.primaryColor.withOpacity(0.8),
+          //             ])),
+          //     padding: const Pad(all: 25),
+          //     child: RowSuper(
+          //         fill: true,
+          //         children: [
+          //           ColumnSuper(alignment: Alignment.centerLeft, children: [
+          //             Text(
+          //               "BNPL Limit".toUpperCase(),
+          //               style: TextStyle(
+          //                 shadows: const [
+          //                   Shadow(color: Colors.black, blurRadius: 2.0),
+          //                   Shadow(color: Colors.black, blurRadius: 2.0)
+          //                 ],
+          //                 color: Colors.white,
+          //                 fontWeight: FontWeight.bold,
+          //                 fontSize: Adaptive.sp(18),
+          //               ),
+          //             ),
+          //             const SizedBox(
+          //               height: 10,
+          //             ),
+          //             Text(
+          //               "${currencyFormat.format(21000000.00)}",
+          //               style: TextStyle(
+          //                   shadows: const [
+          //                     Shadow(color: Colors.black, blurRadius: 2.0),
+          //                     Shadow(color: Colors.black, blurRadius: 2.0)
+          //                   ],
+          //                   fontWeight: FontWeight.bold,
+          //                   fontFamily: GoogleFonts.manrope().fontFamily,
+          //                   fontSize: Adaptive.sp(22),
+          //                   color: Colors.white),
+          //             ),
+          //           ]),
+          //           Center(
+          //             child: IconButton(onPressed: (){
+          //
+          //               flipController.flipcard();
+          //             }, icon: Icon(Icons.crop_rotate,color: Colors.white,)),
+          //           )
+          //         ])),
           SizedBox(
             height: 10,
           ),
