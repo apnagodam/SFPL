@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swfl/Data/Model/OtpVerifyModel.dart';
 
+import '../Model/AdharVerifyOtpModel.dart';
+
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError();
 });
@@ -35,6 +37,17 @@ class SharedUtility {
   }
 
   void setUser(Data? userMap) {
+    sharedPreferences.setString('user', jsonEncode(userMap!.toMap()));
+  }
+
+  AadharData? aadharUserData() {
+    return sharedPreferences.get('user') != null
+        ? AadharData.fromMap(
+            jsonDecode(sharedPreferences.getString('user') ?? ""))
+        : null;
+  }
+
+  void setAadharUserData(AadharData? userMap) {
     sharedPreferences.setString('user', jsonEncode(userMap!.toMap()));
   }
 }

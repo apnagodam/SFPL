@@ -226,81 +226,7 @@ class _IndividualregistrationState
                         child: ElevatedButton(
                           onPressed: () async {
                             if (formKey.currentState!.validate()) {
-                              ref.watch(isRegisteringProvider.notifier).state =
-                                  true;
-                              ref
-                                  .watch(registerUserProvider(
-                                          panCard: panController.text,
-                                          phone:
-                                              phoneController.text.toString(),
-                                          userName:
-                                              nameController.text.toString(),
-                                          constitution: "1",
-                                          email:
-                                              emailController.text.toString(),
-                                          adharNo:
-                                              adharController.text.toString(),
-                                          address:
-                                              addressController.text.toString(),
-                                          locationState: ref
-                                              .watch(statesProvider)
-                                              ?.code
-                                              .toString(),
-                                          district: ref
-                                              .watch(districtProvider)
-                                              ?.districtCode
-                                              .toString(),
-                                          pincode:
-                                              pinController.text.toString(),
-                                          bankName: bankNameController.text
-                                              .toString(),
-                                          bankBranch:
-                                              branchController.text.toString(),
-                                          bankAccount:
-                                              accountController.text.toString(),
-                                          ifscCode:
-                                              ifscController.text.toString(),
-                                          propDocType: ref
-                                              .watch(propDocProvider)
-                                              .toString(),
-                                          propDocNumber:
-                                              gstController.text.toString(),
-                                          firmName:
-                                              firmController.text.toString(),
-                                          panCardImage:
-                                              ref.watch(panImageProvider),
-                                          profileImage:
-                                              ref.watch(panImageProvider),
-                                          adharBackImage:
-                                              ref.watch(adhaBackImageProvider),
-                                          aadharImage:
-                                              ref.watch(adharImageProvider),
-                                          chequeImage:
-                                              ref.watch(chequeImageProvider),
-                                          proprietorProof:
-                                              ref.watch(propDocImageProvider))
-                                      .future)
-                                  .then((value) {
-                                ref
-                                    .watch(isRegisteringProvider.notifier)
-                                    .state = false;
 
-                                if (value['status'].toString() == "1") {
-                                  context.goNamed(RoutesStrings.registrationOtp,
-                                      extra: {
-                                        "panCard": panController.text.toString()
-                                      });
-                                } else {
-                                  errorToast(
-                                      context, value['message'].toString());
-                                }
-                              }).onError((e, s) {
-                                ref
-                                    .watch(isRegisteringProvider.notifier)
-                                    .state = false;
-                                //toastification.show(title: Text(e.toString()));
-                              });
-                            } else {
                               if (ref.watch(panImageProvider) == null) {
                                 errorToast(context, 'Please select Pan Image');
                               } else if (ref.watch(adharImageProvider) ==
@@ -320,9 +246,85 @@ class _IndividualregistrationState
                               } else if (ref.watch(districtProvider) == null) {
                                 errorToast(context, 'Please select District');
                               } else {
-                                errorToast(
-                                    context, 'Please Fill all the details');
+                                ref.watch(isRegisteringProvider.notifier).state =
+                                true;
+                                ref
+                                    .watch(registerUserProvider(
+                                    panCard: panController.text,
+                                    phone:
+                                    phoneController.text.toString(),
+                                    userName:
+                                    nameController.text.toString(),
+                                    constitution: "1",
+                                    email:
+                                    emailController.text.toString(),
+                                    adharNo:
+                                    adharController.text.toString(),
+                                    address:
+                                    addressController.text.toString(),
+                                    locationState: ref
+                                        .watch(statesProvider)
+                                        ?.code
+                                        .toString(),
+                                    district: ref
+                                        .watch(districtProvider)
+                                        ?.districtCode
+                                        .toString(),
+                                    pincode:
+                                    pinController.text.toString(),
+                                    bankName: bankNameController.text
+                                        .toString(),
+                                    bankBranch:
+                                    branchController.text.toString(),
+                                    bankAccount:
+                                    accountController.text.toString(),
+                                    ifscCode:
+                                    ifscController.text.toString(),
+                                    propDocType: ref
+                                        .watch(propDocProvider)
+                                        .toString(),
+                                    propDocNumber:
+                                    gstController.text.toString(),
+                                    firmName:
+                                    firmController.text.toString(),
+                                    panCardImage:
+                                    ref.watch(panImageProvider),
+                                    profileImage:
+                                    ref.watch(panImageProvider),
+                                    adharBackImage:
+                                    ref.watch(adhaBackImageProvider),
+                                    aadharImage:
+                                    ref.watch(adharImageProvider),
+                                    chequeImage:
+                                    ref.watch(chequeImageProvider),
+                                    proprietorProof:
+                                    ref.watch(propDocImageProvider)??ref.watch(chequeImageProvider))
+                                    .future)
+                                    .then((value) {
+                                  ref
+                                      .watch(isRegisteringProvider.notifier)
+                                      .state = false;
+
+                                  if (value['status'].toString() == "1") {
+                                    context.goNamed(RoutesStrings.registrationOtp,
+                                        extra: {
+                                          "panCard": panController.text.toString()
+                                        });
+                                  } else {
+                                    errorToast(
+                                        context, value['message'].toString());
+                                  }
+                                }).onError((e, s) {
+                                  ref
+                                      .watch(isRegisteringProvider.notifier)
+                                      .state = false;
+                                  //toastification.show(title: Text(e.toString()));
+                                });
                               }
+
+
+                            } else {
+
                             }
                           },
                           style: ElevatedButton.styleFrom(

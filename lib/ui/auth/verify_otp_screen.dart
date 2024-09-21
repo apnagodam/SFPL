@@ -3,13 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:swfl/Domain/Dio/DioProvider.dart';
 import 'package:swfl/ui/utils/colors.dart';
 import 'package:swfl/ui/utils/debouncer.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
+import 'package:swfl/ui/utils/widgets.dart';
 
 import '../../Data/SharedPrefs/SharedUtility.dart';
 import '../../Domain/AuthenticationService/AuthenticationService.dart';
+import '../../Domain/Dio/DioProvider.dart';
 
 class VerifyOtpScreen extends ConsumerStatefulWidget {
   const VerifyOtpScreen({super.key, required this.panCard});
@@ -100,13 +101,21 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
                     if (pin.length == 6) {
                       Debouncer(delay: const Duration(milliseconds: 500))
                           .call(() {
+                        showloader(context);
                         ref
                             .watch(verifyOtpProvider(
                                     panCard: widget.panCard, otp: pin)
                                 .future)
                             .then((value) {
-                          if (value.status.toString() == "1") {
+                          Navigator.of(context, rootNavigator: true).pop('dialog');
 
+                          if (value.status.toString() == "1") {
+                            ref
+                                .watch(sharedUtilityProvider)
+                                .setToken(value.data?.token ?? "");
+                            ref.watch(sharedUtilityProvider).setUser(value.data);
+
+                            ref.invalidate(dioProvider);
                             context.go(RoutesStrings.dashboard);
                           }
                         });

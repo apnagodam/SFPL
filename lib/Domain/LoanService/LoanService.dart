@@ -5,6 +5,8 @@ import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:swfl/Data/Model/SanctionLimitListModel.dart';
 import 'package:swfl/Data/Model/TermsModel.dart';
+import 'package:swfl/Data/Model/TripartyAgreementModel.dart';
+import 'package:swfl/Data/Model/WspListModel.dart';
 import 'package:swfl/Domain/Dio/DioProvider.dart';
 
 import '../../Data/Model/SchemeResponseModel.dart';
@@ -65,5 +67,40 @@ Future<Map<String, dynamic>> applyForLoan(ApplyForLoanRef ref,
   });
   var response =
       await ref.watch(dioProvider).post(ApiClient.applyForLoan, data: formData);
+  return response.data;
+}
+
+@riverpod
+Future<WspListModel> wspAgreementList(WspAgreementListRef ref) async {
+  var response = await ref.watch(dioProvider).get(ApiClient.wspAgreementList);
+  return wspListModelFromMap(jsonEncode(response.data));
+}
+
+@riverpod
+Future<TripartyAgreementModel> wspAgreement(WspAgreementRef ref,
+    {String? wspId}) async {
+  var response = await ref
+      .watch(dioProvider)
+      .post(ApiClient.wspTripartyAgreement, queryParameters: {'wsp_id': wspId});
+  return tripartyAgreementModelFromMap(jsonEncode(response.data));
+}
+
+@riverpod
+Future<Map<String, dynamic>> uploadPdf(
+  UploadPdfRef ref, {
+  File? agreementFile,
+  String? wspId,
+}) async {
+  FormData formData = FormData.fromMap({
+    'wsp_id': wspId,
+    'triparty_agr': await MultipartFile.fromFile(
+      agreementFile?.path ?? "",
+      filename: 'agreement',
+    ),
+    "type": "application/pdf"
+  });
+  var response = await ref
+      .watch(dioProvider)
+      .post(ApiClient.uploadAggrement, data: formData);
   return response.data;
 }

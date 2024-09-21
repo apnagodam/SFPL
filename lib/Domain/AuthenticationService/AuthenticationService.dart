@@ -3,6 +3,9 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:swfl/Data/Model/AadharResponseModel.dart';
+import 'package:swfl/Data/Model/AdharVerifyOtpModel.dart';
+import 'package:swfl/Data/Model/BaseApiResponse.dart';
 import 'package:swfl/Data/Model/OtpVerifyModel.dart';
 import 'package:swfl/Domain/Dio/DioProvider.dart';
 
@@ -95,6 +98,29 @@ Future<OtpVerifyModel> verifyOtp(VerifyOtpRef ref,
 }
 
 @riverpod
+Future<AadharResponseModel> sendAadharOtp(SendAadharOtpRef ref,
+    {String? aadharNo}) async {
+  var response = await ref
+      .watch(dioProvider)
+      .post(ApiClient.aadharSendOtp, queryParameters: {'aadhar_no': aadharNo});
+
+  return aadharResponseModelFromMap(jsonEncode(response.data));
+}
+
+@riverpod
+Future<AdharVerifyOtpModel> verifyAadharOtp(VerifyAadharOtpRef ref,
+    {String? clientId, String? otp, String? aadharNumber}) async {
+  var response = await ref.watch(dioProvider).post(ApiClient.verifyAdharOtp,
+      queryParameters: {
+        'client_id': clientId,
+        'otp': otp,
+        'aadhar_no': aadharNumber
+      });
+
+  return adharVerifyOtpModelFromMap(jsonEncode(response.data));
+}
+
+@riverpod
 Future<Map<String, dynamic>> login(LoginRef ref, {String? panNumber}) async {
   var response = await ref
       .watch(dioProvider)
@@ -112,4 +138,34 @@ Future<Map<String, dynamic>> logout(LogoutRef ref) async {
 Future<OtpVerifyModel> loginInfo(LoginInfoRef ref) async {
   var response = await ref.watch(dioProvider).get(ApiClient.loginInfo);
   return otpVerifyModelFromMap(jsonEncode(response.data));
+}
+
+@riverpod
+Future<BaseApiResponse> registerBnpl(RegisterBnplRef ref,
+    {String? constitution,
+    String? type,
+    String? pancardNo,
+    String? bnplName,
+    String? phoneNo}) async {
+  var response =
+      await ref.watch(dioProvider).post(ApiClient.registerBNPL, data: {
+    'constitution': constitution,
+    'type': type,
+    'pancard_no': pancardNo,
+    'name': bnplName,
+    'phone': phoneNo,
+  });
+  return baseApiResponseFromMap(jsonEncode(response.data));
+}
+
+@riverpod
+Future<BaseApiResponse> updateAddress(UpdateAddressRef ref,
+    {String? address, String? stateAddress, String? district, String? pincode}) async {
+  var response = await ref.watch(dioProvider).post(ApiClient.updateAddress, data: {
+    'address': address,
+    'state': stateAddress,
+    'district': district,
+    'pincode': pincode
+  });
+  return baseApiResponseFromMap(jsonEncode(response.data));
 }
