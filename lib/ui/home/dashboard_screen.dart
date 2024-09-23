@@ -285,7 +285,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               if (ref.watch(checkBoxValueProvider)) {
                                 showloader(context);
                                 ref
-                                    .watch(bnplRequestProvider.future)
+                                    .watch(bnplRequestProvider().future)
                                     .then((value) {
                                   hideLoader(context);
                                   if (value.status.toString() == "1") {

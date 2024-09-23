@@ -157,9 +157,9 @@ class _BnplscreenState extends ConsumerState<Bnplscreen> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (ref
-                        .watch(sharedUtilityProvider)
-                        .getUser()
-                        ?.aadharVerify ==
+                            .watch(sharedUtilityProvider)
+                            .getUser()
+                            ?.aadharVerify ==
                         "0") {
                       showVerificationDialog(context,
                           titleText: "Verify Aadhar",
@@ -196,13 +196,14 @@ class _BnplscreenState extends ConsumerState<Bnplscreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Container(
                 padding: Pad(all: 10),
                 decoration: BoxDecoration(
                     border: Border.all(
-                        color: ColorsConstant.secondColorSuperDark,
-                        width: 2),
+                        color: ColorsConstant.secondColorSuperDark, width: 2),
                     borderRadius: BorderRadius.circular(10),
                     gradient: LinearGradient(
                         begin: Alignment.topLeft,
@@ -399,7 +400,11 @@ class _BnplscreenState extends ConsumerState<Bnplscreen> {
                               if (ref.watch(checkBoxValueProvider)) {
                                 showloader(context);
                                 ref
-                                    .watch(bnplRequestProvider.future)
+                                    .watch(bnplRequestProvider(
+                                            requestedAmount:
+                                                bnplController.text.toString(),
+                                            type: "")
+                                        .future)
                                     .then((value) {
                                   hideLoader(context);
                                   if (value.status.toString() == "1") {

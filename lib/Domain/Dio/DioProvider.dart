@@ -112,4 +112,5 @@ BNPL api
 
   static const bnplTerms = 'bnpl-kfc';
   static const requestBnpl = 'bnpl-request';
+  static const bnplListing = 'bnpl-listing';
 }
