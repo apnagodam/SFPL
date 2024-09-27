@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Domain/WalletService/WalletService.dart';
@@ -15,6 +16,7 @@ import 'package:swfl/ui/utils/widgets.dart';
 import '../../../../Data/SharedPrefs/SharedUtility.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/routes.dart';
+import '../../../utils/routes_strings.dart';
 
 class Addmoney extends ConsumerStatefulWidget {
   const Addmoney({super.key});
@@ -36,6 +38,10 @@ class _AddmoneyState extends ConsumerState<Addmoney> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Money'),
+        actions: [IconButton(onPressed: (){
+          context.goNamed(RoutesStrings.moneyRequests);
+
+        }, icon: Icon(Icons.wallet))],
       ),
       body: SafeArea(
           child: Form(

@@ -114,7 +114,7 @@ class _BnplaadharregistrationState
                                 ref.watch(clientIdProvider.notifier).state =
                                     value.data ?? "";
                               }
-                              successToastIndefinite(
+                              successToast(
                                   context, value.message ?? "");
                             }).onError((e, s) {});
                             if (bnplKey.currentState!.validate()) {}

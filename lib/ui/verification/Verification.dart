@@ -13,7 +13,6 @@ import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:path/path.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Domain/LoanService/LoanService.dart';
-import 'package:swfl/ui/home/dashboard_screen.dart';
 import 'package:swfl/ui/utils/pdf.dart';
 import 'package:swfl/ui/utils/widgets.dart';
 
@@ -236,62 +235,62 @@ class _VerificationState extends ConsumerState<Verification> {
                     child: Center(
                       child: ref.watch(triPartyImageProvider) != null
                           ? Text(
-                        "${basename(ref.watch(triPartyImageProvider)?.path??"")}",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color:
-                            ColorsConstant.primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: Adaptive.sp(16)),
-                      )
+                              "${basename(ref.watch(triPartyImageProvider)?.path ?? "")}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: ColorsConstant.primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Adaptive.sp(16)),
+                            )
                           : ColumnSuper(children: [
-                        Icon(
-                          LucideIcons.cloud_upload,
-                          color: ColorsConstant.primaryColor,
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          "Select Agreement",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color:
-                              ColorsConstant.primaryColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: Adaptive.sp(16)),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          "Upload Agreement,\n  Supports PDF",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color:
-                              ColorsConstant.primaryColor,
-                              fontWeight: FontWeight.w700,
-                              fontSize: Adaptive.sp(13)),
-                        )
-                      ]),
+                              Icon(
+                                LucideIcons.cloud_upload,
+                                color: ColorsConstant.primaryColor,
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "Select Agreement",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: ColorsConstant.primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Adaptive.sp(16)),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "Upload Agreement,\n  Supports PDF",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: ColorsConstant.primaryColor,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: Adaptive.sp(13)),
+                              )
+                            ]),
                     ),
                   )),
             ),
             IconsButton(
               onPressed: () async {
                 // print(ref.watch(wspProvider)?.id.toString());
+                showloader(context);
                 ref
                     .watch(uploadPdfProvider(
                             wspId: "${ref.watch(wspProvider)?.id.toString()}",
                             agreementFile: ref.watch(triPartyImageProvider))
                         .future)
                     .then((value) {
+                      hideLoader(context);
                   if (value['status'].toString() == "1") {
                     ref.watch(goRouterProvider).pop();
                     successToast(context, value['message'].toString());
                   } else {
                     errorToast(context, value['message'].toString());
                   }
+                }).onError((e,s){                      hideLoader(context);
                 });
               },
               text: 'Upload',
@@ -312,7 +311,11 @@ class _VerificationState extends ConsumerState<Verification> {
                       text: 'click here',
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          tripartyDialog(context, ref);
+                          showHelpDialog(context,
+                              titleText: '', messageText: '', action: () {
+                            hideLoader(context);
+                          });
+                          // tripartyDialog(context, ref);
                         },
                       style: TextStyle(
                           fontWeight: FontWeight.w700,

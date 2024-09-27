@@ -153,7 +153,7 @@ class _SanctionedamountscreenState
                                     fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                '${currencyFormat.format(int.parse(appliedData?.requestedAmount ?? "0"))}',
+                                '${currencyFormat.format(int.parse("${appliedData?.requestedAmount}"))}',
                                 textAlign: TextAlign.end,
                                 style: TextStyle(
                                     fontSize: Adaptive.sp(15),
@@ -172,7 +172,7 @@ class _SanctionedamountscreenState
                                     fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                '${currencyFormat.format(int.parse(appliedData?.approvedAmount ?? "0"))}',
+                                '${currencyFormat.format(int.parse(appliedData?.approvedAmount.toString() ?? "0"))}',
                                 textAlign: TextAlign.end,
                                 style: TextStyle(
                                     fontSize: Adaptive.sp(15),
@@ -202,17 +202,20 @@ class _SanctionedamountscreenState
                               height: 10,
                             ),
                             TextOneLine(
-                                'Status: ${appliedData?.status == "0" ? "Rejected" : appliedData?.status == "1" ? "Pending" : appliedData?.status == "2" ? "Approved" : appliedData?.status == "3" ? "Pending Approval" : "--"}',
+                                'Status: ${appliedData?.status.toString() == "0" ? "Rejected" : appliedData?.status.toString() == "1" ? "Pending" : appliedData?.status.toString() == "2" ? "Approved" : appliedData?.status.toString() == "3" ? "Verify or user post sanction doc pending" : "--"}',
                                 style: TextStyle(
                                     fontSize: Adaptive.sp(16),
-                                    color: appliedData?.status == "0"
+                                    color: appliedData?.status.toString() == "0"
                                         ? Colors.red
-                                        : appliedData?.status == "1"
+                                        : appliedData?.status.toString() == "1"
                                             ? ColorsConstant
                                                 .secondColorUltraDark
-                                            : appliedData?.status == "2"
+                                            : appliedData?.status.toString() ==
+                                                    "2"
                                                 ? ColorsConstant.primaryColor
-                                                : appliedData?.status == "3"
+                                                : appliedData?.status
+                                                            .toString() ==
+                                                        "3"
                                                     ? ColorsConstant
                                                         .secondColorUltraDark
                                                     : ColorsConstant

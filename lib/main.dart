@@ -24,8 +24,8 @@ void main() async {
       builder: (context, orientation, screenType) {
         return const ToastificationWrapper(
             child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              home: MyApp(),
+          debugShowCheckedModeBanner: false,
+          home: MyApp(),
         ));
       },
     ),
@@ -51,7 +51,8 @@ class MyApp extends ConsumerWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: Adaptive.sp(18),
                 color: Colors.black)),
-        fontFamily: GoogleFonts.manrope().fontFamily,        colorScheme:
+        fontFamily: GoogleFonts.manrope().fontFamily,
+        colorScheme:
             ColorScheme.fromSeed(seedColor: ColorsConstant.secondColorDark),
         useMaterial3: true,
       ),

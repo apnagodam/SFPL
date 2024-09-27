@@ -3,6 +3,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:swfl/Data/Model/LoanApplyListModel.dart';
+import 'package:swfl/Data/Model/LoanDetailsModel.dart';
+import 'package:swfl/Data/Model/LoanRequestFormModel.dart';
+import 'package:swfl/Data/Model/LoanRequestsStatusModel.dart';
 import 'package:swfl/Data/Model/SanctionLimitListModel.dart';
 import 'package:swfl/Data/Model/TermsModel.dart';
 import 'package:swfl/Data/Model/TripartyAgreementModel.dart';
@@ -26,8 +30,10 @@ Future<SanctionLimitListModel> appliedList(AppliedListRef ref) async {
 }
 
 @riverpod
-Future<TermsModel> terms(TermsRef ref) async {
-  var response = await ref.watch(dioProvider).get(ApiClient.getTerms);
+Future<TermsModel> terms(TermsRef ref, {required String? schemeId}) async {
+  var response = await ref
+      .watch(dioProvider)
+      .post(ApiClient.getTerms, queryParameters: {"scheme_id": schemeId});
   return termsModelFromJson(jsonEncode(response.data));
 }
 
@@ -103,4 +109,99 @@ Future<Map<String, dynamic>> uploadPdf(
       .watch(dioProvider)
       .post(ApiClient.uploadAggrement, data: formData);
   return response.data;
+}
+
+@riverpod
+Future<LoanApplyListModel> loanApplyList(LoanApplyListRef ref) async {
+  var response = await ref.watch(dioProvider).get(ApiClient.getStockList);
+  return loanApplyListModelFromMap(jsonEncode(response.data));
+}
+
+@riverpod
+Future<LoanRequestFormModel> loanRequestForm(LoanRequestFormRef ref) async {
+  var response =
+      await ref.watch(dioProvider).post(ApiClient.getLoanRequestForm);
+  return loanRequestFormModelFromMap(jsonEncode(response.data));
+}
+
+@riverpod
+Future<LoanDetailsModel> loanDetails(LoanDetailsRef ref,
+    {String? inventoryId,
+    String? commodityName,
+    String? quantity,
+    String? gatePass,
+    String? schemeId}) async {
+  var response =
+      await ref.watch(dioProvider).post(ApiClient.getLoanDetails, data: {
+    'inventory_id': inventoryId,
+    'commodity_name': commodityName,
+    'quantity': quantity,
+    'gate_pass': gatePass,
+    'scheme_id': schemeId
+  });
+  return loanDetailsModelFromMap(jsonEncode(response.data));
+}
+
+@riverpod
+Future<Map<String, dynamic>> submitLoanRequest(SubmitLoanRequestRef ref,
+    {String? inventoryId,
+    String? commodityName,
+    String? quantity,
+    String? gatePass,
+    String? schemeId,
+    String? bankName,
+    String? ifscCode,
+    String? accountNo,
+    String? stackNo,
+    String? terminalName}) async {
+  var response =
+      await ref.watch(dioProvider).post(ApiClient.submitLoanRequest, data: {
+    'inventory_id': inventoryId,
+    'commodity_name': commodityName,
+    'quantity': quantity,
+    'gate_pass': gatePass,
+    'scheme_id': schemeId,
+    'bank_name': bankName,
+    'ifsc': ifscCode,
+    'account_no': accountNo,
+    'stack_number': stackNo,
+    'terminal': terminalName,
+  });
+  return response.data;
+}
+
+@riverpod
+Future<Map<String, dynamic>> cancelLoanRequest(CancelLoanRequestRef ref,
+    {String? id}) async {
+  var response =
+      await ref.watch(dioProvider).post(ApiClient.cancelLoanRequest, data: {
+    'id': id,
+  });
+  return response.data;
+}
+
+@riverpod
+Future<LoanRequestsStatusModel> approvedRequests(
+    ApprovedRequestsRef ref) async {
+  var response = await ref.watch(dioProvider).get(ApiClient.approvedRequests);
+  return loanRequestsStatusModelFromMap(jsonEncode(response.data));
+}
+
+@riverpod
+Future<LoanRequestsStatusModel> pendingRequests(PendingRequestsRef ref) async {
+  var response = await ref.watch(dioProvider).get(ApiClient.pendingRequests);
+  return loanRequestsStatusModelFromMap(jsonEncode(response.data));
+}
+
+@riverpod
+Future<LoanRequestsStatusModel> rejectedRequests(
+    RejectedRequestsRef ref) async {
+  var response = await ref.watch(dioProvider).get(ApiClient.rejectedRequests);
+  return loanRequestsStatusModelFromMap(jsonEncode(response.data));
+}
+
+@riverpod
+Future<LoanRequestsStatusModel> closedRequests(ClosedRequestsRef ref) async {
+  var response = await ref.watch(dioProvider).get(ApiClient.closedRequests);
+  return loanRequestsStatusModelFromMap(jsonEncode(response.data));
 }

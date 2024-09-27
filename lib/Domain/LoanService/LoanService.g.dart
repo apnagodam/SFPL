@@ -35,21 +35,7 @@ final appliedListProvider =
 );
 
 typedef AppliedListRef = AutoDisposeFutureProviderRef<SanctionLimitListModel>;
-String _$termsHash() => r'331295fe3bed07ef3c6a79c8c41d405f54f37112';
-
-/// See also [terms].
-@ProviderFor(terms)
-final termsProvider = AutoDisposeFutureProvider<TermsModel>.internal(
-  terms,
-  name: r'termsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$termsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef TermsRef = AutoDisposeFutureProviderRef<TermsModel>;
-String _$applyForLoanHash() => r'c911985e88577635e8bb53b69f679afe131179c8';
+String _$termsHash() => r'faaf1fd42283553c5e204e00961682c3bee4acce';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -71,6 +57,133 @@ class _SystemHash {
     return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
   }
 }
+
+/// See also [terms].
+@ProviderFor(terms)
+const termsProvider = TermsFamily();
+
+/// See also [terms].
+class TermsFamily extends Family<AsyncValue<TermsModel>> {
+  /// See also [terms].
+  const TermsFamily();
+
+  /// See also [terms].
+  TermsProvider call({
+    required String? schemeId,
+  }) {
+    return TermsProvider(
+      schemeId: schemeId,
+    );
+  }
+
+  @override
+  TermsProvider getProviderOverride(
+    covariant TermsProvider provider,
+  ) {
+    return call(
+      schemeId: provider.schemeId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'termsProvider';
+}
+
+/// See also [terms].
+class TermsProvider extends AutoDisposeFutureProvider<TermsModel> {
+  /// See also [terms].
+  TermsProvider({
+    required String? schemeId,
+  }) : this._internal(
+          (ref) => terms(
+            ref as TermsRef,
+            schemeId: schemeId,
+          ),
+          from: termsProvider,
+          name: r'termsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$termsHash,
+          dependencies: TermsFamily._dependencies,
+          allTransitiveDependencies: TermsFamily._allTransitiveDependencies,
+          schemeId: schemeId,
+        );
+
+  TermsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.schemeId,
+  }) : super.internal();
+
+  final String? schemeId;
+
+  @override
+  Override overrideWith(
+    FutureOr<TermsModel> Function(TermsRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: TermsProvider._internal(
+        (ref) => create(ref as TermsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        schemeId: schemeId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<TermsModel> createElement() {
+    return _TermsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is TermsProvider && other.schemeId == schemeId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, schemeId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin TermsRef on AutoDisposeFutureProviderRef<TermsModel> {
+  /// The parameter `schemeId` of this provider.
+  String? get schemeId;
+}
+
+class _TermsProviderElement extends AutoDisposeFutureProviderElement<TermsModel>
+    with TermsRef {
+  _TermsProviderElement(super.provider);
+
+  @override
+  String? get schemeId => (origin as TermsProvider).schemeId;
+}
+
+String _$applyForLoanHash() => r'c911985e88577635e8bb53b69f679afe131179c8';
 
 /// See also [applyForLoan].
 @ProviderFor(applyForLoan)
@@ -620,5 +733,711 @@ class _UploadPdfProviderElement
   @override
   String? get wspId => (origin as UploadPdfProvider).wspId;
 }
+
+String _$loanApplyListHash() => r'fbb030dd1147bc476e55e3a251a8a773eb46537c';
+
+/// See also [loanApplyList].
+@ProviderFor(loanApplyList)
+final loanApplyListProvider =
+    AutoDisposeFutureProvider<LoanApplyListModel>.internal(
+  loanApplyList,
+  name: r'loanApplyListProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$loanApplyListHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef LoanApplyListRef = AutoDisposeFutureProviderRef<LoanApplyListModel>;
+String _$loanRequestFormHash() => r'44a7055d9592bf4ffcb7d1c2ad4fc52a388baca3';
+
+/// See also [loanRequestForm].
+@ProviderFor(loanRequestForm)
+final loanRequestFormProvider =
+    AutoDisposeFutureProvider<LoanRequestFormModel>.internal(
+  loanRequestForm,
+  name: r'loanRequestFormProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$loanRequestFormHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef LoanRequestFormRef = AutoDisposeFutureProviderRef<LoanRequestFormModel>;
+String _$loanDetailsHash() => r'd9264f12df1dbc7e100c5d00586f9f90fec27abe';
+
+/// See also [loanDetails].
+@ProviderFor(loanDetails)
+const loanDetailsProvider = LoanDetailsFamily();
+
+/// See also [loanDetails].
+class LoanDetailsFamily extends Family<AsyncValue<LoanDetailsModel>> {
+  /// See also [loanDetails].
+  const LoanDetailsFamily();
+
+  /// See also [loanDetails].
+  LoanDetailsProvider call({
+    String? inventoryId,
+    String? commodityName,
+    String? quantity,
+    String? gatePass,
+    String? schemeId,
+  }) {
+    return LoanDetailsProvider(
+      inventoryId: inventoryId,
+      commodityName: commodityName,
+      quantity: quantity,
+      gatePass: gatePass,
+      schemeId: schemeId,
+    );
+  }
+
+  @override
+  LoanDetailsProvider getProviderOverride(
+    covariant LoanDetailsProvider provider,
+  ) {
+    return call(
+      inventoryId: provider.inventoryId,
+      commodityName: provider.commodityName,
+      quantity: provider.quantity,
+      gatePass: provider.gatePass,
+      schemeId: provider.schemeId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'loanDetailsProvider';
+}
+
+/// See also [loanDetails].
+class LoanDetailsProvider extends AutoDisposeFutureProvider<LoanDetailsModel> {
+  /// See also [loanDetails].
+  LoanDetailsProvider({
+    String? inventoryId,
+    String? commodityName,
+    String? quantity,
+    String? gatePass,
+    String? schemeId,
+  }) : this._internal(
+          (ref) => loanDetails(
+            ref as LoanDetailsRef,
+            inventoryId: inventoryId,
+            commodityName: commodityName,
+            quantity: quantity,
+            gatePass: gatePass,
+            schemeId: schemeId,
+          ),
+          from: loanDetailsProvider,
+          name: r'loanDetailsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$loanDetailsHash,
+          dependencies: LoanDetailsFamily._dependencies,
+          allTransitiveDependencies:
+              LoanDetailsFamily._allTransitiveDependencies,
+          inventoryId: inventoryId,
+          commodityName: commodityName,
+          quantity: quantity,
+          gatePass: gatePass,
+          schemeId: schemeId,
+        );
+
+  LoanDetailsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.inventoryId,
+    required this.commodityName,
+    required this.quantity,
+    required this.gatePass,
+    required this.schemeId,
+  }) : super.internal();
+
+  final String? inventoryId;
+  final String? commodityName;
+  final String? quantity;
+  final String? gatePass;
+  final String? schemeId;
+
+  @override
+  Override overrideWith(
+    FutureOr<LoanDetailsModel> Function(LoanDetailsRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: LoanDetailsProvider._internal(
+        (ref) => create(ref as LoanDetailsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        inventoryId: inventoryId,
+        commodityName: commodityName,
+        quantity: quantity,
+        gatePass: gatePass,
+        schemeId: schemeId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<LoanDetailsModel> createElement() {
+    return _LoanDetailsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is LoanDetailsProvider &&
+        other.inventoryId == inventoryId &&
+        other.commodityName == commodityName &&
+        other.quantity == quantity &&
+        other.gatePass == gatePass &&
+        other.schemeId == schemeId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, inventoryId.hashCode);
+    hash = _SystemHash.combine(hash, commodityName.hashCode);
+    hash = _SystemHash.combine(hash, quantity.hashCode);
+    hash = _SystemHash.combine(hash, gatePass.hashCode);
+    hash = _SystemHash.combine(hash, schemeId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin LoanDetailsRef on AutoDisposeFutureProviderRef<LoanDetailsModel> {
+  /// The parameter `inventoryId` of this provider.
+  String? get inventoryId;
+
+  /// The parameter `commodityName` of this provider.
+  String? get commodityName;
+
+  /// The parameter `quantity` of this provider.
+  String? get quantity;
+
+  /// The parameter `gatePass` of this provider.
+  String? get gatePass;
+
+  /// The parameter `schemeId` of this provider.
+  String? get schemeId;
+}
+
+class _LoanDetailsProviderElement
+    extends AutoDisposeFutureProviderElement<LoanDetailsModel>
+    with LoanDetailsRef {
+  _LoanDetailsProviderElement(super.provider);
+
+  @override
+  String? get inventoryId => (origin as LoanDetailsProvider).inventoryId;
+  @override
+  String? get commodityName => (origin as LoanDetailsProvider).commodityName;
+  @override
+  String? get quantity => (origin as LoanDetailsProvider).quantity;
+  @override
+  String? get gatePass => (origin as LoanDetailsProvider).gatePass;
+  @override
+  String? get schemeId => (origin as LoanDetailsProvider).schemeId;
+}
+
+String _$submitLoanRequestHash() => r'f5fa631c18486e5d3adb9553ecca15dfe35e57d7';
+
+/// See also [submitLoanRequest].
+@ProviderFor(submitLoanRequest)
+const submitLoanRequestProvider = SubmitLoanRequestFamily();
+
+/// See also [submitLoanRequest].
+class SubmitLoanRequestFamily extends Family<AsyncValue<Map<String, dynamic>>> {
+  /// See also [submitLoanRequest].
+  const SubmitLoanRequestFamily();
+
+  /// See also [submitLoanRequest].
+  SubmitLoanRequestProvider call({
+    String? inventoryId,
+    String? commodityName,
+    String? quantity,
+    String? gatePass,
+    String? schemeId,
+    String? bankName,
+    String? ifscCode,
+    String? accountNo,
+    String? stackNo,
+    String? terminalName,
+  }) {
+    return SubmitLoanRequestProvider(
+      inventoryId: inventoryId,
+      commodityName: commodityName,
+      quantity: quantity,
+      gatePass: gatePass,
+      schemeId: schemeId,
+      bankName: bankName,
+      ifscCode: ifscCode,
+      accountNo: accountNo,
+      stackNo: stackNo,
+      terminalName: terminalName,
+    );
+  }
+
+  @override
+  SubmitLoanRequestProvider getProviderOverride(
+    covariant SubmitLoanRequestProvider provider,
+  ) {
+    return call(
+      inventoryId: provider.inventoryId,
+      commodityName: provider.commodityName,
+      quantity: provider.quantity,
+      gatePass: provider.gatePass,
+      schemeId: provider.schemeId,
+      bankName: provider.bankName,
+      ifscCode: provider.ifscCode,
+      accountNo: provider.accountNo,
+      stackNo: provider.stackNo,
+      terminalName: provider.terminalName,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'submitLoanRequestProvider';
+}
+
+/// See also [submitLoanRequest].
+class SubmitLoanRequestProvider
+    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+  /// See also [submitLoanRequest].
+  SubmitLoanRequestProvider({
+    String? inventoryId,
+    String? commodityName,
+    String? quantity,
+    String? gatePass,
+    String? schemeId,
+    String? bankName,
+    String? ifscCode,
+    String? accountNo,
+    String? stackNo,
+    String? terminalName,
+  }) : this._internal(
+          (ref) => submitLoanRequest(
+            ref as SubmitLoanRequestRef,
+            inventoryId: inventoryId,
+            commodityName: commodityName,
+            quantity: quantity,
+            gatePass: gatePass,
+            schemeId: schemeId,
+            bankName: bankName,
+            ifscCode: ifscCode,
+            accountNo: accountNo,
+            stackNo: stackNo,
+            terminalName: terminalName,
+          ),
+          from: submitLoanRequestProvider,
+          name: r'submitLoanRequestProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$submitLoanRequestHash,
+          dependencies: SubmitLoanRequestFamily._dependencies,
+          allTransitiveDependencies:
+              SubmitLoanRequestFamily._allTransitiveDependencies,
+          inventoryId: inventoryId,
+          commodityName: commodityName,
+          quantity: quantity,
+          gatePass: gatePass,
+          schemeId: schemeId,
+          bankName: bankName,
+          ifscCode: ifscCode,
+          accountNo: accountNo,
+          stackNo: stackNo,
+          terminalName: terminalName,
+        );
+
+  SubmitLoanRequestProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.inventoryId,
+    required this.commodityName,
+    required this.quantity,
+    required this.gatePass,
+    required this.schemeId,
+    required this.bankName,
+    required this.ifscCode,
+    required this.accountNo,
+    required this.stackNo,
+    required this.terminalName,
+  }) : super.internal();
+
+  final String? inventoryId;
+  final String? commodityName;
+  final String? quantity;
+  final String? gatePass;
+  final String? schemeId;
+  final String? bankName;
+  final String? ifscCode;
+  final String? accountNo;
+  final String? stackNo;
+  final String? terminalName;
+
+  @override
+  Override overrideWith(
+    FutureOr<Map<String, dynamic>> Function(SubmitLoanRequestRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SubmitLoanRequestProvider._internal(
+        (ref) => create(ref as SubmitLoanRequestRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        inventoryId: inventoryId,
+        commodityName: commodityName,
+        quantity: quantity,
+        gatePass: gatePass,
+        schemeId: schemeId,
+        bankName: bankName,
+        ifscCode: ifscCode,
+        accountNo: accountNo,
+        stackNo: stackNo,
+        terminalName: terminalName,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
+    return _SubmitLoanRequestProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SubmitLoanRequestProvider &&
+        other.inventoryId == inventoryId &&
+        other.commodityName == commodityName &&
+        other.quantity == quantity &&
+        other.gatePass == gatePass &&
+        other.schemeId == schemeId &&
+        other.bankName == bankName &&
+        other.ifscCode == ifscCode &&
+        other.accountNo == accountNo &&
+        other.stackNo == stackNo &&
+        other.terminalName == terminalName;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, inventoryId.hashCode);
+    hash = _SystemHash.combine(hash, commodityName.hashCode);
+    hash = _SystemHash.combine(hash, quantity.hashCode);
+    hash = _SystemHash.combine(hash, gatePass.hashCode);
+    hash = _SystemHash.combine(hash, schemeId.hashCode);
+    hash = _SystemHash.combine(hash, bankName.hashCode);
+    hash = _SystemHash.combine(hash, ifscCode.hashCode);
+    hash = _SystemHash.combine(hash, accountNo.hashCode);
+    hash = _SystemHash.combine(hash, stackNo.hashCode);
+    hash = _SystemHash.combine(hash, terminalName.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin SubmitLoanRequestRef
+    on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
+  /// The parameter `inventoryId` of this provider.
+  String? get inventoryId;
+
+  /// The parameter `commodityName` of this provider.
+  String? get commodityName;
+
+  /// The parameter `quantity` of this provider.
+  String? get quantity;
+
+  /// The parameter `gatePass` of this provider.
+  String? get gatePass;
+
+  /// The parameter `schemeId` of this provider.
+  String? get schemeId;
+
+  /// The parameter `bankName` of this provider.
+  String? get bankName;
+
+  /// The parameter `ifscCode` of this provider.
+  String? get ifscCode;
+
+  /// The parameter `accountNo` of this provider.
+  String? get accountNo;
+
+  /// The parameter `stackNo` of this provider.
+  String? get stackNo;
+
+  /// The parameter `terminalName` of this provider.
+  String? get terminalName;
+}
+
+class _SubmitLoanRequestProviderElement
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with SubmitLoanRequestRef {
+  _SubmitLoanRequestProviderElement(super.provider);
+
+  @override
+  String? get inventoryId => (origin as SubmitLoanRequestProvider).inventoryId;
+  @override
+  String? get commodityName =>
+      (origin as SubmitLoanRequestProvider).commodityName;
+  @override
+  String? get quantity => (origin as SubmitLoanRequestProvider).quantity;
+  @override
+  String? get gatePass => (origin as SubmitLoanRequestProvider).gatePass;
+  @override
+  String? get schemeId => (origin as SubmitLoanRequestProvider).schemeId;
+  @override
+  String? get bankName => (origin as SubmitLoanRequestProvider).bankName;
+  @override
+  String? get ifscCode => (origin as SubmitLoanRequestProvider).ifscCode;
+  @override
+  String? get accountNo => (origin as SubmitLoanRequestProvider).accountNo;
+  @override
+  String? get stackNo => (origin as SubmitLoanRequestProvider).stackNo;
+  @override
+  String? get terminalName =>
+      (origin as SubmitLoanRequestProvider).terminalName;
+}
+
+String _$cancelLoanRequestHash() => r'4b62e8c96135cc7cc585c49cd183ec75fd3e1e45';
+
+/// See also [cancelLoanRequest].
+@ProviderFor(cancelLoanRequest)
+const cancelLoanRequestProvider = CancelLoanRequestFamily();
+
+/// See also [cancelLoanRequest].
+class CancelLoanRequestFamily extends Family<AsyncValue<Map<String, dynamic>>> {
+  /// See also [cancelLoanRequest].
+  const CancelLoanRequestFamily();
+
+  /// See also [cancelLoanRequest].
+  CancelLoanRequestProvider call({
+    String? id,
+  }) {
+    return CancelLoanRequestProvider(
+      id: id,
+    );
+  }
+
+  @override
+  CancelLoanRequestProvider getProviderOverride(
+    covariant CancelLoanRequestProvider provider,
+  ) {
+    return call(
+      id: provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'cancelLoanRequestProvider';
+}
+
+/// See also [cancelLoanRequest].
+class CancelLoanRequestProvider
+    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+  /// See also [cancelLoanRequest].
+  CancelLoanRequestProvider({
+    String? id,
+  }) : this._internal(
+          (ref) => cancelLoanRequest(
+            ref as CancelLoanRequestRef,
+            id: id,
+          ),
+          from: cancelLoanRequestProvider,
+          name: r'cancelLoanRequestProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$cancelLoanRequestHash,
+          dependencies: CancelLoanRequestFamily._dependencies,
+          allTransitiveDependencies:
+              CancelLoanRequestFamily._allTransitiveDependencies,
+          id: id,
+        );
+
+  CancelLoanRequestProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
+  final String? id;
+
+  @override
+  Override overrideWith(
+    FutureOr<Map<String, dynamic>> Function(CancelLoanRequestRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: CancelLoanRequestProvider._internal(
+        (ref) => create(ref as CancelLoanRequestRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
+    return _CancelLoanRequestProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is CancelLoanRequestProvider && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin CancelLoanRequestRef
+    on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
+  /// The parameter `id` of this provider.
+  String? get id;
+}
+
+class _CancelLoanRequestProviderElement
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with CancelLoanRequestRef {
+  _CancelLoanRequestProviderElement(super.provider);
+
+  @override
+  String? get id => (origin as CancelLoanRequestProvider).id;
+}
+
+String _$approvedRequestsHash() => r'b0232b1bb30f2e3a8f8e8d4eddc22706100a5428';
+
+/// See also [approvedRequests].
+@ProviderFor(approvedRequests)
+final approvedRequestsProvider =
+    AutoDisposeFutureProvider<LoanRequestsStatusModel>.internal(
+  approvedRequests,
+  name: r'approvedRequestsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$approvedRequestsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef ApprovedRequestsRef
+    = AutoDisposeFutureProviderRef<LoanRequestsStatusModel>;
+String _$pendingRequestsHash() => r'87ab1b7f5312bc41f1a307e7e3361347a42081f7';
+
+/// See also [pendingRequests].
+@ProviderFor(pendingRequests)
+final pendingRequestsProvider =
+    AutoDisposeFutureProvider<LoanRequestsStatusModel>.internal(
+  pendingRequests,
+  name: r'pendingRequestsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$pendingRequestsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef PendingRequestsRef
+    = AutoDisposeFutureProviderRef<LoanRequestsStatusModel>;
+String _$rejectedRequestsHash() => r'b011588f21fcd462186eb520349296e753362039';
+
+/// See also [rejectedRequests].
+@ProviderFor(rejectedRequests)
+final rejectedRequestsProvider =
+    AutoDisposeFutureProvider<LoanRequestsStatusModel>.internal(
+  rejectedRequests,
+  name: r'rejectedRequestsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$rejectedRequestsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef RejectedRequestsRef
+    = AutoDisposeFutureProviderRef<LoanRequestsStatusModel>;
+String _$closedRequestsHash() => r'17b62f8632183ed0efd21c31eea71ca49e0acd10';
+
+/// See also [closedRequests].
+@ProviderFor(closedRequests)
+final closedRequestsProvider =
+    AutoDisposeFutureProvider<LoanRequestsStatusModel>.internal(
+  closedRequests,
+  name: r'closedRequestsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$closedRequestsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef ClosedRequestsRef
+    = AutoDisposeFutureProviderRef<LoanRequestsStatusModel>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

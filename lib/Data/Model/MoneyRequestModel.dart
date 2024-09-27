@@ -9,8 +9,8 @@ MoneyRequestModel moneyRequestModelFromJson(String str) => MoneyRequestModel.fro
 String moneyRequestModelToJson(MoneyRequestModel data) => json.encode(data.toJson());
 
 class MoneyRequestModel {
-  String? status;
-  String? message;
+  dynamic status;
+  dynamic message;
   List<Datum>? data;
 
   MoneyRequestModel({
@@ -33,14 +33,14 @@ class MoneyRequestModel {
 }
 
 class Datum {
-  int? id;
-  String? userId;
-  String? uniqueLoanReqNo;
-  String? paymentImage;
-  String? paymentType;
-  String? appliedAmount;
-  String? recivedAmount;
-  String? status;
+  dynamic id;
+  dynamic userId;
+  dynamic uniqueLoanReqNo;
+  dynamic paymentImage;
+  dynamic paymentType;
+  dynamic appliedAmount;
+  dynamic recivedAmount;
+  dynamic status;
   DateTime? createdAt;
   DateTime? updatedAt;
 

@@ -12,8 +12,8 @@ String sanctionLimitListModelToMap(SanctionLimitListModel data) =>
 
 class SanctionLimitListModel {
   List<Datum>? data;
-  String? status;
-  String? message;
+  dynamic status;
+  dynamic message;
 
   SanctionLimitListModel({
     this.data,
@@ -39,28 +39,28 @@ class SanctionLimitListModel {
 }
 
 class Datum {
-  int? id;
-  String? loanType;
-  String? userId;
-  String? schemeId;
-  String? schemeName;
-  String? uniqueId;
-  String? interestRate;
-  String? processingFee;
-  String? ltp;
-  String? requestedAmount;
-  String? approvedAmount;
-  String? pdc;
-  String? agreement;
-  String? itrFirstYear;
-  String? itrSecondYear;
-  String? itrThirdYear;
-  String? balFirstYear;
-  String? balSecondYear;
-  String? balThirdYear;
-  String? triAgreement;
+  dynamic id;
+  dynamic loanType;
+  dynamic userId;
+  dynamic schemeId;
+  dynamic schemeName;
+  dynamic uniqueId;
+  dynamic interestRate;
+  dynamic processingFee;
+  dynamic ltp;
+  dynamic requestedAmount;
+  dynamic approvedAmount;
+  dynamic pdc;
+  dynamic agreement;
+  dynamic itrFirstYear;
+  dynamic itrSecondYear;
+  dynamic itrThirdYear;
+  dynamic balFirstYear;
+  dynamic balSecondYear;
+  dynamic balThirdYear;
+  dynamic triAgreement;
   dynamic verifiedDate;
-  String? status;
+  dynamic status;
   DateTime? createdAt;
   DateTime? updatedAt;
 

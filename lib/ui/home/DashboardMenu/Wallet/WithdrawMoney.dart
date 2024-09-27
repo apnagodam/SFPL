@@ -2,12 +2,14 @@ import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Domain/WalletService/WalletService.dart';
 
 import '../../../../Data/SharedPrefs/SharedUtility.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/routes.dart';
+import '../../../utils/routes_strings.dart';
 import '../../../utils/widgets.dart';
 
 class Withdrawmoney extends ConsumerStatefulWidget {
@@ -29,6 +31,9 @@ class _WithdrawmoneyState extends ConsumerState<Withdrawmoney> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Withdraw Money'),
+        actions: [IconButton(onPressed: (){
+          context.goNamed(RoutesStrings.withdrawRequests);
+        }, icon: Icon(Icons.wallet))],
       ),
       body: SafeArea(
           child: Form(
@@ -54,8 +59,8 @@ class _WithdrawmoneyState extends ConsumerState<Withdrawmoney> {
                             Icons.currency_rupee,
                             size: Adaptive.sp(17),
                           ),
-                          hintText: "Enter Applied Amount",
-                          label: const Text("Enter Applied Amount"),
+                          hintText: "Enter Amount",
+                          label: const Text("Enter Amount"),
                           enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
                           border: OutlineInputBorder(
@@ -67,14 +72,14 @@ class _WithdrawmoneyState extends ConsumerState<Withdrawmoney> {
                       height: 10,
                     ),
                     TextFormField(
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.text,
                       controller: remarkController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter remark';
-                        }
-                        return null;
-                      },
+                      // validator: (value) {
+                      //   if (value == null || value.isEmpty) {
+                      //     return 'Please enter remark';
+                      //   }
+                      //   return null;
+                      // },
                       decoration: InputDecoration(
                           hintText: "Enter Remark ",
                           label: const Text("Enter Remark"),

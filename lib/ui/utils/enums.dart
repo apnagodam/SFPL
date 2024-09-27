@@ -21,3 +21,14 @@ enum ConstitutionType {
   final String label;
   final int type;
 }
+
+enum BnplLimitType {
+  defaultType('Select application type', ""),
+  addition('Addition', "addition"),
+  deletion('Deletion ', "deletion");
+
+  const BnplLimitType(this.label, this.type);
+
+  final String label;
+  final String type;
+}

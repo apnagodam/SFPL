@@ -74,6 +74,8 @@ dependencies:
   flutter_flip_card: ^0.0.6
   tab_container: ^3.5.3
   shimmer: ^3.0.0
+  syncfusion_flutter_pdfviewer: ^27.1.50
+  url_launcher: ^6.3.0
 
 
 

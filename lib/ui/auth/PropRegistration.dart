@@ -380,7 +380,8 @@ class _PropregistrationState extends ConsumerState<Propregistration> {
                                         null) {
                                       errorToast(context,
                                           'Please select document Image');
-                                    } else if (ref.watch(statesProvider) ==
+                                    }
+                                    else if (ref.watch(statesProvider) ==
                                         null) {
                                       errorToast(
                                           context, 'Please select state');
@@ -521,8 +522,7 @@ class _PropregistrationState extends ConsumerState<Propregistration> {
           controller: adharController,
           validator: (value) {
             if (value == null ||
-                value.isEmpty ||
-                !value.isValidAadharNumber()) {
+                value.isEmpty ) {
               return 'Please input Valid Aadhar Number';
             }
             return null;
@@ -1316,7 +1316,7 @@ class _PropregistrationState extends ConsumerState<Propregistration> {
         Visibility(
             visible: ref.watch(propTypeProvider).isNotEmpty,
             child: TextFormField(
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.text,
               textInputAction: TextInputAction.next,
               controller: gstController,
               validator: (value) {

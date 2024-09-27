@@ -39,10 +39,14 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ref.watch(loginInfoProvider.future).then((value) async {
         if (value.data?.isLogin != false) {
+
           if (value.data?.type == "BNPL" && value.data?.aadharVerify == "0") {
             showVerificationDialog(context,
                 titleText: "Verify Aadhar",
-                messageText: "Your Aadhar verification is pending");
+                messageText: "Your Aadhar verification is pending", action: () {
+              hideLoader(context);
+              context.goNamed(RoutesStrings.bnplAadharRegistration);
+            });
           }
 
           ref.watch(sharedUtilityProvider).setUser(value.data);
@@ -99,48 +103,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     )),
               ],
             ),
-            CupertinoActionSheet(
-              title: Center(
-                child: Text(
-                  'Buy Now Pay Later',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
-                ),
-              ),
-              actions: [
-                CupertinoActionSheetAction(
-                  onPressed: () {
-                    context.goNamed(RoutesStrings.bnpl);
-                  },
-                  child: Text('Apply ',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontSize: Adaptive.sp(16),
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500)),
-                ),
-                CupertinoActionSheetAction(
-                    onPressed: () {
-                      context.goNamed(RoutesStrings.bnplStatement);
 
-                      // if (ref.watch(sharedUtilityProvider).getUser()?.aadharVerify == "0") {
-                      //   showVerificationDialog(context,
-                      //       titleText: "Verify Aadhar",
-                      //       messageText: "Your Aadhar verification is pending");
-                      // }
-                      // else{
-                      //   context.goNamed(RoutesStrings.sanctionedAmount);
-                      //
-                      // }
-                    },
-                    child: Text('Statement',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: Adaptive.sp(16),
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500))),
-              ],
-            ),
             CupertinoActionSheet(
               title: Center(
                 child: Text(
@@ -152,9 +115,162 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               actions: [
                 CupertinoActionSheetAction(
                   onPressed: () {
-                    context.goNamed(RoutesStrings.applyForLoan);
+
+                    context.goNamed(RoutesStrings.applyForCommodityLoan);
+
+
                   },
-                  child: Text('Apply',
+                  child: Text('Loan Apply ',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontSize: Adaptive.sp(16),
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500)),
+                ),
+                // CupertinoActionSheetAction(
+                //   onPressed: () {
+                //     context.goNamed(RoutesStrings.bnplWithdraw);
+                //   },
+                //   child: Text('Withdraw ',
+                //       textAlign: TextAlign.start,
+                //       style: TextStyle(
+                //           fontSize: Adaptive.sp(16),
+                //           color: Colors.black,
+                //           fontWeight: FontWeight.w500)),
+                // ),
+                CupertinoActionSheetAction(
+                    onPressed: () {
+                      context.goNamed(RoutesStrings.appliedLoanList);
+                      // if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
+                      //   showVerificationDialog(context,
+                      //       titleText: "Verify Aadhar",
+                      //       messageText: "Your Aadhar verification is pending", action: () {
+                      //         hideLoader(context);
+                      //         context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
+                      //       });
+                      // }else{
+                      //
+                      //
+                      // }
+
+                      // if (ref.watch(sharedUtilityProvider).getUser()?.aadharVerify == "0") {
+                      //   showVerificationDialog(context,
+                      //       titleText: "Verify Aadhar",
+                      //       messageText: "Your Aadhar verification is pending");
+                      // }
+                      // else{
+                      //   context.goNamed(RoutesStrings.sanctionedAmount);
+                      //
+                      // }
+                    },
+                    child: Text('Loan Requests',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: Adaptive.sp(16),
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500))),
+              ],
+            ),
+            CupertinoActionSheet(
+              title: Center(
+                child: Text(
+                  'Buy Now Pay Later',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+                ),
+              ),
+              actions: [
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
+                      showVerificationDialog(context,
+                          titleText: "Verify Aadhar",
+                          messageText: "Your Aadhar verification is pending", action: () {
+                            hideLoader(context);
+                            context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
+                          });
+                    }else{
+                      context.goNamed(RoutesStrings.bnpl);
+
+                    }
+
+                  },
+                  child: Text('Apply ',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontSize: Adaptive.sp(16),
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500)),
+                ),
+                // CupertinoActionSheetAction(
+                //   onPressed: () {
+                //     context.goNamed(RoutesStrings.bnplWithdraw);
+                //   },
+                //   child: Text('Withdraw ',
+                //       textAlign: TextAlign.start,
+                //       style: TextStyle(
+                //           fontSize: Adaptive.sp(16),
+                //           color: Colors.black,
+                //           fontWeight: FontWeight.w500)),
+                // ),
+                CupertinoActionSheetAction(
+                    onPressed: () {
+                      context.goNamed(RoutesStrings.bnplStatement);
+                      // if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
+                      //   showVerificationDialog(context,
+                      //       titleText: "Verify Aadhar",
+                      //       messageText: "Your Aadhar verification is pending", action: () {
+                      //         hideLoader(context);
+                      //         context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
+                      //       });
+                      // }else{
+                      //
+                      //
+                      // }
+
+                      // if (ref.watch(sharedUtilityProvider).getUser()?.aadharVerify == "0") {
+                      //   showVerificationDialog(context,
+                      //       titleText: "Verify Aadhar",
+                      //       messageText: "Your Aadhar verification is pending");
+                      // }
+                      // else{
+                      //   context.goNamed(RoutesStrings.sanctionedAmount);
+                      //
+                      // }
+                    },
+                    child: Text('Requests',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: Adaptive.sp(16),
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500))),
+              ],
+            ),
+            CupertinoActionSheet(
+              title: Center(
+                child: Text(
+                  'Sanction Limit',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+                ),
+              ),
+              actions: [
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    if((ref.watch(sharedUtilityProvider).getUser()?.triparty??[]).isEmpty){
+                      showVerificationDialog(context,
+                          titleText: "Verify Tri-Party Agreement",
+                          messageText: "tri party agreement pending", action: () {
+                            hideLoader(context);
+                            context.goNamed(RoutesStrings.verfication);
+                          });
+                    }
+                    else{
+                      context.goNamed(RoutesStrings.applyForSanctionLimit);
+
+                    }
+                  },
+                  child: Text('Sanction Limit Apply',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                           fontSize: Adaptive.sp(16),
@@ -163,7 +279,18 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 ),
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      context.goNamed(RoutesStrings.sanctionedAmount);
+                      if((ref.watch(sharedUtilityProvider).getUser()?.triparty??[]).isEmpty){
+                        showVerificationDialog(context,
+                            titleText: "Verify Tri-Party Agreement",
+                            messageText: "tri party agreement pending", action: () {
+                              hideLoader(context);
+                              context.goNamed(RoutesStrings.verfication);
+                            });
+                      }
+                      else{
+                        context.goNamed(RoutesStrings.sanctionedAmount);
+
+                      }
                     },
                     child: Text('Sanctioned Amount',
                         textAlign: TextAlign.start,
@@ -192,16 +319,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             fontSize: Adaptive.sp(16),
                             color: Colors.black,
                             fontWeight: FontWeight.w500))),
-                CupertinoActionSheetAction(
-                    onPressed: () {
-                      context.goNamed(RoutesStrings.moneyRequests);
-                    },
-                    child: Text('Add Money Requests',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: Adaptive.sp(16),
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500))),
+
                 CupertinoActionSheetAction(
                     onPressed: () {
                       context.goNamed(RoutesStrings.withdrawMoney);
@@ -212,18 +330,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             fontSize: Adaptive.sp(16),
                             color: Colors.black,
                             fontWeight: FontWeight.w500))),
-                CupertinoActionSheetAction(
-                    onPressed: () {
-                      context.goNamed(RoutesStrings.withdrawRequests);
 
-                      // context.goNamed(RoutesStrings.verfication);
-                    },
-                    child: Text('Withdraw Requests',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: Adaptive.sp(16),
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500))),
               ],
             ),
             CupertinoActionSheet(

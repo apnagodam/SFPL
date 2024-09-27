@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,14 +17,14 @@ import 'package:swfl/ui/utils/widgets.dart';
 
 import '../../../utils/colors.dart';
 
-class Applyforloan extends ConsumerStatefulWidget {
-  const Applyforloan({super.key});
+class ApplyForSanctionLimit extends ConsumerStatefulWidget {
+  const ApplyForSanctionLimit({super.key});
 
   @override
-  ConsumerState<Applyforloan> createState() => _ApplyforloanState();
+  ConsumerState<ApplyForSanctionLimit> createState() => _ApplyforloanState();
 }
 
-class _ApplyforloanState extends ConsumerState<Applyforloan> {
+class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
   var loanTypeProvider = StateProvider((ref) => "Select Loan Type");
   var loanTypeList = ['Commodity Finance'];
   final formKey = GlobalKey<FormState>();
@@ -45,7 +44,7 @@ class _ApplyforloanState extends ConsumerState<Applyforloan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Apply for loan'),
+        title: const Text('Apply for Sanction Limit'),
       ),
       body: Form(
           key: formKey,
@@ -54,95 +53,111 @@ class _ApplyforloanState extends ConsumerState<Applyforloan> {
             child: ListView(
               children: [
                 CupertinoButton(
-                    child: Text('Select Loan Type',
+                    child: Text('Loan Type',
                         style: TextStyle(
                             color: ColorsConstant.primaryColor,
                             fontWeight: FontWeight.bold,
                             fontSize: Adaptive.sp(17))),
                     onPressed: () => null),
-                DropdownSearch<String>(
-                  popupProps: PopupProps.menu(
-                      searchFieldProps: const TextFieldProps(
-                          autofocus: true,
-                          cursorColor: ColorsConstant.primaryColor,
-                          padding: Pad(left: 10, right: 10),
-                          decoration: InputDecoration(
-                            contentPadding: Pad(left: 10, right: 10),
-                            focusedErrorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                            disabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                            errorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                          )),
-                      menuProps: MenuProps(
-                          shape: RoundedRectangleBorder(
-                              side: const BorderSide(
-                                  color: ColorsConstant.primaryColor),
-                              borderRadius: BorderRadius.circular(8))),
-                      itemBuilder: (context, terminal, isVisible) =>
-                          ColumnSuper(
-                              alignment: Alignment.centerLeft,
-                              children: [
-                                Padding(
-                                  padding: const Pad(all: 10),
-                                  child: Text(
-                                    "${terminal}",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: Adaptive.sp(16)),
-                                  ),
-                                ),
-                                Container(
-                                  height: 1,
-                                  color: Colors.grey.withOpacity(0.3),
-                                ),
-                              ]),
-                      isFilterOnline: true,
-                      title: Padding(
-                        padding: const Pad(all: 10),
-                        child: Text(
-                          'Select Loan Type',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      showSearchBox: true,
-                      searchDelay: const Duration(microseconds: 500)),
-                  items: loanTypeList ?? [],
-                  itemAsString: (String? u) => u ?? "",
-                  onChanged: (String? data) =>
-                      ref.watch(loanTypeProvider.notifier).state = data ?? "",
-                  dropdownDecoratorProps: const DropDownDecoratorProps(
-                    dropdownSearchDecoration: InputDecoration(
-                        contentPadding: Pad(left: 10, bottom: 5, top: 5),
-                        hintText: "Select Loan Type",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            borderSide: BorderSide(
-                                color: ColorsConstant.secondColorUltraDark))),
-                  ),
+                const SizedBox(
+                  height: 10,
                 ),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                      hintText: "Commodity Finance",
+                      label: const Text("Commodity Finance"),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                ),
+                // DropdownSearch<String>(
+                //   popupProps: PopupProps.menu(
+                //       searchFieldProps: const TextFieldProps(
+                //           autofocus: true,
+                //           cursorColor: ColorsConstant.primaryColor,
+                //           padding: Pad(left: 10, right: 10),
+                //           decoration: InputDecoration(
+                //             contentPadding: Pad(left: 10, right: 10),
+                //             focusedErrorBorder: OutlineInputBorder(
+                //                 borderSide: BorderSide(
+                //                     style: BorderStyle.solid,
+                //                     color: ColorsConstant.primaryColor)),
+                //             disabledBorder: OutlineInputBorder(
+                //                 borderSide: BorderSide(
+                //                     style: BorderStyle.solid,
+                //                     color: ColorsConstant.primaryColor)),
+                //             errorBorder: OutlineInputBorder(
+                //                 borderSide: BorderSide(
+                //                     style: BorderStyle.solid,
+                //                     color: ColorsConstant.primaryColor)),
+                //             focusedBorder: OutlineInputBorder(
+                //                 borderSide: BorderSide(
+                //                     style: BorderStyle.solid,
+                //                     color: ColorsConstant.primaryColor)),
+                //             border: OutlineInputBorder(
+                //                 borderSide: BorderSide(
+                //                     style: BorderStyle.solid,
+                //                     color: ColorsConstant.primaryColor)),
+                //             enabledBorder: OutlineInputBorder(
+                //                 borderSide: BorderSide(
+                //                     style: BorderStyle.solid,
+                //                     color: ColorsConstant.primaryColor)),
+                //           )),
+                //       menuProps: MenuProps(
+                //           shape: RoundedRectangleBorder(
+                //               side: const BorderSide(
+                //                   color: ColorsConstant.primaryColor),
+                //               borderRadius: BorderRadius.circular(8))),
+                //       itemBuilder: (context, terminal, isVisible) =>
+                //           ColumnSuper(
+                //               alignment: Alignment.centerLeft,
+                //               children: [
+                //                 Padding(
+                //                   padding: const Pad(all: 10),
+                //                   child: Text(
+                //                     "${terminal}",
+                //                     style: TextStyle(
+                //                         fontWeight: FontWeight.bold,
+                //                         fontSize: Adaptive.sp(16)),
+                //                   ),
+                //                 ),
+                //                 Container(
+                //                   height: 1,
+                //                   color: Colors.grey.withOpacity(0.3),
+                //                 ),
+                //               ]),
+                //       isFilterOnline: true,
+                //       title: Padding(
+                //         padding: const Pad(all: 10),
+                //         child: Text(
+                //           'Select Loan Type',
+                //           textAlign: TextAlign.center,
+                //           style: TextStyle(
+                //               fontSize: Adaptive.sp(16),
+                //               fontWeight: FontWeight.bold),
+                //         ),
+                //       ),
+                //       showSearchBox: true,
+                //       searchDelay: const Duration(microseconds: 500)),
+                //   items: loanTypeList ?? [],
+                //   itemAsString: (String? u) => u ?? "",
+                //   onChanged: (String? data) =>
+                //       ref.watch(loanTypeProvider.notifier).state = data ?? "",
+                //   dropdownDecoratorProps: const DropDownDecoratorProps(
+                //     dropdownSearchDecoration: InputDecoration(
+                //         contentPadding: Pad(left: 10, bottom: 5, top: 5),
+                //         hintText: "Select Loan Type",
+                //         border: OutlineInputBorder(
+                //             borderRadius: BorderRadius.all(Radius.circular(8)),
+                //             borderSide: BorderSide(
+                //                 color: ColorsConstant.secondColorUltraDark))),
+                //   ),
+                // ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -717,8 +732,6 @@ class _ApplyforloanState extends ConsumerState<Applyforloan> {
                                               .watch(
                                                   schemeActionProvider.notifier)
                                               .state = value.toString();
-                                          successToast(
-                                              context, value.toString());
                                         },
                                       ),
                                     ),
@@ -810,28 +823,24 @@ class _ApplyforloanState extends ConsumerState<Applyforloan> {
                   width: MediaQuery.of(context).size.width,
                   child: ElevatedButton(
                     onPressed: () async {
-                      if (ref.watch(loanTypeProvider) == "Select Loan Type") {
-                        errorToast(context, "Please select loan type");
-                      } else {
-                        if (formKey.currentState!.validate()) {
-                          if (ref.watch(itrFile1) == null) {
-                            errorToast(context, 'Select ITR of last 3 year');
-                          } else if (ref.watch(itrFile2) == null) {
-                            errorToast(context, 'Select ITR of last 2 year');
-                          } else if (ref.watch(itrFile2) == null) {
-                            errorToast(context, 'Select ITR of last 1 year');
-                          } else if (ref.watch(bsFile1) == null) {
-                            errorToast(
-                                context, 'Select Balance Sheet of last 3 year');
-                          } else if (ref.watch(bsFile2) == null) {
-                            errorToast(
-                                context, 'Select Balance Sheet of last 2 year');
-                          } else if (ref.watch(bsFile3) == null) {
-                            errorToast(
-                                context, 'Select Balance Sheet of last 1 year');
-                          } else {
-                            termsLayout(context);
-                          }
+                      if (formKey.currentState!.validate()) {
+                        if (ref.watch(itrFile1) == null) {
+                          errorToast(context, 'Select ITR of last 3 year');
+                        } else if (ref.watch(itrFile2) == null) {
+                          errorToast(context, 'Select ITR of last 2 year');
+                        } else if (ref.watch(itrFile2) == null) {
+                          errorToast(context, 'Select ITR of last 1 year');
+                        } else if (ref.watch(bsFile1) == null) {
+                          errorToast(
+                              context, 'Select Balance Sheet of last 3 year');
+                        } else if (ref.watch(bsFile2) == null) {
+                          errorToast(
+                              context, 'Select Balance Sheet of last 2 year');
+                        } else if (ref.watch(bsFile3) == null) {
+                          errorToast(
+                              context, 'Select Balance Sheet of last 1 year');
+                        } else {
+                          termsLayout(context);
                         }
                       }
                     },
@@ -858,79 +867,93 @@ class _ApplyforloanState extends ConsumerState<Applyforloan> {
   }
 
   termsLayout(BuildContext context) => showBarModalBottomSheet(
-
       context: context,
       expand: true,
-      builder: (context) => ref.watch(termsProvider).when(data: (data)=>Consumer(
-          builder: (context, ref, child) => Padding(
-            padding: const Pad(all: 10),
-            child: ListView(
-              children: [
-                 HtmlWidget(data.view??""),
-                RowSuper(children: [
-                  Checkbox(
-                      value: ref.watch(checkBoxValueProvider),
-                      onChanged: (value) {
-                        ref.watch(checkBoxValueProvider.notifier).state =
-                            value ?? false;
-                      }),
-                  Text(
-                      'By proceeding, you agree to our Term and Conditions',
-                      style: TextStyle(
-                          fontSize: Adaptive.sp(15),
-                          color: Colors.black,
-                          fontWeight: FontWeight.w800)),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ]),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      ref
-                          .watch(applyForLoanProvider(
-                          amount: amountController.text.toString(),
-                          loanType: ref.watch(loanTypeProvider) ==
-                              "Commodity Finance"
-                              ? "1"
-                              : "2",
-                          schemeId: ref.watch(schemeActionProvider),
-                          itr1: ref.watch(itrFile1),
-                          itr2: ref.watch(itrFile2),
-                          itr3: ref.watch(itrFile3),
-                          bs1: ref.watch(bsFile1),
-                          bs2: ref.watch(bsFile2),
-                          bs3: ref.watch(bsFile3))
-                          .future)
-                          .then((value) {
-                        if (value['status'].toString() == "1") {
-                          ref.watch(goRouterProvider).pop();
-                          successToast(
-                              context, value['message'].toString());
-                        } else {
-                          errorToast(context, value['message'].toString());
-                        }
-                      }).onError((e, s) {});
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: ColorsConstant.secondColorDark,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                    child: Text(
-                      "Submit",
-                      style: TextStyle(
-                          color: Colors.white,
-                          shadows: [
-                            const Shadow(
-                                color: Colors.white, blurRadius: 0.3)
-                          ],
-                          fontWeight: FontWeight.w700,
-                          fontSize: Adaptive.sp(16)),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )), error: (e,s)=>Container(), loading: ()=>CupertinoActivityIndicator()));
+      builder: (context) => Consumer(
+          builder: (context, ref, child) => ref
+              .watch(termsProvider(schemeId: ref.watch(schemeActionProvider)))
+              .when(
+                  data: (data) => Consumer(
+                      builder: (context, ref, child) => Padding(
+                            padding: const Pad(all: 10),
+                            child: ListView(
+                              children: [
+                                HtmlWidget(data.view ?? ""),
+                                RowSuper(children: [
+                                  Checkbox(
+                                      value: ref.watch(checkBoxValueProvider),
+                                      onChanged: (value) {
+                                        ref
+                                            .watch(
+                                                checkBoxValueProvider.notifier)
+                                            .state = value ?? false;
+                                      }),
+                                  Text(
+                                      'By proceeding, you agree to our Term and Conditions',
+                                      style: TextStyle(
+                                          fontSize: Adaptive.sp(15),
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w800)),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                ]),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      showloader(context);
+                                      ref
+                                          .watch(applyForLoanProvider(
+                                                  amount: amountController.text
+                                                      .toString(),
+                                                  loanType: "1",
+                                                  schemeId: ref.watch(
+                                                      schemeActionProvider),
+                                                  itr1: ref.watch(itrFile1),
+                                                  itr2: ref.watch(itrFile2),
+                                                  itr3: ref.watch(itrFile3),
+                                                  bs1: ref.watch(bsFile1),
+                                                  bs2: ref.watch(bsFile2),
+                                                  bs3: ref.watch(bsFile3))
+                                              .future)
+                                          .then((value) {
+                                        hideLoader(context);
+                                        if (value['status'].toString() == "1") {
+                                          ref.watch(goRouterProvider).pop();
+                                          successToast(context,
+                                              value['message'].toString());
+                                        } else {
+                                          errorToast(context,
+                                              value['message'].toString());
+                                        }
+                                      }).onError((e, s) {
+                                        hideLoader(context);
+                                      });
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            ColorsConstant.secondColorDark,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10))),
+                                    child: Text(
+                                      "Submit",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          shadows: [
+                                            const Shadow(
+                                                color: Colors.white,
+                                                blurRadius: 0.3)
+                                          ],
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: Adaptive.sp(16)),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                  error: (e, s) => Container(),
+                  loading: () => CupertinoActivityIndicator())));
 }

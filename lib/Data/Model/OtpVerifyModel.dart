@@ -9,8 +9,8 @@ OtpVerifyModel otpVerifyModelFromMap(String str) => OtpVerifyModel.fromMap(json.
 String otpVerifyModelToMap(OtpVerifyModel data) => json.encode(data.toMap());
 
 class OtpVerifyModel {
-  int? status;
-  String? message;
+  dynamic status;
+  dynamic message;
   Data? data;
 
   OtpVerifyModel({
@@ -34,14 +34,14 @@ class OtpVerifyModel {
 
 class Data {
   bool? isLogin;
-  String? token;
-  int? userId;
-  String? type;
-  String? aadharVerify;
-  String? constitution;
-  String? name;
-  String? firmName;
-  String? pancardNo;
+  dynamic token;
+  dynamic userId;
+  dynamic type;
+  dynamic? aadharVerify;
+  dynamic constitution;
+  dynamic name;
+  dynamic firmName;
+  dynamic pancardNo;
   dynamic aadharNo;
   dynamic address;
   dynamic state;
@@ -50,17 +50,17 @@ class Data {
   dynamic bankName;
   dynamic bankBranch;
   dynamic bankAccNo;
-  String? bankIfscCode;
-  String? proprietorshipProofDoc;
-  String? proprietorshipProofNo;
-  String? profileImage;
-  String? chequeImage;
-  String? pancardImage;
-  String? aadharImage;
-  String? aadharBackImage;
-  String? proprietorshipProof;
+  dynamic bankIfscCode;
+  dynamic proprietorshipProofDoc;
+  dynamic proprietorshipProofNo;
+  dynamic profileImage;
+  dynamic chequeImage;
+  dynamic pancardImage;
+  dynamic aadharImage;
+  dynamic aadharBackImage;
+  dynamic proprietorshipProof;
   bool? verifiedAccount;
-  int? wallet;
+  dynamic wallet;
   List<dynamic>? triparty;
 
   Data({

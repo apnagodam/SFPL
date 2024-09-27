@@ -1,3 +1,4 @@
+import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,161 +24,135 @@ class _WithdrawrequestsState extends ConsumerState<Withdrawrequests> {
       body: ref.watch(withdrawlRequestsProvider).when(
           data: (data) => ListView(
                 children: [
-                  FittedBox(
-                    child: DataTable(
-                        headingRowColor: MaterialStateProperty.resolveWith(
-                            (states) => ColorsConstant.primaryColor),
-                        showBottomBorder: true,
-                        columnSpacing: 10,
-                        dataRowMaxHeight: 80,
-                        border: TableBorder.all(color: Colors.grey),
-                        columns: [
-                          DataColumn(
-                            label: Center(
-                                child: Text(
-                              "S.No.",
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: Adaptive.sp(18)),
-                            )),
-                          ),
-                          DataColumn(
-                            label: Center(
-                                child: Text(
-                              "Requested Amount",
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: Adaptive.sp(18)),
-                            )),
-                          ),
-                          DataColumn(
-                              label: Center(
-                                  child: Text(
-                            "Approved Amount",
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: Adaptive.sp(18)),
-                          ))),
-                          DataColumn(
-                              label: Center(
+                  Container(
+                    color: ColorsConstant.primaryColor.withOpacity(0.8),
+                    padding: Pad(all: 10),
+                    child: IntrinsicHeight(
+                      child: Row(children: [
+                        Expanded(
                             child: Text(
-                              "Requested Date",
-                              maxLines: 2,
+                              "S.No.",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
-                                  fontSize: Adaptive.sp(18)),
-                            ),
-                          )),
-                          DataColumn(
-                              label: Center(
+                                  fontSize: Adaptive.sp(14)),
+                            )),
+                        VerticalDivider(),
+                        Expanded(
+                            child: Text(
+                              "Approved ",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: Adaptive.sp(14)),
+                            )),
+                        VerticalDivider(),
+                        Expanded(
+                            child: Text(
+                              "Requested ",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: Adaptive.sp(14)),
+                            )),
+                        VerticalDivider(),
+                        Expanded(
+                            child: Text(
+                              "Date",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: Adaptive.sp(14)),
+                            )),
+                        VerticalDivider(),
+                        Expanded(
                             child: Text(
                               "Status",
-                              maxLines: 2,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
-                                  fontSize: Adaptive.sp(18)),
-                            ),
-                          ))
-                        ],
-                        rows: List.generate(
-                            data.data?.length ?? 0,
-                            (index) => DataRow(
-                                    color: MaterialStateProperty.resolveWith(
-                                        (states) {
-                                      if (index % 2 == 0) {
-                                        return Colors.white;
-                                      } else
-                                        return Colors.grey.withOpacity(0.3);
-                                    }),
-                                    cells: [
-                                      DataCell(Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "${index + 1}",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                              fontSize: Adaptive.sp(18)),
-                                        ),
-                                      )),
-                                      DataCell(Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "${data.data?[index].requestedAmount ?? "0"} ₹",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                              fontSize: Adaptive.sp(18)),
-                                        ),
-                                      )),
-                                      DataCell(Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "${data.data?[index].approvedAmount ?? "0"} ₹",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                              fontSize: Adaptive.sp(18)),
-                                        ),
-                                      )),
-                                      DataCell(Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          DateFormat('dd/MMM/yyyy').format(
-                                              DateTime.parse(
-                                                  "${data.data?[index].createdAt ?? ""}")),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                              fontSize: Adaptive.sp(18)),
-                                        ),
-                                      )),
-                                      DataCell(Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                            data.data?[index].status == "0"
-                                                ? "Rejected"
-                                                : data.data?[index].status ==
-                                                        "2"
-                                                    ? "Approved"
-                                                    : data.data?[index]
-                                                                .status ==
-                                                            "3"
-                                                        ? "Verified"
-                                                        : "Requested",
-                                            style: TextStyle(
-                                              color: data.data?[index].status ==
-                                                      "0"
-                                                  ? Colors.red
-                                                  : data.data?[index].status ==
-                                                          "3"
-                                                      ? ColorsConstant
-                                                          .primaryColor
-                                                      : data.data?[index]
-                                                                  .status ==
-                                                              "2"
-                                                          ? Colors.blue
-                                                          : Colors.orange,
-                                              fontSize: Adaptive.sp(18),
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                      ))
-                                    ]))),
+                                  fontSize: Adaptive.sp(14)),
+                            )),
+                      ]),
+                    ),
                   ),
+                  ListView.builder(
+                      itemCount: data.data?.length??0,
+                      itemBuilder: (context,index)=>
+                          Container(
+                            color: ColorsConstant.primaryColor.withOpacity(0.8),
+                            padding: Pad(all: 10),
+                            child: IntrinsicHeight(
+                              child: Row(children: [
+                                Expanded(
+                                    child: Text(
+                                      "${index + 1}",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: Adaptive.sp(14)),
+                                    )),
+                                VerticalDivider(),
+                                Expanded(
+                                    child: Text(
+                                      "${data.data?[index].approvedAmount ?? "0"} ₹",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: Adaptive.sp(14)),
+                                    )),
+                                VerticalDivider(),
+                                Expanded(
+                                    child: Text(
+                                      "${data.data?[index].approvedAmount ?? "0"} ₹",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: Adaptive.sp(14)),
+                                    )),
+                                VerticalDivider(),
+                                Expanded(
+                                    child: Text(
+                                      DateFormat('dd/MMM/yyyy').format(
+                                          DateTime.parse(
+                                              "${data.data?[index].createdAt ?? ""}")),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: Adaptive.sp(14)),
+                                    )),
+                                VerticalDivider(),
+                                Expanded(
+                                    child: Text(
+                                        data.data?[index].status == "0"
+                                            ? "Rejected"
+                                            : data.data?[index].status ==
+                                            "2"
+                                            ? "Approved"
+                                            : data.data?[index]
+                                            .status ==
+                                            "3"
+                                            ? "Verified"
+                                            : "Requested",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: Adaptive.sp(14)),
+                                    )),
+                              ]),
+                            ),
+                          ),),
+
                   // Container(
                   //     height: 50,
                   //     // alignment: Alignment.topCenter,

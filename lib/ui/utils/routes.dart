@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:swfl/ui/BNPL/BnplScreen.dart';
 import 'package:swfl/ui/BNPL/BnplStatement.dart';
+import 'package:swfl/ui/BNPL/Withdraw.dart';
 import 'package:swfl/ui/auth/BnplAadharRegistration.dart';
 import 'package:swfl/ui/auth/BnplRegistration.dart';
 import 'package:swfl/ui/auth/BnplUpdateAddress.dart';
@@ -12,7 +13,8 @@ import 'package:swfl/ui/auth/RegistrationScreen.dart';
 import 'package:swfl/ui/auth/RegistrationVerifyOtp.dart';
 import 'package:swfl/ui/auth/login_screen.dart';
 import 'package:swfl/ui/auth/verify_otp_screen.dart';
-import 'package:swfl/ui/home/DashboardMenu/ApplyForLoan/ApplyForLoan.dart';
+import 'package:swfl/ui/home/DashboardMenu/ApplyForCommodityLoan/AppliedLoanList.dart';
+import 'package:swfl/ui/home/DashboardMenu/ApplyForCommodityLoan/ApplyLoanScreen.dart';
 import 'package:swfl/ui/home/DashboardMenu/SanctionedAmount/SanctionedAmountScreen.dart';
 import 'package:swfl/ui/home/DashboardMenu/Wallet/AddMoney.dart';
 import 'package:swfl/ui/home/DashboardMenu/Wallet/MoneyRequest.dart';
@@ -25,6 +27,7 @@ import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/verification/Verification.dart';
 
 import '../../Data/SharedPrefs/SharedUtility.dart';
+import '../home/DashboardMenu/ApplyForSanctionLimit/ApplyForSanctionLimit.dart';
 
 part 'routes.g.dart';
 
@@ -59,14 +62,29 @@ GoRouter goRouter(GoRouterRef ref) {
                   path: RoutesStrings.bnplStatement,
                   name: RoutesStrings.bnplStatement,
                   builder: (context, state) => const Bnplstatement()),
+
+
+              GoRoute(
+                  path: RoutesStrings.applyForCommodityLoan,
+                  name: RoutesStrings.applyForCommodityLoan,
+                  builder: (context, state) => const Applyloanscreen()),
+              GoRoute(
+                  path: RoutesStrings.appliedLoanList,
+                  name: RoutesStrings.appliedLoanList,
+                  builder: (context, state) => const Appliedloanlist()),
+
+              GoRoute(
+                  path: RoutesStrings.bnplWithdraw,
+                  name: RoutesStrings.bnplWithdraw,
+                  builder: (context, state) => const WithdrawScreen()),
               GoRoute(
                   path: RoutesStrings.verfication,
                   name: RoutesStrings.verfication,
                   builder: (context, state) => const Verification()),
               GoRoute(
-                path: RoutesStrings.applyForLoan,
-                name: RoutesStrings.applyForLoan,
-                builder: (context, state) => const Applyforloan(),
+                path: RoutesStrings.applyForSanctionLimit,
+                name: RoutesStrings.applyForSanctionLimit,
+                builder: (context, state) => const ApplyForSanctionLimit(),
               ),
               GoRoute(
                 path: RoutesStrings.profile,
@@ -98,6 +116,11 @@ GoRouter goRouter(GoRouterRef ref) {
                 name: RoutesStrings.withdrawRequests,
                 builder: (context, state) => const Withdrawrequests(),
               ),
+              GoRoute(
+                  path: RoutesStrings.bnplAadharRegistrationHome,
+                  name: RoutesStrings.bnplAadharRegistrationHome,
+                  builder: (context, state) =>
+                  const Bnplaadharregistration()),
             ],
             builder: (context, state) => const DashboardScreen()),
         GoRoute(
@@ -118,6 +141,7 @@ GoRouter goRouter(GoRouterRef ref) {
                   name: RoutesStrings.register,
                   builder: (context, state) => const Registrationscreen(),
                   routes: [
+
                     GoRoute(
                         path: RoutesStrings.bnplRegistration,
                         name: RoutesStrings.bnplRegistration,

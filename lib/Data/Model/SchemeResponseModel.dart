@@ -9,8 +9,8 @@ SchemeResponseModel schemeResponseModelFromMap(String str) => SchemeResponseMode
 String schemeResponseModelToMap(SchemeResponseModel data) => json.encode(data.toMap());
 
 class SchemeResponseModel {
-  String? status;
-  String? message;
+  dynamic status;
+  dynamic message;
   List<Datum>? data;
 
   SchemeResponseModel({
@@ -33,16 +33,16 @@ class SchemeResponseModel {
 }
 
 class Datum {
-  int? id;
-  String? schemeName;
-  String? interestRate;
-  String? loanPassDays;
-  String? processingFee;
-  String? loanPerTotalAmount;
-  String? tenor;
-  String? guaranteeFee;
+  dynamic id;
+  dynamic schemeName;
+  dynamic interestRate;
+  dynamic loanPassDays;
+  dynamic processingFee;
+  dynamic loanPerTotalAmount;
+  dynamic tenor;
+  dynamic guaranteeFee;
   dynamic guarantor;
-  String? status;
+  dynamic status;
   DateTime? createdAt;
   DateTime? updatedAt;
 

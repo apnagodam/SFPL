@@ -81,6 +81,19 @@ Loan api
   static const appliedList = 'sanction_limit';
   static const getTerms = 'sanction-limit-terms';
 
+  static const getStockList = 'my-stock';
+  static const getLoanRequestForm = 'loan-request-form';
+
+  static const getLoanDetails = 'get-loan-details';
+
+  static const submitLoanRequest = "loan-request-submit";
+  static const cancelLoanRequest = 'cancel-loan-request';
+
+  static const approvedRequests = 'loan-list/approved';
+  static const pendingRequests = 'loan-list/pending';
+  static const rejectedRequests = 'loan-list/rejected';
+  static const closedRequests = 'loan-list/closed';
+
 /*
 Wallet api
 *
@@ -113,4 +126,5 @@ BNPL api
   static const bnplTerms = 'bnpl-kfc';
   static const requestBnpl = 'bnpl-request';
   static const bnplListing = 'bnpl-listing';
+  static const getBnplPower = 'bnpl-power';
 }

@@ -13,7 +13,7 @@ extension PanCardValidator on String {
 extension BankAccountValidator on String {
   bool isValidBankAccount() {
     return RegExp(
-            r'^\d{9,12}$')
+            r'^\d{10,16}$')
         .hasMatch(this);
   }
 }

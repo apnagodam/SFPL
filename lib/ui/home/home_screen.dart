@@ -19,7 +19,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-late final TabController _controller;
+ TabController? _controller;
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {

@@ -20,7 +20,7 @@ final bnplTermsProvider = AutoDisposeFutureProvider<TermsModel>.internal(
 );
 
 typedef BnplTermsRef = AutoDisposeFutureProviderRef<TermsModel>;
-String _$bnplRequestHash() => r'1aa5f6af3da309eccea60ce8d2403bfa0fb5c5be';
+String _$bnplRequestHash() => r'bf994b69f4d1c8551da0ed27042899b98df2e721';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -202,5 +202,19 @@ final bnplListProvider = AutoDisposeFutureProvider<BnplListingModel>.internal(
 );
 
 typedef BnplListRef = AutoDisposeFutureProviderRef<BnplListingModel>;
+String _$bnplPowerHash() => r'b73f6bfc1ebd16ebf04b30148cef81485143f1a4';
+
+/// See also [bnplPower].
+@ProviderFor(bnplPower)
+final bnplPowerProvider = AutoDisposeFutureProvider<BnplPowerModel>.internal(
+  bnplPower,
+  name: r'bnplPowerProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$bnplPowerHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef BnplPowerRef = AutoDisposeFutureProviderRef<BnplPowerModel>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
