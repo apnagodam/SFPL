@@ -188,18 +188,18 @@ class _ApplyloanscreenState extends ConsumerState<Applyloanscreen> {
                                                 ref.invalidate(loanApplyListProvider);
                                                 successToast(context, value['message'].toString());
 
-
                                               } else {
                                                 errorToast(context, value['message'].toString());
                                               }
                                             });
                                           } else {
-                                            showBarModalBottomSheet(
-                                                context: context,
-                                                builder: (context) =>
-                                                    StockApplyLoan(
+                                            showDialog(context: context, builder: (context)=> StockApplyLoan(
                                                       data: data.data?[index],
                                                     ));
+                                            // showBarModalBottomSheet(
+                                            //     context: context,
+                                            //     builder: (context) =>
+                                            //        );
                                           }
                                         },
 
@@ -271,13 +271,15 @@ class _StockApplyLoanState extends ConsumerState<StockApplyLoan> {
     return Scaffold(
       body: ListView(
         children: [
-          CupertinoButton(
+          Row(children: [
+            IconButton(onPressed: ()=>Navigator.of(context).pop(), icon: Icon(Icons.arrow_back)),
+            CupertinoButton(
               child: Text('Select Scheme',
                   style: TextStyle(
                       color: ColorsConstant.primaryColor,
                       fontWeight: FontWeight.bold,
                       fontSize: Adaptive.sp(17))),
-              onPressed: () async {}),
+              onPressed: () async {})],),
           Container(
             padding: const Pad(all: 10),
             color: ColorsConstant.secondColorDark,
@@ -546,7 +548,7 @@ class _LoanDetailsState extends ConsumerState<LoanDetails> {
                       children: [
                         Text(
                             'Market Rate: ${currencyFormat.format(
-                                double.tryParse("${data.data?.marketPrice}"))}',
+                                double.tryParse("${data.data?.marketPrice??"0"}"))}',
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 fontSize: Adaptive.sp(14),

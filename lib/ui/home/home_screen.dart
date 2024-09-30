@@ -2,9 +2,11 @@ import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flip_card/flutter_flip_card.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
 import 'package:swfl/ui/utils/colors.dart';
 import 'package:tab_container/tab_container.dart';
 
@@ -12,16 +14,16 @@ var currencyFormat =
     NumberFormat.currency(locale: 'HI', symbol: '\u{20B9}', decimalDigits: 2);
 final flipController = FlipCardController();
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
  TabController? _controller;
 
-class _HomeScreenState extends State<HomeScreen>
+class _HomeScreenState extends ConsumerState<HomeScreen>
     with SingleTickerProviderStateMixin {
   @override
   void initState() {
@@ -115,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen>
                           height: 10,
                         ),
                         Text(
-                          "${currencyFormat.format(21000000.00)}",
+                          "${currencyFormat.format(double.tryParse("${ref.watch(sharedUtilityProvider).getUser()?.wallet.toString()}"))}",
                           style: TextStyle(
                               shadows: const [
                                 Shadow(color: Colors.black, blurRadius: 2.0),
@@ -151,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen>
                           height: 10,
                         ),
                         Text(
-                          "${currencyFormat.format(21000000.00)}",
+                          "${currencyFormat.format(double.tryParse("${ref.watch(sharedUtilityProvider).getUser()?.wallet}"))}",
                           style: TextStyle(
                               shadows: const [
                                 Shadow(color: Colors.black, blurRadius: 2.0),
