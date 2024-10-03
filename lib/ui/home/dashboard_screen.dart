@@ -34,24 +34,23 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      ref.watch(loginInfoProvider.future).then((value) async {
-        if (value.data?.isLogin != false) {
-
-          if (value.data?.type == "BNPL" && value.data?.aadharVerify == "0") {
+    WidgetsBinding.instance.addPostFrameCallback((callBack){
+      ref.watch(loginInfoProvider.future).then((data){
+        if (data.data?.isLogin != false) {
+          if (data.data?.type == "BNPL" && data.data?.aadharVerify == "0") {
             showVerificationDialog(context,
                 titleText: "Verify Aadhar",
                 messageText: "Your Aadhar verification is pending", action: () {
-              hideLoader(context);
-              context.goNamed(RoutesStrings.bnplAadharRegistration);
-            });
+                  hideLoader(context);
+                  context.goNamed(RoutesStrings.bnplAadharRegistration);
+                });
           }
 
-          ref.watch(sharedUtilityProvider).setUser(value.data);
+          ref.watch(sharedUtilityProvider).setUser(data.data);
         } else {
           ref.watch(sharedPreferencesProvider).clear();
+          context.go(RoutesStrings.login);
         }
       });
     });
@@ -84,9 +83,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       children: [
                         CircleAvatar(
                           foregroundImage: NetworkImage(ref
-                                  .watch(sharedUtilityProvider)
-                                  .getUser()
-                                  ?.profileImage ??
+                              .watch(sharedUtilityProvider)
+                              .getUser()
+                              ?.profileImage ??
                               ""),
                         ),
                         const SizedBox(
@@ -103,7 +102,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     )),
               ],
             ),
-
             CupertinoActionSheet(
               title: Center(
                 child: Text(
@@ -115,10 +113,19 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               actions: [
                 CupertinoActionSheetAction(
                   onPressed: () {
-
-                    context.goNamed(RoutesStrings.applyForCommodityLoan);
-
-
+                    if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
+                        [])
+                        .isEmpty) {
+                      showVerificationDialog(context,
+                          titleText: "Verify Tri-Party Agreement",
+                          messageText: "tri party agreement pending",
+                          action: () {
+                            hideLoader(context);
+                            context.goNamed(RoutesStrings.verfication);
+                          });
+                    } else {
+                      context.goNamed(RoutesStrings.applyForCommodityLoan);
+                    }
                   },
                   child: Text('Loan Apply ',
                       textAlign: TextAlign.start,
@@ -182,18 +189,23 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               actions: [
                 CupertinoActionSheetAction(
                   onPressed: () {
-                    if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
+                    if (ref
+                        .watch(sharedUtilityProvider)
+                        .getUser()
+                        ?.aadharVerify
+                        .toString() ==
+                        "0") {
                       showVerificationDialog(context,
                           titleText: "Verify Aadhar",
-                          messageText: "Your Aadhar verification is pending", action: () {
+                          messageText: "Your Aadhar verification is pending",
+                          action: () {
                             hideLoader(context);
-                            context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
+                            context
+                                .goNamed(RoutesStrings.bnplAadharRegistrationHome);
                           });
-                    }else{
+                    } else {
                       context.goNamed(RoutesStrings.bnpl);
-
                     }
-
                   },
                   child: Text('Apply ',
                       textAlign: TextAlign.start,
@@ -257,17 +269,18 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               actions: [
                 CupertinoActionSheetAction(
                   onPressed: () {
-                    if((ref.watch(sharedUtilityProvider).getUser()?.triparty??[]).isEmpty){
+                    if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
+                        [])
+                        .isEmpty) {
                       showVerificationDialog(context,
                           titleText: "Verify Tri-Party Agreement",
-                          messageText: "tri party agreement pending", action: () {
+                          messageText: "tri party agreement pending",
+                          action: () {
                             hideLoader(context);
                             context.goNamed(RoutesStrings.verfication);
                           });
-                    }
-                    else{
+                    } else {
                       context.goNamed(RoutesStrings.applyForSanctionLimit);
-
                     }
                   },
                   child: Text('Sanction Limit Apply',
@@ -279,17 +292,21 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 ),
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      if((ref.watch(sharedUtilityProvider).getUser()?.triparty??[]).isEmpty){
+                      if ((ref
+                          .watch(sharedUtilityProvider)
+                          .getUser()
+                          ?.triparty ??
+                          [])
+                          .isEmpty) {
                         showVerificationDialog(context,
                             titleText: "Verify Tri-Party Agreement",
-                            messageText: "tri party agreement pending", action: () {
+                            messageText: "tri party agreement pending",
+                            action: () {
                               hideLoader(context);
                               context.goNamed(RoutesStrings.verfication);
                             });
-                      }
-                      else{
+                      } else {
                         context.goNamed(RoutesStrings.sanctionedAmount);
-
                       }
                     },
                     child: Text('Sanctioned Amount',
@@ -319,7 +336,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             fontSize: Adaptive.sp(16),
                             color: Colors.black,
                             fontWeight: FontWeight.w500))),
-
                 CupertinoActionSheetAction(
                     onPressed: () {
                       context.goNamed(RoutesStrings.withdrawMoney);
@@ -330,7 +346,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             fontSize: Adaptive.sp(16),
                             color: Colors.black,
                             fontWeight: FontWeight.w500))),
-
               ],
             ),
             CupertinoActionSheet(

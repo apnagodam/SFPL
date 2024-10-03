@@ -27,9 +27,9 @@ Future<BaseApiResponse> bnplRequest(BnplRequestRef ref,
 }
 
 @riverpod
-Future<BnplListingModel> bnplList(BnplListRef ref) async {
+Stream<BnplListingModel> bnplList(BnplListRef ref) async* {
   var response = await ref.watch(dioProvider).get(ApiClient.bnplListing);
-  return bnplListingModelFromJson(jsonEncode(response.data));
+  yield bnplListingModelFromJson(jsonEncode(response.data));
 }
 
 @riverpod

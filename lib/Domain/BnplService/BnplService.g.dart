@@ -188,11 +188,11 @@ class _BnplRequestProviderElement
   String? get type => (origin as BnplRequestProvider).type;
 }
 
-String _$bnplListHash() => r'5da7f6e35209e35175645b26ccc433eb34ca04e6';
+String _$bnplListHash() => r'd6c8ac2b35658032cf7f6d5fd0f99cbfed4b10e9';
 
 /// See also [bnplList].
 @ProviderFor(bnplList)
-final bnplListProvider = AutoDisposeFutureProvider<BnplListingModel>.internal(
+final bnplListProvider = AutoDisposeStreamProvider<BnplListingModel>.internal(
   bnplList,
   name: r'bnplListProvider',
   debugGetCreateSourceHash:
@@ -201,7 +201,7 @@ final bnplListProvider = AutoDisposeFutureProvider<BnplListingModel>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef BnplListRef = AutoDisposeFutureProviderRef<BnplListingModel>;
+typedef BnplListRef = AutoDisposeStreamProviderRef<BnplListingModel>;
 String _$bnplPowerHash() => r'b73f6bfc1ebd16ebf04b30148cef81485143f1a4';
 
 /// See also [bnplPower].

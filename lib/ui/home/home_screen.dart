@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_flip_card/flutter_flip_card.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
 import 'package:swfl/ui/utils/colors.dart';
+import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:tab_container/tab_container.dart';
+
+import '../utils/widgets.dart';
 
 var currencyFormat =
     NumberFormat.currency(locale: 'HI', symbol: '\u{20B9}', decimalDigits: 2);
@@ -21,7 +25,7 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
- TabController? _controller;
+TabController? _controller;
 
 class _HomeScreenState extends ConsumerState<HomeScreen>
     with SingleTickerProviderStateMixin {
@@ -66,7 +70,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 ColorsConstant.primaryColor,
                 ColorsConstant.secondColorDark,
               ],
-
               selectedTextStyle: TextStyle(
                   color: Colors.white,
                   shadows: [const Shadow(color: Colors.white, blurRadius: 0.3)],
@@ -79,18 +82,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   fontSize: Adaptive.sp(16)),
               tabs: [
                 Text(
-                  'Outstanding Limit',
+                  'Wallet Balance',
                   style: TextStyle(
-
-                      fontWeight: FontWeight.w700,
-                      fontSize: Adaptive.sp(16)),
+                      fontWeight: FontWeight.w700, fontSize: Adaptive.sp(16)),
                 ),
                 Text(
-                  'BNPL Limit',
+                  'BNPL Balance',
                   style: TextStyle(
-
-                      fontWeight: FontWeight.w700,
-                      fontSize: Adaptive.sp(16)),
+                      fontWeight: FontWeight.w700, fontSize: Adaptive.sp(16)),
                 ),
               ],
               children: [
@@ -101,15 +100,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     child: RowSuper(fill: true, children: [
                       ColumnSuper(alignment: Alignment.centerLeft, children: [
                         Text(
-                          "OutStanding Limit".toUpperCase(),
+                          "Wallet Balance".toUpperCase(),
                           style: TextStyle(
                             shadows: const [
                               Shadow(color: Colors.black, blurRadius: 2.0),
                               Shadow(color: Colors.black, blurRadius: 2.0)
                             ],
                             color: Colors.white,
-                            fontWeight: FontWeight.bold,fontFamily: GoogleFonts.manrope().fontFamily,
-
+                            fontWeight: FontWeight.bold,
+                            fontFamily: GoogleFonts.manrope().fontFamily,
                             fontSize: Adaptive.sp(18),
                           ),
                         ),
@@ -137,7 +136,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     child: RowSuper(fill: true, children: [
                       ColumnSuper(alignment: Alignment.centerLeft, children: [
                         Text(
-                          "BNPL Limit".toUpperCase(),
+                          "BNPL Balance".toUpperCase(),
                           style: TextStyle(
                             shadows: const [
                               Shadow(color: Colors.black, blurRadius: 2.0),
@@ -153,7 +152,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                           height: 10,
                         ),
                         Text(
-                          "${currencyFormat.format(double.tryParse("${ref.watch(sharedUtilityProvider).getUser()?.wallet}"))}",
+                          "${currencyFormat.format(0.0)}",
                           style: TextStyle(
                               shadows: const [
                                 Shadow(color: Colors.black, blurRadius: 2.0),
@@ -238,16 +237,48 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           ),
           homeLayoutWidget(LucideIcons.banknote, 'Commodity Wise Loan', '0',
               imagePath:
-                  'https://cdn.iconscout.com/icon/premium/png-512-thumb/loan-2014155-1711062.png?f=webp&w=256'),
-          homeLayoutWidget(LucideIcons.hand_coins, 'Unfunded SR', '0',
+                  'https://cdn.iconscout.com/icon/premium/png-512-thumb/loan-2014155-1711062.png?f=webp&w=256',
+              callback: () {
+            if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ?? [])
+                .isEmpty) {
+              showVerificationDialog(context,
+                  titleText: "Verify Tri-Party Agreement",
+                  messageText: "tri party agreement pending", action: () {
+                hideLoader(context);
+                context.goNamed(RoutesStrings.verfication);
+              });
+            } else {
+              context.goNamed(RoutesStrings.applyForCommodityLoan);
+            }
+          }),
+          homeLayoutWidget(LucideIcons.hand_coins, 'BNPL', '0',
               imagePath:
-                  'https://cdn.iconscout.com/icon/premium/png-512-thumb/loan-82-1066968.png?f=webp&w=256'),
-          homeLayoutWidget(LucideIcons.percent, 'Due Loans', '0',
-              imagePath:
-                  'https://cdn.iconscout.com/icon/premium/png-512-thumb/due-date-10983830-8792274.png?f=webp&w=256'),
-          homeLayoutWidget(LucideIcons.workflow, 'M2M Shortfalls', '0',
-              imagePath:
-                  'https://cdn.iconscout.com/icon/premium/png-512-thumb/trading-3256014-2712970.png?f=webp&w=256')
+                  'https://cdn.iconscout.com/icon/premium/png-512-thumb/loan-82-1066968.png?f=webp&w=256',
+              callback: () {
+                if (ref
+                    .watch(sharedUtilityProvider)
+                    .getUser()
+                    ?.aadharVerify
+                    .toString() ==
+                    "0") {
+                  showVerificationDialog(context,
+                      titleText: "Verify Aadhar",
+                      messageText: "Your Aadhar verification is pending",
+                      action: () {
+                        hideLoader(context);
+                        context
+                            .goNamed(RoutesStrings.bnplAadharRegistrationHome);
+                      });
+                } else {
+                  context.goNamed(RoutesStrings.bnpl);
+                }
+              }),
+          // homeLayoutWidget(LucideIcons.percent, 'Due Loans', '0',
+          //     imagePath:
+          //         'https://cdn.iconscout.com/icon/premium/png-512-thumb/due-date-10983830-8792274.png?f=webp&w=256'),
+          // homeLayoutWidget(LucideIcons.workflow, 'M2M Shortfalls', '0',
+          //     imagePath:
+          //         'https://cdn.iconscout.com/icon/premium/png-512-thumb/trading-3256014-2712970.png?f=webp&w=256')
         ],
       )),
     );
@@ -297,23 +328,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               style: TextStyle(
                   fontWeight: FontWeight.bold, fontSize: Adaptive.sp(19)),
             )),
-            Container(
-              padding: Pad(all: 10),
-              height: Adaptive.sw(15),
-              decoration: BoxDecoration(
-                  color: ColorsConstant.primaryColor,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(10),
-                      bottomRight: Radius.circular(10))),
-              alignment: Alignment.center,
-              child: Text(
-                number,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: Adaptive.sp(20),
-                    color: Colors.white),
-              ),
-            )
+            // Container(
+            //   padding: Pad(all: 10),
+            //   height: Adaptive.sw(15),
+            //   decoration: BoxDecoration(
+            //       color: ColorsConstant.primaryColor,
+            //       borderRadius: BorderRadius.only(
+            //           topRight: Radius.circular(10),
+            //           bottomRight: Radius.circular(10))),
+            //   alignment: Alignment.center,
+            //   child: Text(
+            //     number,
+            //     style: TextStyle(
+            //         fontWeight: FontWeight.bold,
+            //         fontSize: Adaptive.sp(20),
+            //         color: Colors.white),
+            //   ),
+            // )
           ]),
         ),
       );

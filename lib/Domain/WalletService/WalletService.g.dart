@@ -335,12 +335,12 @@ class _WithdrawMoneyProviderElement
   String? get remark => (origin as WithdrawMoneyProvider).remark;
 }
 
-String _$moneyRequestListHash() => r'd87cd00b9af4794f5115603dc7e852390745e9a6';
+String _$moneyRequestListHash() => r'08ee858494c7f72843817b241a42be74949061e8';
 
 /// See also [moneyRequestList].
 @ProviderFor(moneyRequestList)
 final moneyRequestListProvider =
-    AutoDisposeFutureProvider<MoneyRequestModel>.internal(
+    AutoDisposeStreamProvider<MoneyRequestModel>.internal(
   moneyRequestList,
   name: r'moneyRequestListProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -350,13 +350,13 @@ final moneyRequestListProvider =
   allTransitiveDependencies: null,
 );
 
-typedef MoneyRequestListRef = AutoDisposeFutureProviderRef<MoneyRequestModel>;
-String _$withdrawlRequestsHash() => r'd021e126d3f08bb14c8019c04d404b0498e08d83';
+typedef MoneyRequestListRef = AutoDisposeStreamProviderRef<MoneyRequestModel>;
+String _$withdrawlRequestsHash() => r'5363f4a3b6dfafa6f30c8fa7b8fed0b88838559f';
 
 /// See also [withdrawlRequests].
 @ProviderFor(withdrawlRequests)
 final withdrawlRequestsProvider =
-    AutoDisposeFutureProvider<WithdrawlResponseModel>.internal(
+    AutoDisposeStreamProvider<WithdrawlResponseModel>.internal(
   withdrawlRequests,
   name: r'withdrawlRequestsProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -367,6 +367,6 @@ final withdrawlRequestsProvider =
 );
 
 typedef WithdrawlRequestsRef
-    = AutoDisposeFutureProviderRef<WithdrawlResponseModel>;
+    = AutoDisposeStreamProviderRef<WithdrawlResponseModel>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

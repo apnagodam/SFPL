@@ -48,14 +48,14 @@ Future<Map<String, dynamic>> withdrawMoney(
 }
 
 @riverpod
-Future<MoneyRequestModel> moneyRequestList(MoneyRequestListRef ref) async {
+Stream<MoneyRequestModel> moneyRequestList(MoneyRequestListRef ref) async* {
   var response = await ref.watch(dioProvider).get(ApiClient.moneyRequestList);
-  return moneyRequestModelFromJson(jsonEncode(response.data));
+  yield moneyRequestModelFromJson(jsonEncode(response.data));
 }
 
 @riverpod
-Future<WithdrawlResponseModel> withdrawlRequests(
-    WithdrawlRequestsRef ref) async {
+Stream<WithdrawlResponseModel> withdrawlRequests(
+    WithdrawlRequestsRef ref) async* {
   var response = await ref.watch(dioProvider).get(ApiClient.withdrawlList);
-  return withdrawlResponseModelFromMap(jsonEncode(response.data));
+  yield withdrawlResponseModelFromMap(jsonEncode(response.data));
 }

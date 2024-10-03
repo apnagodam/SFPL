@@ -8,13 +8,13 @@ import 'package:swfl/Domain/Dio/DioProvider.dart';
 part 'StateService.g.dart';
 
 @riverpod
-Future<StatesResponseModel> stateList(StateListRef ref) async {
+Stream<StatesResponseModel> stateList(StateListRef ref) async* {
   var response = await ref.watch(dioProvider).get(ApiClient.getStates);
-  return statesResponseModelFromMap(jsonEncode(response.data));
+  yield statesResponseModelFromMap(jsonEncode(response.data));
 }
 
 @riverpod
-Future<DistrictsResponseModel> districtList(DistrictListRef ref,{String? code}) async {
+Stream<DistrictsResponseModel> districtList(DistrictListRef ref,{String? code}) async* {
   var response = await ref.watch(dioProvider).get(ApiClient.getDistricts,queryParameters: {"code":code});
-  return districtsResponseModelFromMap(jsonEncode(response.data));
+  yield districtsResponseModelFromMap(jsonEncode(response.data));
 }

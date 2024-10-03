@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../Data/SharedPrefs/SharedUtility.dart';
@@ -10,16 +9,16 @@ part 'DioProvider.g.dart';
 Dio dio(DioRef ref) {
   return Dio(BaseOptions(baseUrl: ApiClient.testBaseUrl, headers: {
     "Authorization": "Bearer ${ref.watch(sharedUtilityProvider).getToken()}",
-  }))
-    ..interceptors.add(PrettyDioLogger(
-      requestHeader: true,
-      requestBody: true,
-      responseBody: true,
-      responseHeader: false,
-      error: true,
-      compact: true,
-      maxWidth: 90,
-    ));
+  }));
+  // ..interceptors.add(PrettyDioLogger(
+  //   requestHeader: true,
+  //   requestBody: true,
+  //   responseBody: true,
+  //   responseHeader: false,
+  //   error: true,
+  //   compact: true,
+  //   maxWidth: 90,
+  // ));
 }
 
 @riverpod
@@ -28,13 +27,13 @@ Dio aadharDio(DioRef ref) {
       BaseOptions(baseUrl: "https://sandbox.surepass.io/api/v1/", headers: {
     "Authorization":
         "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNjQ2MTc5MiwianRpIjoiM2UzOWVlZWEtMmNkMC00ZGVlLWEzNGYtZDI2NjEyOTBmMjhlIiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnNhbmpheUBzdXJlcGFzcy5pbyIsIm5iZiI6MTcyNjQ2MTc5MiwiZXhwIjoxNzI5MDUzNzkyLCJlbWFpbCI6InNhbmpheUBzdXJlcGFzcy5pbyIsInRlbmFudF9pZCI6Im1haW4iLCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.2-lXrzeHsncSF4AJvhJhoogm6UQkqSFTheAaMmMa4Mk",
-  }))
-    ..interceptors.add(LogInterceptor(
-      requestBody: true,
-      requestHeader: true,
-      responseHeader: true,
-      responseBody: true,
-    ));
+  }));
+  // ..interceptors.add(LogInterceptor(
+  //   requestBody: true,
+  //   requestHeader: true,
+  //   responseHeader: true,
+  //   responseBody: true,
+  // ));
 }
 
 class ApiClient {
@@ -93,6 +92,8 @@ Loan api
   static const pendingRequests = 'loan-list/pending';
   static const rejectedRequests = 'loan-list/rejected';
   static const closedRequests = 'loan-list/closed';
+
+  static const submitSanctionDocuments = 'post_sanction_document_upload';
 
 /*
 Wallet api

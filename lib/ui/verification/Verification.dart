@@ -38,11 +38,11 @@ class _VerificationState extends ConsumerState<Verification> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Upload Agreement'),
+        title: const Text('Upload Agreement'),
       ),
       body: SafeArea(
           child: Padding(
-        padding: Pad(all: 10),
+        padding: const Pad(all: 10),
         child: ListView(
           children: [
             Align(
@@ -54,7 +54,7 @@ class _VerificationState extends ConsumerState<Verification> {
                     fontSize: Adaptive.sp(18), fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             ref.watch(wspAgreementListProvider).when(
@@ -148,13 +148,13 @@ class _VerificationState extends ConsumerState<Verification> {
                       ),
                     ),
                 error: (e, s) => Container(),
-                loading: () => Center(
+                loading: () => const Center(
                       child: CupertinoActivityIndicator(),
                     )),
             Visibility(
                 visible: ref.watch(wspProvider) != null,
                 child: ref.watch(isAgreementDownloading)
-                    ? CupertinoActivityIndicator()
+                    ? const CupertinoActivityIndicator()
                     : IconsButton(
                         onPressed: () async {
                           ref.watch(isAgreementDownloading.notifier).state =
@@ -198,7 +198,7 @@ class _VerificationState extends ConsumerState<Verification> {
                         text: 'Download Agreement',
                         iconData: Icons.cloud_download,
                         color: ColorsConstant.primaryColor,
-                        textStyle: TextStyle(color: Colors.white),
+                        textStyle: const TextStyle(color: Colors.white),
                         iconColor: Colors.white,
                       )),
             const SizedBox(
@@ -213,7 +213,7 @@ class _VerificationState extends ConsumerState<Verification> {
                     fontSize: Adaptive.sp(18), fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             InkWell(
@@ -243,11 +243,11 @@ class _VerificationState extends ConsumerState<Verification> {
                                   fontSize: Adaptive.sp(16)),
                             )
                           : ColumnSuper(children: [
-                              Icon(
+                              const Icon(
                                 LucideIcons.cloud_upload,
                                 color: ColorsConstant.primaryColor,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               Text(
@@ -258,7 +258,7 @@ class _VerificationState extends ConsumerState<Verification> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: Adaptive.sp(16)),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               Text(
@@ -283,23 +283,24 @@ class _VerificationState extends ConsumerState<Verification> {
                             agreementFile: ref.watch(triPartyImageProvider))
                         .future)
                     .then((value) {
-                      hideLoader(context);
+                  hideLoader(context);
                   if (value['status'].toString() == "1") {
                     ref.watch(goRouterProvider).pop();
                     successToast(context, value['message'].toString());
                   } else {
                     errorToast(context, value['message'].toString());
                   }
-                }).onError((e,s){                      hideLoader(context);
+                }).onError((e, s) {
+                  hideLoader(context);
                 });
               },
               text: 'Upload',
               iconData: Icons.cloud_upload,
               color: ColorsConstant.primaryColor,
-              textStyle: TextStyle(color: Colors.white),
+              textStyle: const TextStyle(color: Colors.white),
               iconColor: Colors.white,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text.rich(TextSpan(

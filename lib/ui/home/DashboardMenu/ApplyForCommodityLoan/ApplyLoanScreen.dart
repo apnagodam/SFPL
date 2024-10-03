@@ -181,21 +181,21 @@ class _ApplyloanscreenState extends ConsumerState<Applyloanscreen> {
                                               .toString()
                                               .toLowerCase() ==
                                               "cancel request") {
-                                            ref.watch(
-                                                cancelLoanRequestProvider(id:"${data.data?[index].financeId}")
-                                                    .future).then((value) {
-                                              if (value['status'].toString() == "1") {
-                                                ref.invalidate(loanApplyListProvider);
-                                                successToast(context, value['message'].toString());
-
-                                              } else {
-                                                errorToast(context, value['message'].toString());
-                                              }
-                                            });
+                                            // ref.watch(
+                                            //     cancelLoanRequestProvider(id:"${data.data?[index].financeId}")
+                                            //         .future).then((value) {
+                                            //   if (value['status'].toString() == "1") {
+                                            //     ref.invalidate(loanApplyListProvider);
+                                            //     successToast(context, value['message'].toString());
+                                            //
+                                            //   } else {
+                                            //     errorToast(context, value['message'].toString());
+                                            //   }
+                                            // });
                                           } else {
                                             showDialog(context: context, builder: (context)=> StockApplyLoan(
-                                                      data: data.data?[index],
-                                                    ));
+                                              data: data.data?[index],
+                                            ));
                                             // showBarModalBottomSheet(
                                             //     context: context,
                                             //     builder: (context) =>
@@ -204,7 +204,12 @@ class _ApplyloanscreenState extends ConsumerState<Applyloanscreen> {
                                         },
 
                                         child: Text(
-                                          "${data.data?[index].loan}",
+                                          "${
+                                              data.data?[index].loan
+                                                  .toString()
+                                                  .toLowerCase() ==
+                                                  "cancel request"?"Applied":
+                                              data.data?[index].loan}",
                                           textAlign: TextAlign.center,
                                           maxLines: 3,
                                           style: TextStyle(
@@ -221,7 +226,7 @@ class _ApplyloanscreenState extends ConsumerState<Applyloanscreen> {
                                                   .toString()
                                                   .toLowerCase() ==
                                                   "cancel request"
-                                                  ? Colors.red
+                                                  ? ColorsConstant.secondaryColor
                                                   : ColorsConstant.primaryColor,
 
                                               fontWeight: FontWeight.w700,

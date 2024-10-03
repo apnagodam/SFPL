@@ -1089,11 +1089,11 @@ final logoutProvider = AutoDisposeFutureProvider<Map<String, dynamic>>.internal(
 );
 
 typedef LogoutRef = AutoDisposeFutureProviderRef<Map<String, dynamic>>;
-String _$loginInfoHash() => r'8c3fba4d6d52b0f873f501fac7356ac1f5cc33de';
+String _$loginInfoHash() => r'4c9427cecbefce698f2fc317361dbd0e5d3e3a12';
 
 /// See also [loginInfo].
 @ProviderFor(loginInfo)
-final loginInfoProvider = AutoDisposeFutureProvider<OtpVerifyModel>.internal(
+final loginInfoProvider = AutoDisposeStreamProvider<OtpVerifyModel>.internal(
   loginInfo,
   name: r'loginInfoProvider',
   debugGetCreateSourceHash:
@@ -1102,7 +1102,7 @@ final loginInfoProvider = AutoDisposeFutureProvider<OtpVerifyModel>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef LoginInfoRef = AutoDisposeFutureProviderRef<OtpVerifyModel>;
+typedef LoginInfoRef = AutoDisposeStreamProviderRef<OtpVerifyModel>;
 String _$registerBnplHash() => r'9ddbe3357f1c0e3e554e60ff977e0074455a0683';
 
 /// See also [registerBnpl].

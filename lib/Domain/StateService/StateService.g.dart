@@ -6,12 +6,12 @@ part of 'StateService.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$stateListHash() => r'e1508647c421d3fb1a7261f753a717f8d17b99e4';
+String _$stateListHash() => r'fc2d67144e8dfa2208975ca1fb1ecdb3a0df4d10';
 
 /// See also [stateList].
 @ProviderFor(stateList)
 final stateListProvider =
-    AutoDisposeFutureProvider<StatesResponseModel>.internal(
+    AutoDisposeStreamProvider<StatesResponseModel>.internal(
   stateList,
   name: r'stateListProvider',
   debugGetCreateSourceHash:
@@ -20,8 +20,8 @@ final stateListProvider =
   allTransitiveDependencies: null,
 );
 
-typedef StateListRef = AutoDisposeFutureProviderRef<StatesResponseModel>;
-String _$districtListHash() => r'ae3fa5bccc6789c33733ac61b09ee593b81e4bc8';
+typedef StateListRef = AutoDisposeStreamProviderRef<StatesResponseModel>;
+String _$districtListHash() => r'd08935f13b374ec49c04a67a3b91a628d279ecaa';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -88,7 +88,7 @@ class DistrictListFamily extends Family<AsyncValue<DistrictsResponseModel>> {
 
 /// See also [districtList].
 class DistrictListProvider
-    extends AutoDisposeFutureProvider<DistrictsResponseModel> {
+    extends AutoDisposeStreamProvider<DistrictsResponseModel> {
   /// See also [districtList].
   DistrictListProvider({
     String? code,
@@ -123,7 +123,7 @@ class DistrictListProvider
 
   @override
   Override overrideWith(
-    FutureOr<DistrictsResponseModel> Function(DistrictListRef provider) create,
+    Stream<DistrictsResponseModel> Function(DistrictListRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -140,7 +140,7 @@ class DistrictListProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<DistrictsResponseModel> createElement() {
+  AutoDisposeStreamProviderElement<DistrictsResponseModel> createElement() {
     return _DistrictListProviderElement(this);
   }
 
@@ -158,13 +158,13 @@ class DistrictListProvider
   }
 }
 
-mixin DistrictListRef on AutoDisposeFutureProviderRef<DistrictsResponseModel> {
+mixin DistrictListRef on AutoDisposeStreamProviderRef<DistrictsResponseModel> {
   /// The parameter `code` of this provider.
   String? get code;
 }
 
 class _DistrictListProviderElement
-    extends AutoDisposeFutureProviderElement<DistrictsResponseModel>
+    extends AutoDisposeStreamProviderElement<DistrictsResponseModel>
     with DistrictListRef {
   _DistrictListProviderElement(super.provider);
 

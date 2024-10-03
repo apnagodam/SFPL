@@ -442,6 +442,190 @@ class _ApplyForLoanProviderElement
   File? get bs3 => (origin as ApplyForLoanProvider).bs3;
 }
 
+String _$submitSanctionDocumentsHash() =>
+    r'ef824830340ed8660558ba3bac34eb24d601d40f';
+
+/// See also [submitSanctionDocuments].
+@ProviderFor(submitSanctionDocuments)
+const submitSanctionDocumentsProvider = SubmitSanctionDocumentsFamily();
+
+/// See also [submitSanctionDocuments].
+class SubmitSanctionDocumentsFamily
+    extends Family<AsyncValue<Map<String, dynamic>>> {
+  /// See also [submitSanctionDocuments].
+  const SubmitSanctionDocumentsFamily();
+
+  /// See also [submitSanctionDocuments].
+  SubmitSanctionDocumentsProvider call({
+    String? id,
+    File? triAgreement,
+    File? pdc,
+    File? agreement,
+  }) {
+    return SubmitSanctionDocumentsProvider(
+      id: id,
+      triAgreement: triAgreement,
+      pdc: pdc,
+      agreement: agreement,
+    );
+  }
+
+  @override
+  SubmitSanctionDocumentsProvider getProviderOverride(
+    covariant SubmitSanctionDocumentsProvider provider,
+  ) {
+    return call(
+      id: provider.id,
+      triAgreement: provider.triAgreement,
+      pdc: provider.pdc,
+      agreement: provider.agreement,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'submitSanctionDocumentsProvider';
+}
+
+/// See also [submitSanctionDocuments].
+class SubmitSanctionDocumentsProvider
+    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+  /// See also [submitSanctionDocuments].
+  SubmitSanctionDocumentsProvider({
+    String? id,
+    File? triAgreement,
+    File? pdc,
+    File? agreement,
+  }) : this._internal(
+          (ref) => submitSanctionDocuments(
+            ref as SubmitSanctionDocumentsRef,
+            id: id,
+            triAgreement: triAgreement,
+            pdc: pdc,
+            agreement: agreement,
+          ),
+          from: submitSanctionDocumentsProvider,
+          name: r'submitSanctionDocumentsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$submitSanctionDocumentsHash,
+          dependencies: SubmitSanctionDocumentsFamily._dependencies,
+          allTransitiveDependencies:
+              SubmitSanctionDocumentsFamily._allTransitiveDependencies,
+          id: id,
+          triAgreement: triAgreement,
+          pdc: pdc,
+          agreement: agreement,
+        );
+
+  SubmitSanctionDocumentsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+    required this.triAgreement,
+    required this.pdc,
+    required this.agreement,
+  }) : super.internal();
+
+  final String? id;
+  final File? triAgreement;
+  final File? pdc;
+  final File? agreement;
+
+  @override
+  Override overrideWith(
+    FutureOr<Map<String, dynamic>> Function(SubmitSanctionDocumentsRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SubmitSanctionDocumentsProvider._internal(
+        (ref) => create(ref as SubmitSanctionDocumentsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+        triAgreement: triAgreement,
+        pdc: pdc,
+        agreement: agreement,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
+    return _SubmitSanctionDocumentsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SubmitSanctionDocumentsProvider &&
+        other.id == id &&
+        other.triAgreement == triAgreement &&
+        other.pdc == pdc &&
+        other.agreement == agreement;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, triAgreement.hashCode);
+    hash = _SystemHash.combine(hash, pdc.hashCode);
+    hash = _SystemHash.combine(hash, agreement.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin SubmitSanctionDocumentsRef
+    on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
+  /// The parameter `id` of this provider.
+  String? get id;
+
+  /// The parameter `triAgreement` of this provider.
+  File? get triAgreement;
+
+  /// The parameter `pdc` of this provider.
+  File? get pdc;
+
+  /// The parameter `agreement` of this provider.
+  File? get agreement;
+}
+
+class _SubmitSanctionDocumentsProviderElement
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with SubmitSanctionDocumentsRef {
+  _SubmitSanctionDocumentsProviderElement(super.provider);
+
+  @override
+  String? get id => (origin as SubmitSanctionDocumentsProvider).id;
+  @override
+  File? get triAgreement =>
+      (origin as SubmitSanctionDocumentsProvider).triAgreement;
+  @override
+  File? get pdc => (origin as SubmitSanctionDocumentsProvider).pdc;
+  @override
+  File? get agreement => (origin as SubmitSanctionDocumentsProvider).agreement;
+}
+
 String _$wspAgreementListHash() => r'db09e024522d17b350c1f811c8d2f7e81bd5863b';
 
 /// See also [wspAgreementList].
@@ -766,7 +950,7 @@ final loanRequestFormProvider =
 );
 
 typedef LoanRequestFormRef = AutoDisposeFutureProviderRef<LoanRequestFormModel>;
-String _$loanDetailsHash() => r'd9264f12df1dbc7e100c5d00586f9f90fec27abe';
+String _$loanDetailsHash() => r'e6dccc32362fd83194f1f41e161825e77a1d93e1';
 
 /// See also [loanDetails].
 @ProviderFor(loanDetails)
@@ -823,7 +1007,7 @@ class LoanDetailsFamily extends Family<AsyncValue<LoanDetailsModel>> {
 }
 
 /// See also [loanDetails].
-class LoanDetailsProvider extends AutoDisposeFutureProvider<LoanDetailsModel> {
+class LoanDetailsProvider extends AutoDisposeStreamProvider<LoanDetailsModel> {
   /// See also [loanDetails].
   LoanDetailsProvider({
     String? inventoryId,
@@ -878,7 +1062,7 @@ class LoanDetailsProvider extends AutoDisposeFutureProvider<LoanDetailsModel> {
 
   @override
   Override overrideWith(
-    FutureOr<LoanDetailsModel> Function(LoanDetailsRef provider) create,
+    Stream<LoanDetailsModel> Function(LoanDetailsRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -899,7 +1083,7 @@ class LoanDetailsProvider extends AutoDisposeFutureProvider<LoanDetailsModel> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<LoanDetailsModel> createElement() {
+  AutoDisposeStreamProviderElement<LoanDetailsModel> createElement() {
     return _LoanDetailsProviderElement(this);
   }
 
@@ -926,7 +1110,7 @@ class LoanDetailsProvider extends AutoDisposeFutureProvider<LoanDetailsModel> {
   }
 }
 
-mixin LoanDetailsRef on AutoDisposeFutureProviderRef<LoanDetailsModel> {
+mixin LoanDetailsRef on AutoDisposeStreamProviderRef<LoanDetailsModel> {
   /// The parameter `inventoryId` of this provider.
   String? get inventoryId;
 
@@ -944,7 +1128,7 @@ mixin LoanDetailsRef on AutoDisposeFutureProviderRef<LoanDetailsModel> {
 }
 
 class _LoanDetailsProviderElement
-    extends AutoDisposeFutureProviderElement<LoanDetailsModel>
+    extends AutoDisposeStreamProviderElement<LoanDetailsModel>
     with LoanDetailsRef {
   _LoanDetailsProviderElement(super.provider);
 
@@ -1371,12 +1555,12 @@ class _CancelLoanRequestProviderElement
   String? get id => (origin as CancelLoanRequestProvider).id;
 }
 
-String _$approvedRequestsHash() => r'b0232b1bb30f2e3a8f8e8d4eddc22706100a5428';
+String _$approvedRequestsHash() => r'5c5acfa44e3b5e1d3812c7b82af1dc2e94b7082a';
 
 /// See also [approvedRequests].
 @ProviderFor(approvedRequests)
 final approvedRequestsProvider =
-    AutoDisposeFutureProvider<LoanRequestsStatusModel>.internal(
+    AutoDisposeStreamProvider<LoanRequestsStatusModel>.internal(
   approvedRequests,
   name: r'approvedRequestsProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -1387,13 +1571,13 @@ final approvedRequestsProvider =
 );
 
 typedef ApprovedRequestsRef
-    = AutoDisposeFutureProviderRef<LoanRequestsStatusModel>;
-String _$pendingRequestsHash() => r'87ab1b7f5312bc41f1a307e7e3361347a42081f7';
+    = AutoDisposeStreamProviderRef<LoanRequestsStatusModel>;
+String _$pendingRequestsHash() => r'e78260af288a51be7314dd566b6696de9624b2a7';
 
 /// See also [pendingRequests].
 @ProviderFor(pendingRequests)
 final pendingRequestsProvider =
-    AutoDisposeFutureProvider<LoanRequestsStatusModel>.internal(
+    AutoDisposeStreamProvider<LoanRequestsStatusModel>.internal(
   pendingRequests,
   name: r'pendingRequestsProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -1404,13 +1588,13 @@ final pendingRequestsProvider =
 );
 
 typedef PendingRequestsRef
-    = AutoDisposeFutureProviderRef<LoanRequestsStatusModel>;
-String _$rejectedRequestsHash() => r'b011588f21fcd462186eb520349296e753362039';
+    = AutoDisposeStreamProviderRef<LoanRequestsStatusModel>;
+String _$rejectedRequestsHash() => r'cb7f493a47f08e5f23630886850d3c0055416226';
 
 /// See also [rejectedRequests].
 @ProviderFor(rejectedRequests)
 final rejectedRequestsProvider =
-    AutoDisposeFutureProvider<LoanRequestsStatusModel>.internal(
+    AutoDisposeStreamProvider<LoanRequestsStatusModel>.internal(
   rejectedRequests,
   name: r'rejectedRequestsProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -1421,7 +1605,7 @@ final rejectedRequestsProvider =
 );
 
 typedef RejectedRequestsRef
-    = AutoDisposeFutureProviderRef<LoanRequestsStatusModel>;
+    = AutoDisposeStreamProviderRef<LoanRequestsStatusModel>;
 String _$closedRequestsHash() => r'17b62f8632183ed0efd21c31eea71ca49e0acd10';
 
 /// See also [closedRequests].

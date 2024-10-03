@@ -135,9 +135,9 @@ Future<Map<String, dynamic>> logout(LogoutRef ref) async {
 }
 
 @riverpod
-Future<OtpVerifyModel> loginInfo(LoginInfoRef ref) async {
+Stream<OtpVerifyModel> loginInfo(LoginInfoRef ref) async* {
   var response = await ref.watch(dioProvider).get(ApiClient.loginInfo);
-  return otpVerifyModelFromMap(jsonEncode(response.data));
+  yield otpVerifyModelFromMap(jsonEncode(response.data));
 }
 
 @riverpod

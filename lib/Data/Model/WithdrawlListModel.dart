@@ -9,8 +9,8 @@ WithdrawlResponseModel withdrawlResponseModelFromMap(String str) => WithdrawlRes
 String withdrawlResponseModelToMap(WithdrawlResponseModel data) => json.encode(data.toMap());
 
 class WithdrawlResponseModel {
-  String? status;
-  String? message;
+  dynamic status;
+  dynamic message;
   List<Datum>? data;
 
   WithdrawlResponseModel({
@@ -33,24 +33,24 @@ class WithdrawlResponseModel {
 }
 
 class Datum {
-  int? id;
-  String? wrr;
-  String? userId;
-  String? requestedAmount;
-  String? approvedAmount;
+  dynamic id;
+  dynamic wrr;
+  dynamic userId;
+  dynamic requestedAmount;
+  dynamic approvedAmount;
   dynamic paymentBy;
   dynamic referenceNo;
   dynamic file;
-  String? remark;
-  String? approvedBy;
-  String? verifiedBy;
-  DateTime? verifiedDate;
-  String? fundAccountId;
-  String? contactId;
-  String? status;
+  dynamic remark;
+  dynamic approvedBy;
+  dynamic verifiedBy;
+  String? verifiedDate;
+  dynamic fundAccountId;
+  dynamic contactId;
+  dynamic status;
   dynamic approvedDate;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  String? createdAt;
+  String? updatedAt;
 
   Datum({
     this.id,
@@ -85,13 +85,13 @@ class Datum {
     remark: json["remark"],
     approvedBy: json["approved_by"],
     verifiedBy: json["verified_by"],
-    verifiedDate: json["verified_date"] == null ? null : DateTime.parse(json["verified_date"]),
+    verifiedDate: json["verified_date"] ,
     fundAccountId: json["fund_account_id"],
     contactId: json["contact_id"],
     status: json["status"],
     approvedDate: json["approved_date"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    createdAt: json["created_at"] ,
+    updatedAt: json["updated_at"] ,
   );
 
   Map<String, dynamic> toMap() => {
@@ -106,12 +106,12 @@ class Datum {
     "remark": remark,
     "approved_by": approvedBy,
     "verified_by": verifiedBy,
-    "verified_date": verifiedDate?.toIso8601String(),
+    "verified_date": verifiedDate,
     "fund_account_id": fundAccountId,
     "contact_id": contactId,
     "status": status,
     "approved_date": approvedDate,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
+    "created_at": createdAt,
+    "updated_at": updatedAt,
   };
 }

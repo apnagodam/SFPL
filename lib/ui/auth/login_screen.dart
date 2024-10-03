@@ -28,7 +28,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         body: Form(
       key: formKey,
       child: Padding(
-        padding: const EdgeInsets.all(10),
+        padding:  EdgeInsets.only(top: 10,left: 10,right: 10,bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

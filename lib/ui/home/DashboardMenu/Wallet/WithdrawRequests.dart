@@ -31,127 +31,133 @@ class _WithdrawrequestsState extends ConsumerState<Withdrawrequests> {
                       child: Row(children: [
                         Expanded(
                             child: Text(
-                              "S.No.",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: Adaptive.sp(14)),
-                            )),
+                          "S.No.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: Adaptive.sp(14)),
+                        )),
                         VerticalDivider(),
                         Expanded(
                             child: Text(
-                              "Approved ",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: Adaptive.sp(14)),
-                            )),
+                          "Approved ",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: Adaptive.sp(14)),
+                        )),
                         VerticalDivider(),
                         Expanded(
                             child: Text(
-                              "Requested ",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: Adaptive.sp(14)),
-                            )),
+                          "Requested ",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: Adaptive.sp(14)),
+                        )),
                         VerticalDivider(),
                         Expanded(
                             child: Text(
-                              "Date",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: Adaptive.sp(14)),
-                            )),
+                          "Date",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: Adaptive.sp(14)),
+                        )),
                         VerticalDivider(),
                         Expanded(
                             child: Text(
-                              "Status",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: Adaptive.sp(14)),
-                            )),
+                          "Status",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: Adaptive.sp(14)),
+                        )),
                       ]),
                     ),
                   ),
                   ListView.builder(
-                      itemCount: data.data?.length??0,
-                      itemBuilder: (context,index)=>
-                          Container(
-                            color: ColorsConstant.primaryColor.withOpacity(0.8),
-                            padding: Pad(all: 10),
-                            child: IntrinsicHeight(
-                              child: Row(children: [
-                                Expanded(
-                                    child: Text(
-                                      "${index + 1}",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: Adaptive.sp(14)),
-                                    )),
-                                VerticalDivider(),
-                                Expanded(
-                                    child: Text(
-                                      "${data.data?[index].approvedAmount ?? "0"} ₹",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: Adaptive.sp(14)),
-                                    )),
-                                VerticalDivider(),
-                                Expanded(
-                                    child: Text(
-                                      "${data.data?[index].approvedAmount ?? "0"} ₹",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: Adaptive.sp(14)),
-                                    )),
-                                VerticalDivider(),
-                                Expanded(
-                                    child: Text(
-                                      DateFormat('dd/MMM/yyyy').format(
-                                          DateTime.parse(
-                                              "${data.data?[index].createdAt ?? ""}")),
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: Adaptive.sp(14)),
-                                    )),
-                                VerticalDivider(),
-                                Expanded(
-                                    child: Text(
-                                        data.data?[index].status == "0"
-                                            ? "Rejected"
-                                            : data.data?[index].status ==
-                                            "2"
-                                            ? "Approved"
-                                            : data.data?[index]
-                                            .status ==
-                                            "3"
-                                            ? "Verified"
-                                            : "Requested",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: Adaptive.sp(14)),
-                                    )),
-                              ]),
-                            ),
-                          ),),
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: data.data?.length ?? 0,
+                    itemBuilder: (context, index) => Container(
+                      color: index % 2 == 0
+                          ? Colors.grey.withOpacity(0.2)
+                          : Colors.white,
+                      padding: Pad(all: 10),
+                      child: IntrinsicHeight(
+                        child: Row(children: [
+                          Expanded(
+                              child: Text(
+                            "${index + 1}",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: Adaptive.sp(14)),
+                          )),
+                          VerticalDivider(),
+                          Expanded(
+                              child: Text(
+                            "${data.data?[index].approvedAmount ?? "0"} ₹",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: Adaptive.sp(14)),
+                          )),
+                          VerticalDivider(),
+                          Expanded(
+                              child: Text(
+                            "${data.data?[index].approvedAmount ?? "0"} ₹",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: Adaptive.sp(14)),
+                          )),
+                          VerticalDivider(),
+                          Expanded(
+                              child: Text(
+                            DateFormat('dd/MMM/yyyy').format(DateTime.parse(
+                                "${data.data?[index].createdAt ?? ""}")),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: Adaptive.sp(14)),
+                          )),
+                          VerticalDivider(),
+                          Expanded(
+                              child: Text(
+                            data.data?[index].status == "0"
+                                ? "Rejected"
+                                : data.data?[index].status == "2"
+                                    ? "Approved"
+                                    : data.data?[index].status == "3"
+                                        ? "Verified"
+                                        : "Requested",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: data.data?[index].status == "3"
+                                    ? ColorsConstant.primaryColor
+                                    : data.data?[index].status == "2"
+                                        ? ColorsConstant.primaryColor
+                                        : data.data?[index].status == "0"
+                                            ? Colors.red
+                                            : ColorsConstant.secondColorUltraDark,
+                                fontSize: Adaptive.sp(14)),
+                          )),
+                        ]),
+                      ),
+                    ),
+                  ),
 
                   // Container(
                   //     height: 50,

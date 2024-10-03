@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:double_back_to_exit/double_back_to_exit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,6 +12,7 @@ import 'package:swfl/ui/utils/routes.dart';
 import 'package:toastification/toastification.dart';
 
 import 'Data/SharedPrefs/SharedUtility.dart';
+import 'package:double_back_to_exit/double_back_to_exit.dart';
 
 void main() async {
   await WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +40,7 @@ class MyApp extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp.router(
+    return DoubleBackToExit(snackBarMessage: "Press back again to exit", child: MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: ref.watch(goRouterProvider),
       title: 'SFPL',
@@ -53,9 +55,17 @@ class MyApp extends ConsumerWidget {
                 color: Colors.black)),
         fontFamily: GoogleFonts.manrope().fontFamily,
         colorScheme:
-            ColorScheme.fromSeed(seedColor: ColorsConstant.secondColorDark),
+        ColorScheme.fromSeed(seedColor: ColorsConstant.secondColorDark),
         useMaterial3: true,
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: <TargetPlatform, PageTransitionsBuilder>{
+            TargetPlatform.android:CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.linux: OpenUpwardsPageTransitionsBuilder(),
+            TargetPlatform.macOS: FadeUpwardsPageTransitionsBuilder(),
+          },
+        ),
       ),
-    );
+    ));
   }
 }
