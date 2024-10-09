@@ -14,18 +14,23 @@ import 'package:swfl/Data/Model/WspListModel.dart';
 import 'package:swfl/Domain/Dio/DioProvider.dart';
 
 import '../../Data/Model/SchemeResponseModel.dart';
+import '../../Data/SharedPrefs/SharedUtility.dart';
+import '../../ui/utils/routes.dart';
+import '../../ui/utils/routes_strings.dart';
 
 part 'LoanService.g.dart';
 
 @riverpod
 Future<SchemeResponseModel> schemes(SchemesRef ref) async {
   var response = await ref.watch(dioProvider).get(ApiClient.getSchemes);
+
   return schemeResponseModelFromMap(jsonEncode(response.data));
 }
 
 @riverpod
 Future<SanctionLimitListModel> appliedList(AppliedListRef ref) async {
   var response = await ref.watch(dioProvider).get(ApiClient.appliedList);
+
   return sanctionLimitListModelFromMap(jsonEncode(response.data));
 }
 
@@ -34,6 +39,7 @@ Future<TermsModel> terms(TermsRef ref, {required String? schemeId}) async {
   var response = await ref
       .watch(dioProvider)
       .post(ApiClient.getTerms, queryParameters: {"scheme_id": schemeId});
+
   return termsModelFromJson(jsonEncode(response.data));
 }
 
@@ -73,6 +79,7 @@ Future<Map<String, dynamic>> applyForLoan(ApplyForLoanRef ref,
   });
   var response =
       await ref.watch(dioProvider).post(ApiClient.applyForLoan, data: formData);
+
   return response.data;
 }
 
@@ -96,12 +103,14 @@ Future<Map<String, dynamic>> submitSanctionDocuments(
   var response = await ref
       .watch(dioProvider)
       .post("post_sanction_document_upload", data: formData);
+
   return response.data;
 }
 
 @riverpod
 Future<WspListModel> wspAgreementList(WspAgreementListRef ref) async {
   var response = await ref.watch(dioProvider).get(ApiClient.wspAgreementList);
+
   return wspListModelFromMap(jsonEncode(response.data));
 }
 
@@ -111,6 +120,7 @@ Future<TripartyAgreementModel> wspAgreement(WspAgreementRef ref,
   var response = await ref
       .watch(dioProvider)
       .post(ApiClient.wspTripartyAgreement, queryParameters: {'wsp_id': wspId});
+
   return tripartyAgreementModelFromMap(jsonEncode(response.data));
 }
 
@@ -131,12 +141,14 @@ Future<Map<String, dynamic>> uploadPdf(
   var response = await ref
       .watch(dioProvider)
       .post(ApiClient.uploadAggrement, data: formData);
+
   return response.data;
 }
 
 @riverpod
 Future<LoanApplyListModel> loanApplyList(LoanApplyListRef ref) async {
   var response = await ref.watch(dioProvider).get(ApiClient.getStockList);
+
   return loanApplyListModelFromMap(jsonEncode(response.data));
 }
 
@@ -144,6 +156,7 @@ Future<LoanApplyListModel> loanApplyList(LoanApplyListRef ref) async {
 Future<LoanRequestFormModel> loanRequestForm(LoanRequestFormRef ref) async {
   var response =
       await ref.watch(dioProvider).post(ApiClient.getLoanRequestForm);
+
   return loanRequestFormModelFromMap(jsonEncode(response.data));
 }
 
@@ -162,6 +175,7 @@ Stream<LoanDetailsModel> loanDetails(LoanDetailsRef ref,
     'gate_pass': gatePass,
     'scheme_id': schemeId
   });
+
   yield loanDetailsModelFromMap(jsonEncode(response.data));
 }
 
@@ -190,6 +204,7 @@ Future<Map<String, dynamic>> submitLoanRequest(SubmitLoanRequestRef ref,
     'stack_number': stackNo,
     'terminal': terminalName,
   });
+
   return response.data;
 }
 
@@ -200,6 +215,7 @@ Future<Map<String, dynamic>> cancelLoanRequest(CancelLoanRequestRef ref,
       await ref.watch(dioProvider).post(ApiClient.cancelLoanRequest, data: {
     'id': id,
   });
+
   return response.data;
 }
 
@@ -207,12 +223,14 @@ Future<Map<String, dynamic>> cancelLoanRequest(CancelLoanRequestRef ref,
 Stream<LoanRequestsStatusModel> approvedRequests(
     ApprovedRequestsRef ref) async* {
   var response = await ref.watch(dioProvider).get(ApiClient.approvedRequests);
+
   yield loanRequestsStatusModelFromMap(jsonEncode(response.data));
 }
 
 @riverpod
 Stream<LoanRequestsStatusModel> pendingRequests(PendingRequestsRef ref) async* {
   var response = await ref.watch(dioProvider).get(ApiClient.pendingRequests);
+
   yield loanRequestsStatusModelFromMap(jsonEncode(response.data));
 }
 
@@ -220,11 +238,13 @@ Stream<LoanRequestsStatusModel> pendingRequests(PendingRequestsRef ref) async* {
 Stream<LoanRequestsStatusModel> rejectedRequests(
     RejectedRequestsRef ref) async* {
   var response = await ref.watch(dioProvider).get(ApiClient.rejectedRequests);
+
   yield loanRequestsStatusModelFromMap(jsonEncode(response.data));
 }
 
 @riverpod
 Future<LoanRequestsStatusModel> closedRequests(ClosedRequestsRef ref) async {
   var response = await ref.watch(dioProvider).get(ApiClient.closedRequests);
+
   return loanRequestsStatusModelFromMap(jsonEncode(response.data));
 }

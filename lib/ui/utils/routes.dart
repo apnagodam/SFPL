@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:swfl/ui/BNPL/BnplRequests.dart';
 import 'package:swfl/ui/BNPL/BnplScreen.dart';
 import 'package:swfl/ui/BNPL/BnplStatement.dart';
 import 'package:swfl/ui/BNPL/Withdraw.dart';
@@ -13,6 +14,7 @@ import 'package:swfl/ui/auth/RegistrationScreen.dart';
 import 'package:swfl/ui/auth/RegistrationVerifyOtp.dart';
 import 'package:swfl/ui/auth/login_screen.dart';
 import 'package:swfl/ui/auth/verify_otp_screen.dart';
+import 'package:swfl/ui/error/ErrorScreen.dart';
 import 'package:swfl/ui/home/DashboardMenu/ApplyForCommodityLoan/AppliedLoanList.dart';
 import 'package:swfl/ui/home/DashboardMenu/ApplyForCommodityLoan/ApplyLoanScreen.dart';
 import 'package:swfl/ui/home/DashboardMenu/SanctionedAmount/SanctionedAmountScreen.dart';
@@ -37,12 +39,17 @@ GoRouter goRouter(GoRouterRef ref) {
       debugLogDiagnostics: kDebugMode,
       redirect: (context, state) {
         if (ref.watch(sharedUtilityProvider).getToken().isEmpty) {
-          if (state.fullPath == RoutesStrings.dashboard)
+          if (state.fullPath == RoutesStrings.dashboard) {
             return RoutesStrings.login;
+          }
           return null;
         }
       },
       routes: [
+        GoRoute(
+            path: RoutesStrings.error,
+            name: RoutesStrings.error,
+            builder: (context, state) => const Errorscreen()),
         GoRoute(
             path: RoutesStrings.onBoarding,
             name: RoutesStrings.onBoarding,
@@ -52,18 +59,18 @@ GoRouter goRouter(GoRouterRef ref) {
             path: RoutesStrings.dashboard,
             name: RoutesStrings.dashboard,
             routes: [
-
               GoRoute(
                   path: RoutesStrings.bnpl,
                   name: RoutesStrings.bnpl,
                   builder: (context, state) => const Bnplscreen()),
-
               GoRoute(
                   path: RoutesStrings.bnplStatement,
                   name: RoutesStrings.bnplStatement,
                   builder: (context, state) => const Bnplstatement()),
-
-
+              GoRoute(
+                  path: RoutesStrings.bnplRequests,
+                  name: RoutesStrings.bnplRequests,
+                  builder: (context, state) => const BnplRequests()),
               GoRoute(
                   path: RoutesStrings.applyForCommodityLoan,
                   name: RoutesStrings.applyForCommodityLoan,
@@ -72,7 +79,6 @@ GoRouter goRouter(GoRouterRef ref) {
                   path: RoutesStrings.appliedLoanList,
                   name: RoutesStrings.appliedLoanList,
                   builder: (context, state) => const Appliedloanlist()),
-
               GoRoute(
                   path: RoutesStrings.bnplWithdraw,
                   name: RoutesStrings.bnplWithdraw,
@@ -119,8 +125,7 @@ GoRouter goRouter(GoRouterRef ref) {
               GoRoute(
                   path: RoutesStrings.bnplAadharRegistrationHome,
                   name: RoutesStrings.bnplAadharRegistrationHome,
-                  builder: (context, state) =>
-                  const Bnplaadharregistration()),
+                  builder: (context, state) => const Bnplaadharregistration()),
             ],
             builder: (context, state) => const DashboardScreen()),
         GoRoute(
@@ -141,7 +146,6 @@ GoRouter goRouter(GoRouterRef ref) {
                   name: RoutesStrings.register,
                   builder: (context, state) => const Registrationscreen(),
                   routes: [
-
                     GoRoute(
                         path: RoutesStrings.bnplRegistration,
                         name: RoutesStrings.bnplRegistration,

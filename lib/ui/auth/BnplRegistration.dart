@@ -179,7 +179,7 @@ class _BnplregistrationState extends ConsumerState<Bnplregistration> {
                                     constitution: widget.constitutiontype,
                                     phoneNo: phoneController.text.toString(),
                                     pancardNo: panController.text.toString(),
-                                    bnplName: firmController.text.toString(),
+                                    bnplName: widget.constitutiontype.toString() == "1"?nameController.text.toString():firmController.text.toString(),
                                     type: widget.typeOfRegistration)
                                 .future)
                             .then((value) {

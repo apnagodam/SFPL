@@ -31,7 +31,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
               foregroundImage: NetworkImage(
                   ref.watch(sharedUtilityProvider).getUser()?.profileImage ??
                       "",
-                  scale: 0.5),
+                  scale: 100),
               radius: Adaptive.sh(10),
             ),
             const SizedBox(
@@ -69,12 +69,24 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                        const Text('Name:'),
+                        Text(
+                          'Name:',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(ref.watch(sharedUtilityProvider).getUser()?.name ??
-                            "")
+                        Text(
+                          ref.watch(sharedUtilityProvider).getUser()?.name ??
+                              "",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        )
                       ],
                     )),
                 CupertinoActionSheetAction(
@@ -83,15 +95,27 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                        const Text('Firm Name:'),
+                        Text(
+                          'Firm Name:',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(ref
-                                .watch(sharedUtilityProvider)
-                                .getUser()
-                                ?.firmName ??
-                            "")
+                        Text(
+                          ref
+                                  .watch(sharedUtilityProvider)
+                                  .getUser()
+                                  ?.firmName ??
+                              "",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        )
                       ],
                     )),
                 CupertinoActionSheetAction(
@@ -100,15 +124,27 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                        const Text('Pan Card Number:'),
+                        Text(
+                          'Pan Card Number:',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(ref
-                                .watch(sharedUtilityProvider)
-                                .getUser()
-                                ?.pancardNo ??
-                            "")
+                        Text(
+                          ref
+                                  .watch(sharedUtilityProvider)
+                                  .getUser()
+                                  ?.pancardNo ??
+                              "",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        )
                       ],
                     )),
                 CupertinoActionSheetAction(
@@ -117,15 +153,52 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                        const Text('Aadhar Card No:'),
+                        Text(
+                          'Aadhar Card No:',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(ref
-                                .watch(sharedUtilityProvider)
-                                .getUser()
-                                ?.aadharNo ??
-                            "")
+                        Text(
+                          ref
+                                  .watch(sharedUtilityProvider)
+                                  .getUser()
+                                  ?.aadharNo ??
+                              "",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    )),
+                CupertinoActionSheetAction(
+                    onPressed: () {},
+                    child: RowSuper(
+                      alignment: Alignment.centerLeft,
+                      children: [
+                        Text(
+                          'Address:',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          ref.watch(sharedUtilityProvider).getUser()?.address ??
+                              "",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        )
                       ],
                     )),
                 CupertinoActionSheetAction(
@@ -134,24 +207,13 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                        const Text('Address:'),
-                        const SizedBox(
-                          width: 10,
+                        Text(
+                          'Pan Card Image:',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
                         ),
-                        Text(ref
-                                .watch(sharedUtilityProvider)
-                                .getUser()
-                                ?.address ??
-                            "")
-                      ],
-                    )),
-                CupertinoActionSheetAction(
-                    onPressed: () {},
-                    child: RowSuper(
-                      mainAxisSize: MainAxisSize.max,
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        const Text('Pan Card Image:'),
                         const SizedBox(
                           width: 10,
                         ),
@@ -172,7 +234,13 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                        const Text('Aadhar Card Image:'),
+                        Text(
+                          'Aadhar Card Image:',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(
                           width: 10,
                         ),
@@ -193,7 +261,13 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                        const Text('Aadhar Card Image(Back):'),
+                        Text(
+                          'Aadhar Card Image(Back):',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(
                           width: 10,
                         ),
@@ -228,15 +302,27 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                        const Text('Bank Name:'),
+                        Text(
+                          'Bank Name:',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(ref
-                                .watch(sharedUtilityProvider)
-                                .getUser()
-                                ?.bankName ??
-                            "")
+                        Text(
+                          ref
+                                  .watch(sharedUtilityProvider)
+                                  .getUser()
+                                  ?.bankName ??
+                              "N/A",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        )
                       ],
                     )),
                 CupertinoActionSheetAction(
@@ -245,15 +331,27 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                        const Text('Bank Account Number:'),
+                        Text(
+                          'Bank Account Number:',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(ref
-                                .watch(sharedUtilityProvider)
-                                .getUser()
-                                ?.bankAccNo ??
-                            "")
+                        Text(
+                          ref
+                                  .watch(sharedUtilityProvider)
+                                  .getUser()
+                                  ?.bankAccNo ??
+                              "N/A",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        )
                       ],
                     )),
                 CupertinoActionSheetAction(
@@ -262,15 +360,27 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                        const Text('Bank Branch:'),
+                        Text(
+                          'Bank Branch:',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(ref
-                                .watch(sharedUtilityProvider)
-                                .getUser()
-                                ?.bankBranch ??
-                            "")
+                        Text(
+                          ref
+                                  .watch(sharedUtilityProvider)
+                                  .getUser()
+                                  ?.bankBranch ??
+                              "N/A",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        )
                       ],
                     )),
                 CupertinoActionSheetAction(
@@ -279,15 +389,27 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                        const Text('Bank IFSC Code:'),
+                        Text(
+                          'Bank IFSC Code:',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(ref
-                                .watch(sharedUtilityProvider)
-                                .getUser()
-                                ?.bankIfscCode ??
-                            "")
+                        Text(
+                         "${ ref
+                             .watch(sharedUtilityProvider)
+                             .getUser()
+                             ?.bankIfscCode ??
+                             "N/A"}",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        )
                       ],
                     )),
                 CupertinoActionSheetAction(
@@ -296,7 +418,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                        const Text('Cheque Image:'),
+                         Text('Cheque Image:',style: TextStyle(color: Colors.black,fontSize: Adaptive.sp(16),fontWeight: FontWeight.bold),),
                         const SizedBox(
                           width: 10,
                         ),
@@ -334,15 +456,15 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                        const Text('Proprietorship Doc Type:'),
+                         Text('Proprietorship Doc Type:',style: TextStyle(color: Colors.black,fontSize: Adaptive.sp(16),fontWeight: FontWeight.bold),),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(ref
-                                .watch(sharedUtilityProvider)
-                                .getUser()
-                                ?.proprietorshipProofDoc ??
-                            "")
+                        Text("${ref
+                            .watch(sharedUtilityProvider)
+                            .getUser()
+                            ?.proprietorshipProofDoc ??
+                            "N/A"}")
                       ],
                     )),
                 CupertinoActionSheetAction(
@@ -352,15 +474,15 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                        const Text('Proprietorship Doc No: '),
+                         Text('Proprietorship Doc No: ',style: TextStyle(color: Colors.black,fontSize: Adaptive.sp(16),fontWeight: FontWeight.bold),),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(ref
-                                .watch(sharedUtilityProvider)
-                                .getUser()
-                                ?.proprietorshipProofNo ??
-                            "")
+                        Text("${ref
+                            .watch(sharedUtilityProvider)
+                            .getUser()
+                            ?.proprietorshipProofNo ??
+                            "N/A"}")
                       ],
                     )),
                 CupertinoActionSheetAction(
@@ -369,7 +491,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                        const Text('Proprietorship Image:'),
+                         Text('Proprietorship Image:',style: TextStyle(color: Colors.black,fontSize: Adaptive.sp(16),fontWeight: FontWeight.bold),),
                         const SizedBox(
                           width: 10,
                         ),

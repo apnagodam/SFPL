@@ -61,8 +61,8 @@ class Datum {
   dynamic triAgreement;
   dynamic verifiedDate;
   dynamic status;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  dynamic createdAt;
+  dynamic updatedAt;
 
   Datum({
     this.id,

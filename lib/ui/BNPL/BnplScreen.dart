@@ -58,7 +58,8 @@ class _BnplscreenState extends ConsumerState<Bnplscreen> {
                         ),
                         Center(
                           child: Text(
-                            currencyFormat.format(data.bnpl?.power ?? 0),
+                            currencyFormat
+                                .format(double.parse("${data.bnpl?.effectiveBalance??0.0}")),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontFamily: GoogleFonts.rubik().fontFamily,
@@ -297,7 +298,7 @@ class _BnplscreenState extends ConsumerState<Bnplscreen> {
                             ),
                             RowSuper(fill: true, children: [
                               Text(
-                                'Sanctioned Amount',
+                                'Original Limit',
                                 style: TextStyle(
                                     shadows: const [
                                       Shadow(
@@ -312,7 +313,7 @@ class _BnplscreenState extends ConsumerState<Bnplscreen> {
                               ),
                               Text(
                                 currencyFormat
-                                    .format(data.bnpl?.limitSanction ?? 0),
+                                    .format( double.tryParse("${data.bnpl?.originalLimit??0.0}")),
                                 textAlign: TextAlign.end,
                                 style: TextStyle(
                                     shadows: const [
@@ -332,7 +333,7 @@ class _BnplscreenState extends ConsumerState<Bnplscreen> {
                             ),
                             RowSuper(fill: true, children: [
                               Text(
-                                'Hold Amount',
+                                'Utilised Limit',
                                 style: TextStyle(
                                     shadows: const [
                                       Shadow(
@@ -347,7 +348,7 @@ class _BnplscreenState extends ConsumerState<Bnplscreen> {
                               ),
                               Text(
                                 currencyFormat
-                                    .format(data.bnpl?.limitSanction ?? 0),
+                                    .format( double.tryParse("${data.bnpl?.utilizedLimit??0.0}")),
                                 textAlign: TextAlign.end,
                                 style: TextStyle(
                                     shadows: const [
@@ -367,7 +368,7 @@ class _BnplscreenState extends ConsumerState<Bnplscreen> {
                             ),
                             RowSuper(fill: true, children: [
                               Text(
-                                'Used Amount',
+                                'Available Limit',
                                 style: TextStyle(
                                     shadows: const [
                                       Shadow(
@@ -381,8 +382,8 @@ class _BnplscreenState extends ConsumerState<Bnplscreen> {
                                     fontSize: Adaptive.sp(17)),
                               ),
                               Text(
-                                currencyFormat.format(
-                                    double.parse(data.bnpl?.uses ?? "0.0")),
+                                currencyFormat
+                                    .format( double.tryParse("${data.bnpl?.availableLimit??0.0}")),
                                 textAlign: TextAlign.end,
                                 style: TextStyle(
                                     shadows: const [
@@ -402,7 +403,7 @@ class _BnplscreenState extends ConsumerState<Bnplscreen> {
                             ),
                             RowSuper(fill: true, children: [
                               Text(
-                                'Available Balance',
+                                'Hold Limit',
                                 style: TextStyle(
                                     shadows: const [
                                       Shadow(
@@ -416,7 +417,44 @@ class _BnplscreenState extends ConsumerState<Bnplscreen> {
                                     fontSize: Adaptive.sp(17)),
                               ),
                               Text(
-                                currencyFormat.format(data.bnpl?.power ?? 0),
+                                currencyFormat
+                                    .format(double.tryParse("${data.bnpl?.holdLimit??0.0}")),
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                    shadows: const [
+                                      Shadow(
+                                          color: Colors.black, blurRadius: 2.0),
+                                      Shadow(
+                                          color: Colors.black, blurRadius: 2.0)
+                                    ],
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: GoogleFonts.rubik().fontFamily,
+                                    fontSize: Adaptive.sp(17)),
+                              )
+                            ]),
+
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            RowSuper(fill: true, children: [
+                              Text(
+                                'Effective Balance',
+                                style: TextStyle(
+                                    shadows: const [
+                                      Shadow(
+                                          color: Colors.black, blurRadius: 2.0),
+                                      Shadow(
+                                          color: Colors.black, blurRadius: 2.0)
+                                    ],
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: GoogleFonts.rubik().fontFamily,
+                                    fontSize: Adaptive.sp(17)),
+                              ),
+                              Text(
+                                currencyFormat
+                                    .format( double.tryParse("${data.bnpl?.effectiveBalance??0.0}")),
                                 textAlign: TextAlign.end,
                                 style: TextStyle(
                                     shadows: const [
@@ -475,6 +513,7 @@ class _BnplscreenState extends ConsumerState<Bnplscreen> {
                           width: MediaQuery.of(context).size.width,
                           child: ElevatedButton(
                             onPressed: () async {
+
                               if (ref.watch(checkBoxValueProvider)) {
                                 showloader(context);
                                 ref
@@ -487,7 +526,10 @@ class _BnplscreenState extends ConsumerState<Bnplscreen> {
                                         .future)
                                     .then((value) {
                                   hideLoader(context);
+
                                   if (value.status.toString() == "1") {
+                                    Navigator.of(context).pop();
+                                    ref.invalidate(bnplPowerProvider);
                                     successToast(
                                         context, value.message.toString());
                                   } else {

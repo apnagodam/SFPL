@@ -9,8 +9,8 @@ LoanRequestFormModel loanRequestFormModelFromMap(String str) => LoanRequestFormM
 String loanRequestFormModelToMap(LoanRequestFormModel data) => json.encode(data.toMap());
 
 class LoanRequestFormModel {
-  String? status;
-  String? message;
+  dynamic status;
+  dynamic message;
   Data? data;
 
   LoanRequestFormModel({
@@ -34,9 +34,9 @@ class LoanRequestFormModel {
 
 class Data {
   List<Scheme>? scheme;
-  String? bankName;
-  String? ifscCode;
-  String? accountNumber;
+  dynamic bankName;
+  dynamic ifscCode;
+  dynamic accountNumber;
 
   Data({
     this.scheme,
@@ -61,19 +61,19 @@ class Data {
 }
 
 class Scheme {
-  int? id;
-  String? schemeName;
-  String? interestRate;
-  String? loanPassDays;
-  String? processingFee;
-  String? loanPerTotalAmount;
-  int? tenor;
-  int? cgst;
-  int? sgst;
-  int? status;
-  String? createdAt;
-  String? updatedAt;
-  String? limit;
+  dynamic id;
+  dynamic schemeName;
+  dynamic interestRate;
+  dynamic loanPassDays;
+  dynamic processingFee;
+  dynamic loanPerTotalAmount;
+  dynamic tenor;
+  dynamic cgst;
+  dynamic sgst;
+  dynamic status;
+  dynamic createdAt;
+  dynamic updatedAt;
+  dynamic limit;
 
   Scheme({
     this.id,

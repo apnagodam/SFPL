@@ -1,6 +1,8 @@
 class RoutesStrings {
   static const dashboard = '/';
   static const login = '/login';
+  static const error = '/error';
+
   static const verifyOtp = 'verifyOtp';
   static const onBoarding = '/onBoarding';
   static const register = 'register';
@@ -25,6 +27,7 @@ class RoutesStrings {
 
   static const bnpl = 'bnpl';
   static const bnplStatement = 'bnplStatement';
+  static const bnplRequests = 'bnplRequests';
   static const bnplWithdraw = 'bnplWithdraw';
 
   static const profile = 'profile';
@@ -36,4 +39,5 @@ class RoutesStrings {
   static const withdrawRequests = 'withdrawRequests';
 
   static const verfication = 'verification';
+
 }

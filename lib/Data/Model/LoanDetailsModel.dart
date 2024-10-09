@@ -9,8 +9,8 @@ LoanDetailsModel loanDetailsModelFromMap(String str) => LoanDetailsModel.fromMap
 String loanDetailsModelToMap(LoanDetailsModel data) => json.encode(data.toMap());
 
 class LoanDetailsModel {
-  String? status;
-  String? message;
+  dynamic status;
+  dynamic message;
   Data? data;
 
   LoanDetailsModel({
@@ -33,19 +33,19 @@ class LoanDetailsModel {
 }
 
 class Data {
-  double? marketPrice;
-  String? quantity;
-  double? marketValue;
-  String? ltv;
-  double? loanAmount;
-  String? proccessingFessPer;
-  int? cgstPer;
-  int? sgstPer;
-  double? proccessingFessAmt;
-  double? cgstAmt;
-  double? sgstAmt;
-  double? netPayableAmt;
-  double? apr;
+  dynamic marketPrice;
+  dynamic quantity;
+  dynamic marketValue;
+  dynamic ltv;
+  dynamic loanAmount;
+  dynamic proccessingFessPer;
+  dynamic cgstPer;
+  dynamic sgstPer;
+  dynamic proccessingFessAmt;
+  dynamic cgstAmt;
+  dynamic sgstAmt;
+  dynamic netPayableAmt;
+  dynamic apr;
 
   Data({
     this.marketPrice,

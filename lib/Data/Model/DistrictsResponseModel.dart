@@ -12,8 +12,8 @@ String districtsResponseModelToMap(DistrictsResponseModel data) =>
 
 class DistrictsResponseModel {
   List<StateDatum>? data;
-  String? status;
-  String? message;
+  dynamic status;
+  dynamic message;
 
   DistrictsResponseModel({
     this.data,
@@ -40,10 +40,10 @@ class DistrictsResponseModel {
 }
 
 class StateDatum {
-  int? id;
-  String? stateCode;
-  String? districtCode;
-  String? name;
+  dynamic id;
+  dynamic stateCode;
+  dynamic districtCode;
+  dynamic name;
 
   StateDatum({
     this.id,

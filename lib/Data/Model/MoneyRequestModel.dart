@@ -41,8 +41,8 @@ class Datum {
   dynamic appliedAmount;
   dynamic recivedAmount;
   dynamic status;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  dynamic createdAt;
+  dynamic updatedAt;
 
   Datum({
     this.id,

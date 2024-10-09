@@ -9,8 +9,8 @@ AdharVerifyOtpModel adharVerifyOtpModelFromMap(String str) => AdharVerifyOtpMode
 String adharVerifyOtpModelToMap(AdharVerifyOtpModel data) => json.encode(data.toMap());
 
 class AdharVerifyOtpModel {
-  int? status;
-  String? message;
+  dynamic status;
+  dynamic message;
   AadharData? data;
 
   AdharVerifyOtpModel({
@@ -33,7 +33,7 @@ class AdharVerifyOtpModel {
 }
 
 class AadharData {
-  String? name;
+  dynamic name;
   Address? address;
 
   AadharData({
@@ -53,17 +53,17 @@ class AadharData {
 }
 
 class Address {
-  String? country;
-  String? dist;
-  String? state;
-  String? po;
-  String? loc;
-  String? vtc;
-  String? subdist;
-  String? street;
-  String? house;
-  String? landmark;
-  String? zip;
+  dynamic country;
+  dynamic dist;
+  dynamic state;
+  dynamic po;
+  dynamic loc;
+  dynamic vtc;
+  dynamic subdist;
+  dynamic street;
+  dynamic house;
+  dynamic landmark;
+  dynamic zip;
 
   Address({
     this.country,

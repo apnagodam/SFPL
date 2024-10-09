@@ -9,8 +9,8 @@ BnplPowerModel bnplPowerModelFromMap(String str) => BnplPowerModel.fromMap(json.
 String bnplPowerModelToMap(BnplPowerModel data) => json.encode(data.toMap());
 
 class BnplPowerModel {
-  String? status;
-  String? message;
+  dynamic status;
+  dynamic message;
   Bnpl? bnpl;
 
   BnplPowerModel({
@@ -33,25 +33,33 @@ class BnplPowerModel {
 }
 
 class Bnpl {
-  int? limitSanction;
-  int? power;
-  String? uses;
+  dynamic originalLimit;
+  dynamic utilizedLimit;
+  dynamic availableLimit;
+  dynamic holdLimit;
+  dynamic effectiveBalance;
 
   Bnpl({
-    this.limitSanction,
-    this.power,
-    this.uses,
+    this.originalLimit,
+    this.utilizedLimit,
+    this.availableLimit,
+    this.holdLimit,
+    this.effectiveBalance,
   });
 
   factory Bnpl.fromMap(Map<String, dynamic> json) => Bnpl(
-    limitSanction: json["limit_sanction"],
-    power: json["power"],
-    uses: json["uses"],
+    originalLimit: json["original_limit"],
+    utilizedLimit: json["utilized_limit"],
+    availableLimit: json["available_limit"],
+    holdLimit: json["hold_limit"],
+    effectiveBalance: json["effective_balance"],
   );
 
   Map<String, dynamic> toMap() => {
-    "limit_sanction": limitSanction,
-    "power": power,
-    "uses": uses,
+    "original_limit": originalLimit,
+    "utilized_limit": utilizedLimit,
+    "available_limit": availableLimit,
+    "hold_limit": holdLimit,
+    "effective_balance": effectiveBalance,
   };
 }

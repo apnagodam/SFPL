@@ -6,6 +6,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:swfl/Data/Model/MoneyRequestModel.dart';
 import 'package:swfl/Data/Model/WithdrawlListModel.dart';
 
+import '../../Data/SharedPrefs/SharedUtility.dart';
+import '../../ui/utils/routes.dart';
+import '../../ui/utils/routes_strings.dart';
 import '../Dio/DioProvider.dart';
 
 part 'WalletService.g.dart';
@@ -28,6 +31,7 @@ Future<Map<String, dynamic>> addMoney(
   });
   var response =
       await ref.watch(dioProvider).post(ApiClient.addMoney, data: formData);
+
   return response.data;
 }
 
@@ -44,12 +48,14 @@ Future<Map<String, dynamic>> withdrawMoney(
   var response = await ref
       .watch(dioProvider)
       .post(ApiClient.withdrawMoney, data: formData);
+
   return response.data;
 }
 
 @riverpod
 Stream<MoneyRequestModel> moneyRequestList(MoneyRequestListRef ref) async* {
   var response = await ref.watch(dioProvider).get(ApiClient.moneyRequestList);
+
   yield moneyRequestModelFromJson(jsonEncode(response.data));
 }
 
@@ -57,5 +63,6 @@ Stream<MoneyRequestModel> moneyRequestList(MoneyRequestListRef ref) async* {
 Stream<WithdrawlResponseModel> withdrawlRequests(
     WithdrawlRequestsRef ref) async* {
   var response = await ref.watch(dioProvider).get(ApiClient.withdrawlList);
+
   yield withdrawlResponseModelFromMap(jsonEncode(response.data));
 }

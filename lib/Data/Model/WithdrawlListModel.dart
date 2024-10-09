@@ -44,13 +44,13 @@ class Datum {
   dynamic remark;
   dynamic approvedBy;
   dynamic verifiedBy;
-  String? verifiedDate;
+  dynamic verifiedDate;
   dynamic fundAccountId;
   dynamic contactId;
   dynamic status;
   dynamic approvedDate;
-  String? createdAt;
-  String? updatedAt;
+  dynamic createdAt;
+  dynamic updatedAt;
 
   Datum({
     this.id,

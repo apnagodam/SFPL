@@ -9,7 +9,7 @@ AadharResponseModel aadharResponseModelFromMap(String str) => AadharResponseMode
 String aadharResponseModelToMap(AadharResponseModel data) => json.encode(data.toMap());
 
 class AadharResponseModel {
-  int? status;
+  dynamic status;
   String? message;
   String? data;
 

@@ -9,8 +9,8 @@ BnplListingModel bnplListingModelFromJson(String str) => BnplListingModel.fromJs
 String bnplListingModelToJson(BnplListingModel data) => json.encode(data.toJson());
 
 class BnplListingModel {
-  String? status;
-  String? message;
+  dynamic status;
+  dynamic message;
   List<Datum>? data;
 
   BnplListingModel({
@@ -33,15 +33,15 @@ class BnplListingModel {
 }
 
 class Datum {
-  int? id;
-  String? userId;
+  dynamic id;
+  dynamic userId;
   dynamic uniqueId;
-  String? requestedAmount;
-  String? interestRate;
+  dynamic requestedAmount;
+  dynamic interestRate;
   dynamic approvedAmount;
-  String? status;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  dynamic status;
+  dynamic createdAt;
+  dynamic updatedAt;
 
   Datum({
     this.id,

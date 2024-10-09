@@ -43,8 +43,8 @@ class Datum {
   dynamic guaranteeFee;
   dynamic guarantor;
   dynamic status;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  dynamic createdAt;
+  dynamic updatedAt;
 
   Datum({
     this.id,

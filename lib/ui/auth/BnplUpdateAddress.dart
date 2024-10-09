@@ -51,9 +51,8 @@ class _BnplupdateaddressState extends ConsumerState<Bnplupdateaddress> {
       body: SafeArea(
           child: Form(
               key: addressKey,
-              child: Padding(padding: Pad(all: 10),child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Padding(padding: Pad(all: 10),child: ListView(
+
                 children: [
 
                   SizedBox(

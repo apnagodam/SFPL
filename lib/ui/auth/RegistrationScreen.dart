@@ -66,89 +66,89 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
               const SizedBox(
                 height: 10,
               ),
-              // DropdownSearch<RegistrationType?>(
-              //   popupProps: PopupProps.menu(
-              //       searchFieldProps: const TextFieldProps(
-              //           autofocus: true,
-              //           cursorColor: ColorsConstant.primaryColor,
-              //           padding: Pad(left: 10, right: 10),
-              //           decoration: InputDecoration(
-              //             contentPadding: Pad(left: 10, right: 10),
-              //             focusedErrorBorder: OutlineInputBorder(
-              //                 borderSide: BorderSide(
-              //                     style: BorderStyle.solid,
-              //                     color: ColorsConstant.primaryColor)),
-              //             disabledBorder: OutlineInputBorder(
-              //                 borderSide: BorderSide(
-              //                     style: BorderStyle.solid,
-              //                     color: ColorsConstant.primaryColor)),
-              //             errorBorder: OutlineInputBorder(
-              //                 borderSide: BorderSide(
-              //                     style: BorderStyle.solid,
-              //                     color: ColorsConstant.primaryColor)),
-              //             focusedBorder: OutlineInputBorder(
-              //                 borderSide: BorderSide(
-              //                     style: BorderStyle.solid,
-              //                     color: ColorsConstant.primaryColor)),
-              //             border: OutlineInputBorder(
-              //                 borderSide: BorderSide(
-              //                     style: BorderStyle.solid,
-              //                     color: ColorsConstant.primaryColor)),
-              //             enabledBorder: OutlineInputBorder(
-              //                 borderSide: BorderSide(
-              //                     style: BorderStyle.solid,
-              //                     color: ColorsConstant.primaryColor)),
-              //           )),
-              //       menuProps: MenuProps(
-              //           shape: RoundedRectangleBorder(
-              //               side: const BorderSide(
-              //                   color: ColorsConstant.primaryColor),
-              //               borderRadius: BorderRadius.circular(8))),
-              //       itemBuilder: (context, terminal, isVisible) =>
-              //           ColumnSuper(alignment: Alignment.centerLeft, children: [
-              //             Padding(
-              //               padding: const Pad(all: 10),
-              //               child: Text(
-              //                 "${terminal?.label}",
-              //                 style: TextStyle(
-              //                     fontWeight: FontWeight.bold,
-              //                     fontSize: Adaptive.sp(16)),
-              //               ),
-              //             ),
-              //             Container(
-              //               height: 1,
-              //               color: Colors.grey.withOpacity(0.3),
-              //             ),
-              //           ]),
-              //       isFilterOnline: true,
-              //       title: Padding(
-              //         padding: const Pad(all: 10),
-              //         child: Text(
-              //           'Select Product Type',
-              //           textAlign: TextAlign.center,
-              //           style: TextStyle(
-              //               fontSize: Adaptive.sp(16), fontWeight: FontWeight.bold),
-              //         ),
-              //       ),
-              //       showSearchBox: true,
-              //       searchDelay: const Duration(microseconds: 500)),
-              //   items: RegistrationType.values,
-              //   itemAsString: (RegistrationType? u) => u!.label,
-              //   onChanged: (RegistrationType? data) =>
-              //       ref.watch(registrationTypeProvider.notifier).state = data,
-              //   dropdownDecoratorProps: const DropDownDecoratorProps(
-              //     dropdownSearchDecoration: InputDecoration(
-              //         contentPadding: Pad(left: 10, bottom: 5, top: 5),
-              //         hintText: "Select Product Type",
-              //         border: OutlineInputBorder(
-              //             borderRadius: BorderRadius.all(Radius.circular(8)),
-              //             borderSide: BorderSide(
-              //                 color: ColorsConstant.secondColorUltraDark))),
-              //   ),
-              // ),
-              // const SizedBox(
-              //   height: 10,
-              // ),
+              DropdownSearch<RegistrationType?>(
+                popupProps: PopupProps.menu(
+                    searchFieldProps: const TextFieldProps(
+                        autofocus: true,
+                        cursorColor: ColorsConstant.primaryColor,
+                        padding: Pad(left: 10, right: 10),
+                        decoration: InputDecoration(
+                          contentPadding: Pad(left: 10, right: 10),
+                          focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  style: BorderStyle.solid,
+                                  color: ColorsConstant.primaryColor)),
+                          disabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  style: BorderStyle.solid,
+                                  color: ColorsConstant.primaryColor)),
+                          errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  style: BorderStyle.solid,
+                                  color: ColorsConstant.primaryColor)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  style: BorderStyle.solid,
+                                  color: ColorsConstant.primaryColor)),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  style: BorderStyle.solid,
+                                  color: ColorsConstant.primaryColor)),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  style: BorderStyle.solid,
+                                  color: ColorsConstant.primaryColor)),
+                        )),
+                    menuProps: MenuProps(
+                        shape: RoundedRectangleBorder(
+                            side: const BorderSide(
+                                color: ColorsConstant.primaryColor),
+                            borderRadius: BorderRadius.circular(8))),
+                    itemBuilder: (context, terminal, isVisible) =>
+                        ColumnSuper(alignment: Alignment.centerLeft, children: [
+                          Padding(
+                            padding: const Pad(all: 10),
+                            child: Text(
+                              "${terminal?.label}",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Adaptive.sp(16)),
+                            ),
+                          ),
+                          Container(
+                            height: 1,
+                            color: Colors.grey.withOpacity(0.3),
+                          ),
+                        ]),
+                    isFilterOnline: true,
+                    title: Padding(
+                      padding: const Pad(all: 10),
+                      child: Text(
+                        'Select Product Type',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: Adaptive.sp(16), fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    showSearchBox: true,
+                    searchDelay: const Duration(microseconds: 500)),
+                items: RegistrationType.values,
+                itemAsString: (RegistrationType? u) => u!.label,
+                onChanged: (RegistrationType? data) =>
+                    ref.watch(registrationTypeProvider.notifier).state = data,
+                dropdownDecoratorProps: const DropDownDecoratorProps(
+                  dropdownSearchDecoration: InputDecoration(
+                      contentPadding: Pad(left: 10, bottom: 5, top: 5),
+                      hintText: "Select Product Type",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          borderSide: BorderSide(
+                              color: ColorsConstant.secondColorUltraDark))),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               DropdownSearch<ConstitutionType?>(
                 popupProps: PopupProps.menu(
                     searchFieldProps: const TextFieldProps(
@@ -243,11 +243,11 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (ref.watch(registrationTypeProvider) ==
-                        RegistrationType.defaultType) {
-                      errorToast(context, 'Please select Registration type');
+                       null || ref.watch(registrationTypeProvider)==RegistrationType.defaultType) {
+                      errorToast(context, 'Please select Product type');
                     }
-                    if (ref.watch(constitutionTypeProvider) ==
-                        ConstitutionType.defaultType) {
+                    else if (ref.watch(constitutionTypeProvider) ==
+                        null ||ref.watch(constitutionTypeProvider)==ConstitutionType.defaultType ) {
                       errorToast(context, 'Please select Constitution');
                     } else {
                       if (ref.watch(registrationTypeProvider) ==

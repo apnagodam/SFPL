@@ -202,11 +202,11 @@ final bnplListProvider = AutoDisposeStreamProvider<BnplListingModel>.internal(
 );
 
 typedef BnplListRef = AutoDisposeStreamProviderRef<BnplListingModel>;
-String _$bnplPowerHash() => r'b73f6bfc1ebd16ebf04b30148cef81485143f1a4';
+String _$bnplPowerHash() => r'3aa8029a497c8a3b020cdafd6d2dcad3c916b93d';
 
 /// See also [bnplPower].
 @ProviderFor(bnplPower)
-final bnplPowerProvider = AutoDisposeFutureProvider<BnplPowerModel>.internal(
+final bnplPowerProvider = AutoDisposeStreamProvider<BnplPowerModel>.internal(
   bnplPower,
   name: r'bnplPowerProvider',
   debugGetCreateSourceHash:
@@ -215,6 +215,152 @@ final bnplPowerProvider = AutoDisposeFutureProvider<BnplPowerModel>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef BnplPowerRef = AutoDisposeFutureProviderRef<BnplPowerModel>;
+typedef BnplPowerRef = AutoDisposeStreamProviderRef<BnplPowerModel>;
+String _$bnplStatementHash() => r'0c2ae37cea26cc52b56344f34b65712cf1694629';
+
+/// See also [bnplStatement].
+@ProviderFor(bnplStatement)
+const bnplStatementProvider = BnplStatementFamily();
+
+/// See also [bnplStatement].
+class BnplStatementFamily extends Family<AsyncValue<BnplStatementModel>> {
+  /// See also [bnplStatement].
+  const BnplStatementFamily();
+
+  /// See also [bnplStatement].
+  BnplStatementProvider call({
+    String? pastDate,
+    String? currentDate,
+  }) {
+    return BnplStatementProvider(
+      pastDate: pastDate,
+      currentDate: currentDate,
+    );
+  }
+
+  @override
+  BnplStatementProvider getProviderOverride(
+    covariant BnplStatementProvider provider,
+  ) {
+    return call(
+      pastDate: provider.pastDate,
+      currentDate: provider.currentDate,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'bnplStatementProvider';
+}
+
+/// See also [bnplStatement].
+class BnplStatementProvider
+    extends AutoDisposeStreamProvider<BnplStatementModel> {
+  /// See also [bnplStatement].
+  BnplStatementProvider({
+    String? pastDate,
+    String? currentDate,
+  }) : this._internal(
+          (ref) => bnplStatement(
+            ref as BnplStatementRef,
+            pastDate: pastDate,
+            currentDate: currentDate,
+          ),
+          from: bnplStatementProvider,
+          name: r'bnplStatementProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$bnplStatementHash,
+          dependencies: BnplStatementFamily._dependencies,
+          allTransitiveDependencies:
+              BnplStatementFamily._allTransitiveDependencies,
+          pastDate: pastDate,
+          currentDate: currentDate,
+        );
+
+  BnplStatementProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.pastDate,
+    required this.currentDate,
+  }) : super.internal();
+
+  final String? pastDate;
+  final String? currentDate;
+
+  @override
+  Override overrideWith(
+    Stream<BnplStatementModel> Function(BnplStatementRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: BnplStatementProvider._internal(
+        (ref) => create(ref as BnplStatementRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        pastDate: pastDate,
+        currentDate: currentDate,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeStreamProviderElement<BnplStatementModel> createElement() {
+    return _BnplStatementProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is BnplStatementProvider &&
+        other.pastDate == pastDate &&
+        other.currentDate == currentDate;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, pastDate.hashCode);
+    hash = _SystemHash.combine(hash, currentDate.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin BnplStatementRef on AutoDisposeStreamProviderRef<BnplStatementModel> {
+  /// The parameter `pastDate` of this provider.
+  String? get pastDate;
+
+  /// The parameter `currentDate` of this provider.
+  String? get currentDate;
+}
+
+class _BnplStatementProviderElement
+    extends AutoDisposeStreamProviderElement<BnplStatementModel>
+    with BnplStatementRef {
+  _BnplStatementProviderElement(super.provider);
+
+  @override
+  String? get pastDate => (origin as BnplStatementProvider).pastDate;
+  @override
+  String? get currentDate => (origin as BnplStatementProvider).currentDate;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

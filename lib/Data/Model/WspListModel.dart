@@ -9,8 +9,8 @@ WspListModel wspListModelFromMap(String str) => WspListModel.fromMap(json.decode
 String wspListModelToMap(WspListModel data) => json.encode(data.toMap());
 
 class WspListModel {
-  String? status;
-  String? message;
+  dynamic status;
+  dynamic message;
   List<Datum>? data;
 
   WspListModel({
@@ -33,18 +33,18 @@ class WspListModel {
 }
 
 class Datum {
-  int? id;
-  String? portalName;
-  String? legalName;
-  String? constitution;
-  String? pancardNo;
-  String? gstNo;
-  String? email;
-  String? mobile;
-  String? contactPersion;
-  String? address;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  dynamic id;
+  dynamic portalName;
+  dynamic legalName;
+  dynamic constitution;
+  dynamic pancardNo;
+  dynamic gstNo;
+  dynamic email;
+  dynamic mobile;
+  dynamic contactPersion;
+  dynamic address;
+  dynamic createdAt;
+  dynamic updatedAt;
 
   Datum({
     this.id,

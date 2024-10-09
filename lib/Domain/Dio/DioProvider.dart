@@ -1,24 +1,52 @@
+import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:one_context/one_context.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:swfl/ui/utils/routes.dart';
+import 'package:swfl/ui/utils/routes_strings.dart';
+import 'package:swfl/ui/utils/widgets.dart';
 
 import '../../Data/SharedPrefs/SharedUtility.dart';
 
 part 'DioProvider.g.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 @riverpod
 Dio dio(DioRef ref) {
   return Dio(BaseOptions(baseUrl: ApiClient.testBaseUrl, headers: {
     "Authorization": "Bearer ${ref.watch(sharedUtilityProvider).getToken()}",
-  }));
-  // ..interceptors.add(PrettyDioLogger(
-  //   requestHeader: true,
-  //   requestBody: true,
-  //   responseBody: true,
-  //   responseHeader: false,
-  //   error: true,
-  //   compact: true,
-  //   maxWidth: 90,
-  // ));
+  }))
+    ..interceptors.add(InterceptorsWrapper(onRequest: (request, handler) {
+      handler.next(request);
+    }, onResponse: (response, handler) {
+      if (response.data['status'].toString() == '3') {
+        OneContext().showDialog(
+            builder: (context) => ColumnSuper(children: [
+                  Text("You have been Logged out!"),
+                  Text("Please Login Again!"),
+                  ElevatedButton(
+                      onPressed: () {
+                        ref
+                            .watch(sharedUtilityProvider)
+                            .sharedPreferences
+                            .clear();
+                        ref
+                            .watch(goRouterProvider)
+                            .goNamed(RoutesStrings.login);
+                      },
+                      child: Text("Login"))
+                ]));
+      }
+      // if (response.data['status'].toString() == "0") {
+      //   errorToast(OneContext().context!, '${response.data['message']}');
+      // }
+      handler.next(response);
+    }, onError: (e, handler) {
+      //   ref.watch(goRouterProvider).goNamed(RoutesStrings.login);
+      handler.next(e);
+    }));
 }
 
 @riverpod
@@ -128,4 +156,5 @@ BNPL api
   static const requestBnpl = 'bnpl-request';
   static const bnplListing = 'bnpl-listing';
   static const getBnplPower = 'bnpl-power';
+  static const getBnplStatement = 'bnpl-hold-statement';
 }
