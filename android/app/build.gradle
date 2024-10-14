@@ -39,7 +39,15 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
-
+//    signingConfigs {
+//        release {
+//            keyAlias 'apnagodam'
+//            keyPassword 'apnagodam'
+//            storeFile file('/Users/anantmann/StudioProjects/SFPL/finance')
+//            storePassword 'apnagodam'
+//        }
+//
+//    }
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.swfl.swfl"
