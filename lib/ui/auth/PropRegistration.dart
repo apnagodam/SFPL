@@ -787,7 +787,7 @@ class _PropregistrationState extends ConsumerState<Propregistration> {
             ? const SizedBox()
             : ref
                 .watch(
-                    districtListProvider(code: ref.watch(statesProvider)?.code))
+                    districtListProvider(code: ref.watch(statesProvider)?.code.toString()))
                 .when(
                     data: (states) => DropdownSearch<StateDatum?>(
                           popupProps: PopupProps.menu(

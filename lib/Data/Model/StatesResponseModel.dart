@@ -34,7 +34,7 @@ class StatesResponseModel {
 
 class Datum {
   dynamic id;
-  dynamic name;
+  String? name;
   dynamic code;
   dynamic countryId;
 
@@ -52,7 +52,7 @@ class Datum {
     countryId: json["country_id"],
   );
   bool stateFilterByName(String filter) {
-    return this.name.toString().toLowerCase().trim().contains(filter);
+    return name.toString().toLowerCase().trim().contains(filter);
   }
   Map<String, dynamic> toMap() => {
     "id": id,

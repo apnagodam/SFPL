@@ -362,5 +362,154 @@ class _BnplStatementProviderElement
   @override
   String? get currentDate => (origin as BnplStatementProvider).currentDate;
 }
+
+String _$bnplDebitStatementHash() =>
+    r'125379ed6a1934c7244d2ff189db9d654b56406f';
+
+/// See also [bnplDebitStatement].
+@ProviderFor(bnplDebitStatement)
+const bnplDebitStatementProvider = BnplDebitStatementFamily();
+
+/// See also [bnplDebitStatement].
+class BnplDebitStatementFamily extends Family<AsyncValue<BnplStatementModel>> {
+  /// See also [bnplDebitStatement].
+  const BnplDebitStatementFamily();
+
+  /// See also [bnplDebitStatement].
+  BnplDebitStatementProvider call({
+    String? pastDate,
+    String? currentDate,
+  }) {
+    return BnplDebitStatementProvider(
+      pastDate: pastDate,
+      currentDate: currentDate,
+    );
+  }
+
+  @override
+  BnplDebitStatementProvider getProviderOverride(
+    covariant BnplDebitStatementProvider provider,
+  ) {
+    return call(
+      pastDate: provider.pastDate,
+      currentDate: provider.currentDate,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'bnplDebitStatementProvider';
+}
+
+/// See also [bnplDebitStatement].
+class BnplDebitStatementProvider
+    extends AutoDisposeStreamProvider<BnplStatementModel> {
+  /// See also [bnplDebitStatement].
+  BnplDebitStatementProvider({
+    String? pastDate,
+    String? currentDate,
+  }) : this._internal(
+          (ref) => bnplDebitStatement(
+            ref as BnplDebitStatementRef,
+            pastDate: pastDate,
+            currentDate: currentDate,
+          ),
+          from: bnplDebitStatementProvider,
+          name: r'bnplDebitStatementProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$bnplDebitStatementHash,
+          dependencies: BnplDebitStatementFamily._dependencies,
+          allTransitiveDependencies:
+              BnplDebitStatementFamily._allTransitiveDependencies,
+          pastDate: pastDate,
+          currentDate: currentDate,
+        );
+
+  BnplDebitStatementProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.pastDate,
+    required this.currentDate,
+  }) : super.internal();
+
+  final String? pastDate;
+  final String? currentDate;
+
+  @override
+  Override overrideWith(
+    Stream<BnplStatementModel> Function(BnplDebitStatementRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: BnplDebitStatementProvider._internal(
+        (ref) => create(ref as BnplDebitStatementRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        pastDate: pastDate,
+        currentDate: currentDate,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeStreamProviderElement<BnplStatementModel> createElement() {
+    return _BnplDebitStatementProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is BnplDebitStatementProvider &&
+        other.pastDate == pastDate &&
+        other.currentDate == currentDate;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, pastDate.hashCode);
+    hash = _SystemHash.combine(hash, currentDate.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin BnplDebitStatementRef
+    on AutoDisposeStreamProviderRef<BnplStatementModel> {
+  /// The parameter `pastDate` of this provider.
+  String? get pastDate;
+
+  /// The parameter `currentDate` of this provider.
+  String? get currentDate;
+}
+
+class _BnplDebitStatementProviderElement
+    extends AutoDisposeStreamProviderElement<BnplStatementModel>
+    with BnplDebitStatementRef {
+  _BnplDebitStatementProviderElement(super.provider);
+
+  @override
+  String? get pastDate => (origin as BnplDebitStatementProvider).pastDate;
+  @override
+  String? get currentDate => (origin as BnplDebitStatementProvider).currentDate;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

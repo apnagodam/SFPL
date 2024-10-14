@@ -789,7 +789,7 @@ class _IndividualregistrationState
                   // asyncItems: (String filter) => getData(filter),
 
                   items: states.data ?? [],
-                  itemAsString: (Datum? u) => u?.name ?? "",
+                  itemAsString: (Datum? u) =>  "${u?.name}",
                   onChanged: (Datum? data) =>
                       ref.watch(statesProvider.notifier).state = data,
                   dropdownDecoratorProps: const DropDownDecoratorProps(

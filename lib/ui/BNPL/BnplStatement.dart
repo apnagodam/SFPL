@@ -27,7 +27,7 @@ class _BnplstatementState extends ConsumerState<Bnplstatement> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bnpl Statements'),
+        title: Text('BNPL Hold Statements'),
       ),
       body: Padding(
         padding: Pad(all: 10),

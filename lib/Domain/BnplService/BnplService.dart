@@ -8,16 +8,11 @@ import 'package:swfl/Data/Model/BnplStatementModel.dart';
 import 'package:swfl/Data/Model/TermsModel.dart';
 import 'package:swfl/Domain/Dio/DioProvider.dart';
 
-import '../../Data/SharedPrefs/SharedUtility.dart';
-import '../../ui/utils/routes.dart';
-import '../../ui/utils/routes_strings.dart';
-
 part 'BnplService.g.dart';
 
 @riverpod
 Future<TermsModel> bnplTerms(BnplTermsRef ref) async {
   var response = await ref.watch(dioProvider).get(ApiClient.bnplTerms);
-
 
   return termsModelFromJson(jsonEncode(response.data));
 }
@@ -52,6 +47,16 @@ Stream<BnplPowerModel> bnplPower(BnplPowerRef ref) async* {
 Stream<BnplStatementModel> bnplStatement(BnplStatementRef ref,
     {String? pastDate, String? currentDate}) async* {
   var response = await ref.watch(dioProvider).post(ApiClient.getBnplStatement,
+      queryParameters: {'from_date': pastDate, "to_date": currentDate});
+
+  yield bnplStatementModelFromMap(jsonEncode(response.data));
+}
+
+@riverpod
+Stream<BnplStatementModel> bnplDebitStatement(BnplDebitStatementRef ref,
+    {String? pastDate, String? currentDate}) async* {
+  var response = await ref.watch(dioProvider).post(
+      ApiClient.getBnplDebitStatement,
       queryParameters: {'from_date': pastDate, "to_date": currentDate});
 
   yield bnplStatementModelFromMap(jsonEncode(response.data));

@@ -147,7 +147,21 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 // ),
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      context.goNamed(RoutesStrings.appliedLoanList);
+                      if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
+                          [])
+                          .isEmpty) {
+                        showVerificationDialog(context,
+                            titleText: "Verify Tri-Party Agreement",
+                            messageText: "tri party agreement pending",
+                            action: () {
+                              hideLoader(context);
+                              context.goNamed(RoutesStrings.verfication);
+                            });
+                      } else {
+                        context.goNamed(RoutesStrings.appliedLoanList);
+                      }
+
+
                       // if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
                       //   showVerificationDialog(context,
                       //       titleText: "Verify Aadhar",
@@ -189,22 +203,18 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               actions: [
                 CupertinoActionSheetAction(
                   onPressed: () {
-                    if (ref
-                            .watch(sharedUtilityProvider)
-                            .getUser()
-                            ?.aadharVerify
-                            .toString() ==
-                        "0") {
+
+                    if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
                       showVerificationDialog(context,
                           titleText: "Verify Aadhar",
-                          messageText: "Your Aadhar verification is pending",
-                          action: () {
-                        hideLoader(context);
-                        context
-                            .goNamed(RoutesStrings.bnplAadharRegistrationHome);
-                      });
-                    } else {
+                          messageText: "Your Aadhar verification is pending", action: () {
+                            hideLoader(context);
+                            context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
+                          });
+                    }else{
                       context.goNamed(RoutesStrings.bnpl);
+
+
                     }
                   },
                   child: Text('Apply ',
@@ -227,28 +237,18 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 // ),
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      context.goNamed(RoutesStrings.bnplRequests);
-                      // if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
-                      //   showVerificationDialog(context,
-                      //       titleText: "Verify Aadhar",
-                      //       messageText: "Your Aadhar verification is pending", action: () {
-                      //         hideLoader(context);
-                      //         context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
-                      //       });
-                      // }else{
-                      //
-                      //
-                      // }
+                      if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
+                        showVerificationDialog(context,
+                            titleText: "Verify Aadhar",
+                            messageText: "Your Aadhar verification is pending", action: () {
+                              hideLoader(context);
+                              context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
+                            });
+                      }else{
+                        context.goNamed(RoutesStrings.bnplRequests);
 
-                      // if (ref.watch(sharedUtilityProvider).getUser()?.aadharVerify == "0") {
-                      //   showVerificationDialog(context,
-                      //       titleText: "Verify Aadhar",
-                      //       messageText: "Your Aadhar verification is pending");
-                      // }
-                      // else{
-                      //   context.goNamed(RoutesStrings.sanctionedAmount);
-                      //
-                      // }
+
+                      }
                     },
                     child: Text('Requests',
                         textAlign: TextAlign.start,
@@ -259,30 +259,43 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      context.goNamed(RoutesStrings.bnplStatement);
-                      // if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
-                      //   showVerificationDialog(context,
-                      //       titleText: "Verify Aadhar",
-                      //       messageText: "Your Aadhar verification is pending", action: () {
-                      //         hideLoader(context);
-                      //         context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
-                      //       });
-                      // }else{
-                      //
-                      //
-                      // }
+                      if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
+                        showVerificationDialog(context,
+                            titleText: "Verify Aadhar",
+                            messageText: "Your Aadhar verification is pending", action: () {
+                              hideLoader(context);
+                              context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
+                            });
+                      }else{
+                        context.goNamed(RoutesStrings.bnplStatement);
 
-                      // if (ref.watch(sharedUtilityProvider).getUser()?.aadharVerify == "0") {
-                      //   showVerificationDialog(context,
-                      //       titleText: "Verify Aadhar",
-                      //       messageText: "Your Aadhar verification is pending");
-                      // }
-                      // else{
-                      //   context.goNamed(RoutesStrings.sanctionedAmount);
-                      //
-                      // }
+
+                      }
                     },
-                    child: Text('Statement',
+                    child: Text('Hold Statement',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: Adaptive.sp(16),
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500))),
+                CupertinoActionSheetAction(
+                    onPressed: () {
+                      if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
+                        showVerificationDialog(context,
+                            titleText: "Verify Aadhar",
+                            messageText: "Your Aadhar verification is pending", action: () {
+                              hideLoader(context);
+                              context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
+                            });
+                      }else{
+                        context.goNamed(RoutesStrings.bnplDebitStatement);
+
+
+                      }
+
+
+                    },
+                    child: Text('Debit Statement',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: Adaptive.sp(16),

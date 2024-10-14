@@ -4,6 +4,7 @@ import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:swfl/ui/auth/BnplAadharRegistration.dart';
 import 'package:swfl/ui/utils/colors.dart';
 import 'package:toastification/toastification.dart';
 
@@ -195,6 +196,9 @@ showErrorDialog(BuildContext context,
       showConfirmBtn: true,
       confirmBtnText: "Okay",
       confirmBtnColor: ColorsConstant.primaryColor,
-      onConfirmBtnTap: action,
+      onConfirmBtnTap: () {
+        action!();
+        hideLoader(context);
+      },
       widget: Text(''),
     );

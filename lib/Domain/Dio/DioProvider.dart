@@ -1,4 +1,3 @@
-import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:one_context/one_context.dart';
@@ -22,22 +21,12 @@ Dio dio(DioRef ref) {
       handler.next(request);
     }, onResponse: (response, handler) {
       if (response.data['status'].toString() == '3') {
-        OneContext().showDialog(
-            builder: (context) => ColumnSuper(children: [
-                  Text("You have been Logged out!"),
-                  Text("Please Login Again!"),
-                  ElevatedButton(
-                      onPressed: () {
-                        ref
-                            .watch(sharedUtilityProvider)
-                            .sharedPreferences
-                            .clear();
-                        ref
-                            .watch(goRouterProvider)
-                            .goNamed(RoutesStrings.login);
-                      },
-                      child: Text("Login"))
-                ]));
+        showErrorDialog(OneContext().context!,
+            titleText: 'You have been Logged out!',
+            messageText: "Please Login Again!", action: () {
+          ref.watch(goRouterProvider).goNamed(RoutesStrings.login);
+          ref.watch(sharedUtilityProvider).sharedPreferences.clear();
+        });
       }
       // if (response.data['status'].toString() == "0") {
       //   errorToast(OneContext().context!, '${response.data['message']}');
@@ -157,4 +146,5 @@ BNPL api
   static const bnplListing = 'bnpl-listing';
   static const getBnplPower = 'bnpl-power';
   static const getBnplStatement = 'bnpl-hold-statement';
+  static const getBnplDebitStatement = 'bnpl-debit-statement';
 }

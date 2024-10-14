@@ -20,13 +20,12 @@ class RoutesStrings {
 
   static const applyForLoan = 'applyForLoan';
 
-
   static const applyForCommodityLoan = 'applyForCommodityLoan';
   static const appliedLoanList = 'appliedLoanList';
 
-
   static const bnpl = 'bnpl';
   static const bnplStatement = 'bnplStatement';
+  static const bnplDebitStatement = 'bnplDebitStatement';
   static const bnplRequests = 'bnplRequests';
   static const bnplWithdraw = 'bnplWithdraw';
 
@@ -39,5 +38,4 @@ class RoutesStrings {
   static const withdrawRequests = 'withdrawRequests';
 
   static const verfication = 'verification';
-
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:swfl/ui/BNPL/BnplDebitStatement.dart';
 import 'package:swfl/ui/BNPL/BnplRequests.dart';
 import 'package:swfl/ui/BNPL/BnplScreen.dart';
 import 'package:swfl/ui/BNPL/BnplStatement.dart';
@@ -67,6 +68,11 @@ GoRouter goRouter(GoRouterRef ref) {
                   path: RoutesStrings.bnplStatement,
                   name: RoutesStrings.bnplStatement,
                   builder: (context, state) => const Bnplstatement()),
+              GoRoute(
+                  path: RoutesStrings.bnplDebitStatement,
+                  name: RoutesStrings.bnplDebitStatement,
+                  builder: (context, state) => const Bnpldebitstatement()),
+
               GoRoute(
                   path: RoutesStrings.bnplRequests,
                   name: RoutesStrings.bnplRequests,

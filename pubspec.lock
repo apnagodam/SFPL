@@ -1538,13 +1538,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  smooth:
-    dependency: "direct main"
-    description:
-      path: "packages/smooth"
-      relative: true
-    source: path
-    version: "0.0.1"
   source_gen:
     dependency: transitive
     description:
