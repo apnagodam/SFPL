@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Domain/WalletService/WalletService.dart';
+import 'package:swfl/ui/utils/widgets.dart';
 
 import '../../../utils/colors.dart';
 import '../../home_screen.dart';
@@ -83,7 +84,7 @@ class _MoneyrequestState extends ConsumerState<Moneyrequest> {
                       ]),
                     ),
                   ),
-                  ListView.builder(
+               (data.data??[]).isEmpty ?emptyData():   ListView.builder(
                     itemCount: data.data?.length ?? 0,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -552,7 +553,7 @@ class _MoneyrequestState extends ConsumerState<Moneyrequest> {
                 ],
               ),
           error: (e, s) => Text(e.toString()),
-          loading: () => const Center(child: CupertinoActivityIndicator(),)),
+          loading: () =>  Center(child: defaultLoader(),)),
     );
   }
 }

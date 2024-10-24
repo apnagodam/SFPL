@@ -1,12 +1,27 @@
+import 'dart:io';
+
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
+import 'package:one_context/one_context.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/ui/auth/BnplAadharRegistration.dart';
 import 'package:swfl/ui/utils/colors.dart';
 import 'package:toastification/toastification.dart';
+
+emptyData()=>SizedBox(height: MediaQuery.of(OneContext().context!).size.height/2,child: Column(
+  mainAxisAlignment: MainAxisAlignment.center,
+  mainAxisSize: MainAxisSize.max,
+  children: [
+LottieBuilder.asset('assets/loading_finance.json',height: Adaptive.sh(20),fit: BoxFit.cover,),
+Text("No Data Found!",style: TextStyle(fontSize: Adaptive.sp(20),fontWeight: FontWeight.bold),)
+]),);
+
+defaultLoader()=> const CircularProgressIndicator.adaptive(backgroundColor:ColorsConstant.primaryColor,);
 
 errorToast(BuildContext context, String text) => toastification.show(
       context: context,
@@ -202,3 +217,8 @@ showErrorDialog(BuildContext context,
       },
       widget: Text(''),
     );
+
+
+var downloadProgressProvider = StateProvider((ref)=>"0");
+var isFileDownloading = StateProvider((ref)=>false);
+var downloadFilePath = StateProvider<File?>((ref)=>null);

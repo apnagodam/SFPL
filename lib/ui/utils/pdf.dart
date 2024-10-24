@@ -4,8 +4,10 @@ import 'package:file_support/file_support.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:htmltopdfwidgets/htmltopdfwidgets.dart' as htmltoPdf;
+import 'package:one_context/one_context.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:swfl/ui/utils/widgets.dart';
 
 part 'pdf.g.dart';
 
@@ -23,18 +25,35 @@ Future<File?> convertAndDownloadHtmlPdf(ConvertAndDownloadHtmlPdfRef ref,
     Directory documents = await getApplicationDocumentsDirectory();
     filePath = documents.path;
   }
-
-  await FileSupport()
+  
+  ref.invalidate(downloadProgressProvider);
+  ref.watch(isFileDownloading.notifier).state = true;
+   FileSupport()
       .downloadCustomLocation(
     url: data,
     path: filePath,
     filename: '/agreement',
     extension: ".pdf",
-    progress: (progress) async {},
-  )
-      .then((video) async {
+    progress: (progress) async {
+      print(progress);
+      ref.watch(downloadProgressProvider.notifier).state = progress;
+        
+      },
+  ) .then((video) async {
+          ref.watch(isFileDownloading.notifier).state = false;;
+
+    if(video!=null){
+             successToast(OneContext().context!, 'File Downloaded at ${video?.path}');
+
+    ref.watch(downloadFilePath.notifier).state = video;
+    }
+   
+
     file = video;
-  }).onError((error, stackTrace) {});
+  }).onError((error, stackTrace) {
+      ref.watch(isFileDownloading.notifier).state = false;
+
+  });
 
   return file;
 }

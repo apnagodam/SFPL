@@ -476,7 +476,7 @@ class _BnplscreenState extends ConsumerState<Bnplscreen> {
                   ),
                 ),
             error: (e, s) => Container(),
-            loading: () => CupertinoActivityIndicator()),
+            loading: () => defaultLoader()),
       )),
     );
   }

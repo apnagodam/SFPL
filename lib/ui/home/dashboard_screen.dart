@@ -190,6 +190,56 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             fontSize: Adaptive.sp(16),
                             color: Colors.black,
                             fontWeight: FontWeight.w500))),
+            
+             CupertinoActionSheetAction(
+                  onPressed: () {
+                    if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
+                            [])
+                        .isEmpty) {
+                      showVerificationDialog(context,
+                          titleText: "Verify Tri-Party Agreement",
+                          messageText: "tri party agreement pending",
+                          action: () {
+                        hideLoader(context);
+                        context.goNamed(RoutesStrings.verfication);
+                      });
+                    } else {
+                      context.goNamed(RoutesStrings.applyForSanctionLimit);
+                    }
+                  },
+                  child: Text('Sanction Limit Apply',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontSize: Adaptive.sp(16),
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500)),
+                ),
+                CupertinoActionSheetAction(
+                    onPressed: () {
+                      if ((ref
+                                  .watch(sharedUtilityProvider)
+                                  .getUser()
+                                  ?.triparty ??
+                              [])
+                          .isEmpty) {
+                        showVerificationDialog(context,
+                            titleText: "Verify Tri-Party Agreement",
+                            messageText: "tri party agreement pending",
+                            action: () {
+                          hideLoader(context);
+                          context.goNamed(RoutesStrings.verfication);
+                        });
+                      } else {
+                        context.goNamed(RoutesStrings.sanctionedAmount);
+                      }
+                    },
+                    child: Text('Sanctioned Amount',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: Adaptive.sp(16),
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500))),
+           
               ],
             ),
             CupertinoActionSheet(
@@ -303,65 +353,65 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             fontWeight: FontWeight.w500))),
               ],
             ),
-            CupertinoActionSheet(
-              title: Center(
-                child: Text(
-                  'Sanction Limit',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
-                ),
-              ),
-              actions: [
-                CupertinoActionSheetAction(
-                  onPressed: () {
-                    if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
-                            [])
-                        .isEmpty) {
-                      showVerificationDialog(context,
-                          titleText: "Verify Tri-Party Agreement",
-                          messageText: "tri party agreement pending",
-                          action: () {
-                        hideLoader(context);
-                        context.goNamed(RoutesStrings.verfication);
-                      });
-                    } else {
-                      context.goNamed(RoutesStrings.applyForSanctionLimit);
-                    }
-                  },
-                  child: Text('Sanction Limit Apply',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontSize: Adaptive.sp(16),
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500)),
-                ),
-                CupertinoActionSheetAction(
-                    onPressed: () {
-                      if ((ref
-                                  .watch(sharedUtilityProvider)
-                                  .getUser()
-                                  ?.triparty ??
-                              [])
-                          .isEmpty) {
-                        showVerificationDialog(context,
-                            titleText: "Verify Tri-Party Agreement",
-                            messageText: "tri party agreement pending",
-                            action: () {
-                          hideLoader(context);
-                          context.goNamed(RoutesStrings.verfication);
-                        });
-                      } else {
-                        context.goNamed(RoutesStrings.sanctionedAmount);
-                      }
-                    },
-                    child: Text('Sanctioned Amount',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: Adaptive.sp(16),
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500))),
-              ],
-            ),
+            // CupertinoActionSheet(
+            //   title: Center(
+            //     child: Text(
+            //       'Sanction Limit',
+            //       style: TextStyle(
+            //           fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+            //     ),
+            //   ),
+            //   actions: [
+            //     CupertinoActionSheetAction(
+            //       onPressed: () {
+            //         if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
+            //                 [])
+            //             .isEmpty) {
+            //           showVerificationDialog(context,
+            //               titleText: "Verify Tri-Party Agreement",
+            //               messageText: "tri party agreement pending",
+            //               action: () {
+            //             hideLoader(context);
+            //             context.goNamed(RoutesStrings.verfication);
+            //           });
+            //         } else {
+            //           context.goNamed(RoutesStrings.applyForSanctionLimit);
+            //         }
+            //       },
+            //       child: Text('Sanction Limit Apply',
+            //           textAlign: TextAlign.start,
+            //           style: TextStyle(
+            //               fontSize: Adaptive.sp(16),
+            //               color: Colors.black,
+            //               fontWeight: FontWeight.w500)),
+            //     ),
+            //     CupertinoActionSheetAction(
+            //         onPressed: () {
+            //           if ((ref
+            //                       .watch(sharedUtilityProvider)
+            //                       .getUser()
+            //                       ?.triparty ??
+            //                   [])
+            //               .isEmpty) {
+            //             showVerificationDialog(context,
+            //                 titleText: "Verify Tri-Party Agreement",
+            //                 messageText: "tri party agreement pending",
+            //                 action: () {
+            //               hideLoader(context);
+            //               context.goNamed(RoutesStrings.verfication);
+            //             });
+            //           } else {
+            //             context.goNamed(RoutesStrings.sanctionedAmount);
+            //           }
+            //         },
+            //         child: Text('Sanctioned Amount',
+            //             textAlign: TextAlign.start,
+            //             style: TextStyle(
+            //                 fontSize: Adaptive.sp(16),
+            //                 color: Colors.black,
+            //                 fontWeight: FontWeight.w500))),
+            //   ],
+            // ),
             CupertinoActionSheet(
               title: Center(
                 child: Text(

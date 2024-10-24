@@ -6,6 +6,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Data/Model/LoanApplyListModel.dart';
 import 'package:swfl/Data/Model/LoanRequestFormModel.dart';
+import 'package:swfl/Domain/BnplService/BnplService.dart';
 import 'package:swfl/Domain/LoanService/LoanService.dart';
 import 'package:swfl/ui/home/home_screen.dart';
 
@@ -25,7 +26,7 @@ class _ApplyloanscreenState extends ConsumerState<Applyloanscreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Stock"),
+        title: const Text("Stock Loan Apply"),
         titleTextStyle: TextStyle(
             color: ColorsConstant.primaryColor,
             fontSize: Adaptive.sp(18),
@@ -103,7 +104,7 @@ class _ApplyloanscreenState extends ConsumerState<Applyloanscreen> {
               ),
               ref.watch(loanApplyListProvider).when(
                   data: (data) =>
-                      ListView.builder(
+                   (data.data??[]).isEmpty ?emptyData():   ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: data.data?.length ?? 0,
                           shrinkWrap: true,
@@ -250,7 +251,7 @@ class _ApplyloanscreenState extends ConsumerState<Applyloanscreen> {
                                   ),
                                 ),
                               )),
-                  error: (e, s) => Container(),
+                  error: (e, s) => emptyData(),
                   loading: () => const CupertinoActivityIndicator())
             ],
           )),
@@ -274,7 +275,7 @@ class _StockApplyLoanState extends ConsumerState<StockApplyLoan> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
+      body: ref.watch(bnplPowerProvider).when(data: (bnplData)=>ListView(
         children: [
           Row(children: [
             IconButton(onPressed: ()=>Navigator.of(context).pop(), icon: Icon(Icons.arrow_back)),
@@ -374,13 +375,13 @@ class _StockApplyLoanState extends ConsumerState<StockApplyLoan> {
             ]),
           ),
           ref.watch(loanRequestFormProvider).when(
-              data: (data) =>
+              data: (data) =>(data.data?.scheme??[]).isEmpty ?emptyData():
                   ListView.builder(
                     itemCount: data.data?.scheme?.length ?? 0,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) =>
-                        Container(
+                    itemBuilder: (context, index) => (data.data?.scheme?[index].schemeName.toString().toLowerCase().trim()=="bnpl takeover" && num.parse("${bnplData.bnpl?.utilizedLimit??0}")<=0)?SizedBox():
+                      Container(
                           color: index % 2 == 0
                               ? Colors.grey.withOpacity(0.1)
                               : Colors.white,
@@ -509,11 +510,11 @@ class _StockApplyLoanState extends ConsumerState<StockApplyLoan> {
                   ),
               error: (e, s) => Container(),
               loading: () =>
-              const Center(
-                child: CupertinoActivityIndicator(),
+               Center(
+                child: defaultLoader(),
               ))
         ],
-      ),
+      ), error: (e,s)=>emptyData(), loading: ()=>Center(child: defaultLoader(),)),
     );
   }
 }
@@ -833,8 +834,8 @@ class _LoanDetailsState extends ConsumerState<LoanDetails> {
               ]),
           error: (e, s) => Container(),
           loading: () =>
-          const Center(
-            child: CupertinoActivityIndicator(),
+           Center(
+            child: defaultLoader(),
           )),
     );
   }

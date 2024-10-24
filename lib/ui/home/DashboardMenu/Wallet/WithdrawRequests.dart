@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Domain/WalletService/WalletService.dart';
 import 'package:swfl/ui/utils/colors.dart';
+import 'package:swfl/ui/utils/widgets.dart';
 
 class Withdrawrequests extends ConsumerStatefulWidget {
   const Withdrawrequests({super.key});
@@ -81,7 +82,7 @@ class _WithdrawrequestsState extends ConsumerState<Withdrawrequests> {
                       ]),
                     ),
                   ),
-                  ListView.builder(
+              (data.data??[]).isEmpty ?emptyData():    ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: data.data?.length ?? 0,
@@ -402,7 +403,7 @@ class _WithdrawrequestsState extends ConsumerState<Withdrawrequests> {
             return null;
           },
           loading: () => Center(
-                child: CupertinoActivityIndicator(),
+                child: defaultLoader(),
               )),
     );
   }

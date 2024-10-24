@@ -166,7 +166,7 @@ class _IndividualregistrationState
             ),
             widgetList[ref.watch(activeStepProvider)],
             ref.watch(isRegisteringProvider) == true
-                ? const CupertinoActivityIndicator()
+                ? defaultLoader()
                 : ref.watch(activeStepProvider) < 2
                     ? ElevatedButton(
                         onPressed: () async {
@@ -803,7 +803,7 @@ class _IndividualregistrationState
                   ),
                 ),
             error: (e, s) => Container(),
-            loading: () => const CupertinoActivityIndicator()),
+            loading: () => defaultLoader()),
         const SizedBox(
           height: 10,
         ),
@@ -910,7 +910,7 @@ class _IndividualregistrationState
                           ),
                         ),
                     error: (e, s) => Container(),
-                    loading: () => const CupertinoActivityIndicator()),
+                    loading: () => defaultLoader()),
         const SizedBox(
           height: 10,
         ),

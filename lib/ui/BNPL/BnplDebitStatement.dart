@@ -341,61 +341,129 @@ class _BnpldebitstatementState extends ConsumerState<Bnpldebitstatement> {
                     currentDate:
                         format.format(ref.watch(endDate) ?? DateTime.now())))
                 .when(
-                    data: (statementData) => ListView.builder(
+                    data: (statementData) =>(statementData.data??[]).isEmpty ?emptyData(): ListView.builder(
                         itemCount: statementData.data?.length ?? 0,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) => Card(
-                              color: Colors.white,
-                              margin: const Pad(top: 10, bottom: 10),
-                              elevation: 10,
-                              shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                      color:
-                                          ColorsConstant.secondColorSuperDark),
-                                  borderRadius: BorderRadius.circular(10)),
-                              surfaceTintColor: Colors.white,
-                              child: Padding(
-                                padding: const Pad(all: 10),
-                                child: RowSuper(fill: true, children: [
-                                  ColumnSuper(
-                                      alignment: Alignment.topLeft,
-                                      children: [
-                                        Text(
-                                          "${statementData.data?[index].narration}",
-                                          style: TextStyle(
-                                              fontSize: Adaptive.sp(16),
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          "${statementData.data?[index].type}",
-                                          style: TextStyle(
-                                              fontSize: Adaptive.sp(15),
-                                              fontWeight: FontWeight.w400),
-                                        )
-                                      ]),
-                                  ColumnSuper(
-                                      alignment: Alignment.topRight,
-                                      children: [
-                                        Text(
-                                          "${currencyFormat.format(double.tryParse("${statementData.data?[index].amount ?? 0}"))}",
-                                          style: TextStyle(
-                                              fontSize: Adaptive.sp(16),
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          "${statementData.data?[index].date ?? ""}",
-                                          style: TextStyle(
-                                              fontSize: Adaptive.sp(15),
-                                              fontWeight: FontWeight.w400),
-                                        )
-                                      ])
-                                ]),
-                              ),
+                          color: Colors.white,
+                          margin: Pad(top:10,bottom: 10 ),
+                          elevation: 10,
+                          shape: RoundedRectangleBorder(
+                              side: BorderSide(color: ColorsConstant.secondColorSuperDark),
+                              borderRadius: BorderRadius.circular(10)),
+                          surfaceTintColor: Colors.white,
+                              child: Padding(padding: Pad(all: 10),child: ColumnSuper(children: [
+                                 Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Expanded(child: Text(
+                                            "${statementData.data?[index].reference}",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: Adaptive.sp(16),
+                                                fontWeight: FontWeight.bold),
+                                          )),
+                                         
+                                        ]),
+                                        SizedBox(height: 10,),
+                                 Row(
+                                      
+                                        children: [
+                                          Expanded(child: Text(
+                                            "Type",
+                                            style: TextStyle(
+                                                fontSize: Adaptive.sp(15),
+                                                fontWeight: FontWeight.bold),
+                                          )),
+                                           Text(
+                                           "${statementData.data?[index].narration}",
+                                            style: TextStyle(
+                                                fontSize: Adaptive.sp(15),
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                         
+                                        ]),
+                                          SizedBox(height: 5,),
+                                          Row(
+                                      
+                                        children: [
+                                          Expanded(child: Text(
+                                            "Amount",
+                                            style: TextStyle(
+                                                fontSize: Adaptive.sp(15),
+                                                fontWeight: FontWeight.bold),
+                                          )),
+                                           Text(
+                                           "${currencyFormat.format(double.tryParse("${statementData.data?[index].amount??0}"))}",
+                                            style: TextStyle(
+                                                fontSize: Adaptive.sp(15),
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                         
+                                        ]),
+                                        SizedBox(height: 5,),
+                                          Row(
+                                  
+                                        children: [
+                                          Expanded(child: Text(
+                                            "Rate",
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                fontSize: Adaptive.sp(15),
+                                                fontWeight: FontWeight.bold),
+                                          )),
+                                          Text( 
+                                            "${currencyFormat.format(double.tryParse("${statementData.data?[index].commodityPrice??0}"))} / ${statementData.data?[index].weight??0} Qtl.",
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                                fontSize: Adaptive.sp(15),
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ]),
+                                        SizedBox(height: 5,),
+                                        
+                                         Row(
+                                        children: [
+                                          Expanded(child: Text(
+                                            "Statement Type",
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                fontSize: Adaptive.sp(15),
+                                                fontWeight: FontWeight.bold),
+                                          )),
+                                          Text(
+                                            "${statementData.data?[index].type ?? ""}",
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                                fontSize: Adaptive.sp(15),
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ]),
+                                         SizedBox(height: 5,),
+                                    Row(
+                                  
+                                        children: [
+                                          Expanded(child: Text(
+                                            "Date",
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                fontSize: Adaptive.sp(15),
+                                                fontWeight: FontWeight.bold),
+                                          )),
+                                          Text(
+                                            "${statementData.data?[index].date ?? ""}",
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                                fontSize: Adaptive.sp(15),
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ])
+                              ]),),
                             )),
                     error: (e, s) => Container(),
-                    loading: () => const Center(
-                          child: CupertinoActivityIndicator(),
+                    loading: () =>  Center(
+                          child: defaultLoader(),
                         ))
           ],
         ),

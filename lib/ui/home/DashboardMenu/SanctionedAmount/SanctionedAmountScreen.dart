@@ -41,7 +41,7 @@ class _SanctionedamountscreenState
       body: ListView(
         children: [
           ref.watch(appliedListProvider).when(
-              data: (data) =>
+              data: (data) =>(data.data??[]).isEmpty ?emptyData():
                   ListView.builder(
                     itemCount: data.data?.length ?? 0,
                     shrinkWrap: true,
@@ -276,7 +276,7 @@ class _SanctionedamountscreenState
                     },
                   ),
               error: (e, s) => Text(e.toString()),
-              loading: () => const CupertinoActivityIndicator()),
+              loading: () => defaultLoader()),
           const SizedBox(
             height: 10,
           ),

@@ -6,7 +6,7 @@ part of 'DioProvider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$dioHash() => r'2bd7fe2d28a33b0ee4a57d879ef2f548b0752537';
+String _$dioHash() => r'c9de4319363eac2b8f4f4bc14d05c5b9dacb28ce';
 
 /// See also [dio].
 @ProviderFor(dio)
@@ -20,19 +20,19 @@ final dioProvider = AutoDisposeProvider<Dio>.internal(
 );
 
 typedef DioRef = AutoDisposeProviderRef<Dio>;
-String _$aadharDioHash() => r'93c10fc935735f9997661b9b281c1e4cc0d106f9';
+String _$apnagodamDioHash() => r'8dfe585e5f7b46ceb0af00b6e9bce779599bb1ae';
 
-/// See also [aadharDio].
-@ProviderFor(aadharDio)
-final aadharDioProvider = AutoDisposeProvider<Dio>.internal(
-  aadharDio,
-  name: r'aadharDioProvider',
+/// See also [apnagodamDio].
+@ProviderFor(apnagodamDio)
+final apnagodamDioProvider = AutoDisposeProvider<Dio>.internal(
+  apnagodamDio,
+  name: r'apnagodamDioProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$aadharDioHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$apnagodamDioHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef AadharDioRef = AutoDisposeProviderRef<Dio>;
+typedef ApnagodamDioRef = AutoDisposeProviderRef<Dio>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

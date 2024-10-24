@@ -710,7 +710,7 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
                           itemCount: data.data?.length ?? 0,
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) => Container(
+                          itemBuilder: (context, index) =>data.data?[index].schemeName.toString().toLowerCase().trim()=="bnpl takeover"?SizedBox(): Container(
                             color: index % 2 == 0
                                 ? Colors.grey.withOpacity(0.1)
                                 : Colors.white,
@@ -815,7 +815,7 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
                           ),
                         ),
                     error: (e, s) => Text(e.toString()),
-                    loading: () => const CupertinoActivityIndicator()),
+                    loading: () =>  defaultLoader()),
                 const SizedBox(
                   height: 10,
                 ),
@@ -955,5 +955,5 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
                             ),
                           )),
                   error: (e, s) => Container(),
-                  loading: () => CupertinoActivityIndicator())));
+                  loading: () => defaultLoader())));
 }

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:one_context/one_context.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:swfl/ui/utils/DioInterceptor.dart';
 import 'package:swfl/ui/utils/routes.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/utils/widgets.dart';
@@ -17,7 +18,15 @@ Dio dio(DioRef ref) {
   return Dio(BaseOptions(baseUrl: ApiClient.testBaseUrl, headers: {
     "Authorization": "Bearer ${ref.watch(sharedUtilityProvider).getToken()}",
   }))
-    ..interceptors.add(InterceptorsWrapper(onRequest: (request, handler) {
+    ..interceptors.add(Diointerceptor(ref));
+}
+
+@riverpod
+Dio apnagodamDio(DioRef ref) {
+  return Dio(
+      BaseOptions(baseUrl: ApiClient.testBaseUrl, headers: {
+"Authorization": "Bearer ${ref.watch(sharedUtilityProvider).getToken()}",
+  })) ..interceptors.add(InterceptorsWrapper(onRequest: (request, handler) {
       handler.next(request);
     }, onResponse: (response, handler) {
       if (response.data['status'].toString() == '3') {
@@ -28,34 +37,20 @@ Dio dio(DioRef ref) {
           ref.watch(sharedUtilityProvider).sharedPreferences.clear();
         });
       }
-      // if (response.data['status'].toString() == "0") {
-      //   errorToast(OneContext().context!, '${response.data['message']}');
-      // }
+    
       handler.next(response);
     }, onError: (e, handler) {
-      //   ref.watch(goRouterProvider).goNamed(RoutesStrings.login);
       handler.next(e);
     }));
-}
-
-@riverpod
-Dio aadharDio(DioRef ref) {
-  return Dio(
-      BaseOptions(baseUrl: "https://sandbox.surepass.io/api/v1/", headers: {
-    "Authorization":
-        "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNjQ2MTc5MiwianRpIjoiM2UzOWVlZWEtMmNkMC00ZGVlLWEzNGYtZDI2NjEyOTBmMjhlIiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnNhbmpheUBzdXJlcGFzcy5pbyIsIm5iZiI6MTcyNjQ2MTc5MiwiZXhwIjoxNzI5MDUzNzkyLCJlbWFpbCI6InNhbmpheUBzdXJlcGFzcy5pbyIsInRlbmFudF9pZCI6Im1haW4iLCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.2-lXrzeHsncSF4AJvhJhoogm6UQkqSFTheAaMmMa4Mk",
-  }));
-  // ..interceptors.add(LogInterceptor(
-  //   requestBody: true,
-  //   requestHeader: true,
-  //   responseHeader: true,
-  //   responseBody: true,
-  // ));
+  
 }
 
 class ApiClient {
-  static const baseUrl = "https://apnagodamfinance.com/finance/api/";
+  static const baseUrl = "https://apnagodamfinance.com/api/";
   static const testBaseUrl = 'https://test.apnagodamfinance.com/api/';
+
+  static const baseUrlApna= 'https://apnagodam.com/';
+  static const testBaseUrlApna ="https://test.apnagodam.com/";
 
 /*
 state and district api
@@ -147,4 +142,13 @@ BNPL api
   static const getBnplPower = 'bnpl-power';
   static const getBnplStatement = 'bnpl-hold-statement';
   static const getBnplDebitStatement = 'bnpl-debit-statement';
+
+
+/*
+Bank api
+*
+*
+*
+*/
+  static const bankList ='sbt_api/bnpl_bank_list';
 }

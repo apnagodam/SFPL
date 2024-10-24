@@ -6,7 +6,7 @@ extension AadharNumberValidator on String {
 
 extension PanCardValidator on String {
   bool isValidPanCardNo() {
-    return RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$').hasMatch(this);
+    return RegExp(r'^[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}$').hasMatch(this);
   }
 }
 
@@ -21,7 +21,7 @@ extension BankAccountValidator on String {
 extension DrivingLicenseValidator on String {
   bool isValidLicenseNo() {
     return RegExp(
-            r'^(([A-Z]{2}[0-9]{2})( )|([A-Z]{2}-[0-9]{2}))((19|20)[0-9][0-9])[0-9]{7}$')
+            r'^(([a-zA-Z]{2}[0-9]{2})( )|([a-zA-Z]{2}-[0-9]{2}))((19|20)[0-9][0-9])[0-9]{7}$')
         .hasMatch(this);
   }
 }

@@ -1,6 +1,8 @@
+import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -25,12 +27,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         body: Form(
       key: formKey,
       child: Padding(
         padding:  EdgeInsets.only(top: 10,left: 10,right: 10,bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: ColumnSuper(
           children: [
             SizedBox(
               height: Adaptive.h(25),
@@ -63,6 +65,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               }
               return null;
             },
+            inputFormatters: [
+    UpperCaseTextFormatter(),
+  ],
             keyboardType: TextInputType.text,
             controller: panController,
             textCapitalization: TextCapitalization.characters,
@@ -80,8 +85,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             height: 10,
           ),
           ref.watch(isLoading)
-              ? const Center(
-            child: CupertinoActivityIndicator(),
+              ?  Center(
+            child: defaultLoader(),
           )
               : SizedBox(
             width: MediaQuery.of(context).size.width,
@@ -101,7 +106,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     if (value['status'].toString() == "1") {
                       context.goNamed(RoutesStrings.verifyOtp,
                           extra: {
-                            'panCard': panController.text.toString()
+                            'panCard': panController.text.toString().toUpperCase()
                           });
                       successToast(context, '${value['message']}');
                     } else {
@@ -160,5 +165,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ),
       ),
     ));
+  }
+}
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(
+      text: newValue.text.toUpperCase(),
+      selection: newValue.selection,
+    );
   }
 }

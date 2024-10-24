@@ -153,11 +153,10 @@ class _VerificationState extends ConsumerState<Verification> {
                     )),
             Visibility(
                 visible: ref.watch(wspProvider) != null,
-                child: ref.watch(isAgreementDownloading)
-                    ? const CupertinoActivityIndicator()
-                    : IconsButton(
+                child:  IconsButton(
                         onPressed: () async {
-                          ref.watch(isAgreementDownloading.notifier).state =
+                          if( !ref.watch(isFileDownloading)){
+  ref.watch(isAgreementDownloading.notifier).state =
                               true;
                           ref
                               .watch(wspAgreementProvider(
@@ -169,13 +168,12 @@ class _VerificationState extends ConsumerState<Verification> {
                                 false;
 
                             if ("${value.status ?? "0"}" == "1") {
-                              ref
+                             await  ref
                                   .watch(convertAndDownloadHtmlPdfProvider(
                                           data: value.data)
                                       .future)
                                   .then((value) {
-                                successToast(context,
-                                    'Agreement saved at ${value?.path}');
+                             
                               }).onError((e, s) {
                                 ref
                                     .watch(isAgreementDownloading.notifier)
@@ -194,8 +192,10 @@ class _VerificationState extends ConsumerState<Verification> {
                               //         ));
                             }
                           });
-                        },
-                        text: 'Download Agreement',
+                   
+                          }
+                             },
+                        text: ref.watch(isFileDownloading)?"Downloading...${ref.watch(downloadProgressProvider)}": 'Download Agreement',
                         iconData: Icons.cloud_download,
                         color: ColorsConstant.primaryColor,
                         textStyle: const TextStyle(color: Colors.white),
@@ -233,9 +233,9 @@ class _VerificationState extends ConsumerState<Verification> {
                   child: Padding(
                     padding: const Pad(all: 20),
                     child: Center(
-                      child: ref.watch(triPartyImageProvider) != null
+                      child: ref.watch(downloadFilePath) != null
                           ? Text(
-                              "${basename(ref.watch(triPartyImageProvider)?.path ?? "")}",
+                              "${basename(ref.watch(downloadFilePath)?.path ?? "")}",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: ColorsConstant.primaryColor,
@@ -280,7 +280,7 @@ class _VerificationState extends ConsumerState<Verification> {
                 ref
                     .watch(uploadPdfProvider(
                             wspId: "${ref.watch(wspProvider)?.id.toString()}",
-                            agreementFile: ref.watch(triPartyImageProvider))
+                            agreementFile: ref.watch(downloadFilePath))
                         .future)
                     .then((value) {
                   hideLoader(context);

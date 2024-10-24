@@ -6,6 +6,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Domain/BnplService/BnplService.dart';
 import 'package:swfl/ui/home/home_screen.dart';
 import 'package:swfl/ui/utils/colors.dart';
+import 'package:swfl/ui/utils/widgets.dart';
 
 class BnplRequests extends ConsumerStatefulWidget {
   const BnplRequests({super.key});
@@ -82,7 +83,10 @@ class _BnplRequestsState extends ConsumerState<BnplRequests> {
             ),
           ),
           ref.watch(bnplListProvider).when(
-              data: (data) => ListView.builder(
+              data: (data) =>
+              
+              (data.data??[]).isEmpty?emptyData():
+               ListView.builder(
                     itemCount: data.data?.length ?? 0,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -156,11 +160,9 @@ class _BnplRequestsState extends ConsumerState<BnplRequests> {
                     ),
                   ),
               error: (e, s) => Container(),
-              loading: () => const Center(
-                    child: Center(
-                      child: CupertinoActivityIndicator(),
-                    ),
-                  )),
+              loading: () =>  Center(
+                child: defaultLoader(),
+              )),
         ],
       )),
     );

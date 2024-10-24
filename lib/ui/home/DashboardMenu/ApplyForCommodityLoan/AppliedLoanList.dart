@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Domain/LoanService/LoanService.dart';
 import 'package:swfl/ui/home/home_screen.dart';
+import 'package:swfl/ui/utils/widgets.dart';
 
 import '../../../utils/colors.dart';
 
@@ -18,10 +19,10 @@ class Appliedloanlist extends ConsumerStatefulWidget {
 class _AppliedloanlistState extends ConsumerState<Appliedloanlist> {
   var indexProvider = StateProvider((ref) => 0);
   var listOfScreens = [
-    ApprovedloanRequests(),
-    PendingloanRequests(),
-    RejectedloanRequests(),
-    ClosedloanRequests()
+    const ApprovedloanRequests(),
+    const PendingloanRequests(),
+    const RejectedloanRequests(),
+    const ClosedloanRequests()
   ];
 
   @override
@@ -48,15 +49,15 @@ class _AppliedloanlistState extends ConsumerState<Appliedloanlist> {
                 unselectedLabelStyle: TextStyle(
                     fontWeight: FontWeight.bold, fontSize: Adaptive.sp(12)),
                 items: [
-                  BottomNavigationBarItem(
+                  const BottomNavigationBarItem(
                       icon: Icon(Icons.approval_outlined), label: "Approved"),
-                  BottomNavigationBarItem(
+                  const BottomNavigationBarItem(
                     icon: Icon(Icons.pending),
                     label: "Pending",
                   ),
-                  BottomNavigationBarItem(
+                  const BottomNavigationBarItem(
                       icon: Icon(Icons.close), label: "Rejected"),
-                  BottomNavigationBarItem(
+                  const BottomNavigationBarItem(
                       icon: Icon(Icons.check), label: "Closed")
                 ]),
             body: listOfScreens[ref.watch(indexProvider)]));
@@ -145,10 +146,10 @@ class _ApprovedloanRequestsState extends ConsumerState<ApprovedloanRequests> {
             ),
           ),
           ref.watch(approvedRequestsProvider).when(
-              data: (data) => ListView.builder(
+              data: (data) => (data.data??[]).isEmpty ?emptyData(): ListView.builder(
                     itemCount: data.data?.length ?? 0,
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) => Container(
                       color: index % 2 == 0
                           ? Colors.grey.withOpacity(0.2)
@@ -219,9 +220,9 @@ class _ApprovedloanRequestsState extends ConsumerState<ApprovedloanRequests> {
                       ),
                     ),
                   ),
-              error: (e, s) => Container(),
-              loading: () => Center(
-                    child: CupertinoActivityIndicator(),
+              error: (e, s) => emptyData(),
+              loading: () =>  Center(
+                    child: defaultLoader(),
                   ))
         ],
       ),
@@ -311,10 +312,10 @@ class _PendingloanRequestsState extends ConsumerState<PendingloanRequests> {
             ),
           ),
           ref.watch(pendingRequestsProvider).when(
-              data: (data) => ListView.builder(
+              data: (data) => (data.data??[]).isEmpty ?emptyData(): ListView.builder(
                     itemCount: data.data?.length ?? 0,
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) => Container(
                       color: index % 2 == 0
                           ? Colors.grey.withOpacity(0.2)
@@ -386,8 +387,8 @@ class _PendingloanRequestsState extends ConsumerState<PendingloanRequests> {
                     ),
                   ),
               error: (e, s) => Container(),
-              loading: () => Center(
-                    child: CupertinoActivityIndicator(),
+              loading: () =>  Center(
+                    child:defaultLoader(),
                   ))
         ],
       ),
@@ -477,10 +478,10 @@ class _RejectedloanRequestsState extends ConsumerState<RejectedloanRequests> {
             ),
           ),
           ref.watch(approvedRequestsProvider).when(
-              data: (data) => ListView.builder(
+              data: (data) => (data.data??[]).isEmpty ?emptyData(): ListView.builder(
                     itemCount: data.data?.length ?? 0,
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) => Container(
                       color: index % 2 == 0
                           ? Colors.grey.withOpacity(0.2)
@@ -552,8 +553,8 @@ class _RejectedloanRequestsState extends ConsumerState<RejectedloanRequests> {
                     ),
                   ),
               error: (e, s) => Container(),
-              loading: () => Center(
-                    child: CupertinoActivityIndicator(),
+              loading: () =>  Center(
+                    child: defaultLoader()
                   ))
         ],
       ),
@@ -642,10 +643,10 @@ class _ClosedloanRequestsState extends ConsumerState<ClosedloanRequests> {
             ),
           ),
           ref.watch(closedRequestsProvider).when(
-              data: (data) => ListView.builder(
+              data: (data) => (data.data??[]).isEmpty ?emptyData(): ListView.builder(
                     itemCount: data.data?.length ?? 0,
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) => Container(
                       color: index % 2 == 0
                           ? Colors.grey.withOpacity(0.2)
@@ -717,8 +718,8 @@ class _ClosedloanRequestsState extends ConsumerState<ClosedloanRequests> {
                     ),
                   ),
               error: (e, s) => Container(),
-              loading: () => Center(
-                    child: CupertinoActivityIndicator(),
+              loading: () =>  Center(
+                    child: defaultLoader(),
                   ))
         ],
       ),

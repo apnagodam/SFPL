@@ -38,6 +38,8 @@ class Datum {
   dynamic reference;
   dynamic type;
   dynamic amount;
+  dynamic commodityPrice;
+  dynamic weight;
 
   Datum({
     this.date,
@@ -45,6 +47,8 @@ class Datum {
     this.reference,
     this.type,
     this.amount,
+    this.commodityPrice,
+    this.weight
   });
 
   factory Datum.fromMap(Map<String, dynamic> json) => Datum(
@@ -53,6 +57,8 @@ class Datum {
     reference: json["reference"],
     type: json["type"],
     amount: json["amount"],
+    commodityPrice: json['commodity_price']??double.tryParse('0.0'),
+    weight: json['weight'] ?? double.tryParse('0.0')
   );
 
   Map<String, dynamic> toMap() => {
@@ -61,5 +67,8 @@ class Datum {
     "reference": reference,
     "type": type,
     "amount": amount,
+    'commodity_price':commodityPrice,
+    'weight':weight
+
   };
 }
