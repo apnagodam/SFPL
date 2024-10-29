@@ -60,21 +60,21 @@ Future<Map<String, dynamic>> applyForLoan(ApplyForLoanRef ref,
     'scheme_id': schemeId,
     'itr_first_year': await MultipartFile.fromFile(
       itr1?.path ?? "",
-      filename: 'itr1',
-      contentType: DioMediaType("image", "jpeg"),
+      filename: 'itr1.pdf',
+      contentType: DioMediaType("document", "pdf"),
     ),
     'itr_second_year': await MultipartFile.fromFile(itr2?.path ?? "",
-        contentType: DioMediaType("image", "jpeg"), filename: 'itr2'),
+        contentType: DioMediaType("document", "pdf"), filename: 'itr2.pdf'),
     'itr_third_year': await MultipartFile.fromFile(itr3?.path ?? "",
-        contentType: DioMediaType("image", "jpeg"), filename: 'itr3'),
+        contentType: DioMediaType("document", "pdf"), filename: 'itr3.pdf'),
     'bal_first_year': await MultipartFile.fromFile(bs1?.path ?? "",
-        contentType: DioMediaType("image", "jpeg"), filename: 'bal1'),
+        contentType: DioMediaType("document", "pdf"), filename: 'bal1.pdf'),
     'bal_second_year': await MultipartFile.fromFile(bs2?.path ?? "",
-        contentType: DioMediaType("image", "jpeg"), filename: 'bal2'),
+        contentType: DioMediaType("document", "pdf"), filename: 'bal2.pdf'),
     'bal_third_year': await MultipartFile.fromFile(
       bs3?.path ?? "",
-      filename: 'bal2',
-      contentType: DioMediaType("image", "jpeg"),
+      filename: 'bal2.pdf',
+      contentType: DioMediaType("document", "pdf"),
     ),
   });
   var response =
@@ -93,12 +93,11 @@ Future<Map<String, dynamic>> submitSanctionDocuments(
 }) async {
   FormData formData = new FormData.fromMap({
     "id": id,
-    'tri_agreement': await MultipartFile.fromFile(triAgreement?.path ?? "",
-        contentType: DioMediaType("image", "jpeg"), filename: 'itr2'),
+    'tri_agreement': await MultipartFile.fromFile(triAgreement?.path ?? "",),
     'pdc': await MultipartFile.fromFile(pdc?.path ?? "",
-        contentType: DioMediaType("image", "jpeg"), filename: 'itr3'),
+        contentType: DioMediaType("document", "pdf"), filename: 'itr3.pdf'),
     'agreement': await MultipartFile.fromFile(agreement?.path ?? "",
-        contentType: DioMediaType("image", "jpeg"), filename: 'bal1'),
+        contentType: DioMediaType("document", "pdf"), filename: 'bal1.pdf'),
   });
   var response = await ref
       .watch(dioProvider)
@@ -134,9 +133,9 @@ Future<Map<String, dynamic>> uploadPdf(
     'wsp_id': wspId,
     'triparty_agr': await MultipartFile.fromFile(
       agreementFile?.path ?? "",
-      filename: 'agreement',
+      filename: 'agreement.pdf',
     ),
-    "type": "application/pdf"
+    "type": "document/pdf"
   });
   var response = await ref
       .watch(dioProvider)
@@ -190,6 +189,7 @@ Future<Map<String, dynamic>> submitLoanRequest(SubmitLoanRequestRef ref,
     String? ifscCode,
     String? accountNo,
     String? stackNo,
+    String? bags,
     String? terminalName}) async {
   var response =
       await ref.watch(dioProvider).post(ApiClient.submitLoanRequest, data: {
@@ -202,6 +202,7 @@ Future<Map<String, dynamic>> submitLoanRequest(SubmitLoanRequestRef ref,
     'ifsc': ifscCode,
     'account_no': accountNo,
     'stack_number': stackNo,
+    'bags':bags,
     'terminal': terminalName,
   });
 

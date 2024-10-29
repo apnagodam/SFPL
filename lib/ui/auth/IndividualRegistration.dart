@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:swfl/ui/auth/login_screen.dart';
 import 'package:swfl/ui/utils/extensions.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/utils/widgets.dart';
@@ -456,6 +457,7 @@ class _IndividualregistrationState
             }
             return null;
           },
+          inputFormatters: [  UpperCaseTextFormatter(),],
           decoration: InputDecoration(
               hintText: "Enter PAN Number",
               label: const Text("Enter PAN Number"),

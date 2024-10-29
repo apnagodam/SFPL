@@ -90,6 +90,16 @@ class _ApplyloanscreenState extends ConsumerState<Applyloanscreen> {
                               fontSize: Adaptive.sp(12)),
                         )),
                     const VerticalDivider(),
+                     Expanded(
+                        child: Text(
+                          "Bags",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: Adaptive.sp(12)),
+                        )),
+                    const VerticalDivider(),
                     Expanded(
                         child: Text(
                           "status",
@@ -166,6 +176,18 @@ class _ApplyloanscreenState extends ConsumerState<Applyloanscreen> {
                                                   text:
                                                   "${data.data?[index]
                                                       .stackNumber ?? "0"}"),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: Adaptive.sp(12)))),
+                                      const VerticalDivider(),
+
+                                        Expanded(
+                                          child: Text.rich(
+                                              TextSpan(
+                                                  text:
+                                                  "${data.data?[index]
+                                                      .bags?? "0"}"),
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
@@ -799,6 +821,7 @@ class _LoanDetailsState extends ConsumerState<LoanDetails> {
                           ifscCode: "${widget.loanData?.ifscCode}",
                           accountNo: "${widget.loanData?.accountNumber}",
                           stackNo: "${widget.data?.stackNumber}",
+                          bags: "${widget.data?.bags}",
                           terminalName: "${widget.data?.terminal}")
                           .future)
                           .then((value) {

@@ -6,7 +6,7 @@ part of 'WalletService.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$addMoneyHash() => r'5d2193c227111e6a026dabb973379211a67676de';
+String _$addMoneyHash() => r'650a5aa718dacb1ec73a727061216ad8dcec6118';
 
 /// Copied from Dart SDK
 class _SystemHash {

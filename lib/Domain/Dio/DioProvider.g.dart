@@ -20,7 +20,7 @@ final dioProvider = AutoDisposeProvider<Dio>.internal(
 );
 
 typedef DioRef = AutoDisposeProviderRef<Dio>;
-String _$apnagodamDioHash() => r'8dfe585e5f7b46ceb0af00b6e9bce779599bb1ae';
+String _$apnagodamDioHash() => r'060c69ac6a6c92dd155853378939411de0c70308';
 
 /// See also [apnagodamDio].
 @ProviderFor(apnagodamDio)

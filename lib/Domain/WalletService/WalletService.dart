@@ -20,13 +20,13 @@ Future<Map<String, dynamic>> addMoney(
   String? paymentType,
   File? image,
 }) async {
-  FormData formData = new FormData.fromMap({
+  FormData formData =  FormData.fromMap({
     "amount": amount,
     'payment_type': paymentType,
     'image': await MultipartFile.fromFile(
       image?.path ?? "",
-      filename: 'image',
-      contentType: DioMediaType("image", "jpeg"),
+      filename: 'image.png',
+      contentType: DioMediaType("image", "png"),
     ),
   });
   var response =

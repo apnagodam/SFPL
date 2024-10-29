@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:swfl/ui/auth/login_screen.dart';
 import 'package:swfl/ui/utils/extensions.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 
@@ -298,11 +299,11 @@ class _PropregistrationState extends ConsumerState<Propregistration> {
                                                     .toString(),
                                                 locationState: ref
                                                     .watch(statesProvider)
-                                                    ?.code
+                                                    ?.name
                                                     .toString(),
                                                 district: ref
                                                     .watch(districtProvider)
-                                                    ?.districtCode
+                                                    ?.name
                                                     .toString(),
                                                 pincode: pinController.text
                                                     .toString(),
@@ -316,7 +317,7 @@ class _PropregistrationState extends ConsumerState<Propregistration> {
                                                 ifscCode: ifscController.text
                                                     .toString(),
                                                 propDocType: ref
-                                                    .watch(propDocProvider)
+                                                    .watch(propTypeProvider)
                                                     .toString(),
                                                 propDocNumber: gstController.text
                                                     .toString(),
@@ -1424,6 +1425,8 @@ class _PropregistrationState extends ConsumerState<Propregistration> {
             }
             return null;
           },
+                    inputFormatters: [  UpperCaseTextFormatter(),],
+
           decoration: InputDecoration(
               hintText: "Enter PAN Number",
               label: const Text("Enter PAN Number"),

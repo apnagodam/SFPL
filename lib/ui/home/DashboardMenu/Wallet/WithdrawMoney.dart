@@ -160,11 +160,11 @@ class _WithdrawmoneyState extends ConsumerState<Withdrawmoney> {
                                 3
                               ],
                               colors: [
-                                Colors.transparent.withOpacity(0.8),
-                                ColorsConstant.primaryColor.withOpacity(0.8),
+                                Colors.transparent,
+                                ColorsConstant.primaryColor,
                                 ColorsConstant.secondColorDark,
                                 ColorsConstant.secondColorSuperDark,
-                                ColorsConstant.primaryColor.withOpacity(0.8),
+                                ColorsConstant.primaryColor,
                               ])),
                       child: ColumnSuper(children: [
                         Text(
@@ -187,24 +187,24 @@ class _WithdrawmoneyState extends ConsumerState<Withdrawmoney> {
                             'Bank Name',
                             style: TextStyle(
                                 shadows: const [
-                                  Shadow(color: Colors.black, blurRadius: 2.0),
-                                  Shadow(color: Colors.black, blurRadius: 2.0)
+                                 Shadow(color: Colors.black, blurRadius: 10.0),
+                                  Shadow(color: Colors.black, blurRadius: 10.0)
                                 ],
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: Adaptive.sp(15)),
+                                fontSize: Adaptive.sp(16)),
                           ),
                           Text(
                             "${ref.watch(sharedUtilityProvider).getUser()?.bankName ?? ""}",
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 shadows: const [
-                                  Shadow(color: Colors.black, blurRadius: 2.0),
-                                  Shadow(color: Colors.black, blurRadius: 2.0)
+                                  Shadow(color: Colors.black, blurRadius: 10.0),
+                                  Shadow(color: Colors.black, blurRadius: 10.0)
                                 ],
                                 color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: Adaptive.sp(15)),
+                                fontWeight: FontWeight.bold,
+                                fontSize: Adaptive.sp(16)),
                           )
                         ]),
                         const SizedBox(
@@ -215,24 +215,24 @@ class _WithdrawmoneyState extends ConsumerState<Withdrawmoney> {
                             'Account Number',
                             style: TextStyle(
                                 shadows: const [
-                                  Shadow(color: Colors.black, blurRadius: 2.0),
-                                  Shadow(color: Colors.black, blurRadius: 2.0)
+                                  Shadow(color: Colors.black, blurRadius: 10.0),
+                                  Shadow(color: Colors.black, blurRadius: 10.0)
                                 ],
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: Adaptive.sp(15)),
+                                fontSize: Adaptive.sp(16)),
                           ),
                           Text(
                             "${ref.watch(sharedUtilityProvider).getUser()?.bankAccNo ?? ""}",
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 shadows: const [
-                                  Shadow(color: Colors.black, blurRadius: 2.0),
-                                  Shadow(color: Colors.black, blurRadius: 2.0)
+                                   Shadow(color: Colors.black, blurRadius: 10.0),
+                                  Shadow(color: Colors.black, blurRadius: 10.0)
                                 ],
                                 color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: Adaptive.sp(15)),
+                                fontWeight: FontWeight. bold,
+                                fontSize: Adaptive.sp(16)),
                           )
                         ]),
                         const SizedBox(
@@ -243,24 +243,24 @@ class _WithdrawmoneyState extends ConsumerState<Withdrawmoney> {
                             'IFSC Code',
                             style: TextStyle(
                                 shadows: const [
-                                  Shadow(color: Colors.black, blurRadius: 2.0),
-                                  Shadow(color: Colors.black, blurRadius: 2.0)
+                                  Shadow(color: Colors.black, blurRadius: 10.0),
+                                  Shadow(color: Colors.black, blurRadius: 10.0)
                                 ],
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: Adaptive.sp(15)),
+                                fontSize: Adaptive.sp(16)),
                           ),
                           Text(
                             "${ref.watch(sharedUtilityProvider).getUser()?.bankIfscCode ?? ""}",
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 shadows: const [
-                                  Shadow(color: Colors.black, blurRadius: 2.0),
-                                  Shadow(color: Colors.black, blurRadius: 2.0)
+                                  Shadow(color: Colors.black, blurRadius: 10.0),
+                                  Shadow(color: Colors.black, blurRadius: 10.0)
                                 ],
                                 color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: Adaptive.sp(15)),
+                                fontWeight: FontWeight.bold,
+                                fontSize: Adaptive.sp(16)),
                           )
                         ]),
                         const SizedBox(
@@ -271,24 +271,24 @@ class _WithdrawmoneyState extends ConsumerState<Withdrawmoney> {
                             'Branch',
                             style: TextStyle(
                                 shadows: const [
-                                  Shadow(color: Colors.black, blurRadius: 2.0),
-                                  Shadow(color: Colors.black, blurRadius: 2.0)
+                                 Shadow(color: Colors.black, blurRadius: 10.0),
+                                  Shadow(color: Colors.black, blurRadius: 10.0)
                                 ],
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: Adaptive.sp(15)),
+                                fontSize: Adaptive.sp(16)),
                           ),
                           Text(
                             "${ref.watch(sharedUtilityProvider).getUser()?.bankBranch ?? ""}",
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 shadows: const [
-                                  Shadow(color: Colors.black, blurRadius: 2.0),
-                                  Shadow(color: Colors.black, blurRadius: 2.0)
+                                  Shadow(color: Colors.black, blurRadius: 10.0),
+                                  Shadow(color: Colors.black, blurRadius: 10.0)
                                 ],
                                 color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: Adaptive.sp(15)),
+                                fontWeight: FontWeight.bold,
+                                fontSize: Adaptive.sp(16)),
                           )
                         ]),
                       ]),

@@ -59,6 +59,7 @@ class Data {
   dynamic aadharImage;
   dynamic aadharBackImage;
   dynamic proprietorshipProof;
+  dynamic phone;
   bool? verifiedAccount;
   dynamic wallet;
   List<dynamic>? triparty;
@@ -90,6 +91,7 @@ class Data {
     this.aadharImage,
     this.aadharBackImage,
     this.proprietorshipProof,
+    this.phone,
     this.verifiedAccount,
     this.wallet,
     this.triparty,
@@ -122,6 +124,7 @@ class Data {
     aadharImage: json["aadhar_image"],
     aadharBackImage: json["aadhar_back_image"],
     proprietorshipProof: json["proprietorship_proof"],
+    phone: json['phone'],
     verifiedAccount: json["verified_account"],
     wallet: json["wallet"],
     triparty: json["triparty"] == null ? [] : List<dynamic>.from(json["triparty"]!.map((x) => x)),
@@ -154,6 +157,7 @@ class Data {
     "aadhar_image": aadharImage,
     "aadhar_back_image": aadharBackImage,
     "proprietorship_proof": proprietorshipProof,
+    'phone':phone,
     "verified_account": verifiedAccount,
     "wallet": wallet,
     "triparty": triparty == null ? [] : List<dynamic>.from(triparty!.map((x) => x)),

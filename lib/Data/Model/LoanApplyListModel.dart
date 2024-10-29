@@ -40,6 +40,7 @@ class Datum {
   dynamic commodity;
   dynamic quantity;
   dynamic stackNumber;
+  dynamic bags;
   dynamic date;
   dynamic loan;
   dynamic status;
@@ -52,6 +53,7 @@ class Datum {
     this.commodity,
     this.quantity,
     this.stackNumber,
+    this.bags,
     this.date,
     this.loan,
     this.status,
@@ -65,6 +67,7 @@ class Datum {
     commodity: json["commodity"],
     quantity: json["quantity"],
     stackNumber: json["stack_number"],
+    bags:json['bags'],
     date: json["date"],
     loan: json["loan"],
     status: json["status"],
@@ -78,6 +81,7 @@ class Datum {
     "commodity": commodity,
     "quantity": quantity,
     "stack_number": stackNumber,
+    "bags":bags,
     "date": date,
     "loan": loan,
     "status": status,

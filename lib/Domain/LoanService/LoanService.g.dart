@@ -183,7 +183,7 @@ class _TermsProviderElement extends AutoDisposeFutureProviderElement<TermsModel>
   String? get schemeId => (origin as TermsProvider).schemeId;
 }
 
-String _$applyForLoanHash() => r'c911985e88577635e8bb53b69f679afe131179c8';
+String _$applyForLoanHash() => r'b67fc9b496b0a962057a8da591dc338fd08a0f26';
 
 /// See also [applyForLoan].
 @ProviderFor(applyForLoan)
@@ -443,7 +443,7 @@ class _ApplyForLoanProviderElement
 }
 
 String _$submitSanctionDocumentsHash() =>
-    r'ef824830340ed8660558ba3bac34eb24d601d40f';
+    r'db22ebe82bce107b8b121547964a7abaf287d381';
 
 /// See also [submitSanctionDocuments].
 @ProviderFor(submitSanctionDocuments)
@@ -772,7 +772,7 @@ class _WspAgreementProviderElement
   String? get wspId => (origin as WspAgreementProvider).wspId;
 }
 
-String _$uploadPdfHash() => r'a799e050f6d24f3797dd7bdb86c371ffd095075c';
+String _$uploadPdfHash() => r'c0eb19f7baabbd1e89e3c686d7c57c8721831ec7';
 
 /// See also [uploadPdf].
 @ProviderFor(uploadPdf)
@@ -1144,7 +1144,7 @@ class _LoanDetailsProviderElement
   String? get schemeId => (origin as LoanDetailsProvider).schemeId;
 }
 
-String _$submitLoanRequestHash() => r'f5fa631c18486e5d3adb9553ecca15dfe35e57d7';
+String _$submitLoanRequestHash() => r'446a22b0ce71fcd437a0022657ee4a82d31940ab';
 
 /// See also [submitLoanRequest].
 @ProviderFor(submitLoanRequest)
@@ -1166,6 +1166,7 @@ class SubmitLoanRequestFamily extends Family<AsyncValue<Map<String, dynamic>>> {
     String? ifscCode,
     String? accountNo,
     String? stackNo,
+    String? bags,
     String? terminalName,
   }) {
     return SubmitLoanRequestProvider(
@@ -1178,6 +1179,7 @@ class SubmitLoanRequestFamily extends Family<AsyncValue<Map<String, dynamic>>> {
       ifscCode: ifscCode,
       accountNo: accountNo,
       stackNo: stackNo,
+      bags: bags,
       terminalName: terminalName,
     );
   }
@@ -1196,6 +1198,7 @@ class SubmitLoanRequestFamily extends Family<AsyncValue<Map<String, dynamic>>> {
       ifscCode: provider.ifscCode,
       accountNo: provider.accountNo,
       stackNo: provider.stackNo,
+      bags: provider.bags,
       terminalName: provider.terminalName,
     );
   }
@@ -1229,6 +1232,7 @@ class SubmitLoanRequestProvider
     String? ifscCode,
     String? accountNo,
     String? stackNo,
+    String? bags,
     String? terminalName,
   }) : this._internal(
           (ref) => submitLoanRequest(
@@ -1242,6 +1246,7 @@ class SubmitLoanRequestProvider
             ifscCode: ifscCode,
             accountNo: accountNo,
             stackNo: stackNo,
+            bags: bags,
             terminalName: terminalName,
           ),
           from: submitLoanRequestProvider,
@@ -1262,6 +1267,7 @@ class SubmitLoanRequestProvider
           ifscCode: ifscCode,
           accountNo: accountNo,
           stackNo: stackNo,
+          bags: bags,
           terminalName: terminalName,
         );
 
@@ -1281,6 +1287,7 @@ class SubmitLoanRequestProvider
     required this.ifscCode,
     required this.accountNo,
     required this.stackNo,
+    required this.bags,
     required this.terminalName,
   }) : super.internal();
 
@@ -1293,6 +1300,7 @@ class SubmitLoanRequestProvider
   final String? ifscCode;
   final String? accountNo;
   final String? stackNo;
+  final String? bags;
   final String? terminalName;
 
   @override
@@ -1318,6 +1326,7 @@ class SubmitLoanRequestProvider
         ifscCode: ifscCode,
         accountNo: accountNo,
         stackNo: stackNo,
+        bags: bags,
         terminalName: terminalName,
       ),
     );
@@ -1340,6 +1349,7 @@ class SubmitLoanRequestProvider
         other.ifscCode == ifscCode &&
         other.accountNo == accountNo &&
         other.stackNo == stackNo &&
+        other.bags == bags &&
         other.terminalName == terminalName;
   }
 
@@ -1355,6 +1365,7 @@ class SubmitLoanRequestProvider
     hash = _SystemHash.combine(hash, ifscCode.hashCode);
     hash = _SystemHash.combine(hash, accountNo.hashCode);
     hash = _SystemHash.combine(hash, stackNo.hashCode);
+    hash = _SystemHash.combine(hash, bags.hashCode);
     hash = _SystemHash.combine(hash, terminalName.hashCode);
 
     return _SystemHash.finish(hash);
@@ -1390,6 +1401,9 @@ mixin SubmitLoanRequestRef
   /// The parameter `stackNo` of this provider.
   String? get stackNo;
 
+  /// The parameter `bags` of this provider.
+  String? get bags;
+
   /// The parameter `terminalName` of this provider.
   String? get terminalName;
 }
@@ -1418,6 +1432,8 @@ class _SubmitLoanRequestProviderElement
   String? get accountNo => (origin as SubmitLoanRequestProvider).accountNo;
   @override
   String? get stackNo => (origin as SubmitLoanRequestProvider).stackNo;
+  @override
+  String? get bags => (origin as SubmitLoanRequestProvider).bags;
   @override
   String? get terminalName =>
       (origin as SubmitLoanRequestProvider).terminalName;
