@@ -21,10 +21,12 @@ import 'package:swfl/ui/home/DashboardMenu/ApplyForCommodityLoan/ApplyLoanScreen
 import 'package:swfl/ui/home/DashboardMenu/SanctionedAmount/SanctionedAmountScreen.dart';
 import 'package:swfl/ui/home/DashboardMenu/Wallet/AddMoney.dart';
 import 'package:swfl/ui/home/DashboardMenu/Wallet/MoneyRequest.dart';
+import 'package:swfl/ui/home/DashboardMenu/Wallet/WalletStatement.dart';
 import 'package:swfl/ui/home/DashboardMenu/Wallet/WithdrawMoney.dart';
 import 'package:swfl/ui/home/DashboardMenu/Wallet/WithdrawRequests.dart';
 import 'package:swfl/ui/home/dashboard_screen.dart';
 import 'package:swfl/ui/profile/ProfileScreen.dart';
+import 'package:swfl/ui/repayment/RepaymentScreen.dart';
 import 'package:swfl/ui/splash/onboarding_screen.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/verification/Verification.dart';
@@ -72,7 +74,6 @@ GoRouter goRouter(GoRouterRef ref) {
                   path: RoutesStrings.bnplDebitStatement,
                   name: RoutesStrings.bnplDebitStatement,
                   builder: (context, state) => const Bnpldebitstatement()),
-
               GoRoute(
                   path: RoutesStrings.bnplRequests,
                   name: RoutesStrings.bnplRequests,
@@ -129,9 +130,18 @@ GoRouter goRouter(GoRouterRef ref) {
                 builder: (context, state) => const Withdrawrequests(),
               ),
               GoRoute(
+                path: RoutesStrings.walletStatement,
+                name: RoutesStrings.walletStatement,
+                builder: (context, state) => const Walletstatement(),
+              ),
+              GoRoute(
                   path: RoutesStrings.bnplAadharRegistrationHome,
                   name: RoutesStrings.bnplAadharRegistrationHome,
                   builder: (context, state) => const Bnplaadharregistration()),
+              GoRoute(
+                  path: RoutesStrings.repayment,
+                  name: RoutesStrings.repayment,
+                  builder: (context, state) => const Repaymentscreen()),
             ],
             builder: (context, state) => const DashboardScreen()),
         GoRoute(

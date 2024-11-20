@@ -147,20 +147,22 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 // ),
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
-                          [])
+                      if ((ref
+                                  .watch(sharedUtilityProvider)
+                                  .getUser()
+                                  ?.triparty ??
+                              [])
                           .isEmpty) {
                         showVerificationDialog(context,
                             titleText: "Verify Tri-Party Agreement",
                             messageText: "tri party agreement pending",
                             action: () {
-                              hideLoader(context);
-                              context.goNamed(RoutesStrings.verfication);
-                            });
+                          hideLoader(context);
+                          context.goNamed(RoutesStrings.verfication);
+                        });
                       } else {
                         context.goNamed(RoutesStrings.appliedLoanList);
                       }
-
 
                       // if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
                       //   showVerificationDialog(context,
@@ -190,8 +192,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             fontSize: Adaptive.sp(16),
                             color: Colors.black,
                             fontWeight: FontWeight.w500))),
-            
-             CupertinoActionSheetAction(
+
+                CupertinoActionSheetAction(
                   onPressed: () {
                     if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
                             [])
@@ -239,7 +241,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             fontSize: Adaptive.sp(16),
                             color: Colors.black,
                             fontWeight: FontWeight.w500))),
-           
               ],
             ),
             CupertinoActionSheet(
@@ -253,18 +254,22 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               actions: [
                 CupertinoActionSheetAction(
                   onPressed: () {
-
-                    if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
+                    if (ref
+                            .watch(sharedUtilityProvider)
+                            .getUser()
+                            ?.aadharVerify
+                            .toString() ==
+                        "0") {
                       showVerificationDialog(context,
                           titleText: "Verify Aadhar",
-                          messageText: "Your Aadhar verification is pending", action: () {
-                            hideLoader(context);
-                            context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
-                          });
-                    }else{
+                          messageText: "Your Aadhar verification is pending",
+                          action: () {
+                        hideLoader(context);
+                        context
+                            .goNamed(RoutesStrings.bnplAadharRegistrationHome);
+                      });
+                    } else {
                       context.goNamed(RoutesStrings.bnpl);
-
-
                     }
                   },
                   child: Text('Apply ',
@@ -287,17 +292,22 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 // ),
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
+                      if (ref
+                              .watch(sharedUtilityProvider)
+                              .getUser()
+                              ?.aadharVerify
+                              .toString() ==
+                          "0") {
                         showVerificationDialog(context,
                             titleText: "Verify Aadhar",
-                            messageText: "Your Aadhar verification is pending", action: () {
-                              hideLoader(context);
-                              context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
-                            });
-                      }else{
+                            messageText: "Your Aadhar verification is pending",
+                            action: () {
+                          hideLoader(context);
+                          context.goNamed(
+                              RoutesStrings.bnplAadharRegistrationHome);
+                        });
+                      } else {
                         context.goNamed(RoutesStrings.bnplRequests);
-
-
                       }
                     },
                     child: Text('Requests',
@@ -309,17 +319,22 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
+                      if (ref
+                              .watch(sharedUtilityProvider)
+                              .getUser()
+                              ?.aadharVerify
+                              .toString() ==
+                          "0") {
                         showVerificationDialog(context,
                             titleText: "Verify Aadhar",
-                            messageText: "Your Aadhar verification is pending", action: () {
-                              hideLoader(context);
-                              context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
-                            });
-                      }else{
+                            messageText: "Your Aadhar verification is pending",
+                            action: () {
+                          hideLoader(context);
+                          context.goNamed(
+                              RoutesStrings.bnplAadharRegistrationHome);
+                        });
+                      } else {
                         context.goNamed(RoutesStrings.bnplStatement);
-
-
                       }
                     },
                     child: Text('Hold Statement',
@@ -330,20 +345,23 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             fontWeight: FontWeight.w500))),
                 CupertinoActionSheetAction(
                     onPressed: () {
-                      if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
+                      if (ref
+                              .watch(sharedUtilityProvider)
+                              .getUser()
+                              ?.aadharVerify
+                              .toString() ==
+                          "0") {
                         showVerificationDialog(context,
                             titleText: "Verify Aadhar",
-                            messageText: "Your Aadhar verification is pending", action: () {
-                              hideLoader(context);
-                              context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
-                            });
-                      }else{
+                            messageText: "Your Aadhar verification is pending",
+                            action: () {
+                          hideLoader(context);
+                          context.goNamed(
+                              RoutesStrings.bnplAadharRegistrationHome);
+                        });
+                      } else {
                         context.goNamed(RoutesStrings.bnplDebitStatement);
-
-
                       }
-
-
                     },
                     child: Text('Debit Statement',
                         textAlign: TextAlign.start,
@@ -441,6 +459,16 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             fontSize: Adaptive.sp(16),
                             color: Colors.black,
                             fontWeight: FontWeight.w500))),
+                // CupertinoActionSheetAction(
+                //     onPressed: () {
+                //       context.goNamed(RoutesStrings.walletStatement);
+                //     },
+                //     child: Text('Wallet Statement',
+                //         textAlign: TextAlign.start,
+                //         style: TextStyle(
+                //             fontSize: Adaptive.sp(16),
+                //             color: Colors.black,
+                //             fontWeight: FontWeight.w500))),
               ],
             ),
             CupertinoActionSheet(

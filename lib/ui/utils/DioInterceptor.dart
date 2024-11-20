@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:one_context/one_context.dart';
 import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
 import 'package:swfl/Domain/Dio/DioProvider.dart';
+import 'package:swfl/ui/auth/BnplAadharRegistration.dart';
 import 'package:swfl/ui/utils/routes.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/utils/widgets.dart';
@@ -50,49 +51,49 @@ class Diointerceptor extends InterceptorsWrapper {
         showErrorDialog(OneContext().context!,
             titleText: 'Connection Timeout!',
             messageText: "please check you internet connection!", action: () {
-          ref.watch(goRouterProvider).pop();
+              Navigator.of(OneContext().context!,rootNavigator: false).pop();
         });
       case DioExceptionType.sendTimeout:
         showErrorDialog(OneContext().context!,
             titleText: 'Connection Timeout!',
             messageText: "please check you internet connection!", action: () {
-          ref.watch(goRouterProvider).pop();
+              Navigator.of(OneContext().context!,rootNavigator: false).pop();
         });
       case DioExceptionType.receiveTimeout:
         showErrorDialog(OneContext().context!,
             titleText: 'Connection Timeout!',
             messageText: "please check you internet connection!", action: () {
-          ref.watch(goRouterProvider).pop();
+              Navigator.of(OneContext().context!,rootNavigator: false).pop();
         });
       case DioExceptionType.badCertificate:
         showErrorDialog(OneContext().context!,
             titleText: 'Server error!',
             messageText: "${err.message}", action: () {
-          ref.watch(goRouterProvider).pop();
+              Navigator.of(OneContext().context!,rootNavigator: false).pop();
         });
       case DioExceptionType.badResponse:
         showErrorDialog(OneContext().context!,
             titleText: 'Server error!',
             messageText: "${err.message}", action: () {
-          ref.watch(goRouterProvider).pop();
+              Navigator.of(OneContext().context!,rootNavigator: false).pop();
         });
       case DioExceptionType.cancel:
         showErrorDialog(OneContext().context!,
             titleText: 'Server error!',
             messageText: "${err.message}", action: () {
-          ref.watch(goRouterProvider).pop();
+              Navigator.of(OneContext().context!,rootNavigator: false).pop();
         });
       case DioExceptionType.connectionError:
         showErrorDialog(OneContext().context!,
             titleText: 'Server error!',
             messageText: "${err.message}", action: () {
-          ref.watch(goRouterProvider).pop();
+              Navigator.of(OneContext().context!,rootNavigator: false).pop();
         });
       case DioExceptionType.unknown:
         showErrorDialog(OneContext().context!,
             titleText: 'Server error!',
             messageText: "${err.message}", action: () {
-          ref.watch(goRouterProvider).pop();
+              Navigator.of(OneContext().context!,rootNavigator: false).pop();
         });
     }
     super.onError(err, handler);

@@ -158,7 +158,7 @@ class _ConvertAndDownloadHtmlPdfProviderElement
   String? get data => (origin as ConvertAndDownloadHtmlPdfProvider).data;
 }
 
-String _$downloadFileHash() => r'241933eed1d7dc61f6cf6a1a6e7191a485a18109';
+String _$downloadFileHash() => r'c54708e0a7f09eb7a15fac0f4bb42356d3da30fb';
 
 /// See also [downloadFile].
 @ProviderFor(downloadFile)

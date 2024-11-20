@@ -815,7 +815,7 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
                           ),
                         ),
                     error: (e, s) => Text(e.toString()),
-                    loading: () =>  defaultLoader()),
+                    loading: () => SizedBox(height: MediaQuery.of(context).size.height,child: Center(child: defaultLoader(),),)),
                 const SizedBox(
                   height: 10,
                 ),
@@ -955,5 +955,5 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
                             ),
                           )),
                   error: (e, s) => Container(),
-                  loading: () => defaultLoader())));
+                  loading: () => SizedBox(height: MediaQuery.of(context).size.height,child: Center(child: defaultLoader(),),))));
 }

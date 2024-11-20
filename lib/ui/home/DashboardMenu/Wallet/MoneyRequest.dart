@@ -553,7 +553,7 @@ class _MoneyrequestState extends ConsumerState<Moneyrequest> {
                 ],
               ),
           error: (e, s) => Text(e.toString()),
-          loading: () =>  Center(child: defaultLoader(),)),
+          loading: () =>  Center(child: SizedBox(height: MediaQuery.of(context).size.height,child: Center(child: defaultLoader(),),),)),
     );
   }
 }

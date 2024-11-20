@@ -29,6 +29,8 @@ class RoutesStrings {
   static const bnplRequests = 'bnplRequests';
   static const bnplWithdraw = 'bnplWithdraw';
 
+  static const repayment = 'repayment';
+
   static const profile = 'profile';
   static const sanctionedAmount = 'sanctionedAmount';
   static const addMoney = 'addMoney';
@@ -36,6 +38,7 @@ class RoutesStrings {
 
   static const withdrawMoney = 'withdrawMoney';
   static const withdrawRequests = 'withdrawRequests';
+  static const walletStatement = 'walletStatement';
 
   static const verfication = 'verification';
 }

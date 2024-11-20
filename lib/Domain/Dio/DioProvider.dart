@@ -15,7 +15,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 
 @riverpod
 Dio dio(DioRef ref) {
-  return Dio(BaseOptions(baseUrl: ApiClient.testBaseUrl, headers: {
+  return Dio(BaseOptions(baseUrl: ApiClient.baseUrl, headers: {
     "Authorization": "Bearer ${ref.watch(sharedUtilityProvider).getToken()}",
   }))
     ..interceptors.add(Diointerceptor(ref));
@@ -23,10 +23,10 @@ Dio dio(DioRef ref) {
 
 @riverpod
 Dio apnagodamDio(DioRef ref) {
-  return Dio(
-      BaseOptions(baseUrl: ApiClient.testBaseUrl, headers: {
-"Authorization": "Bearer ${ref.watch(sharedUtilityProvider).getToken()}",
-  })) ..interceptors.add(InterceptorsWrapper(onRequest: (request, handler) {
+  return Dio(BaseOptions(baseUrl: ApiClient.testBaseUrl, headers: {
+    "Authorization": "Bearer ${ref.watch(sharedUtilityProvider).getToken()}",
+  }))
+    ..interceptors.add(InterceptorsWrapper(onRequest: (request, handler) {
       handler.next(request);
     }, onResponse: (response, handler) {
       if (response.data['status'].toString() == '3') {
@@ -37,20 +37,19 @@ Dio apnagodamDio(DioRef ref) {
           ref.watch(sharedUtilityProvider).sharedPreferences.clear();
         });
       }
-    
+
       handler.next(response);
     }, onError: (e, handler) {
       handler.next(e);
     }));
-  
 }
 
 class ApiClient {
   static const baseUrl = "https://apnagodamfinance.com/api/";
   static const testBaseUrl = 'https://test.apnagodamfinance.com/api/';
 
-  static const baseUrlApna= 'https://apnagodam.com/';
-  static const testBaseUrlApna ="https://test.apnagodam.com/";
+  static const baseUrlApna = 'https://apnagodam.com/';
+  static const testBaseUrlApna = "https://test.apnagodam.com/";
 
 /*
 state and district api
@@ -143,12 +142,22 @@ BNPL api
   static const getBnplStatement = 'bnpl-hold-statement';
   static const getBnplDebitStatement = 'bnpl-debit-statement';
 
-
 /*
 Bank api
 *
 *
 *
 */
-  static const bankList ='sbt_api/bnpl_bank_list';
+  static const bankList = 'sbt_api/bnpl_bank_list';
+
+/*
+repayment api
+*
+*
+*
+*/
+  static const getRepaymentTerminal = "terminal-data-for-loan";
+  static const getRepaymentData = "get-terminal-commodity-stack";
+  static const getRepaymentSettlementList = 'repayment-details-drf-wise';
+  static const repayGatepass = 'gate-pass-settlement-pay';
 }

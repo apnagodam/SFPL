@@ -222,7 +222,7 @@ class _ApprovedloanRequestsState extends ConsumerState<ApprovedloanRequests> {
                   ),
               error: (e, s) => emptyData(),
               loading: () =>  Center(
-                    child: defaultLoader(),
+                    child: SizedBox(height: MediaQuery.of(context).size.height,child: Center(child: defaultLoader(),),),
                   ))
         ],
       ),
@@ -388,7 +388,7 @@ class _PendingloanRequestsState extends ConsumerState<PendingloanRequests> {
                   ),
               error: (e, s) => Container(),
               loading: () =>  Center(
-                    child:defaultLoader(),
+                    child:SizedBox(height: MediaQuery.of(context).size.height,child: Center(child: defaultLoader(),),),
                   ))
         ],
       ),
@@ -554,7 +554,7 @@ class _RejectedloanRequestsState extends ConsumerState<RejectedloanRequests> {
                   ),
               error: (e, s) => Container(),
               loading: () =>  Center(
-                    child: defaultLoader()
+                    child: SizedBox(height: MediaQuery.of(context).size.height,child: Center(child: defaultLoader(),),)
                   ))
         ],
       ),
@@ -719,7 +719,7 @@ class _ClosedloanRequestsState extends ConsumerState<ClosedloanRequests> {
                   ),
               error: (e, s) => Container(),
               loading: () =>  Center(
-                    child: defaultLoader(),
+                    child: SizedBox(height: MediaQuery.of(context).size.height,child: Center(child: defaultLoader(),),),
                   ))
         ],
       ),

@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Data/Model/SanctionLimitListModel.dart';
+import 'package:swfl/Domain/Dio/DioProvider.dart';
 import 'package:swfl/Domain/LoanService/LoanService.dart';
 import 'package:swfl/ui/home/home_screen.dart';
 import 'package:swfl/ui/utils/pdf.dart';
@@ -226,7 +227,7 @@ class _SanctionedamountscreenState
                             ),
                             appliedData?.status.toString() == "3"
                                 ? downloadUploadAgreementLayout(
-                                data.data?[index], context)
+                                appliedData, context)
                                 : TextOneLine(
                                 'Status: ${appliedData?.status.toString() == "0"
                                     ? "Rejected"
@@ -276,7 +277,7 @@ class _SanctionedamountscreenState
                     },
                   ),
               error: (e, s) => Text(e.toString()),
-              loading: () => defaultLoader()),
+              loading: () => SizedBox(height: MediaQuery.of(context).size.height,child: Center(child: defaultLoader(),),)),
           const SizedBox(
             height: 10,
           ),
@@ -290,17 +291,18 @@ class _SanctionedamountscreenState
         Row(children: [
           Expanded(
               child: Text(
-                'Tri party Agreement',
+                'Sanction Letter',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     fontSize: Adaptive.sp(15), fontWeight: FontWeight.bold),
               )),
           IconButton(
               onPressed: () async {
+                
                 ref
                     .watch(downloadFileProvider(
-                    fileName: "Loan Agreement",
-                    url: "${appliedData?.agreement ?? ""}")
+                    fileName: "Sanction Letter",
+                    url: "${ref.watch(dioProvider).options.baseUrl}sanction_letter_download/${appliedData?.id}")
                     .future)
                     .then((value) {
                   if (value != null) {
@@ -331,14 +333,13 @@ class _SanctionedamountscreenState
               onPressed: () {
                 ref
                     .watch(downloadFileProvider(
-                    fileName: "PDC", url: "${appliedData?.pdc ?? ""}")
+                    fileName: "PDC", url: "${ref.watch(dioProvider).options.baseUrl}pdc_download/${appliedData?.id}")
                     .future)
                     .then((value) {
                   if (value != null) {
                     successToast(context,
                         "${basename(
-                            value.path)} successfully downloaded at ${value
-                            .path}");
+                            value.path)} successfully downloaded at ${value .path}");
                   }
                 });
               },
@@ -353,7 +354,7 @@ class _SanctionedamountscreenState
         Row(children: [
           Expanded(
               child: Text(
-                'Tri party letter',
+                'Loan Agreement',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     fontSize: Adaptive.sp(15), fontWeight: FontWeight.bold),
@@ -362,8 +363,8 @@ class _SanctionedamountscreenState
               onPressed: () {
                 ref
                     .watch(downloadFileProvider(
-                    fileName: "Tri party letter",
-                    url: "${appliedData?.triAgreement ?? ""}")
+                    fileName: "Loan Agreement",
+                    url: "${ref.watch(dioProvider).options.baseUrl}loan_agr_download/${appliedData?.id}")
                     .future)
                     .then((value) {
                   if (value != null) {
@@ -385,7 +386,7 @@ class _SanctionedamountscreenState
                 onTap: () async {
                   FilePickerResult? result = await FilePicker.platform
                       .pickFiles(
-                      type: FileType.image);
+                      type: FileType.custom,allowedExtensions: ['.pdf'],);
 
                   if (result != null) {
                     File file = File(result.files.single.path!);
@@ -429,7 +430,7 @@ class _SanctionedamountscreenState
                           const SizedBox(
                             height: 10,
                           ),
-                          Text('Agreement*',
+                          TextOneLine('Sanction Letter*',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: Adaptive.sp(14)))
@@ -445,7 +446,7 @@ class _SanctionedamountscreenState
                 onTap: () async {
                   FilePickerResult? result = await FilePicker.platform
                       .pickFiles(
-                      type: FileType.image);
+                      type: FileType.custom,allowedExtensions: ['.pdf'],);
 
                   if (result != null) {
                     File file = File(result.files.single.path!);
@@ -505,7 +506,7 @@ class _SanctionedamountscreenState
                 onTap: () async {
                   FilePickerResult? result = await FilePicker.platform
                       .pickFiles(
-                      type: FileType.image);
+                      type: FileType.custom,allowedExtensions: ['pdf'],);
 
                   if (result != null) {
                     File file = File(result.files.single.path!);

@@ -93,15 +93,15 @@ Future<Map<String, dynamic>> submitSanctionDocuments(
 }) async {
   FormData formData = new FormData.fromMap({
     "id": id,
-    'tri_agreement': await MultipartFile.fromFile(triAgreement?.path ?? "",),
+    'tri_agreement': await MultipartFile.fromFile(triAgreement?.path ?? "",filename: 'triagreement.pdf'),
     'pdc': await MultipartFile.fromFile(pdc?.path ?? "",
-        contentType: DioMediaType("document", "pdf"), filename: 'itr3.pdf'),
+        contentType: DioMediaType("document", "pdf"), filename: 'pdf.pdf'),
     'agreement': await MultipartFile.fromFile(agreement?.path ?? "",
-        contentType: DioMediaType("document", "pdf"), filename: 'bal1.pdf'),
+        contentType: DioMediaType("document", "pdf"), filename: 'agreement.pdf'),
   });
   var response = await ref
       .watch(dioProvider)
-      .post("post_sanction_document_upload", data: formData);
+      .post(ApiClient.submitSanctionDocuments, data: formData);
 
   return response.data;
 }

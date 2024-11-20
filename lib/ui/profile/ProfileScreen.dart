@@ -27,12 +27,21 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
         padding: const Pad(all: 10),
         child: ListView(
           children: [
-            CircleAvatar(
-              foregroundImage: NetworkImage(
-                  ref.watch(sharedUtilityProvider).getUser()?.profileImage ??
-                      "",
-                  scale: 100),
-              radius: Adaptive.sh(10),
+            Container(
+              height: Adaptive.sp(35),
+              width: Adaptive.sp(35),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      image: NetworkImage(
+                        ref
+                                .watch(sharedUtilityProvider)
+                                .getUser()
+                                ?.profileImage ??
+                            "",
+                      ),
+                      repeat: ImageRepeat.repeat,
+                      fit: BoxFit.contain)),
             ),
             const SizedBox(
               height: 10,
@@ -248,7 +257,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                             child: Image.network(
                           height: Adaptive.sh(5),
                           width: Adaptive.sw(5),
-                          '${ref.watch(sharedUtilityProvider).getUser()?.pancardImage}',
+                          '${ref.watch(sharedUtilityProvider).getUser()?.aadharImage}',
                           errorBuilder: (context, ob, s) =>
                               Icon(LucideIcons.circle_stop),
                           fit: BoxFit.cover,
@@ -275,7 +284,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                             child: Image.network(
                           height: Adaptive.sh(5),
                           width: Adaptive.sw(5),
-                          '${ref.watch(sharedUtilityProvider).getUser()?.pancardImage}',
+                          '${ref.watch(sharedUtilityProvider).getUser()?.aadharBackImage}',
                           errorBuilder: (context, ob, s) =>
                               Icon(LucideIcons.circle_stop),
                           fit: BoxFit.cover,
@@ -400,11 +409,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                           width: 10,
                         ),
                         Text(
-                         "${ ref
-                             .watch(sharedUtilityProvider)
-                             .getUser()
-                             ?.bankIfscCode ??
-                             "N/A"}",
+                          "${ref.watch(sharedUtilityProvider).getUser()?.bankIfscCode ?? "N/A"}",
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: Adaptive.sp(16),
@@ -418,7 +423,13 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                         Text('Cheque Image:',style: TextStyle(color: Colors.black,fontSize: Adaptive.sp(16),fontWeight: FontWeight.bold),),
+                        Text(
+                          'Cheque Image:',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(
                           width: 10,
                         ),
@@ -456,15 +467,18 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                         Text('Proprietorship Doc Type:',style: TextStyle(color: Colors.black,fontSize: Adaptive.sp(16),fontWeight: FontWeight.bold),),
+                        Text(
+                          'Proprietorship Doc Type:',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text("${ref
-                            .watch(sharedUtilityProvider)
-                            .getUser()
-                            ?.proprietorshipProofDoc ??
-                            "N/A"}")
+                        Text(
+                            "${ref.watch(sharedUtilityProvider).getUser()?.proprietorshipProofDoc ?? "N/A"}")
                       ],
                     )),
                 CupertinoActionSheetAction(
@@ -474,15 +488,18 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                         Text('Proprietorship Doc No: ',style: TextStyle(color: Colors.black,fontSize: Adaptive.sp(16),fontWeight: FontWeight.bold),),
+                        Text(
+                          'Proprietorship Doc No: ',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text("${ref
-                            .watch(sharedUtilityProvider)
-                            .getUser()
-                            ?.proprietorshipProofNo ??
-                            "N/A"}")
+                        Text(
+                            "${ref.watch(sharedUtilityProvider).getUser()?.proprietorshipProofNo ?? "N/A"}")
                       ],
                     )),
                 CupertinoActionSheetAction(
@@ -491,7 +508,13 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       mainAxisSize: MainAxisSize.max,
                       alignment: Alignment.centerLeft,
                       children: [
-                         Text('Proprietorship Image:',style: TextStyle(color: Colors.black,fontSize: Adaptive.sp(16),fontWeight: FontWeight.bold),),
+                        Text(
+                          'Proprietorship Image:',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(
                           width: 10,
                         ),

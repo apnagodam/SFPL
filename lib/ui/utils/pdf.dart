@@ -73,7 +73,7 @@ Future<File?> downloadFile(DownloadFileRef ref,
       .downloadCustomLocation(
     url: url,
     path: filePath,
-    filename: '$fileName',
+    filename: '${fileName.toString().toLowerCase().replaceAll(' ', '_') }',
     extension: ".pdf",
     progress: (progress) async {
       debugPrint(progress);

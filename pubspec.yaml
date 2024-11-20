@@ -77,6 +77,9 @@ dependencies:
   double_back_to_exit: ^1.1.0
   flutter_date_range_picker: ^0.1.1
   one_context: ^4.0.0
+  glass_kit: ^4.0.1
+  faker: ^2.2.0
+  in_app_update: ^4.2.3
 
 
 

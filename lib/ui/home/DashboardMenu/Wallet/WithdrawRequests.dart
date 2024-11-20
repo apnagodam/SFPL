@@ -403,7 +403,7 @@ class _WithdrawrequestsState extends ConsumerState<Withdrawrequests> {
             return null;
           },
           loading: () => Center(
-                child: defaultLoader(),
+                child: SizedBox(height: MediaQuery.of(context).size.height,child: Center(child: defaultLoader(),),),
               )),
     );
   }
