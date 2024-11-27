@@ -17,6 +17,7 @@ import 'package:swfl/ui/utils/colors.dart';
 import 'package:swfl/ui/utils/routes.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/utils/widgets.dart';
+import 'package:tap_to_expand/tap_to_expand.dart';
 
 import '../../Domain/AuthenticationService/AuthenticationService.dart';
 
@@ -72,6 +73,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       drawer: Drawer(
         child: ListView(
           children: [
+
             CupertinoActionSheet(
               actions: [
                 CupertinoActionSheetAction(
@@ -102,6 +104,69 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     )),
               ],
             ),
+            // TapToExpand(
+            //     backgroundcolor: Colors.white,
+            //     outerClosedPadding: 0.0,
+            //
+            //     title: Text(
+            //       'Sanctioned',
+            //       style: TextStyle(
+            //           fontSize: Adaptive.sp(16),
+            //           color: Colors.black,
+            //           fontWeight: FontWeight.w700),
+            //     ),
+            //     content: Column(
+            //       children: [
+            //         CupertinoActionSheetAction(
+            //           onPressed: () {
+            //             if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
+            //                 [])
+            //                 .isEmpty) {
+            //               showVerificationDialog(context,
+            //                   titleText: "Verify Tri-Party Agreement",
+            //                   messageText: "tri party agreement pending",
+            //                   action: () {
+            //                     hideLoader(context);
+            //                     context.goNamed(RoutesStrings.verfication);
+            //                   });
+            //             } else {
+            //               context.goNamed(RoutesStrings.applyForSanctionLimit);
+            //             }
+            //           },
+            //           child: Text('Sanction Limit Apply',
+            //               textAlign: TextAlign.start,
+            //               style: TextStyle(
+            //                   fontSize: Adaptive.sp(16),
+            //                   color: Colors.black,
+            //                   fontWeight: FontWeight.w500)),
+            //         ),
+            //         CupertinoActionSheetAction(
+            //             onPressed: () {
+            //               if ((ref
+            //                   .watch(sharedUtilityProvider)
+            //                   .getUser()
+            //                   ?.triparty ??
+            //                   [])
+            //                   .isEmpty) {
+            //                 showVerificationDialog(context,
+            //                     titleText: "Verify Tri-Party Agreement",
+            //                     messageText: "tri party agreement pending",
+            //                     action: () {
+            //                       hideLoader(context);
+            //                       context.goNamed(RoutesStrings.verfication);
+            //                     });
+            //               } else {
+            //                 context.goNamed(RoutesStrings.sanctionedAmount);
+            //               }
+            //             },
+            //             child: Text('Sanctioned Amount',
+            //                 textAlign: TextAlign.start,
+            //                 style: TextStyle(
+            //                     fontSize: Adaptive.sp(16),
+            //                     color: Colors.black,
+            //                     fontWeight: FontWeight.w500))),
+            //       ],
+            //     )),
             CupertinoActionSheet(
               title: Center(
                 child: Text(
@@ -111,6 +176,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 ),
               ),
               actions: [
+
                 CupertinoActionSheetAction(
                   onPressed: () {
                     if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??

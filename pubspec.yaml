@@ -80,6 +80,7 @@ dependencies:
   glass_kit: ^4.0.1
   faker: ^2.2.0
   in_app_update: ^4.2.3
+  tap_to_expand: ^0.7.2
 
 
 
@@ -155,7 +156,7 @@ flutter_native_splash:
     # 640 pixels in diameter.
     # App icon without an icon background: This should be 1152×1152 pixels, and fit within a circle
     # 768 pixels in diameter.
-    image: assets/swfl.png
+#    image: assets/swfl.png
 
     # Splash screen background color.
     #color: "#42a5f5"

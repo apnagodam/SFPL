@@ -386,7 +386,7 @@ class _SanctionedamountscreenState
                 onTap: () async {
                   FilePickerResult? result = await FilePicker.platform
                       .pickFiles(
-                      type: FileType.custom,allowedExtensions: ['.pdf'],);
+                      type: FileType.custom,allowedExtensions: ['pdf'],);
 
                   if (result != null) {
                     File file = File(result.files.single.path!);
@@ -446,7 +446,7 @@ class _SanctionedamountscreenState
                 onTap: () async {
                   FilePickerResult? result = await FilePicker.platform
                       .pickFiles(
-                      type: FileType.custom,allowedExtensions: ['.pdf'],);
+                      type: FileType.custom,allowedExtensions: ['pdf'],);
 
                   if (result != null) {
                     File file = File(result.files.single.path!);
