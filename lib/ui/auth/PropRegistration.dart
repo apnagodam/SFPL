@@ -381,8 +381,7 @@ class _PropregistrationState extends ConsumerState<Propregistration> {
                                         null) {
                                       errorToast(context,
                                           'Please select document Image');
-                                    }
-                                    else if (ref.watch(statesProvider) ==
+                                    } else if (ref.watch(statesProvider) ==
                                         null) {
                                       errorToast(
                                           context, 'Please select state');
@@ -522,8 +521,7 @@ class _PropregistrationState extends ConsumerState<Propregistration> {
           keyboardType: TextInputType.number,
           controller: adharController,
           validator: (value) {
-            if (value == null ||
-                value.isEmpty ) {
+            if (value == null || value.isEmpty) {
               return 'Please input Valid Aadhar Number';
             }
             return null;
@@ -787,8 +785,8 @@ class _PropregistrationState extends ConsumerState<Propregistration> {
         ref.watch(statesProvider) == null
             ? const SizedBox()
             : ref
-                .watch(
-                    districtListProvider(code: ref.watch(statesProvider)?.code.toString()))
+                .watch(districtListProvider(
+                    code: ref.watch(statesProvider)?.code.toString()))
                 .when(
                     data: (states) => DropdownSearch<StateDatum?>(
                           popupProps: PopupProps.menu(
@@ -1425,8 +1423,9 @@ class _PropregistrationState extends ConsumerState<Propregistration> {
             }
             return null;
           },
-                    inputFormatters: [  UpperCaseTextFormatter(),],
-
+          inputFormatters: [
+            UpperCaseTextFormatter(),
+          ],
           decoration: InputDecoration(
               hintText: "Enter PAN Number",
               label: const Text("Enter PAN Number"),

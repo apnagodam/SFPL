@@ -377,12 +377,18 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
               SizedBox(
                 height: 10,
               ),
-              Text(
+              ref.watch(terminalProvider) == null ||
+                  ref.watch(commodityProvider) == null ||
+                  ref.watch(stackProvider) == null
+                  ? SizedBox(): Text(
                 'Select Gatepass',
                 style: TextStyle(
                     fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
               ),
-              SizedBox(
+              ref.watch(terminalProvider) == null ||
+                  ref.watch(commodityProvider) == null ||
+                  ref.watch(stackProvider) == null
+                  ? SizedBox():  SizedBox(
                 height: 10,
               ),
               ref.watch(terminalProvider) == null ||

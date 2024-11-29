@@ -265,27 +265,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               context.goNamed(RoutesStrings.applyForCommodityLoan);
             }
           }),
-          homeLayoutWidget(LucideIcons.hand_coins, 'BNPL', '0',
-              imagePath:
-                  'https://cdn.iconscout.com/icon/premium/png-512-thumb/loan-82-1066968.png?f=webp&w=256',
-              callback: () {
-            if (ref
-                    .watch(sharedUtilityProvider)
-                    .getUser()
-                    ?.aadharVerify
-                    .toString() ==
-                "0") {
-              showVerificationDialog(context,
-                  titleText: "Verify Aadhar",
-                  messageText: "Your Aadhar verification is pending",
-                  action: () {
-                hideLoader(context);
-                context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
-              });
-            } else {
-              context.goNamed(RoutesStrings.bnpl);
-            }
-          }),
+          // homeLayoutWidget(LucideIcons.hand_coins, 'BNPL', '0',
+          //     imagePath:
+          //         'https://cdn.iconscout.com/icon/premium/png-512-thumb/loan-82-1066968.png?f=webp&w=256',
+          //     callback: () {
+          //   if (ref
+          //           .watch(sharedUtilityProvider)
+          //           .getUser()
+          //           ?.aadharVerify
+          //           .toString() ==
+          //       "0") {
+          //     showVerificationDialog(context,
+          //         titleText: "Verify Aadhar",
+          //         messageText: "Your Aadhar verification is pending",
+          //         action: () {
+          //       hideLoader(context);
+          //       context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
+          //     });
+          //   } else {
+          //     context.goNamed(RoutesStrings.bnpl);
+          //   }
+          // }),
           homeLayoutWidget(LucideIcons.hand_coins, 'Repayment', '0',
               imagePath:
                   'https://static.thenounproject.com/png/4814670-200.png',

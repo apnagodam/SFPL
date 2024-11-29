@@ -17,7 +17,6 @@ import 'package:swfl/ui/utils/colors.dart';
 import 'package:swfl/ui/utils/routes.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/utils/widgets.dart';
-import 'package:tap_to_expand/tap_to_expand.dart';
 
 import '../../Domain/AuthenticationService/AuthenticationService.dart';
 
@@ -47,7 +46,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               context.goNamed(RoutesStrings.bnplAadharRegistration);
             });
           }
-
           ref.watch(sharedUtilityProvider).setUser(data.data);
         } else {
           ref.watch(sharedPreferencesProvider).clear();
@@ -71,492 +69,812 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             const IconThemeData(color: ColorsConstant.secondColorSuperDark),
       ),
       drawer: Drawer(
-        child: ListView(
-          children: [
+          backgroundColor: Colors.white,
+          child: SafeArea(
+            child: ListView(
+              padding: Pad(
+                  left: 10,
+                  right: 10,
+                  top: MediaQuery.of(context).viewInsets.top),
+              children: [
+                InkWell(
+                  onTap: () {
+                    context.goNamed(RoutesStrings.profile);
+                  },
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        foregroundImage: NetworkImage(ref
+                                .watch(sharedUtilityProvider)
+                                .getUser()
+                                ?.profileImage ??
+                            ""),
+                        radius: Adaptive.sp(30),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        '${ref.watch(sharedUtilityProvider).getUser()?.firmName}',
+                        style: TextStyle(
+                            fontSize: Adaptive.sp(16),
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Divider(),
+                SizedBox(
+                  height: 20,
+                ),
+                // CupertinoActionSheet(
+                //   actions: [
+                //     CupertinoActionSheetAction(
+                //         onPressed: () {
+                //           context.goNamed(RoutesStrings.profile);
+                //         },
+                //         child: RowSuper(
+                //           alignment: Alignment.centerLeft,
+                //           children: [
+                //             CircleAvatar(
+                //               foregroundImage: NetworkImage(ref
+                //                       .watch(sharedUtilityProvider)
+                //                       .getUser()
+                //                       ?.profileImage ??
+                //                   ""),
+                //             ),
+                //             const SizedBox(
+                //               width: 10,
+                //             ),
+                //             Text(
+                //               '${ref.watch(sharedUtilityProvider).getUser()?.firmName}',
+                //               style: TextStyle(
+                //                   fontSize: Adaptive.sp(16),
+                //                   color: Colors.black,
+                //                   fontWeight: FontWeight.w700),
+                //             )
+                //           ],
+                //         )),
+                //   ],
+                // ),
+                // TapToExpand(
+                //     backgroundcolor: Colors.white,
+                //     outerClosedPadding: 0.0,
+                //
+                //     title: Text(
+                //       'Sanctioned',
+                //       style: TextStyle(
+                //           fontSize: Adaptive.sp(16),
+                //           color: Colors.black,
+                //           fontWeight: FontWeight.w700),
+                //     ),
+                //     content: Column(
+                //       children: [
+                //         CupertinoActionSheetAction(
+                //           onPressed: () {
+                //             if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
+                //                 [])
+                //                 .isEmpty) {
+                //               showVerificationDialog(context,
+                //                   titleText: "Verify Tri-Party Agreement",
+                //                   messageText: "tri party agreement pending",
+                //                   action: () {
+                //                     hideLoader(context);
+                //                     context.goNamed(RoutesStrings.verfication);
+                //                   });
+                //             } else {
+                //               context.goNamed(RoutesStrings.applyForSanctionLimit);
+                //             }
+                //           },
+                //           child: Text('Sanction Limit Apply',
+                //               textAlign: TextAlign.start,
+                //               style: TextStyle(
+                //                   fontSize: Adaptive.sp(16),
+                //                   color: Colors.black,
+                //                   fontWeight: FontWeight.w500)),
+                //         ),
+                //         CupertinoActionSheetAction(
+                //             onPressed: () {
+                //               if ((ref
+                //                   .watch(sharedUtilityProvider)
+                //                   .getUser()
+                //                   ?.triparty ??
+                //                   [])
+                //                   .isEmpty) {
+                //                 showVerificationDialog(context,
+                //                     titleText: "Verify Tri-Party Agreement",
+                //                     messageText: "tri party agreement pending",
+                //                     action: () {
+                //                       hideLoader(context);
+                //                       context.goNamed(RoutesStrings.verfication);
+                //                     });
+                //               } else {
+                //                 context.goNamed(RoutesStrings.sanctionedAmount);
+                //               }
+                //             },
+                //             child: Text('Sanctioned Amount',
+                //                 textAlign: TextAlign.start,
+                //                 style: TextStyle(
+                //                     fontSize: Adaptive.sp(16),
+                //                     color: Colors.black,
+                //                     fontWeight: FontWeight.w500))),
+                //       ],
+                //     )),
 
-            CupertinoActionSheet(
-              actions: [
-                CupertinoActionSheetAction(
-                    onPressed: () {
-                      context.goNamed(RoutesStrings.profile);
-                    },
-                    child: RowSuper(
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        CircleAvatar(
-                          foregroundImage: NetworkImage(ref
-                                  .watch(sharedUtilityProvider)
-                                  .getUser()
-                                  ?.profileImage ??
-                              ""),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          '${ref.watch(sharedUtilityProvider).getUser()?.firmName}',
+                ExpansionTile(
+                  title: Center(
+                    child: Text(
+                      'Sanction',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: Adaptive.sp(16)),
+                    ),
+                  ),
+                  children: [
+                    Divider(),
+                    ListTile(
+                        onTap: () {
+                          if ((ref
+                                      .watch(sharedUtilityProvider)
+                                      .getUser()
+                                      ?.triparty ??
+                                  [])
+                              .isEmpty) {
+                            showVerificationDialog(context,
+                                titleText: "Verify Tri-Party Agreement",
+                                messageText: "tri party agreement pending",
+                                action: () {
+                              hideLoader(context);
+                              context.goNamed(RoutesStrings.verfication);
+                            });
+                          } else {
+                            context
+                                .goNamed(RoutesStrings.applyForSanctionLimit);
+                          }
+                        },
+                        title: Center(
+                          child: Text('Apply',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(16),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500)),
+                        )),
+                    Divider(),
+                    ListTile(
+                        onTap: () {
+                          if ((ref
+                                      .watch(sharedUtilityProvider)
+                                      .getUser()
+                                      ?.triparty ??
+                                  [])
+                              .isEmpty) {
+                            showVerificationDialog(context,
+                                titleText: "Verify Tri-Party Agreement",
+                                messageText: "tri party agreement pending",
+                                action: () {
+                              hideLoader(context);
+                              context.goNamed(RoutesStrings.verfication);
+                            });
+                          } else {
+                            context.goNamed(RoutesStrings.sanctionedAmount);
+                          }
+                        },
+                        title: Center(
+                          child: Text('Requests',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(16),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500)),
+                        ))
+                  ],
+                  backgroundColor: Colors.white,
+                  collapsedBackgroundColor: Colors.white,
+                  collapsedShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side:
+                          const BorderSide(color: ColorsConstant.primaryColor)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(
+                          color: ColorsConstant.secondColorUltraDark)),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+
+                ExpansionTile(
+                  title: Center(
+                    child: Text(
+                      'Disbursement',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: Adaptive.sp(16)),
+                    ),
+                  ),
+                  children: [
+                    Divider(),
+                    ListTile(
+                      onTap: () {
+                        if ((ref
+                                    .watch(sharedUtilityProvider)
+                                    .getUser()
+                                    ?.triparty ??
+                                [])
+                            .isEmpty) {
+                          showVerificationDialog(context,
+                              titleText: "Verify Tri-Party Agreement",
+                              messageText: "tri party agreement pending",
+                              action: () {
+                            hideLoader(context);
+                            context.goNamed(RoutesStrings.verfication);
+                          });
+                        } else {
+                          context.goNamed(RoutesStrings.applyForCommodityLoan);
+                        }
+                      },
+                      title: Center(
+                        child: Text('Apply ',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: Adaptive.sp(16),
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                    ),
+                    // CupertinoActionSheetAction(
+                    //   onPressed: () {
+                    //     context.goNamed(RoutesStrings.bnplWithdraw);
+                    //   },
+                    //   child: Text('Withdraw ',
+                    //       textAlign: TextAlign.start,
+                    //       style: TextStyle(
+                    //           fontSize: Adaptive.sp(16),
+                    //           color: Colors.black,
+                    //           fontWeight: FontWeight.w500)),
+                    // ),
+                    Divider(),
+
+                    ListTile(
+                        onTap: () {
+                          if ((ref
+                                      .watch(sharedUtilityProvider)
+                                      .getUser()
+                                      ?.triparty ??
+                                  [])
+                              .isEmpty) {
+                            showVerificationDialog(context,
+                                titleText: "Verify Tri-Party Agreement",
+                                messageText: "tri party agreement pending",
+                                action: () {
+                              hideLoader(context);
+                              context.goNamed(RoutesStrings.verfication);
+                            });
+                          } else {
+                            context.goNamed(RoutesStrings.appliedLoanList);
+                          }
+
+                          // if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
+                          //   showVerificationDialog(context,
+                          //       titleText: "Verify Aadhar",
+                          //       messageText: "Your Aadhar verification is pending", action: () {
+                          //         hideLoader(context);
+                          //         context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
+                          //       });
+                          // }else{
+                          //
+                          //
+                          // }
+
+                          // if (ref.watch(sharedUtilityProvider).getUser()?.aadharVerify == "0") {
+                          //   showVerificationDialog(context,
+                          //       titleText: "Verify Aadhar",
+                          //       messageText: "Your Aadhar verification is pending");
+                          // }
+                          // else{
+                          //   context.goNamed(RoutesStrings.sanctionedAmount);
+                          //
+                          // }
+                        },
+                        title: Center(
+                          child: Text('Requests',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(16),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500)),
+                        )),
+                  ],
+                  backgroundColor: Colors.white,
+                  collapsedBackgroundColor: Colors.white,
+                  collapsedShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side:
+                          const BorderSide(color: ColorsConstant.primaryColor)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(
+                          color: ColorsConstant.secondColorUltraDark)),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                ExpansionTile(
+                  title: Center(
+                    child: Text(
+                      'Wallet',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: Adaptive.sp(16)),
+                    ),
+                  ),
+                  children: [
+                    Divider(),
+                    ListTile(
+                        onTap: () {
+                          context.goNamed(RoutesStrings.addMoney);
+                        },
+                        title: Center(
+                          child: Text('Add Money',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(16),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500)),
+                        )),
+                    Divider(),
+
+                    ListTile(
+                        onTap: () {
+                          context.goNamed(RoutesStrings.withdrawMoney);
+                        },
+                        title: Center(
+                          child: Text('Withdraw Money',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(16),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500)),
+                        )),
+                  ],
+                  backgroundColor: Colors.white,
+                  collapsedBackgroundColor: Colors.white,
+                  collapsedShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side:
+                          const BorderSide(color: ColorsConstant.primaryColor)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(
+                          color: ColorsConstant.secondColorUltraDark)),
+                ),
+                // CupertinoActionSheet(
+                //   title: Center(
+                //     child: Text(
+                //       'Sanctioned Amount',
+                //       style: TextStyle(
+                //           fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+                //     ),
+                //   ),
+                //   actions: [
+                //     CupertinoActionSheetAction(
+                //       onPressed: () {
+                //         if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
+                //                 [])
+                //             .isEmpty) {
+                //           showVerificationDialog(context,
+                //               titleText: "Verify Tri-Party Agreement",
+                //               messageText: "tri party agreement pending",
+                //               action: () {
+                //             hideLoader(context);
+                //             context.goNamed(RoutesStrings.verfication);
+                //           });
+                //         } else {
+                //           context.goNamed(RoutesStrings.applyForSanctionLimit);
+                //         }
+                //       },
+                //       child: Text('Apply',
+                //           textAlign: TextAlign.start,
+                //           style: TextStyle(
+                //               fontSize: Adaptive.sp(16),
+                //               color: Colors.black,
+                //               fontWeight: FontWeight.w500)),
+                //     ),
+                //     CupertinoActionSheetAction(
+                //         onPressed: () {
+                //           if ((ref
+                //                       .watch(sharedUtilityProvider)
+                //                       .getUser()
+                //                       ?.triparty ??
+                //                   [])
+                //               .isEmpty) {
+                //             showVerificationDialog(context,
+                //                 titleText: "Verify Tri-Party Agreement",
+                //                 messageText: "tri party agreement pending",
+                //                 action: () {
+                //               hideLoader(context);
+                //               context.goNamed(RoutesStrings.verfication);
+                //             });
+                //           } else {
+                //             context.goNamed(RoutesStrings.sanctionedAmount);
+                //           }
+                //         },
+                //         child: Text('Requests',
+                //             textAlign: TextAlign.start,
+                //             style: TextStyle(
+                //                 fontSize: Adaptive.sp(16),
+                //                 color: Colors.black,
+                //                 fontWeight: FontWeight.w500))),
+                //   ],
+                // ),
+                // CupertinoActionSheet(
+                //   title: Center(
+                //     child: Text(
+                //       'Disbursement Amount',
+                //       style: TextStyle(
+                //           fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+                //     ),
+                //   ),
+                //   actions: [
+                //     CupertinoActionSheetAction(
+                //       onPressed: () {
+                //         if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
+                //                 [])
+                //             .isEmpty) {
+                //           showVerificationDialog(context,
+                //               titleText: "Verify Tri-Party Agreement",
+                //               messageText: "tri party agreement pending",
+                //               action: () {
+                //             hideLoader(context);
+                //             context.goNamed(RoutesStrings.verfication);
+                //           });
+                //         } else {
+                //           context.goNamed(RoutesStrings.applyForCommodityLoan);
+                //         }
+                //       },
+                //       child: Text('Apply ',
+                //           textAlign: TextAlign.start,
+                //           style: TextStyle(
+                //               fontSize: Adaptive.sp(16),
+                //               color: Colors.black,
+                //               fontWeight: FontWeight.w500)),
+                //     ),
+                //     // CupertinoActionSheetAction(
+                //     //   onPressed: () {
+                //     //     context.goNamed(RoutesStrings.bnplWithdraw);
+                //     //   },
+                //     //   child: Text('Withdraw ',
+                //     //       textAlign: TextAlign.start,
+                //     //       style: TextStyle(
+                //     //           fontSize: Adaptive.sp(16),
+                //     //           color: Colors.black,
+                //     //           fontWeight: FontWeight.w500)),
+                //     // ),
+                //     CupertinoActionSheetAction(
+                //         onPressed: () {
+                //           if ((ref
+                //                       .watch(sharedUtilityProvider)
+                //                       .getUser()
+                //                       ?.triparty ??
+                //                   [])
+                //               .isEmpty) {
+                //             showVerificationDialog(context,
+                //                 titleText: "Verify Tri-Party Agreement",
+                //                 messageText: "tri party agreement pending",
+                //                 action: () {
+                //               hideLoader(context);
+                //               context.goNamed(RoutesStrings.verfication);
+                //             });
+                //           } else {
+                //             context.goNamed(RoutesStrings.appliedLoanList);
+                //           }
+                //
+                //           // if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
+                //           //   showVerificationDialog(context,
+                //           //       titleText: "Verify Aadhar",
+                //           //       messageText: "Your Aadhar verification is pending", action: () {
+                //           //         hideLoader(context);
+                //           //         context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
+                //           //       });
+                //           // }else{
+                //           //
+                //           //
+                //           // }
+                //
+                //           // if (ref.watch(sharedUtilityProvider).getUser()?.aadharVerify == "0") {
+                //           //   showVerificationDialog(context,
+                //           //       titleText: "Verify Aadhar",
+                //           //       messageText: "Your Aadhar verification is pending");
+                //           // }
+                //           // else{
+                //           //   context.goNamed(RoutesStrings.sanctionedAmount);
+                //           //
+                //           // }
+                //         },
+                //         child: Text('Requests',
+                //             textAlign: TextAlign.start,
+                //             style: TextStyle(
+                //                 fontSize: Adaptive.sp(16),
+                //                 color: Colors.black,
+                //                 fontWeight: FontWeight.w500))),
+                //   ],
+                // ),
+
+                // CupertinoActionSheet(
+                //   title: Center(
+                //     child: Text(
+                //       'Commodity Pledge Loan',
+                //       style: TextStyle(
+                //           fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+                //     ),
+                //   ),
+                //   actions: [
+                //
+                //   ],
+                // ),
+                // CupertinoActionSheet(
+                //   title: Center(
+                //     child: Text(
+                //       'Buy Now Pay Later',
+                //       style: TextStyle(
+                //           fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+                //     ),
+                //   ),
+                //   actions: [
+                //     CupertinoActionSheetAction(
+                //       onPressed: () {
+                //         if (ref
+                //                 .watch(sharedUtilityProvider)
+                //                 .getUser()
+                //                 ?.aadharVerify
+                //                 .toString() ==
+                //             "0") {
+                //           showVerificationDialog(context,
+                //               titleText: "Verify Aadhar",
+                //               messageText: "Your Aadhar verification is pending",
+                //               action: () {
+                //             hideLoader(context);
+                //             context
+                //                 .goNamed(RoutesStrings.bnplAadharRegistrationHome);
+                //           });
+                //         } else {
+                //           context.goNamed(RoutesStrings.bnpl);
+                //         }
+                //       },
+                //       child: Text('Apply ',
+                //           textAlign: TextAlign.start,
+                //           style: TextStyle(
+                //               fontSize: Adaptive.sp(16),
+                //               color: Colors.black,
+                //               fontWeight: FontWeight.w500)),
+                //     ),
+                //     // CupertinoActionSheetAction(
+                //     //   onPressed: () {
+                //     //     context.goNamed(RoutesStrings.bnplWithdraw);
+                //     //   },
+                //     //   child: Text('Withdraw ',
+                //     //       textAlign: TextAlign.start,
+                //     //       style: TextStyle(
+                //     //           fontSize: Adaptive.sp(16),
+                //     //           color: Colors.black,
+                //     //           fontWeight: FontWeight.w500)),
+                //     // ),
+                //     CupertinoActionSheetAction(
+                //         onPressed: () {
+                //           if (ref
+                //                   .watch(sharedUtilityProvider)
+                //                   .getUser()
+                //                   ?.aadharVerify
+                //                   .toString() ==
+                //               "0") {
+                //             showVerificationDialog(context,
+                //                 titleText: "Verify Aadhar",
+                //                 messageText: "Your Aadhar verification is pending",
+                //                 action: () {
+                //               hideLoader(context);
+                //               context.goNamed(
+                //                   RoutesStrings.bnplAadharRegistrationHome);
+                //             });
+                //           } else {
+                //             context.goNamed(RoutesStrings.bnplRequests);
+                //           }
+                //         },
+                //         child: Text('Requests',
+                //             textAlign: TextAlign.start,
+                //             style: TextStyle(
+                //                 fontSize: Adaptive.sp(16),
+                //                 color: Colors.black,
+                //                 fontWeight: FontWeight.w500))),
+                //
+                //     CupertinoActionSheetAction(
+                //         onPressed: () {
+                //           if (ref
+                //                   .watch(sharedUtilityProvider)
+                //                   .getUser()
+                //                   ?.aadharVerify
+                //                   .toString() ==
+                //               "0") {
+                //             showVerificationDialog(context,
+                //                 titleText: "Verify Aadhar",
+                //                 messageText: "Your Aadhar verification is pending",
+                //                 action: () {
+                //               hideLoader(context);
+                //               context.goNamed(
+                //                   RoutesStrings.bnplAadharRegistrationHome);
+                //             });
+                //           } else {
+                //             context.goNamed(RoutesStrings.bnplStatement);
+                //           }
+                //         },
+                //         child: Text('Hold Statement',
+                //             textAlign: TextAlign.start,
+                //             style: TextStyle(
+                //                 fontSize: Adaptive.sp(16),
+                //                 color: Colors.black,
+                //                 fontWeight: FontWeight.w500))),
+                //     CupertinoActionSheetAction(
+                //         onPressed: () {
+                //           if (ref
+                //                   .watch(sharedUtilityProvider)
+                //                   .getUser()
+                //                   ?.aadharVerify
+                //                   .toString() ==
+                //               "0") {
+                //             showVerificationDialog(context,
+                //                 titleText: "Verify Aadhar",
+                //                 messageText: "Your Aadhar verification is pending",
+                //                 action: () {
+                //               hideLoader(context);
+                //               context.goNamed(
+                //                   RoutesStrings.bnplAadharRegistrationHome);
+                //             });
+                //           } else {
+                //             context.goNamed(RoutesStrings.bnplDebitStatement);
+                //           }
+                //         },
+                //         child: Text('Debit Statement',
+                //             textAlign: TextAlign.start,
+                //             style: TextStyle(
+                //                 fontSize: Adaptive.sp(16),
+                //                 color: Colors.black,
+                //                 fontWeight: FontWeight.w500))),
+                //   ],
+                // ),
+                // CupertinoActionSheet(
+                //   title: Center(
+                //     child: Text(
+                //       'Sanction Limit',
+                //       style: TextStyle(
+                //           fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+                //     ),
+                //   ),
+                //   actions: [
+                //     CupertinoActionSheetAction(
+                //       onPressed: () {
+                //         if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
+                //                 [])
+                //             .isEmpty) {
+                //           showVerificationDialog(context,
+                //               titleText: "Verify Tri-Party Agreement",
+                //               messageText: "tri party agreement pending",
+                //               action: () {
+                //             hideLoader(context);
+                //             context.goNamed(RoutesStrings.verfication);
+                //           });
+                //         } else {
+                //           context.goNamed(RoutesStrings.applyForSanctionLimit);
+                //         }
+                //       },
+                //       child: Text('Sanction Limit Apply',
+                //           textAlign: TextAlign.start,
+                //           style: TextStyle(
+                //               fontSize: Adaptive.sp(16),
+                //               color: Colors.black,
+                //               fontWeight: FontWeight.w500)),
+                //     ),
+                //     CupertinoActionSheetAction(
+                //         onPressed: () {
+                //           if ((ref
+                //                       .watch(sharedUtilityProvider)
+                //                       .getUser()
+                //                       ?.triparty ??
+                //                   [])
+                //               .isEmpty) {
+                //             showVerificationDialog(context,
+                //                 titleText: "Verify Tri-Party Agreement",
+                //                 messageText: "tri party agreement pending",
+                //                 action: () {
+                //               hideLoader(context);
+                //               context.goNamed(RoutesStrings.verfication);
+                //             });
+                //           } else {
+                //             context.goNamed(RoutesStrings.sanctionedAmount);
+                //           }
+                //         },
+                //         child: Text('Sanctioned Amount',
+                //             textAlign: TextAlign.start,
+                //             style: TextStyle(
+                //                 fontSize: Adaptive.sp(16),
+                //                 color: Colors.black,
+                //                 fontWeight: FontWeight.w500))),
+                //   ],
+                // ),
+                // CupertinoActionSheet(
+                //   title: Center(
+                //     child: Text(
+                //       'Wallet',
+                //       style: TextStyle(
+                //           fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
+                //     ),
+                //   ),
+                //   actions: [
+                //     CupertinoActionSheetAction(
+                //         onPressed: () {
+                //           context.goNamed(RoutesStrings.addMoney);
+                //         },
+                //         child: Text('Add Money',
+                //             textAlign: TextAlign.start,
+                //             style: TextStyle(
+                //                 fontSize: Adaptive.sp(16),
+                //                 color: Colors.black,
+                //                 fontWeight: FontWeight.w500))),
+                //     CupertinoActionSheetAction(
+                //         onPressed: () {
+                //           context.goNamed(RoutesStrings.withdrawMoney);
+                //         },
+                //         child: Text('Withdraw Money',
+                //             textAlign: TextAlign.start,
+                //             style: TextStyle(
+                //                 fontSize: Adaptive.sp(16),
+                //                 color: Colors.black,
+                //                 fontWeight: FontWeight.w500))),
+                //     // CupertinoActionSheetAction(
+                //     //     onPressed: () {
+                //     //       context.goNamed(RoutesStrings.walletStatement);
+                //     //     },
+                //     //     child: Text('Wallet Statement',
+                //     //         textAlign: TextAlign.start,
+                //     //         style: TextStyle(
+                //     //             fontSize: Adaptive.sp(16),
+                //     //             color: Colors.black,
+                //     //             fontWeight: FontWeight.w500))),
+                //   ],
+                // ),
+                CupertinoActionSheet(
+                  actions: [
+                    CupertinoActionSheetAction(
+                        onPressed: () async {
+                          showLogoutDialog(context, () async {
+                            await ref.watch(sharedPreferencesProvider).clear();
+                            ref
+                                .watch(goRouterProvider)
+                                .goNamed(RoutesStrings.login);
+                            ref
+                                .watch(logoutProvider.future)
+                                .then((value) async {});
+
+                            hideLoader(context);
+
+                          });
+
+                        },
+                        child: Text(
+                          'Logout',
                           style: TextStyle(
                               fontSize: Adaptive.sp(16),
-                              color: Colors.black,
+                              color: Colors.red,
                               fontWeight: FontWeight.w700),
-                        )
-                      ],
-                    )),
+                        )),
+                  ],
+                )
               ],
             ),
-            // TapToExpand(
-            //     backgroundcolor: Colors.white,
-            //     outerClosedPadding: 0.0,
-            //
-            //     title: Text(
-            //       'Sanctioned',
-            //       style: TextStyle(
-            //           fontSize: Adaptive.sp(16),
-            //           color: Colors.black,
-            //           fontWeight: FontWeight.w700),
-            //     ),
-            //     content: Column(
-            //       children: [
-            //         CupertinoActionSheetAction(
-            //           onPressed: () {
-            //             if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
-            //                 [])
-            //                 .isEmpty) {
-            //               showVerificationDialog(context,
-            //                   titleText: "Verify Tri-Party Agreement",
-            //                   messageText: "tri party agreement pending",
-            //                   action: () {
-            //                     hideLoader(context);
-            //                     context.goNamed(RoutesStrings.verfication);
-            //                   });
-            //             } else {
-            //               context.goNamed(RoutesStrings.applyForSanctionLimit);
-            //             }
-            //           },
-            //           child: Text('Sanction Limit Apply',
-            //               textAlign: TextAlign.start,
-            //               style: TextStyle(
-            //                   fontSize: Adaptive.sp(16),
-            //                   color: Colors.black,
-            //                   fontWeight: FontWeight.w500)),
-            //         ),
-            //         CupertinoActionSheetAction(
-            //             onPressed: () {
-            //               if ((ref
-            //                   .watch(sharedUtilityProvider)
-            //                   .getUser()
-            //                   ?.triparty ??
-            //                   [])
-            //                   .isEmpty) {
-            //                 showVerificationDialog(context,
-            //                     titleText: "Verify Tri-Party Agreement",
-            //                     messageText: "tri party agreement pending",
-            //                     action: () {
-            //                       hideLoader(context);
-            //                       context.goNamed(RoutesStrings.verfication);
-            //                     });
-            //               } else {
-            //                 context.goNamed(RoutesStrings.sanctionedAmount);
-            //               }
-            //             },
-            //             child: Text('Sanctioned Amount',
-            //                 textAlign: TextAlign.start,
-            //                 style: TextStyle(
-            //                     fontSize: Adaptive.sp(16),
-            //                     color: Colors.black,
-            //                     fontWeight: FontWeight.w500))),
-            //       ],
-            //     )),
-            CupertinoActionSheet(
-              title: Center(
-                child: Text(
-                  'Commodity Pledge Loan',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
-                ),
-              ),
-              actions: [
-
-                CupertinoActionSheetAction(
-                  onPressed: () {
-                    if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
-                            [])
-                        .isEmpty) {
-                      showVerificationDialog(context,
-                          titleText: "Verify Tri-Party Agreement",
-                          messageText: "tri party agreement pending",
-                          action: () {
-                        hideLoader(context);
-                        context.goNamed(RoutesStrings.verfication);
-                      });
-                    } else {
-                      context.goNamed(RoutesStrings.applyForCommodityLoan);
-                    }
-                  },
-                  child: Text('Loan Apply ',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontSize: Adaptive.sp(16),
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500)),
-                ),
-                // CupertinoActionSheetAction(
-                //   onPressed: () {
-                //     context.goNamed(RoutesStrings.bnplWithdraw);
-                //   },
-                //   child: Text('Withdraw ',
-                //       textAlign: TextAlign.start,
-                //       style: TextStyle(
-                //           fontSize: Adaptive.sp(16),
-                //           color: Colors.black,
-                //           fontWeight: FontWeight.w500)),
-                // ),
-                CupertinoActionSheetAction(
-                    onPressed: () {
-                      if ((ref
-                                  .watch(sharedUtilityProvider)
-                                  .getUser()
-                                  ?.triparty ??
-                              [])
-                          .isEmpty) {
-                        showVerificationDialog(context,
-                            titleText: "Verify Tri-Party Agreement",
-                            messageText: "tri party agreement pending",
-                            action: () {
-                          hideLoader(context);
-                          context.goNamed(RoutesStrings.verfication);
-                        });
-                      } else {
-                        context.goNamed(RoutesStrings.appliedLoanList);
-                      }
-
-                      // if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
-                      //   showVerificationDialog(context,
-                      //       titleText: "Verify Aadhar",
-                      //       messageText: "Your Aadhar verification is pending", action: () {
-                      //         hideLoader(context);
-                      //         context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
-                      //       });
-                      // }else{
-                      //
-                      //
-                      // }
-
-                      // if (ref.watch(sharedUtilityProvider).getUser()?.aadharVerify == "0") {
-                      //   showVerificationDialog(context,
-                      //       titleText: "Verify Aadhar",
-                      //       messageText: "Your Aadhar verification is pending");
-                      // }
-                      // else{
-                      //   context.goNamed(RoutesStrings.sanctionedAmount);
-                      //
-                      // }
-                    },
-                    child: Text('Loan Requests',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: Adaptive.sp(16),
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500))),
-
-                CupertinoActionSheetAction(
-                  onPressed: () {
-                    if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
-                            [])
-                        .isEmpty) {
-                      showVerificationDialog(context,
-                          titleText: "Verify Tri-Party Agreement",
-                          messageText: "tri party agreement pending",
-                          action: () {
-                        hideLoader(context);
-                        context.goNamed(RoutesStrings.verfication);
-                      });
-                    } else {
-                      context.goNamed(RoutesStrings.applyForSanctionLimit);
-                    }
-                  },
-                  child: Text('Sanction Limit Apply',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontSize: Adaptive.sp(16),
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500)),
-                ),
-                CupertinoActionSheetAction(
-                    onPressed: () {
-                      if ((ref
-                                  .watch(sharedUtilityProvider)
-                                  .getUser()
-                                  ?.triparty ??
-                              [])
-                          .isEmpty) {
-                        showVerificationDialog(context,
-                            titleText: "Verify Tri-Party Agreement",
-                            messageText: "tri party agreement pending",
-                            action: () {
-                          hideLoader(context);
-                          context.goNamed(RoutesStrings.verfication);
-                        });
-                      } else {
-                        context.goNamed(RoutesStrings.sanctionedAmount);
-                      }
-                    },
-                    child: Text('Sanctioned Amount',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: Adaptive.sp(16),
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500))),
-              ],
-            ),
-            CupertinoActionSheet(
-              title: Center(
-                child: Text(
-                  'Buy Now Pay Later',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
-                ),
-              ),
-              actions: [
-                CupertinoActionSheetAction(
-                  onPressed: () {
-                    if (ref
-                            .watch(sharedUtilityProvider)
-                            .getUser()
-                            ?.aadharVerify
-                            .toString() ==
-                        "0") {
-                      showVerificationDialog(context,
-                          titleText: "Verify Aadhar",
-                          messageText: "Your Aadhar verification is pending",
-                          action: () {
-                        hideLoader(context);
-                        context
-                            .goNamed(RoutesStrings.bnplAadharRegistrationHome);
-                      });
-                    } else {
-                      context.goNamed(RoutesStrings.bnpl);
-                    }
-                  },
-                  child: Text('Apply ',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontSize: Adaptive.sp(16),
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500)),
-                ),
-                // CupertinoActionSheetAction(
-                //   onPressed: () {
-                //     context.goNamed(RoutesStrings.bnplWithdraw);
-                //   },
-                //   child: Text('Withdraw ',
-                //       textAlign: TextAlign.start,
-                //       style: TextStyle(
-                //           fontSize: Adaptive.sp(16),
-                //           color: Colors.black,
-                //           fontWeight: FontWeight.w500)),
-                // ),
-                CupertinoActionSheetAction(
-                    onPressed: () {
-                      if (ref
-                              .watch(sharedUtilityProvider)
-                              .getUser()
-                              ?.aadharVerify
-                              .toString() ==
-                          "0") {
-                        showVerificationDialog(context,
-                            titleText: "Verify Aadhar",
-                            messageText: "Your Aadhar verification is pending",
-                            action: () {
-                          hideLoader(context);
-                          context.goNamed(
-                              RoutesStrings.bnplAadharRegistrationHome);
-                        });
-                      } else {
-                        context.goNamed(RoutesStrings.bnplRequests);
-                      }
-                    },
-                    child: Text('Requests',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: Adaptive.sp(16),
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500))),
-
-                CupertinoActionSheetAction(
-                    onPressed: () {
-                      if (ref
-                              .watch(sharedUtilityProvider)
-                              .getUser()
-                              ?.aadharVerify
-                              .toString() ==
-                          "0") {
-                        showVerificationDialog(context,
-                            titleText: "Verify Aadhar",
-                            messageText: "Your Aadhar verification is pending",
-                            action: () {
-                          hideLoader(context);
-                          context.goNamed(
-                              RoutesStrings.bnplAadharRegistrationHome);
-                        });
-                      } else {
-                        context.goNamed(RoutesStrings.bnplStatement);
-                      }
-                    },
-                    child: Text('Hold Statement',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: Adaptive.sp(16),
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500))),
-                CupertinoActionSheetAction(
-                    onPressed: () {
-                      if (ref
-                              .watch(sharedUtilityProvider)
-                              .getUser()
-                              ?.aadharVerify
-                              .toString() ==
-                          "0") {
-                        showVerificationDialog(context,
-                            titleText: "Verify Aadhar",
-                            messageText: "Your Aadhar verification is pending",
-                            action: () {
-                          hideLoader(context);
-                          context.goNamed(
-                              RoutesStrings.bnplAadharRegistrationHome);
-                        });
-                      } else {
-                        context.goNamed(RoutesStrings.bnplDebitStatement);
-                      }
-                    },
-                    child: Text('Debit Statement',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: Adaptive.sp(16),
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500))),
-              ],
-            ),
-            // CupertinoActionSheet(
-            //   title: Center(
-            //     child: Text(
-            //       'Sanction Limit',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
-            //     ),
-            //   ),
-            //   actions: [
-            //     CupertinoActionSheetAction(
-            //       onPressed: () {
-            //         if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
-            //                 [])
-            //             .isEmpty) {
-            //           showVerificationDialog(context,
-            //               titleText: "Verify Tri-Party Agreement",
-            //               messageText: "tri party agreement pending",
-            //               action: () {
-            //             hideLoader(context);
-            //             context.goNamed(RoutesStrings.verfication);
-            //           });
-            //         } else {
-            //           context.goNamed(RoutesStrings.applyForSanctionLimit);
-            //         }
-            //       },
-            //       child: Text('Sanction Limit Apply',
-            //           textAlign: TextAlign.start,
-            //           style: TextStyle(
-            //               fontSize: Adaptive.sp(16),
-            //               color: Colors.black,
-            //               fontWeight: FontWeight.w500)),
-            //     ),
-            //     CupertinoActionSheetAction(
-            //         onPressed: () {
-            //           if ((ref
-            //                       .watch(sharedUtilityProvider)
-            //                       .getUser()
-            //                       ?.triparty ??
-            //                   [])
-            //               .isEmpty) {
-            //             showVerificationDialog(context,
-            //                 titleText: "Verify Tri-Party Agreement",
-            //                 messageText: "tri party agreement pending",
-            //                 action: () {
-            //               hideLoader(context);
-            //               context.goNamed(RoutesStrings.verfication);
-            //             });
-            //           } else {
-            //             context.goNamed(RoutesStrings.sanctionedAmount);
-            //           }
-            //         },
-            //         child: Text('Sanctioned Amount',
-            //             textAlign: TextAlign.start,
-            //             style: TextStyle(
-            //                 fontSize: Adaptive.sp(16),
-            //                 color: Colors.black,
-            //                 fontWeight: FontWeight.w500))),
-            //   ],
-            // ),
-            CupertinoActionSheet(
-              title: Center(
-                child: Text(
-                  'Wallet',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
-                ),
-              ),
-              actions: [
-                CupertinoActionSheetAction(
-                    onPressed: () {
-                      context.goNamed(RoutesStrings.addMoney);
-                    },
-                    child: Text('Add Money',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: Adaptive.sp(16),
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500))),
-                CupertinoActionSheetAction(
-                    onPressed: () {
-                      context.goNamed(RoutesStrings.withdrawMoney);
-                    },
-                    child: Text('Withdraw Money',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: Adaptive.sp(16),
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500))),
-                // CupertinoActionSheetAction(
-                //     onPressed: () {
-                //       context.goNamed(RoutesStrings.walletStatement);
-                //     },
-                //     child: Text('Wallet Statement',
-                //         textAlign: TextAlign.start,
-                //         style: TextStyle(
-                //             fontSize: Adaptive.sp(16),
-                //             color: Colors.black,
-                //             fontWeight: FontWeight.w500))),
-              ],
-            ),
-            CupertinoActionSheet(
-              actions: [
-                CupertinoActionSheetAction(
-                    onPressed: () async {
-                      await ref.watch(sharedPreferencesProvider).clear();
-                      ref.watch(goRouterProvider).goNamed(RoutesStrings.login);
-                      ref.watch(logoutProvider.future).then((value) async {});
-                    },
-                    child: Text(
-                      'Logout',
-                      style: TextStyle(
-                          fontSize: Adaptive.sp(16),
-                          color: Colors.red,
-                          fontWeight: FontWeight.w700),
-                    )),
-              ],
-            )
-          ],
-        ),
-      ),
+          )),
       body: const HomeScreen(),
     );
   }

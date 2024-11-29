@@ -890,7 +890,7 @@ class _LoanDetailsState extends ConsumerState<LoanDetails> {
                               // account_no:27840210001226
                               // stack_number:6
                               // terminal:Mohan Cold Storage Pvt. Ltd.
-
+                              showloader(context);
                               ref
                                   .watch(submitLoanRequestProvider(
                                           inventoryId:
@@ -913,6 +913,7 @@ class _LoanDetailsState extends ConsumerState<LoanDetails> {
                                               "${widget.data?.terminal}")
                                       .future)
                                   .then((value) {
+                                    hideLoader(context);
                                 if (value['status'].toString() == "1") {
                                   ref.invalidate(loanApplyListProvider);
                                   successToast(
@@ -924,6 +925,8 @@ class _LoanDetailsState extends ConsumerState<LoanDetails> {
                                       context, value['message'].toString());
                                 }
                               }).onError((e, s) {
+                                hideLoader(context);
+
                                 errorToast(context, e.toString());
                               });
                             },

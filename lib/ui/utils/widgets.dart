@@ -71,6 +71,8 @@ showloader(
       text: "Please wait...",
       showCancelBtn: false,
       showConfirmBtn: false,
+      barrierDismissible: false,
+      disableBackBtn: true,
       widget: Text(''),
     );
 
@@ -92,6 +94,26 @@ showVerificationDialog(BuildContext context,
       onConfirmBtnTap: action,
       widget: Text(''),
     );
+
+
+showLogoutDialog(BuildContext context,  VoidCallback action )=> QuickAlert.show(
+  context: context,
+  type: QuickAlertType.error,
+  headerBackgroundColor: ColorsConstant.primaryColor,
+  title: 'Logout?',
+  text: 'Are you sure you want to logout?',
+  barrierDismissible: false,
+
+  showCancelBtn: true,
+  showConfirmBtn: true,
+  confirmBtnText: "Logout",
+  confirmBtnColor: Colors.red,
+  onConfirmBtnTap: action,
+  onCancelBtnTap: (){
+    hideLoader(context);
+  },
+  widget: Text(''),
+);
 
 showAccountVerificationDialog(BuildContext context,
         {required String titleText,
