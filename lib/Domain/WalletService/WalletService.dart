@@ -6,6 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:swfl/Data/Model/MoneyRequestModel.dart';
 import 'package:swfl/Data/Model/WithdrawlListModel.dart';
 
+import '../../Data/Model/BnplStatementModel.dart';
 import '../../Data/SharedPrefs/SharedUtility.dart';
 import '../../ui/utils/routes.dart';
 import '../../ui/utils/routes_strings.dart';
@@ -35,6 +36,14 @@ Future<Map<String, dynamic>> addMoney(
   return response.data;
 }
 
+@riverpod
+Stream<BnplStatementModel> walletStatement(WalletStatementRef ref,
+    {String? pastDate, String? currentDate}) async* {
+  var response = await ref.watch(dioProvider).post(ApiClient.getWalletStatement,
+      queryParameters: {'from_date': pastDate, "to_date": currentDate});
+
+  yield bnplStatementModelFromMap(jsonEncode(response.data));
+}
 @riverpod
 Future<Map<String, dynamic>> withdrawMoney(
   WithdrawMoneyRef ref, {

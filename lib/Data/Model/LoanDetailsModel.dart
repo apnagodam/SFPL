@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-LoanDetailsModel loanDetailsModelFromMap(String str) => LoanDetailsModel.fromMap(json.decode(str));
+LoanDetailsModel loanDetailsModelFromMap(String str) =>
+    LoanDetailsModel.fromMap(json.decode(str));
 
-String loanDetailsModelToMap(LoanDetailsModel data) => json.encode(data.toMap());
+String loanDetailsModelToMap(LoanDetailsModel data) =>
+    json.encode(data.toMap());
 
 class LoanDetailsModel {
   dynamic status;
@@ -19,21 +21,23 @@ class LoanDetailsModel {
     this.data,
   });
 
-  factory LoanDetailsModel.fromMap(Map<String, dynamic> json) => LoanDetailsModel(
-    status: json["status"],
-    message: json["message"],
-    data: json["data"] == null ? null : Data.fromMap(json["data"]),
-  );
+  factory LoanDetailsModel.fromMap(Map<String, dynamic> json) =>
+      LoanDetailsModel(
+        status: json["status"],
+        message: json["message"],
+        data: json["data"] == null ? null : Data.fromMap(json["data"]),
+      );
 
   Map<String, dynamic> toMap() => {
-    "status": status,
-    "message": message,
-    "data": data?.toMap(),
-  };
+        "status": status,
+        "message": message,
+        "data": data?.toMap(),
+      };
 }
 
 class Data {
   dynamic marketPrice;
+  dynamic qualityMarketPrice;
   dynamic quantity;
   dynamic marketValue;
   dynamic ltv;
@@ -49,6 +53,7 @@ class Data {
 
   Data({
     this.marketPrice,
+    this.qualityMarketPrice,
     this.quantity,
     this.marketValue,
     this.ltv,
@@ -64,34 +69,36 @@ class Data {
   });
 
   factory Data.fromMap(Map<String, dynamic> json) => Data(
-    marketPrice: json["market_price"]?.toDouble(),
-    quantity: json["quantity"],
-    marketValue: json["market_value"]?.toDouble(),
-    ltv: json["ltv"],
-    loanAmount: json["loan_amount"]?.toDouble(),
-    proccessingFessPer: json["proccessing_fess_per"],
-    cgstPer: json["cgst_per"],
-    sgstPer: json["sgst_per"],
-    proccessingFessAmt: json["proccessing_fess_amt"]?.toDouble(),
-    cgstAmt: json["cgst_amt"]?.toDouble(),
-    sgstAmt: json["sgst_amt"]?.toDouble(),
-    netPayableAmt: json["net_payable_amt"]?.toDouble(),
-    apr: json["apr"]?.toDouble(),
-  );
+        marketPrice: json["market_price"],
+        qualityMarketPrice: json['quality_market_price'],
+        quantity: json["quantity"],
+        marketValue: json["market_value"],
+        ltv: json["ltv"],
+        loanAmount: json["loan_amount"],
+        proccessingFessPer: json["proccessing_fess_per"],
+        cgstPer: json["cgst_per"],
+        sgstPer: json["sgst_per"],
+        proccessingFessAmt: json["proccessing_fess_amt"],
+        cgstAmt: json["cgst_amt"],
+        sgstAmt: json["sgst_amt"],
+        netPayableAmt: json["net_payable_amt"],
+        apr: json["apr"],
+      );
 
   Map<String, dynamic> toMap() => {
-    "market_price": marketPrice,
-    "quantity": quantity,
-    "market_value": marketValue,
-    "ltv": ltv,
-    "loan_amount": loanAmount,
-    "proccessing_fess_per": proccessingFessPer,
-    "cgst_per": cgstPer,
-    "sgst_per": sgstPer,
-    "proccessing_fess_amt": proccessingFessAmt,
-    "cgst_amt": cgstAmt,
-    "sgst_amt": sgstAmt,
-    "net_payable_amt": netPayableAmt,
-    "apr": apr,
-  };
+        "market_price": marketPrice,
+        "quality_market_price": qualityMarketPrice,
+        "quantity": quantity,
+        "market_value": marketValue,
+        "ltv": ltv,
+        "loan_amount": loanAmount,
+        "proccessing_fess_per": proccessingFessPer,
+        "cgst_per": cgstPer,
+        "sgst_per": sgstPer,
+        "proccessing_fess_amt": proccessingFessAmt,
+        "cgst_amt": cgstAmt,
+        "sgst_amt": sgstAmt,
+        "net_payable_amt": netPayableAmt,
+        "apr": apr,
+      };
 }

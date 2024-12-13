@@ -188,6 +188,153 @@ class _AddMoneyProviderElement
   File? get image => (origin as AddMoneyProvider).image;
 }
 
+String _$walletStatementHash() => r'b705a39bfe0303723ceab90020037b1025632d3f';
+
+/// See also [walletStatement].
+@ProviderFor(walletStatement)
+const walletStatementProvider = WalletStatementFamily();
+
+/// See also [walletStatement].
+class WalletStatementFamily extends Family<AsyncValue<BnplStatementModel>> {
+  /// See also [walletStatement].
+  const WalletStatementFamily();
+
+  /// See also [walletStatement].
+  WalletStatementProvider call({
+    String? pastDate,
+    String? currentDate,
+  }) {
+    return WalletStatementProvider(
+      pastDate: pastDate,
+      currentDate: currentDate,
+    );
+  }
+
+  @override
+  WalletStatementProvider getProviderOverride(
+    covariant WalletStatementProvider provider,
+  ) {
+    return call(
+      pastDate: provider.pastDate,
+      currentDate: provider.currentDate,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'walletStatementProvider';
+}
+
+/// See also [walletStatement].
+class WalletStatementProvider
+    extends AutoDisposeStreamProvider<BnplStatementModel> {
+  /// See also [walletStatement].
+  WalletStatementProvider({
+    String? pastDate,
+    String? currentDate,
+  }) : this._internal(
+          (ref) => walletStatement(
+            ref as WalletStatementRef,
+            pastDate: pastDate,
+            currentDate: currentDate,
+          ),
+          from: walletStatementProvider,
+          name: r'walletStatementProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$walletStatementHash,
+          dependencies: WalletStatementFamily._dependencies,
+          allTransitiveDependencies:
+              WalletStatementFamily._allTransitiveDependencies,
+          pastDate: pastDate,
+          currentDate: currentDate,
+        );
+
+  WalletStatementProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.pastDate,
+    required this.currentDate,
+  }) : super.internal();
+
+  final String? pastDate;
+  final String? currentDate;
+
+  @override
+  Override overrideWith(
+    Stream<BnplStatementModel> Function(WalletStatementRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: WalletStatementProvider._internal(
+        (ref) => create(ref as WalletStatementRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        pastDate: pastDate,
+        currentDate: currentDate,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeStreamProviderElement<BnplStatementModel> createElement() {
+    return _WalletStatementProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is WalletStatementProvider &&
+        other.pastDate == pastDate &&
+        other.currentDate == currentDate;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, pastDate.hashCode);
+    hash = _SystemHash.combine(hash, currentDate.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin WalletStatementRef on AutoDisposeStreamProviderRef<BnplStatementModel> {
+  /// The parameter `pastDate` of this provider.
+  String? get pastDate;
+
+  /// The parameter `currentDate` of this provider.
+  String? get currentDate;
+}
+
+class _WalletStatementProviderElement
+    extends AutoDisposeStreamProviderElement<BnplStatementModel>
+    with WalletStatementRef {
+  _WalletStatementProviderElement(super.provider);
+
+  @override
+  String? get pastDate => (origin as WalletStatementProvider).pastDate;
+  @override
+  String? get currentDate => (origin as WalletStatementProvider).currentDate;
+}
+
 String _$withdrawMoneyHash() => r'2265863b6a1f887118f01c06ce7d31294ac94c3f';
 
 /// See also [withdrawMoney].

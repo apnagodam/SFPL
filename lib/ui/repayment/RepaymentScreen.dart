@@ -412,9 +412,8 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
                                     data.data?[index].id;
                                 return InkWell(
                                   child: GlassContainer.frostedGlass(
-                                      height: Adaptive.h(isSelected ? 15 : 10),
+                                      height: Adaptive.h(isSelected ? 25 : 20),
                                       blur: 10,
-                                      margin: Pad(all: 10),
                                       padding: Pad(all: 10),
                                       borderRadius: BorderRadius.circular(10),
                                       frostedOpacity: 0.12,
@@ -461,7 +460,9 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
                                                   ColorsConstant.primaryColor,
                                                 ]),
                                       borderWidth: 2,
-                                      child: ColumnSuper(children: [
+                                      child: ColumnSuper(
+                                        alignment: Alignment.topLeft,
+                                          children: [
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -485,7 +486,7 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
                                             //       fontSize: Adaptive.sp(16)),
                                             // ),
                                             Text.rich(TextSpan(
-                                                text: 'Quantity:',
+                                                text: 'Gatepass:',
                                                 style: TextStyle(
                                                     height: 2,
                                                     fontWeight: FontWeight.bold,
@@ -496,10 +497,25 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
                                                 children: [
                                                   TextSpan(
                                                       text:
-                                                          ' ${data.data?[index].quantity ?? 0.0}')
+                                                          ' ${data.data?[index].gatePass ?? 0.0}')
                                                 ])),
                                           ],
-                                        )
+                                        ),
+                                      Text.rich(TextSpan(
+                                          text: 'Quantity:',
+                                          style: TextStyle(
+                                              height: 2,
+                                              fontWeight: FontWeight.bold,
+                                              color: isSelected
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                              fontSize: Adaptive.sp(16)),
+                                          children: [
+                                            TextSpan(
+                                                text:
+                                                ' ${data.data?[index].quantity ?? 0.0}')
+                                          ])),
+
                                         // RowSuper(fill: true, children: [
                                         //   // Text.rich(TextSpan(
                                         //   //     text: 'Commodity:',
@@ -514,7 +530,25 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
                                         //   //     ])),
                                         //
                                         // ]),
-                                        ,
+
+                                        Text.rich(
+                                          TextSpan(
+                                              text: 'Interest Amount:',
+                                              style: TextStyle(
+                                                  height: 2,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: isSelected
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                                  fontSize: Adaptive.sp(16)),
+
+                                              children: [
+                                                TextSpan(
+                                                    text:
+                                                    ' ${currencyFormat.format(double.parse("${data.data?[index].interestAmount ?? 0.0}"))}')
+                                              ],),
+
+                                        ),
                                         Text.rich(
                                           TextSpan(
                                               text: 'Settlement Amount:',
@@ -531,6 +565,7 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
                                                         ' ${currencyFormat.format(double.parse("${data.data?[index].totalSettlementAmount ?? 0.0}"))}')
                                               ]),
                                         ),
+
                                         // RowSuper(fill: true, children: [
                                         //   // Text.rich(
                                         //   //   TextSpan(

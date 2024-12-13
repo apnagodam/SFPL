@@ -70,228 +70,253 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                         color: ColorsConstant.primaryColor,
                         fontWeight: FontWeight.bold,
                         fontSize: Adaptive.sp(17)))),
-            CupertinoActionSheet(
-              actions: [
-                CupertinoActionSheetAction(
-                    onPressed: () {},
-                    child: RowSuper(
-                      mainAxisSize: MainAxisSize.max,
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        Text(
-                          'Name:',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          ref.watch(sharedUtilityProvider).getUser()?.name ??
-                              "",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    )),
-                CupertinoActionSheetAction(
-                    onPressed: () {},
-                    child: RowSuper(
-                      mainAxisSize: MainAxisSize.max,
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        Text(
-                          'Firm Name:',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          ref
-                                  .watch(sharedUtilityProvider)
-                                  .getUser()
-                                  ?.firmName ??
-                              "",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    )),
-                CupertinoActionSheetAction(
-                    onPressed: () {},
-                    child: RowSuper(
-                      mainAxisSize: MainAxisSize.max,
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        Text(
-                          'Pan Card Number:',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          ref
-                                  .watch(sharedUtilityProvider)
-                                  .getUser()
-                                  ?.pancardNo ??
-                              "",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    )),
-                CupertinoActionSheetAction(
-                    onPressed: () {},
-                    child: RowSuper(
-                      mainAxisSize: MainAxisSize.max,
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        Text(
-                          'Aadhar Card No:',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          ref
-                                  .watch(sharedUtilityProvider)
-                                  .getUser()
-                                  ?.aadharNo ??
-                              "",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    )),
-                CupertinoActionSheetAction(
-                    onPressed: () {},
-                    child: RowSuper(
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        Text(
-                          'Address:',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          ref.watch(sharedUtilityProvider).getUser()?.address ??
-                              "",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    )),
-                CupertinoActionSheetAction(
-                    onPressed: () {},
-                    child: RowSuper(
-                      mainAxisSize: MainAxisSize.max,
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        Text(
-                          'Pan Card Image:',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        InstaImageViewer(
-                            child: Image.network(
-                          height: Adaptive.sh(5),
-                          width: Adaptive.sw(5),
-                          '${ref.watch(sharedUtilityProvider).getUser()?.pancardImage}',
-                          errorBuilder: (context, ob, s) =>
-                              Icon(LucideIcons.circle_stop),
-                          fit: BoxFit.cover,
-                        )),
-                      ],
-                    )),
-                CupertinoActionSheetAction(
-                    onPressed: () {},
-                    child: RowSuper(
-                      mainAxisSize: MainAxisSize.max,
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        Text(
-                          'Aadhar Card Image:',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        InstaImageViewer(
-                            child: Image.network(
-                          height: Adaptive.sh(5),
-                          width: Adaptive.sw(5),
-                          '${ref.watch(sharedUtilityProvider).getUser()?.aadharImage}',
-                          errorBuilder: (context, ob, s) =>
-                              Icon(LucideIcons.circle_stop),
-                          fit: BoxFit.cover,
-                        )),
-                      ],
-                    )),
-                CupertinoActionSheetAction(
-                    onPressed: () {},
-                    child: RowSuper(
-                      mainAxisSize: MainAxisSize.max,
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        Text(
-                          'Aadhar Card Image(Back):',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        InstaImageViewer(
-                            child: Image.network(
-                          height: Adaptive.sh(5),
-                          width: Adaptive.sw(5),
-                          '${ref.watch(sharedUtilityProvider).getUser()?.aadharBackImage}',
-                          errorBuilder: (context, ob, s) =>
-                              Icon(LucideIcons.circle_stop),
-                          fit: BoxFit.cover,
-                        )),
-                      ],
-                    )),
+            const SizedBox(
+              height: 10,
+            ),
+            Divider(),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(
+              mainAxisSize: MainAxisSize.max,
+              alignment: Alignment.centerLeft,
+              children: [
+                Text(
+                  'Name:',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  ref.watch(sharedUtilityProvider).getUser()?.name ?? "",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                )
               ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Divider(),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(
+              mainAxisSize: MainAxisSize.max,
+              alignment: Alignment.centerLeft,
+              children: [
+                Text(
+                  'Firm Name:',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  ref.watch(sharedUtilityProvider).getUser()?.firmName ?? "",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Divider(),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(
+              mainAxisSize: MainAxisSize.max,
+              alignment: Alignment.centerLeft,
+              children: [
+                Text(
+                  'Pan Card Number:',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  ref.watch(sharedUtilityProvider).getUser()?.pancardNo ?? "",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Divider(),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(
+              mainAxisSize: MainAxisSize.max,
+              alignment: Alignment.centerLeft,
+              children: [
+                Text(
+                  'Aadhar Card No:',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  ref.watch(sharedUtilityProvider).getUser()?.aadharNo ?? "",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Divider(),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(
+              alignment: Alignment.centerLeft,
+              children: [
+                Text(
+                  'Address:',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  ref.watch(sharedUtilityProvider).getUser()?.address ?? "",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Divider(),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(
+              mainAxisSize: MainAxisSize.max,
+              alignment: Alignment.centerLeft,
+              children: [
+                Text(
+                  'Pan Card Image:',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                InstaImageViewer(
+                    child: Image.network(
+                  height: Adaptive.sh(5),
+                  width: Adaptive.sw(5),
+                  '${ref.watch(sharedUtilityProvider).getUser()?.pancardImage}',
+                  errorBuilder: (context, ob, s) =>
+                      Icon(LucideIcons.circle_stop),
+                  fit: BoxFit.cover,
+                )),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Divider(),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(
+              mainAxisSize: MainAxisSize.max,
+              alignment: Alignment.centerLeft,
+              children: [
+                Text(
+                  'Aadhar Card Image:',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                InstaImageViewer(
+                    child: Image.network(
+                  height: Adaptive.sh(5),
+                  width: Adaptive.sw(5),
+                  '${ref.watch(sharedUtilityProvider).getUser()?.aadharImage}',
+                  errorBuilder: (context, ob, s) =>
+                      Icon(LucideIcons.circle_stop),
+                  fit: BoxFit.cover,
+                )),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Divider(),
+            const SizedBox(
+              height: 10,
+            ),
+            RowSuper(
+              mainAxisSize: MainAxisSize.max,
+              alignment: Alignment.centerLeft,
+              children: [
+                Text(
+                  'Aadhar Card Image(Back):',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                InstaImageViewer(
+                    child: Image.network(
+                  height: Adaptive.sh(5),
+                  width: Adaptive.sw(5),
+                  '${ref.watch(sharedUtilityProvider).getUser()?.aadharBackImage}',
+                  errorBuilder: (context, ob, s) =>
+                      Icon(LucideIcons.circle_stop),
+                  fit: BoxFit.cover,
+                )),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
             ),
             CupertinoButton(
                 onPressed: null,
@@ -303,146 +328,142 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
             const SizedBox(
               height: 10,
             ),
-            CupertinoActionSheet(
-              actions: [
-                CupertinoActionSheetAction(
-                    onPressed: () {},
-                    child: RowSuper(
-                      mainAxisSize: MainAxisSize.max,
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        Text(
-                          'Bank Name:',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          ref
-                                  .watch(sharedUtilityProvider)
-                                  .getUser()
-                                  ?.bankName ??
-                              "N/A",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    )),
-                CupertinoActionSheetAction(
-                    onPressed: () {},
-                    child: RowSuper(
-                      mainAxisSize: MainAxisSize.max,
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        Text(
-                          'Bank Account Number:',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          ref
-                                  .watch(sharedUtilityProvider)
-                                  .getUser()
-                                  ?.bankAccNo ??
-                              "N/A",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    )),
-                CupertinoActionSheetAction(
-                    onPressed: () {},
-                    child: RowSuper(
-                      mainAxisSize: MainAxisSize.max,
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        Text(
-                          'Bank Branch:',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          ref
-                                  .watch(sharedUtilityProvider)
-                                  .getUser()
-                                  ?.bankBranch ??
-                              "N/A",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    )),
-                CupertinoActionSheetAction(
-                    onPressed: () {},
-                    child: RowSuper(
-                      mainAxisSize: MainAxisSize.max,
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        Text(
-                          'Bank IFSC Code:',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "${ref.watch(sharedUtilityProvider).getUser()?.bankIfscCode ?? "N/A"}",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    )),
-                CupertinoActionSheetAction(
-                    onPressed: () {},
-                    child: RowSuper(
-                      mainAxisSize: MainAxisSize.max,
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        Text(
-                          'Cheque Image:',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        InstaImageViewer(
-                            child: Image.network(
-                          height: Adaptive.sh(5),
-                          width: Adaptive.sw(5),
-                          '${ref.watch(sharedUtilityProvider).getUser()?.chequeImage}',
-                          errorBuilder: (context, ob, s) =>
-                              Icon(LucideIcons.circle_stop),
-                          fit: BoxFit.cover,
-                        )),
-                      ],
+            SizedBox(height: 10,),
+            Divider(),
+            RowSuper(
+              mainAxisSize: MainAxisSize.max,
+              alignment: Alignment.centerLeft,
+              children: [
+                Text(
+                  'Bank Name:',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  ref
+                      .watch(sharedUtilityProvider)
+                      .getUser()
+                      ?.bankName ??
+                      "N/A",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            SizedBox(height: 10,),
+            Divider(),
+            RowSuper(
+              mainAxisSize: MainAxisSize.max,
+              alignment: Alignment.centerLeft,
+              children: [
+                Text(
+                  'Bank Account Number:',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  ref
+                      .watch(sharedUtilityProvider)
+                      .getUser()
+                      ?.bankAccNo ??
+                      "N/A",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            SizedBox(height: 10,),
+            Divider(),
+            RowSuper(
+              mainAxisSize: MainAxisSize.max,
+              alignment: Alignment.centerLeft,
+              children: [
+                Text(
+                  'Bank Branch:',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  ref
+                      .watch(sharedUtilityProvider)
+                      .getUser()
+                      ?.bankBranch ??
+                      "N/A",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            SizedBox(height: 10,),
+            Divider(),
+            RowSuper(
+              mainAxisSize: MainAxisSize.max,
+              alignment: Alignment.centerLeft,
+              children: [
+                Text(
+                  'Bank IFSC Code:',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  "${ref.watch(sharedUtilityProvider).getUser()?.bankIfscCode ?? "N/A"}",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            SizedBox(height: 10,),
+            Divider(),
+            RowSuper(
+              mainAxisSize: MainAxisSize.max,
+              alignment: Alignment.centerLeft,
+              children: [
+                Text(
+                  'Cheque Image:',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Adaptive.sp(16),
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                InstaImageViewer(
+                    child: Image.network(
+                      height: Adaptive.sh(5),
+                      width: Adaptive.sw(5),
+                      '${ref.watch(sharedUtilityProvider).getUser()?.chequeImage}',
+                      errorBuilder: (context, ob, s) =>
+                          Icon(LucideIcons.circle_stop),
+                      fit: BoxFit.cover,
                     )),
               ],
             ),

@@ -11,7 +11,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 
 @riverpod
 Dio dio(DioRef ref) {
-  return Dio(BaseOptions(baseUrl: ApiClient.baseUrl, headers: {
+  return Dio(BaseOptions(baseUrl: ApiClient.testBaseUrl, headers: {
     "Authorization": "Bearer ${ref.watch(sharedUtilityProvider).getToken()}",
   }))
     ..interceptors.add(Diointerceptor(ref));
@@ -74,6 +74,7 @@ Loan api
   static const closedRequests = 'loan-list/closed';
 
   static const submitSanctionDocuments = 'post_sanction_document_upload';
+  static const getSanctionSchemes = 'sanctiond-limit-schemes';
 
 /*
 Wallet api
@@ -85,6 +86,7 @@ Wallet api
   static const moneyRequestList = 'add-money-list';
   static const withdrawMoney = 'add-withdrawal-request';
   static const withdrawlList = 'add-withdrawal-list';
+  static const getWalletStatement = 'wallet-statement';
 
 /*
 verification api

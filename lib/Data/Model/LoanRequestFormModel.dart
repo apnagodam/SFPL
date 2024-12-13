@@ -68,6 +68,8 @@ class Scheme {
   dynamic processingFee;
   dynamic loanPerTotalAmount;
   dynamic tenor;
+  dynamic tenorType;
+
   dynamic cgst;
   dynamic sgst;
   dynamic status;
@@ -83,6 +85,7 @@ class Scheme {
     this.processingFee,
     this.loanPerTotalAmount,
     this.tenor,
+    this.tenorType,
     this.cgst,
     this.sgst,
     this.status,
@@ -97,8 +100,9 @@ class Scheme {
     interestRate: json["interest_rate"],
     loanPassDays: json["loan_pass_days"],
     processingFee: json["processing_fee"],
-    loanPerTotalAmount: json["loan_per_total_amount"],
+    loanPerTotalAmount: json["ltv"],
     tenor: json["tenor"],
+    tenorType: json['tenor_type'],
     cgst: json["cgst"],
     sgst: json["sgst"],
     status: json["status"],
@@ -113,8 +117,9 @@ class Scheme {
     "interest_rate": interestRate,
     "loan_pass_days": loanPassDays,
     "processing_fee": processingFee,
-    "loan_per_total_amount": loanPerTotalAmount,
+    "ltv": loanPerTotalAmount,
     "tenor": tenor,
+    "tenor_type":tenorType,
     "cgst": cgst,
     "sgst": sgst,
     "status": status,

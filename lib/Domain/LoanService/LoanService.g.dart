@@ -35,7 +35,7 @@ final appliedListProvider =
 );
 
 typedef AppliedListRef = AutoDisposeFutureProviderRef<SanctionLimitListModel>;
-String _$termsHash() => r'faaf1fd42283553c5e204e00961682c3bee4acce';
+String _$termsHash() => r'742c3c5365d03574b2719679b609d7e881bf4883';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -69,10 +69,10 @@ class TermsFamily extends Family<AsyncValue<TermsModel>> {
 
   /// See also [terms].
   TermsProvider call({
-    required String? schemeId,
+    required TermsRequestModel model,
   }) {
     return TermsProvider(
-      schemeId: schemeId,
+      model: model,
     );
   }
 
@@ -81,7 +81,7 @@ class TermsFamily extends Family<AsyncValue<TermsModel>> {
     covariant TermsProvider provider,
   ) {
     return call(
-      schemeId: provider.schemeId,
+      model: provider.model,
     );
   }
 
@@ -101,14 +101,14 @@ class TermsFamily extends Family<AsyncValue<TermsModel>> {
 }
 
 /// See also [terms].
-class TermsProvider extends AutoDisposeFutureProvider<TermsModel> {
+class TermsProvider extends AutoDisposeStreamProvider<TermsModel> {
   /// See also [terms].
   TermsProvider({
-    required String? schemeId,
+    required TermsRequestModel model,
   }) : this._internal(
           (ref) => terms(
             ref as TermsRef,
-            schemeId: schemeId,
+            model: model,
           ),
           from: termsProvider,
           name: r'termsProvider',
@@ -118,7 +118,7 @@ class TermsProvider extends AutoDisposeFutureProvider<TermsModel> {
                   : _$termsHash,
           dependencies: TermsFamily._dependencies,
           allTransitiveDependencies: TermsFamily._allTransitiveDependencies,
-          schemeId: schemeId,
+          model: model,
         );
 
   TermsProvider._internal(
@@ -128,14 +128,14 @@ class TermsProvider extends AutoDisposeFutureProvider<TermsModel> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.schemeId,
+    required this.model,
   }) : super.internal();
 
-  final String? schemeId;
+  final TermsRequestModel model;
 
   @override
   Override overrideWith(
-    FutureOr<TermsModel> Function(TermsRef provider) create,
+    Stream<TermsModel> Function(TermsRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -146,44 +146,44 @@ class TermsProvider extends AutoDisposeFutureProvider<TermsModel> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        schemeId: schemeId,
+        model: model,
       ),
     );
   }
 
   @override
-  AutoDisposeFutureProviderElement<TermsModel> createElement() {
+  AutoDisposeStreamProviderElement<TermsModel> createElement() {
     return _TermsProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is TermsProvider && other.schemeId == schemeId;
+    return other is TermsProvider && other.model == model;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, schemeId.hashCode);
+    hash = _SystemHash.combine(hash, model.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin TermsRef on AutoDisposeFutureProviderRef<TermsModel> {
-  /// The parameter `schemeId` of this provider.
-  String? get schemeId;
+mixin TermsRef on AutoDisposeStreamProviderRef<TermsModel> {
+  /// The parameter `model` of this provider.
+  TermsRequestModel get model;
 }
 
-class _TermsProviderElement extends AutoDisposeFutureProviderElement<TermsModel>
+class _TermsProviderElement extends AutoDisposeStreamProviderElement<TermsModel>
     with TermsRef {
   _TermsProviderElement(super.provider);
 
   @override
-  String? get schemeId => (origin as TermsProvider).schemeId;
+  TermsRequestModel get model => (origin as TermsProvider).model;
 }
 
-String _$applyForLoanHash() => r'b67fc9b496b0a962057a8da591dc338fd08a0f26';
+String _$applyForLoanHash() => r'87bd93b434a3eba1fff3f8729293c0046f1ff75f';
 
 /// See also [applyForLoan].
 @ProviderFor(applyForLoan)
@@ -198,7 +198,7 @@ class ApplyForLoanFamily extends Family<AsyncValue<Map<String, dynamic>>> {
   ApplyForLoanProvider call({
     String? amount,
     String? loanType,
-    String? schemeId,
+    List<int>? schemeId,
     File? itr1,
     File? itr2,
     File? itr3,
@@ -258,7 +258,7 @@ class ApplyForLoanProvider
   ApplyForLoanProvider({
     String? amount,
     String? loanType,
-    String? schemeId,
+    List<int>? schemeId,
     File? itr1,
     File? itr2,
     File? itr3,
@@ -318,7 +318,7 @@ class ApplyForLoanProvider
 
   final String? amount;
   final String? loanType;
-  final String? schemeId;
+  final List<int>? schemeId;
   final File? itr1;
   final File? itr2;
   final File? itr3;
@@ -396,7 +396,7 @@ mixin ApplyForLoanRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
   String? get loanType;
 
   /// The parameter `schemeId` of this provider.
-  String? get schemeId;
+  List<int>? get schemeId;
 
   /// The parameter `itr1` of this provider.
   File? get itr1;
@@ -427,7 +427,7 @@ class _ApplyForLoanProviderElement
   @override
   String? get loanType => (origin as ApplyForLoanProvider).loanType;
   @override
-  String? get schemeId => (origin as ApplyForLoanProvider).schemeId;
+  List<int>? get schemeId => (origin as ApplyForLoanProvider).schemeId;
   @override
   File? get itr1 => (origin as ApplyForLoanProvider).itr1;
   @override
@@ -440,6 +440,139 @@ class _ApplyForLoanProviderElement
   File? get bs2 => (origin as ApplyForLoanProvider).bs2;
   @override
   File? get bs3 => (origin as ApplyForLoanProvider).bs3;
+}
+
+String _$sanctionSchemesHash() => r'4404bbd60dbe3223ed470489133056059ba5ee19';
+
+/// See also [sanctionSchemes].
+@ProviderFor(sanctionSchemes)
+const sanctionSchemesProvider = SanctionSchemesFamily();
+
+/// See also [sanctionSchemes].
+class SanctionSchemesFamily
+    extends Family<AsyncValue<SanctionSchemeListModel>> {
+  /// See also [sanctionSchemes].
+  const SanctionSchemesFamily();
+
+  /// See also [sanctionSchemes].
+  SanctionSchemesProvider call({
+    String? id,
+  }) {
+    return SanctionSchemesProvider(
+      id: id,
+    );
+  }
+
+  @override
+  SanctionSchemesProvider getProviderOverride(
+    covariant SanctionSchemesProvider provider,
+  ) {
+    return call(
+      id: provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'sanctionSchemesProvider';
+}
+
+/// See also [sanctionSchemes].
+class SanctionSchemesProvider
+    extends AutoDisposeStreamProvider<SanctionSchemeListModel> {
+  /// See also [sanctionSchemes].
+  SanctionSchemesProvider({
+    String? id,
+  }) : this._internal(
+          (ref) => sanctionSchemes(
+            ref as SanctionSchemesRef,
+            id: id,
+          ),
+          from: sanctionSchemesProvider,
+          name: r'sanctionSchemesProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$sanctionSchemesHash,
+          dependencies: SanctionSchemesFamily._dependencies,
+          allTransitiveDependencies:
+              SanctionSchemesFamily._allTransitiveDependencies,
+          id: id,
+        );
+
+  SanctionSchemesProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
+  final String? id;
+
+  @override
+  Override overrideWith(
+    Stream<SanctionSchemeListModel> Function(SanctionSchemesRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SanctionSchemesProvider._internal(
+        (ref) => create(ref as SanctionSchemesRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeStreamProviderElement<SanctionSchemeListModel> createElement() {
+    return _SanctionSchemesProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SanctionSchemesProvider && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin SanctionSchemesRef
+    on AutoDisposeStreamProviderRef<SanctionSchemeListModel> {
+  /// The parameter `id` of this provider.
+  String? get id;
+}
+
+class _SanctionSchemesProviderElement
+    extends AutoDisposeStreamProviderElement<SanctionSchemeListModel>
+    with SanctionSchemesRef {
+  _SanctionSchemesProviderElement(super.provider);
+
+  @override
+  String? get id => (origin as SanctionSchemesProvider).id;
 }
 
 String _$submitSanctionDocumentsHash() =>
@@ -950,7 +1083,7 @@ final loanRequestFormProvider =
 );
 
 typedef LoanRequestFormRef = AutoDisposeFutureProviderRef<LoanRequestFormModel>;
-String _$loanDetailsHash() => r'e6dccc32362fd83194f1f41e161825e77a1d93e1';
+String _$loanDetailsHash() => r'd5be262874c5d76a4d52ba13a547e730abe2acc3';
 
 /// See also [loanDetails].
 @ProviderFor(loanDetails)
@@ -968,6 +1101,7 @@ class LoanDetailsFamily extends Family<AsyncValue<LoanDetailsModel>> {
     String? quantity,
     String? gatePass,
     String? schemeId,
+    String? bags,
   }) {
     return LoanDetailsProvider(
       inventoryId: inventoryId,
@@ -975,6 +1109,7 @@ class LoanDetailsFamily extends Family<AsyncValue<LoanDetailsModel>> {
       quantity: quantity,
       gatePass: gatePass,
       schemeId: schemeId,
+      bags: bags,
     );
   }
 
@@ -988,6 +1123,7 @@ class LoanDetailsFamily extends Family<AsyncValue<LoanDetailsModel>> {
       quantity: provider.quantity,
       gatePass: provider.gatePass,
       schemeId: provider.schemeId,
+      bags: provider.bags,
     );
   }
 
@@ -1015,6 +1151,7 @@ class LoanDetailsProvider extends AutoDisposeStreamProvider<LoanDetailsModel> {
     String? quantity,
     String? gatePass,
     String? schemeId,
+    String? bags,
   }) : this._internal(
           (ref) => loanDetails(
             ref as LoanDetailsRef,
@@ -1023,6 +1160,7 @@ class LoanDetailsProvider extends AutoDisposeStreamProvider<LoanDetailsModel> {
             quantity: quantity,
             gatePass: gatePass,
             schemeId: schemeId,
+            bags: bags,
           ),
           from: loanDetailsProvider,
           name: r'loanDetailsProvider',
@@ -1038,6 +1176,7 @@ class LoanDetailsProvider extends AutoDisposeStreamProvider<LoanDetailsModel> {
           quantity: quantity,
           gatePass: gatePass,
           schemeId: schemeId,
+          bags: bags,
         );
 
   LoanDetailsProvider._internal(
@@ -1052,6 +1191,7 @@ class LoanDetailsProvider extends AutoDisposeStreamProvider<LoanDetailsModel> {
     required this.quantity,
     required this.gatePass,
     required this.schemeId,
+    required this.bags,
   }) : super.internal();
 
   final String? inventoryId;
@@ -1059,6 +1199,7 @@ class LoanDetailsProvider extends AutoDisposeStreamProvider<LoanDetailsModel> {
   final String? quantity;
   final String? gatePass;
   final String? schemeId;
+  final String? bags;
 
   @override
   Override overrideWith(
@@ -1078,6 +1219,7 @@ class LoanDetailsProvider extends AutoDisposeStreamProvider<LoanDetailsModel> {
         quantity: quantity,
         gatePass: gatePass,
         schemeId: schemeId,
+        bags: bags,
       ),
     );
   }
@@ -1094,7 +1236,8 @@ class LoanDetailsProvider extends AutoDisposeStreamProvider<LoanDetailsModel> {
         other.commodityName == commodityName &&
         other.quantity == quantity &&
         other.gatePass == gatePass &&
-        other.schemeId == schemeId;
+        other.schemeId == schemeId &&
+        other.bags == bags;
   }
 
   @override
@@ -1105,6 +1248,7 @@ class LoanDetailsProvider extends AutoDisposeStreamProvider<LoanDetailsModel> {
     hash = _SystemHash.combine(hash, quantity.hashCode);
     hash = _SystemHash.combine(hash, gatePass.hashCode);
     hash = _SystemHash.combine(hash, schemeId.hashCode);
+    hash = _SystemHash.combine(hash, bags.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -1125,6 +1269,9 @@ mixin LoanDetailsRef on AutoDisposeStreamProviderRef<LoanDetailsModel> {
 
   /// The parameter `schemeId` of this provider.
   String? get schemeId;
+
+  /// The parameter `bags` of this provider.
+  String? get bags;
 }
 
 class _LoanDetailsProviderElement
@@ -1142,6 +1289,8 @@ class _LoanDetailsProviderElement
   String? get gatePass => (origin as LoanDetailsProvider).gatePass;
   @override
   String? get schemeId => (origin as LoanDetailsProvider).schemeId;
+  @override
+  String? get bags => (origin as LoanDetailsProvider).bags;
 }
 
 String _$submitLoanRequestHash() => r'446a22b0ce71fcd437a0022657ee4a82d31940ab';

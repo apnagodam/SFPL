@@ -83,14 +83,23 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   },
                   child: Column(
                     children: [
-                      CircleAvatar(
-                        foregroundImage: NetworkImage(ref
-                                .watch(sharedUtilityProvider)
-                                .getUser()
-                                ?.profileImage ??
-                            ""),
-                        radius: Adaptive.sp(30),
+                      Container(
+                        height: Adaptive.sp(45),
+                        width: Adaptive.sp(45),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                  ref
+                                      .watch(sharedUtilityProvider)
+                                      .getUser()
+                                      ?.profileImage ??
+                                      "",
+                                ),
+                                repeat: ImageRepeat.repeat,
+                                fit: BoxFit.contain)),
                       ),
+
                       SizedBox(
                         height: 10,
                       ),
@@ -441,6 +450,18 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                   color: Colors.black,
                                   fontWeight: FontWeight.w500)),
                         )),
+                    Divider(),
+                    ListTile(
+                        onTap: () {
+                          context.goNamed(RoutesStrings.walletStatement);
+                        },
+                        title: Center(child: Text('Wallet Statement',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: Adaptive.sp(16),
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500)),)),
+
                   ],
                   backgroundColor: Colors.white,
                   collapsedBackgroundColor: Colors.white,
@@ -717,32 +738,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 //                 fontSize: Adaptive.sp(16),
                 //                 color: Colors.black,
                 //                 fontWeight: FontWeight.w500))),
-                //     CupertinoActionSheetAction(
-                //         onPressed: () {
-                //           if (ref
-                //                   .watch(sharedUtilityProvider)
-                //                   .getUser()
-                //                   ?.aadharVerify
-                //                   .toString() ==
-                //               "0") {
-                //             showVerificationDialog(context,
-                //                 titleText: "Verify Aadhar",
-                //                 messageText: "Your Aadhar verification is pending",
-                //                 action: () {
-                //               hideLoader(context);
-                //               context.goNamed(
-                //                   RoutesStrings.bnplAadharRegistrationHome);
-                //             });
-                //           } else {
-                //             context.goNamed(RoutesStrings.bnplDebitStatement);
-                //           }
-                //         },
-                //         child: Text('Debit Statement',
-                //             textAlign: TextAlign.start,
-                //             style: TextStyle(
-                //                 fontSize: Adaptive.sp(16),
-                //                 color: Colors.black,
-                //                 fontWeight: FontWeight.w500))),
+
                 //   ],
                 // ),
                 // CupertinoActionSheet(

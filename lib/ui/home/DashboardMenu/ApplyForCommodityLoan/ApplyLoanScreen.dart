@@ -382,7 +382,7 @@ class _StockApplyLoanState extends ConsumerState<StockApplyLoan> {
                                       color: Colors.white,
                                       fontWeight: FontWeight.w800))),
                           Expanded(
-                              child: Text("Days",
+                              child: Text("Tenor",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: Adaptive.sp(13),
@@ -550,11 +550,14 @@ class _StockApplyLoanState extends ConsumerState<StockApplyLoan> {
                                                                     .w800))),
                                                 Expanded(
                                                     child: Text(
-                                                        data
-                                                                .data
-                                                                ?.scheme?[index]
-                                                                .loanPassDays ??
-                                                            "",
+
+                                                    "${data
+                                                        .data
+                                                        ?.scheme?[index]
+                                                        .tenor ??""} ${data
+                                                        .data
+                                                        ?.scheme?[index]
+                                                        .tenorType ??""}",
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: TextStyle(
@@ -642,7 +645,7 @@ class _LoanDetailsState extends ConsumerState<LoanDetails> {
               commodityName: "${widget.data?.commodity}",
               quantity: "${widget.data?.quantity}",
               gatePass: "${widget.data?.gatePass}",
-              schemeId: "${widget.schemeId}"))
+              schemeId: "${widget.schemeId}",bags: "${widget.data?.bags??"0"}"))
           .when(
               data: (data) {
                 return data.status.toString() == "0"
@@ -656,13 +659,14 @@ class _LoanDetailsState extends ConsumerState<LoanDetails> {
                         ),
                       )
                     : ColumnSuper(alignment: Alignment.centerLeft, children: [
+
                         Padding(
                           padding: const Pad(all: 10),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                    'Market Rate: ${currencyFormat.format(double.tryParse("${data.data?.marketPrice ?? "0"}"))}',
+                                    'Market Rate: ',
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         fontSize: Adaptive.sp(14),
@@ -675,7 +679,7 @@ class _LoanDetailsState extends ConsumerState<LoanDetails> {
                                         color: Colors.black,
                                         fontWeight: FontWeight.w800)),
                                 Text(
-                                    'Weight: ${data.data?.quantity ?? 0.0} Qtl.',
+                                    '${currencyFormat.format(double.tryParse("${data.data?.marketPrice ?? "0"}"))} Qtl.',
                                     textAlign: TextAlign.end,
                                     style: TextStyle(
                                         fontSize: Adaptive.sp(14),
@@ -689,6 +693,39 @@ class _LoanDetailsState extends ConsumerState<LoanDetails> {
                                         fontWeight: FontWeight.w800)),
                               ]),
                         ),
+                  const Divider(),
+                  Padding(
+                    padding: const Pad(all: 10),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                              'Quality Adjusted Market Rate:  ',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(14),
+                                  shadows: const [
+                                    Shadow(
+                                        color: Colors.white,
+                                        blurRadius: 1,
+                                        offset: Offset(0.2, 0.2))
+                                  ],
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w800)),
+                          Text('${data.data?.qualityMarketPrice ?? 0.0} Qtl.',
+                              textAlign: TextAlign.end,
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(14),
+                                  shadows: const [
+                                    Shadow(
+                                        color: Colors.white,
+                                        blurRadius: 1,
+                                        offset: Offset(0.2, 0.2))
+                                  ],
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w800)),
+                        ]),
+                  ),
                         const Divider(),
                         Padding(
                           padding: const Pad(all: 10),
@@ -722,6 +759,40 @@ class _LoanDetailsState extends ConsumerState<LoanDetails> {
                                         fontWeight: FontWeight.w800)),
                               ]),
                         ),
+                  const Divider(),
+                  Padding(
+                    padding: const Pad(all: 10),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                              'Weight: ',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(14),
+                                  shadows: const [
+                                    Shadow(
+                                        color: Colors.white,
+                                        blurRadius: 1,
+                                        offset: Offset(0.2, 0.2))
+                                  ],
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w800)),
+                          Text(
+                              '${data.data?.quantity ?? 0.0} Qtl.',
+                              textAlign: TextAlign.end,
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(14),
+                                  shadows: const [
+                                    Shadow(
+                                        color: Colors.white,
+                                        blurRadius: 1,
+                                        offset: Offset(0.2, 0.2))
+                                  ],
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w800)),
+                        ]),
+                  ),
                         const Divider(),
                         Padding(
                           padding: const Pad(all: 10),

@@ -85,7 +85,7 @@ class MyApp extends ConsumerWidget {
                   fontWeight: FontWeight.bold,
                   fontSize: Adaptive.sp(18),
                   color: Colors.black)),
-          fontFamily: GoogleFonts.manrope().fontFamily,
+          fontFamily: GoogleFonts.inter().fontFamily,
           colorScheme:
           ColorScheme.fromSeed(seedColor: ColorsConstant.secondColorDark),
           useMaterial3: true,

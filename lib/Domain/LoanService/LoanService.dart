@@ -8,15 +8,14 @@ import 'package:swfl/Data/Model/LoanDetailsModel.dart';
 import 'package:swfl/Data/Model/LoanRequestFormModel.dart';
 import 'package:swfl/Data/Model/LoanRequestsStatusModel.dart';
 import 'package:swfl/Data/Model/SanctionLimitListModel.dart';
+import 'package:swfl/Data/Model/SanctionSchemeListModel.dart';
 import 'package:swfl/Data/Model/TermsModel.dart';
 import 'package:swfl/Data/Model/TripartyAgreementModel.dart';
 import 'package:swfl/Data/Model/WspListModel.dart';
 import 'package:swfl/Domain/Dio/DioProvider.dart';
 
 import '../../Data/Model/SchemeResponseModel.dart';
-import '../../Data/SharedPrefs/SharedUtility.dart';
-import '../../ui/utils/routes.dart';
-import '../../ui/utils/routes_strings.dart';
+import '../../Data/Model/TermsRequestModel.dart';
 
 part 'LoanService.g.dart';
 
@@ -35,19 +34,20 @@ Future<SanctionLimitListModel> appliedList(AppliedListRef ref) async {
 }
 
 @riverpod
-Future<TermsModel> terms(TermsRef ref, {required String? schemeId}) async {
-  var response = await ref
-      .watch(dioProvider)
-      .post(ApiClient.getTerms, queryParameters: {"scheme_id": schemeId});
+Stream<TermsModel> terms(TermsRef ref,
+    {required TermsRequestModel model}) async* {
+  var data = TermsRequestModel(model.scheme_id).toJson();
+  var response =
+      await ref.watch(dioProvider).post(ApiClient.getTerms, data: data);
 
-  return termsModelFromJson(jsonEncode(response.data));
+  yield termsModelFromJson(jsonEncode(response.data));
 }
 
 @riverpod
 Future<Map<String, dynamic>> applyForLoan(ApplyForLoanRef ref,
     {String? amount,
     String? loanType,
-    String? schemeId,
+    List<int>? schemeId,
     File? itr1,
     File? itr2,
     File? itr3,
@@ -57,30 +57,50 @@ Future<Map<String, dynamic>> applyForLoan(ApplyForLoanRef ref,
   FormData formData = new FormData.fromMap({
     "amount": amount,
     'loan_type': loanType,
-    'scheme_id': schemeId,
-    'itr_first_year': await MultipartFile.fromFile(
-      itr1?.path ?? "",
-      filename: 'itr1.pdf',
-      contentType: DioMediaType("document", "pdf"),
-    ),
-    'itr_second_year': await MultipartFile.fromFile(itr2?.path ?? "",
-        contentType: DioMediaType("document", "pdf"), filename: 'itr2.pdf'),
-    'itr_third_year': await MultipartFile.fromFile(itr3?.path ?? "",
-        contentType: DioMediaType("document", "pdf"), filename: 'itr3.pdf'),
-    'bal_first_year': await MultipartFile.fromFile(bs1?.path ?? "",
-        contentType: DioMediaType("document", "pdf"), filename: 'bal1.pdf'),
-    'bal_second_year': await MultipartFile.fromFile(bs2?.path ?? "",
-        contentType: DioMediaType("document", "pdf"), filename: 'bal2.pdf'),
-    'bal_third_year': await MultipartFile.fromFile(
-      bs3?.path ?? "",
-      filename: 'bal2.pdf',
-      contentType: DioMediaType("document", "pdf"),
-    ),
+    if (itr1 != null)
+      'itr_first_year': await MultipartFile.fromFile(
+        itr1?.path ?? "",
+        filename: 'itr1.pdf',
+        contentType: DioMediaType("document", "pdf"),
+      ),
+    if (itr2 != null)
+      'itr_second_year': await MultipartFile.fromFile(itr2?.path ?? "",
+          contentType: DioMediaType("document", "pdf"), filename: 'itr2.pdf'),
+    if (itr3 != null)
+      'itr_third_year': await MultipartFile.fromFile(itr3?.path ?? "",
+          contentType: DioMediaType("document", "pdf"), filename: 'itr3.pdf'),
+    if (bs1 != null)
+      'bal_first_year': await MultipartFile.fromFile(bs1?.path ?? "",
+          contentType: DioMediaType("document", "pdf"), filename: 'bal1.pdf'),
+    if (bs2 != null)
+      'bal_second_year': await MultipartFile.fromFile(bs2?.path ?? "",
+          contentType: DioMediaType("document", "pdf"), filename: 'bal2.pdf'),
+    if (bs2 != null)
+      'bal_third_year': await MultipartFile.fromFile(
+        bs3?.path ?? "",
+        filename: 'bal2.pdf',
+        contentType: DioMediaType("document", "pdf"),
+      ),
   });
+  for (var i = 0; i < schemeId!.length; i++) {
+    formData.fields.add(MapEntry('scheme_id[$i]', "${schemeId[i]}"));
+  }
   var response =
       await ref.watch(dioProvider).post(ApiClient.applyForLoan, data: formData);
 
   return response.data;
+}
+
+@riverpod
+Stream<SanctionSchemeListModel> sanctionSchemes(SanctionSchemesRef ref,
+    {String? id}) async* {
+  var response = await ref
+      .watch(dioProvider)
+      .post(ApiClient.getSanctionSchemes, queryParameters: {
+    'id': id,
+  });
+
+  yield sanctionSchemeListModelFromMap(jsonEncode(response.data));
 }
 
 @riverpod
@@ -93,11 +113,13 @@ Future<Map<String, dynamic>> submitSanctionDocuments(
 }) async {
   FormData formData = new FormData.fromMap({
     "id": id,
-    'tri_agreement': await MultipartFile.fromFile(triAgreement?.path ?? "",filename: 'triagreement.pdf'),
+    'tri_agreement': await MultipartFile.fromFile(triAgreement?.path ?? "",
+        filename: 'triagreement.pdf'),
     'pdc': await MultipartFile.fromFile(pdc?.path ?? "",
         contentType: DioMediaType("document", "pdf"), filename: 'pdf.pdf'),
     'agreement': await MultipartFile.fromFile(agreement?.path ?? "",
-        contentType: DioMediaType("document", "pdf"), filename: 'agreement.pdf'),
+        contentType: DioMediaType("document", "pdf"),
+        filename: 'agreement.pdf'),
   });
   var response = await ref
       .watch(dioProvider)
@@ -165,14 +187,16 @@ Stream<LoanDetailsModel> loanDetails(LoanDetailsRef ref,
     String? commodityName,
     String? quantity,
     String? gatePass,
-    String? schemeId}) async* {
+    String? schemeId,
+    String? bags}) async* {
   var response =
       await ref.watch(dioProvider).post(ApiClient.getLoanDetails, data: {
     'inventory_id': inventoryId,
     'commodity_name': commodityName,
     'quantity': quantity,
     'gate_pass': gatePass,
-    'scheme_id': schemeId
+    'scheme_id': schemeId,
+    'bags': '${bags}'
   });
 
   yield loanDetailsModelFromMap(jsonEncode(response.data));
@@ -202,7 +226,7 @@ Future<Map<String, dynamic>> submitLoanRequest(SubmitLoanRequestRef ref,
     'ifsc': ifscCode,
     'account_no': accountNo,
     'stack_number': stackNo,
-    'bags':bags,
+    'bags': bags,
     'terminal': terminalName,
   });
 

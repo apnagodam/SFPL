@@ -11,8 +11,10 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:path/path.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:swfl/Data/Model/TermsRequestModel.dart';
 import 'package:swfl/Domain/LoanService/LoanService.dart';
 import 'package:swfl/ui/utils/routes.dart';
+import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/utils/widgets.dart';
 
 import '../../../utils/colors.dart';
@@ -39,6 +41,7 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
   var bsFile3 = StateProvider<File?>((ref) => null);
   var schemeActionProvider = StateProvider<String>((ref) => '');
   var checkBoxValueProvider = StateProvider((ref) => false);
+  var schemeList = StateProvider<List<int>>((ref) => []);
 
   @override
   Widget build(BuildContext context) {
@@ -263,7 +266,7 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
                                     const SizedBox(
                                       height: 10,
                                     ),
-                                    Text('ITR File 1*',
+                                    Text('ITR File 1',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: Adaptive.sp(14)))
@@ -325,7 +328,7 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
                                       height: 10,
                                     ),
                                     Text(
-                                      'ITR File 2*',
+                                      'ITR File 2',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: Adaptive.sp(14)),
@@ -388,7 +391,7 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
                                       height: 10,
                                     ),
                                     Text(
-                                      'ITR File 3*',
+                                      'ITR File 3',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: Adaptive.sp(14)),
@@ -462,7 +465,7 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
                                       const SizedBox(
                                         height: 10,
                                       ),
-                                      Text('Balance Sheet File 1*',
+                                      Text('Balance Sheet File 1',
                                           maxLines: 2,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
@@ -526,7 +529,7 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
                                       const SizedBox(
                                         height: 10,
                                       ),
-                                      Text('Balance Sheet File 2*',
+                                      Text('Balance Sheet File 2',
                                           maxLines: 2,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
@@ -590,7 +593,7 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
                                       const SizedBox(
                                         height: 10,
                                       ),
-                                      Text('Balance Sheet File 3*',
+                                      Text('Balance Sheet File 3',
                                           maxLines: 2,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
@@ -691,10 +694,10 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
                                     color: Colors.white,
                                     fontWeight: FontWeight.w800))),
                         Expanded(
-                            child: Text("Days",
+                            child: Text("Tenor",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    fontSize: Adaptive.sp(13),
+                                    fontSize: Adaptive.sp(14),
                                     shadows: const [
                                       Shadow(
                                           color: Colors.white,
@@ -702,7 +705,20 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
                                           offset: Offset(0.2, 0.2))
                                     ],
                                     color: Colors.white,
-                                    fontWeight: FontWeight.w800)))
+                                    fontWeight: FontWeight.w800))),
+                        // Expanded(
+                        //     child: Text("Days",
+                        //         textAlign: TextAlign.center,
+                        //         style: TextStyle(
+                        //             fontSize: Adaptive.sp(13),
+                        //             shadows: const [
+                        //               Shadow(
+                        //                   color: Colors.white,
+                        //                   blurRadius: 1,
+                        //                   offset: Offset(0.2, 0.2))
+                        //             ],
+                        //             color: Colors.white,
+                        //             fontWeight: FontWeight.w800)))
                       ]),
                 ),
                 ref.watch(schemesProvider).when(
@@ -710,112 +726,168 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
                           itemCount: data.data?.length ?? 0,
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) =>data.data?[index].schemeName.toString().toLowerCase().trim()=="bnpl takeover"?SizedBox(): Container(
-                            color: index % 2 == 0
-                                ? Colors.grey.withOpacity(0.1)
-                                : Colors.white,
-                            child: Padding(
-                              padding: const Pad(all: 10),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: Radio<String?>(
-                                        activeColor:
-                                            ColorsConstant.primaryColor,
-                                        value: data.data?[index].id.toString(),
-                                        groupValue: ref
-                                            .watch(schemeActionProvider)
-                                            .toString(),
-                                        onChanged: (String? value) {
-                                          ref
-                                              .watch(
-                                                  schemeActionProvider.notifier)
-                                              .state = value.toString();
-                                        },
-                                      ),
-                                    ),
-                                    Expanded(
-                                        child: Text(
-                                            data.data?[index].schemeName ?? "",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: Adaptive.sp(15),
-                                                shadows: const [
-                                                  Shadow(
-                                                      color: Colors.white,
-                                                      blurRadius: 1,
-                                                      offset: Offset(0.2, 0.2))
-                                                ],
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w800))),
-                                    Expanded(
-                                        child: Text(
-                                            data.data?[index].processingFee ??
-                                                "",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: Adaptive.sp(15),
-                                                shadows: const [
-                                                  Shadow(
-                                                      color: Colors.white,
-                                                      blurRadius: 1,
-                                                      offset: Offset(0.2, 0.2))
-                                                ],
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w800))),
-                                    Expanded(
-                                        child: Text(
-                                            data.data?[index].interestRate ??
-                                                "",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: Adaptive.sp(15),
-                                                shadows: const [
-                                                  Shadow(
-                                                      color: Colors.white,
-                                                      blurRadius: 1,
-                                                      offset: Offset(0.2, 0.2))
-                                                ],
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w800))),
-                                    Expanded(
-                                        child: Text(
-                                            data.data?[index]
-                                                    .loanPerTotalAmount ??
-                                                "",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: Adaptive.sp(15),
-                                                shadows: const [
-                                                  Shadow(
-                                                      color: Colors.white,
-                                                      blurRadius: 1,
-                                                      offset: Offset(0.2, 0.2))
-                                                ],
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w800))),
-                                    Expanded(
-                                        child: Text(
-                                            data.data?[index].loanPassDays ??
-                                                "",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: Adaptive.sp(15),
-                                                shadows: const [
-                                                  Shadow(
-                                                      color: Colors.white,
-                                                      blurRadius: 1,
-                                                      offset: Offset(0.2, 0.2))
-                                                ],
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w800)))
-                                  ]),
-                            ),
-                          ),
+                          itemBuilder: (context, index) => data
+                                      .data?[index].schemeName
+                                      .toString()
+                                      .toLowerCase()
+                                      .trim() ==
+                                  "bnpl takeover"
+                              ? SizedBox()
+                              : Container(
+                                  color: index % 2 == 0
+                                      ? Colors.grey.withOpacity(0.1)
+                                      : Colors.white,
+                                  child: Padding(
+                                    padding: const Pad(all: 10),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            child: Checkbox(
+                                                value: ref
+                                                    .watch(schemeList)
+                                                    .contains(
+                                                        data.data?[index].id),
+                                                onChanged: (isSelected) {
+                                                  if (!ref
+                                                      .watch(schemeList)
+                                                      .contains(data
+                                                          .data?[index].id)) {
+                                                    ref
+                                                        .watch(
+                                                            schemeList.notifier)
+                                                        .state = [
+                                                      ...ref.watch(schemeList),
+                                                      data.data?[index].id
+                                                    ];
+                                                  } else {
+                                                    ref
+                                                        .watch(schemeList)
+                                                        .remove(data
+                                                            .data?[index].id);
+
+                                                    setState(() {});
+                                                  }
+                                                }),
+                                          ),
+                                          Expanded(
+                                              child: Text(
+                                                  data.data?[index]
+                                                          .schemeName ??
+                                                      "",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: Adaptive.sp(15),
+                                                      shadows: const [
+                                                        Shadow(
+                                                            color: Colors.white,
+                                                            blurRadius: 1,
+                                                            offset: Offset(
+                                                                0.2, 0.2))
+                                                      ],
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w800))),
+                                          Expanded(
+                                              child: Text(
+                                                  data.data?[index]
+                                                          .processingFee ??
+                                                      "",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: Adaptive.sp(15),
+                                                      shadows: const [
+                                                        Shadow(
+                                                            color: Colors.white,
+                                                            blurRadius: 1,
+                                                            offset: Offset(
+                                                                0.2, 0.2))
+                                                      ],
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w800))),
+                                          Expanded(
+                                              child: Text(
+                                                  data.data?[index]
+                                                          .interestRate ??
+                                                      "",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: Adaptive.sp(15),
+                                                      shadows: const [
+                                                        Shadow(
+                                                            color: Colors.white,
+                                                            blurRadius: 1,
+                                                            offset: Offset(
+                                                                0.2, 0.2))
+                                                      ],
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w800))),
+                                          Expanded(
+                                              child: Text(
+                                                  data.data?[index]
+                                                          .loanPerTotalAmount ??
+                                                      "",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: Adaptive.sp(15),
+                                                      shadows: const [
+                                                        Shadow(
+                                                            color: Colors.white,
+                                                            blurRadius: 1,
+                                                            offset: Offset(
+                                                                0.2, 0.2))
+                                                      ],
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w800))),
+                                          Expanded(
+                                              child: Text(
+                                                  "${data.data?[index].tenor} ${data.data?[index].tenorType}",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: Adaptive.sp(15),
+                                                      shadows: const [
+                                                        Shadow(
+                                                            color: Colors.white,
+                                                            blurRadius: 1,
+                                                            offset: Offset(
+                                                                0.2, 0.2))
+                                                      ],
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w800))),
+                                          // Expanded(
+                                          //     child: Text(
+                                          //         data.data?[index]
+                                          //                 .loanPassDays ??
+                                          //             "",
+                                          //         textAlign: TextAlign.center,
+                                          //         style: TextStyle(
+                                          //             fontSize: Adaptive.sp(15),
+                                          //             shadows: const [
+                                          //               Shadow(
+                                          //                   color: Colors.white,
+                                          //                   blurRadius: 1,
+                                          //                   offset: Offset(
+                                          //                       0.2, 0.2))
+                                          //             ],
+                                          //             color: Colors.black,
+                                          //             fontWeight:
+                                          //                 FontWeight.w800)))
+                                        ]),
+                                  ),
+                                ),
                         ),
                     error: (e, s) => Text(e.toString()),
-                    loading: () => SizedBox(height: MediaQuery.of(context).size.height,child: Center(child: defaultLoader(),),)),
+                    loading: () => SizedBox(
+                          height: MediaQuery.of(context).size.height,
+                          child: Center(
+                            child: defaultLoader(),
+                          ),
+                        )),
                 const SizedBox(
                   height: 10,
                 ),
@@ -824,24 +896,141 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
                   child: ElevatedButton(
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
-                        if (ref.watch(itrFile1) == null) {
-                          errorToast(context, 'Select ITR of last 3 year');
-                        } else if (ref.watch(itrFile2) == null) {
-                          errorToast(context, 'Select ITR of last 2 year');
-                        } else if (ref.watch(itrFile2) == null) {
-                          errorToast(context, 'Select ITR of last 1 year');
-                        } else if (ref.watch(bsFile1) == null) {
-                          errorToast(
-                              context, 'Select Balance Sheet of last 3 year');
-                        } else if (ref.watch(bsFile2) == null) {
-                          errorToast(
-                              context, 'Select Balance Sheet of last 2 year');
-                        } else if (ref.watch(bsFile3) == null) {
-                          errorToast(
-                              context, 'Select Balance Sheet of last 1 year');
-                        } else {
-                          termsLayout(context);
-                        }
+                        var data = TermsRequestModel(ref.watch(schemeList));
+                        ref
+                            .watch(termsProvider(model: data).future)
+                            .then((data) {
+                          showBarModalBottomSheet(
+                              context: context,
+                              expand: true,
+                              builder: (context) => Consumer(
+                                builder: (context, ref, child) =>
+                                    ListView(
+                                      padding: Pad(all: 10),
+                                      children: [
+                                        HtmlWidget(data.view ?? ""),
+                                        RowSuper(children: [
+                                          Checkbox(
+                                              value: ref.watch(
+                                                  checkBoxValueProvider),
+                                              onChanged: (value) {
+                                                ref
+                                                    .watch(
+                                                    checkBoxValueProvider
+                                                        .notifier)
+                                                    .state = value ?? false;
+                                              }),
+                                          Text(
+                                              'By proceeding, you agree to our Term and Conditions',
+                                              style: TextStyle(
+                                                  fontSize: Adaptive.sp(15),
+                                                  color: Colors.black,
+                                                  fontWeight:
+                                                  FontWeight.w800)),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                        ]),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                              .size
+                                              .width,
+                                          child: ElevatedButton(
+                                            onPressed: () async {
+                                              showloader(context);
+                                              ref
+                                                  .watch(applyForLoanProvider(
+                                                  amount:
+                                                  amountController
+                                                      .text
+                                                      .toString(),
+                                                  loanType: "1",
+                                                  schemeId: ref.watch(
+                                                      schemeList),
+                                                  itr1: ref.watch(
+                                                      itrFile1),
+                                                  itr2: ref.watch(
+                                                      itrFile2),
+                                                  itr3: ref.watch(
+                                                      itrFile3),
+                                                  bs1: ref
+                                                      .watch(bsFile1),
+                                                  bs2: ref
+                                                      .watch(bsFile2),
+                                                  bs3: ref
+                                                      .watch(bsFile3))
+                                                  .future)
+                                                  .then((value) {
+                                                hideLoader(context);
+                                                if (value['status']
+                                                    .toString() ==
+                                                    "1") {
+                                                  ref
+                                                      .watch(goRouterProvider)
+                                                      .pop();
+                                                  successToast(
+                                                      context,
+                                                      value['message']
+                                                          .toString());
+
+                                                  ref
+                                                      .watch(goRouterProvider)
+                                                      .go(RoutesStrings
+                                                      .dashboard);
+                                                } else {
+                                                  errorToast(
+                                                      context,
+                                                      value['message']
+                                                          .toString());
+                                                }
+                                              }).onError((e, s) {
+                                                hideLoader(context);
+                                              });
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                ColorsConstant
+                                                    .secondColorDark,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius.circular(
+                                                        10))),
+                                            child: Text(
+                                              "Submit",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  shadows: [
+                                                    const Shadow(
+                                                        color: Colors.white,
+                                                        blurRadius: 0.3)
+                                                  ],
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: Adaptive.sp(16)),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                              ));
+                        });
+                        // if (ref.watch(itrFile1) == null) {
+                        //   errorToast(context, 'Select ITR of last 3 year');
+                        // } else if (ref.watch(itrFile2) == null) {
+                        //   errorToast(context, 'Select ITR of last 2 year');
+                        // } else if (ref.watch(itrFile2) == null) {
+                        //   errorToast(context, 'Select ITR of last 1 year');
+                        // } else if (ref.watch(bsFile1) == null) {
+                        //   errorToast(
+                        //       context, 'Select Balance Sheet of last 3 year');
+                        // } else if (ref.watch(bsFile2) == null) {
+                        //   errorToast(
+                        //       context, 'Select Balance Sheet of last 2 year');
+                        // } else if (ref.watch(bsFile3) == null) {
+                        //   errorToast(
+                        //       context, 'Select Balance Sheet of last 1 year');
+                        // } else {
+                        //
+                        // }
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -865,95 +1054,4 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
           )),
     );
   }
-
-  termsLayout(BuildContext context) => showBarModalBottomSheet(
-      context: context,
-      expand: true,
-      builder: (context) => Consumer(
-          builder: (context, ref, child) => ref
-              .watch(termsProvider(schemeId: ref.watch(schemeActionProvider)))
-              .when(
-                  data: (data) => Consumer(
-                      builder: (context, ref, child) => Padding(
-                            padding: const Pad(all: 10),
-                            child: ListView(
-                              children: [
-                                HtmlWidget(data.view ?? ""),
-                                RowSuper(children: [
-                                  Checkbox(
-                                      value: ref.watch(checkBoxValueProvider),
-                                      onChanged: (value) {
-                                        ref
-                                            .watch(
-                                                checkBoxValueProvider.notifier)
-                                            .state = value ?? false;
-                                      }),
-                                  Text(
-                                      'By proceeding, you agree to our Term and Conditions',
-                                      style: TextStyle(
-                                          fontSize: Adaptive.sp(15),
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w800)),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                ]),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      showloader(context);
-                                      ref
-                                          .watch(applyForLoanProvider(
-                                                  amount: amountController.text
-                                                      .toString(),
-                                                  loanType: "1",
-                                                  schemeId: ref.watch(
-                                                      schemeActionProvider),
-                                                  itr1: ref.watch(itrFile1),
-                                                  itr2: ref.watch(itrFile2),
-                                                  itr3: ref.watch(itrFile3),
-                                                  bs1: ref.watch(bsFile1),
-                                                  bs2: ref.watch(bsFile2),
-                                                  bs3: ref.watch(bsFile3))
-                                              .future)
-                                          .then((value) {
-                                        hideLoader(context);
-                                        if (value['status'].toString() == "1") {
-                                          ref.watch(goRouterProvider).pop();
-                                          successToast(context,
-                                              value['message'].toString());
-                                        } else {
-                                          errorToast(context,
-                                              value['message'].toString());
-                                        }
-                                      }).onError((e, s) {
-                                        hideLoader(context);
-                                      });
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            ColorsConstant.secondColorDark,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10))),
-                                    child: Text(
-                                      "Submit",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          shadows: [
-                                            const Shadow(
-                                                color: Colors.white,
-                                                blurRadius: 0.3)
-                                          ],
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: Adaptive.sp(16)),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )),
-                  error: (e, s) => Container(),
-                  loading: () => SizedBox(height: MediaQuery.of(context).size.height,child: Center(child: defaultLoader(),),))));
 }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1467EEA42D07185E001336C0 /* file_picker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1467EEA32D07185E001336C0 /* file_picker.framework */; };
+		1467EEA52D07185E001336C0 /* file_picker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1467EEA32D07185E001336C0 /* file_picker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		31F4AD7BC403AB0B05446000 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52A37D18586312A8F88A0B5B /* Pods_RunnerTests.framework */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
@@ -35,6 +37,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				1467EEA52D07185E001336C0 /* file_picker.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -42,6 +45,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1467EEA32D07185E001336C0 /* file_picker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = file_picker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		21C3CA35FDD154547782C454 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -80,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1467EEA42D07185E001336C0 /* file_picker.framework in Frameworks */,
 				9BAF14E4033AD81D693743A2 /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,6 +116,7 @@
 		589018E055270FDEEB70A233 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1467EEA32D07185E001336C0 /* file_picker.framework */,
 				21C3CA35FDD154547782C454 /* Pods_Runner.framework */,
 				52A37D18586312A8F88A0B5B /* Pods_RunnerTests.framework */,
 			);

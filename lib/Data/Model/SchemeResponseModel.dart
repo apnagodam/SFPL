@@ -40,6 +40,8 @@ class Datum {
   dynamic processingFee;
   dynamic loanPerTotalAmount;
   dynamic tenor;
+  dynamic tenorType;
+
   dynamic guaranteeFee;
   dynamic guarantor;
   dynamic status;
@@ -54,6 +56,7 @@ class Datum {
     this.processingFee,
     this.loanPerTotalAmount,
     this.tenor,
+    this.tenorType,
     this.guaranteeFee,
     this.guarantor,
     this.status,
@@ -69,6 +72,7 @@ class Datum {
     processingFee: json["processing_fee"],
     loanPerTotalAmount: json["loan_per_total_amount"],
     tenor: json["tenor"],
+    tenorType:json['tenor_type'],
     guaranteeFee: json["guarantee_fee"],
     guarantor: json["guarantor"],
     status: json["status"],
@@ -84,6 +88,7 @@ class Datum {
     "processing_fee": processingFee,
     "loan_per_total_amount": loanPerTotalAmount,
     "tenor": tenor,
+    "tenor_type":tenorType,
     "guarantee_fee": guaranteeFee,
     "guarantor": guarantor,
     "status": status,
