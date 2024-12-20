@@ -11,7 +11,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 
 @riverpod
 Dio dio(DioRef ref) {
-  return Dio(BaseOptions(baseUrl: ApiClient.testBaseUrl, headers: {
+  return Dio(BaseOptions(baseUrl: ApiClient.baseUrl, headers: {
     "Authorization": "Bearer ${ref.watch(sharedUtilityProvider).getToken()}",
   }))
     ..interceptors.add(Diointerceptor(ref));

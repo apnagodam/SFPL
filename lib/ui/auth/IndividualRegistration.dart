@@ -265,11 +265,11 @@ class _IndividualregistrationState
                                     addressController.text.toString(),
                                     locationState: ref
                                         .watch(statesProvider)
-                                        ?.code
+                                        ?.name
                                         .toString(),
                                     district: ref
                                         .watch(districtProvider)
-                                        ?.districtCode
+                                        ?.name
                                         .toString(),
                                     pincode:
                                     pinController.text.toString(),
