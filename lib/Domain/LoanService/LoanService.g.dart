@@ -22,6 +22,219 @@ final dashboardDataProvider =
 );
 
 typedef DashboardDataRef = AutoDisposeStreamProviderRef<DashboardModel>;
+String _$drfLinkHash() => r'f3f572de527e30641665f325e1bca50155ecb1a9';
+
+/// Copied from Dart SDK
+class _SystemHash {
+  _SystemHash._();
+
+  static int combine(int hash, int value) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + value);
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
+    return hash ^ (hash >> 6);
+  }
+
+  static int finish(int hash) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
+    // ignore: parameter_assignments
+    hash = hash ^ (hash >> 11);
+    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+  }
+}
+
+/// See also [drfLink].
+@ProviderFor(drfLink)
+const drfLinkProvider = DrfLinkFamily();
+
+/// See also [drfLink].
+class DrfLinkFamily extends Family<AsyncValue<Map<String, dynamic>>> {
+  /// See also [drfLink].
+  const DrfLinkFamily();
+
+  /// See also [drfLink].
+  DrfLinkProvider call({
+    String? financeId,
+  }) {
+    return DrfLinkProvider(
+      financeId: financeId,
+    );
+  }
+
+  @override
+  DrfLinkProvider getProviderOverride(
+    covariant DrfLinkProvider provider,
+  ) {
+    return call(
+      financeId: provider.financeId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'drfLinkProvider';
+}
+
+/// See also [drfLink].
+class DrfLinkProvider extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+  /// See also [drfLink].
+  DrfLinkProvider({
+    String? financeId,
+  }) : this._internal(
+          (ref) => drfLink(
+            ref as DrfLinkRef,
+            financeId: financeId,
+          ),
+          from: drfLinkProvider,
+          name: r'drfLinkProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$drfLinkHash,
+          dependencies: DrfLinkFamily._dependencies,
+          allTransitiveDependencies: DrfLinkFamily._allTransitiveDependencies,
+          financeId: financeId,
+        );
+
+  DrfLinkProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.financeId,
+  }) : super.internal();
+
+  final String? financeId;
+
+  @override
+  Override overrideWith(
+    FutureOr<Map<String, dynamic>> Function(DrfLinkRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: DrfLinkProvider._internal(
+        (ref) => create(ref as DrfLinkRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        financeId: financeId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
+    return _DrfLinkProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DrfLinkProvider && other.financeId == financeId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, financeId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin DrfLinkRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
+  /// The parameter `financeId` of this provider.
+  String? get financeId;
+}
+
+class _DrfLinkProviderElement
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with DrfLinkRef {
+  _DrfLinkProviderElement(super.provider);
+
+  @override
+  String? get financeId => (origin as DrfLinkProvider).financeId;
+}
+
+String _$nearExpiryLoansHash() => r'294ac7929a67be1316633fb31239d11decc23b7f';
+
+/// See also [nearExpiryLoans].
+@ProviderFor(nearExpiryLoans)
+final nearExpiryLoansProvider =
+    AutoDisposeStreamProvider<LoanNearExpiryModel>.internal(
+  nearExpiryLoans,
+  name: r'nearExpiryLoansProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$nearExpiryLoansHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef NearExpiryLoansRef = AutoDisposeStreamProviderRef<LoanNearExpiryModel>;
+String _$expiredLoansHash() => r'08b0d5821947d943d0303de0a997db53de97af93';
+
+/// See also [expiredLoans].
+@ProviderFor(expiredLoans)
+final expiredLoansProvider =
+    AutoDisposeStreamProvider<LoanNearExpiryModel>.internal(
+  expiredLoans,
+  name: r'expiredLoansProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$expiredLoansHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef ExpiredLoansRef = AutoDisposeStreamProviderRef<LoanNearExpiryModel>;
+String _$pledgedCommodityHash() => r'28ab1f45ea1395d219acb320735efab12aea2756';
+
+/// See also [pledgedCommodity].
+@ProviderFor(pledgedCommodity)
+final pledgedCommodityProvider =
+    AutoDisposeStreamProvider<PledgedCommodityModel>.internal(
+  pledgedCommodity,
+  name: r'pledgedCommodityProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$pledgedCommodityHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef PledgedCommodityRef
+    = AutoDisposeStreamProviderRef<PledgedCommodityModel>;
+String _$totalLoanAmountHash() => r'e8a3e084813ee677d28a4ecd0f4a9277382f28f3';
+
+/// See also [totalLoanAmount].
+@ProviderFor(totalLoanAmount)
+final totalLoanAmountProvider =
+    AutoDisposeStreamProvider<TotalLoanAmountModel>.internal(
+  totalLoanAmount,
+  name: r'totalLoanAmountProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$totalLoanAmountHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef TotalLoanAmountRef = AutoDisposeStreamProviderRef<TotalLoanAmountModel>;
 String _$schemesHash() => r'39d34d88d06efdc9f1064ca8b608d61b7d880f05';
 
 /// See also [schemes].
@@ -52,27 +265,6 @@ final appliedListProvider =
 
 typedef AppliedListRef = AutoDisposeFutureProviderRef<SanctionLimitListModel>;
 String _$termsHash() => r'742c3c5365d03574b2719679b609d7e881bf4883';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
 
 /// See also [terms].
 @ProviderFor(terms)
@@ -1804,5 +1996,418 @@ final closedRequestsProvider =
 
 typedef ClosedRequestsRef
     = AutoDisposeFutureProviderRef<LoanRequestsStatusModel>;
+String _$surepassLoanAgreementHash() =>
+    r'7983e8cd46313af71bfb1a2504c2a63c6b257ea8';
+
+/// See also [surepassLoanAgreement].
+@ProviderFor(surepassLoanAgreement)
+const surepassLoanAgreementProvider = SurepassLoanAgreementFamily();
+
+/// See also [surepassLoanAgreement].
+class SurepassLoanAgreementFamily
+    extends Family<AsyncValue<Map<String, dynamic>>> {
+  /// See also [surepassLoanAgreement].
+  const SurepassLoanAgreementFamily();
+
+  /// See also [surepassLoanAgreement].
+  SurepassLoanAgreementProvider call({
+    String? id,
+  }) {
+    return SurepassLoanAgreementProvider(
+      id: id,
+    );
+  }
+
+  @override
+  SurepassLoanAgreementProvider getProviderOverride(
+    covariant SurepassLoanAgreementProvider provider,
+  ) {
+    return call(
+      id: provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'surepassLoanAgreementProvider';
+}
+
+/// See also [surepassLoanAgreement].
+class SurepassLoanAgreementProvider
+    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+  /// See also [surepassLoanAgreement].
+  SurepassLoanAgreementProvider({
+    String? id,
+  }) : this._internal(
+          (ref) => surepassLoanAgreement(
+            ref as SurepassLoanAgreementRef,
+            id: id,
+          ),
+          from: surepassLoanAgreementProvider,
+          name: r'surepassLoanAgreementProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$surepassLoanAgreementHash,
+          dependencies: SurepassLoanAgreementFamily._dependencies,
+          allTransitiveDependencies:
+              SurepassLoanAgreementFamily._allTransitiveDependencies,
+          id: id,
+        );
+
+  SurepassLoanAgreementProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
+  final String? id;
+
+  @override
+  Override overrideWith(
+    FutureOr<Map<String, dynamic>> Function(SurepassLoanAgreementRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SurepassLoanAgreementProvider._internal(
+        (ref) => create(ref as SurepassLoanAgreementRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
+    return _SurepassLoanAgreementProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SurepassLoanAgreementProvider && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin SurepassLoanAgreementRef
+    on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
+  /// The parameter `id` of this provider.
+  String? get id;
+}
+
+class _SurepassLoanAgreementProviderElement
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with SurepassLoanAgreementRef {
+  _SurepassLoanAgreementProviderElement(super.provider);
+
+  @override
+  String? get id => (origin as SurepassLoanAgreementProvider).id;
+}
+
+String _$surepassPdcHash() => r'e148e87eb5f73808c53cb903ac0d26db4f4811e5';
+
+/// See also [surepassPdc].
+@ProviderFor(surepassPdc)
+const surepassPdcProvider = SurepassPdcFamily();
+
+/// See also [surepassPdc].
+class SurepassPdcFamily extends Family<AsyncValue<Map<String, dynamic>>> {
+  /// See also [surepassPdc].
+  const SurepassPdcFamily();
+
+  /// See also [surepassPdc].
+  SurepassPdcProvider call({
+    String? id,
+  }) {
+    return SurepassPdcProvider(
+      id: id,
+    );
+  }
+
+  @override
+  SurepassPdcProvider getProviderOverride(
+    covariant SurepassPdcProvider provider,
+  ) {
+    return call(
+      id: provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'surepassPdcProvider';
+}
+
+/// See also [surepassPdc].
+class SurepassPdcProvider
+    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+  /// See also [surepassPdc].
+  SurepassPdcProvider({
+    String? id,
+  }) : this._internal(
+          (ref) => surepassPdc(
+            ref as SurepassPdcRef,
+            id: id,
+          ),
+          from: surepassPdcProvider,
+          name: r'surepassPdcProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$surepassPdcHash,
+          dependencies: SurepassPdcFamily._dependencies,
+          allTransitiveDependencies:
+              SurepassPdcFamily._allTransitiveDependencies,
+          id: id,
+        );
+
+  SurepassPdcProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
+  final String? id;
+
+  @override
+  Override overrideWith(
+    FutureOr<Map<String, dynamic>> Function(SurepassPdcRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SurepassPdcProvider._internal(
+        (ref) => create(ref as SurepassPdcRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
+    return _SurepassPdcProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SurepassPdcProvider && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin SurepassPdcRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
+  /// The parameter `id` of this provider.
+  String? get id;
+}
+
+class _SurepassPdcProviderElement
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with SurepassPdcRef {
+  _SurepassPdcProviderElement(super.provider);
+
+  @override
+  String? get id => (origin as SurepassPdcProvider).id;
+}
+
+String _$surepassSanctionLetterHash() =>
+    r'3d4fb319cb42f9585226cd281cf9d1818ea7bb0b';
+
+/// See also [surepassSanctionLetter].
+@ProviderFor(surepassSanctionLetter)
+const surepassSanctionLetterProvider = SurepassSanctionLetterFamily();
+
+/// See also [surepassSanctionLetter].
+class SurepassSanctionLetterFamily
+    extends Family<AsyncValue<Map<String, dynamic>>> {
+  /// See also [surepassSanctionLetter].
+  const SurepassSanctionLetterFamily();
+
+  /// See also [surepassSanctionLetter].
+  SurepassSanctionLetterProvider call({
+    String? id,
+  }) {
+    return SurepassSanctionLetterProvider(
+      id: id,
+    );
+  }
+
+  @override
+  SurepassSanctionLetterProvider getProviderOverride(
+    covariant SurepassSanctionLetterProvider provider,
+  ) {
+    return call(
+      id: provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'surepassSanctionLetterProvider';
+}
+
+/// See also [surepassSanctionLetter].
+class SurepassSanctionLetterProvider
+    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+  /// See also [surepassSanctionLetter].
+  SurepassSanctionLetterProvider({
+    String? id,
+  }) : this._internal(
+          (ref) => surepassSanctionLetter(
+            ref as SurepassSanctionLetterRef,
+            id: id,
+          ),
+          from: surepassSanctionLetterProvider,
+          name: r'surepassSanctionLetterProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$surepassSanctionLetterHash,
+          dependencies: SurepassSanctionLetterFamily._dependencies,
+          allTransitiveDependencies:
+              SurepassSanctionLetterFamily._allTransitiveDependencies,
+          id: id,
+        );
+
+  SurepassSanctionLetterProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
+  final String? id;
+
+  @override
+  Override overrideWith(
+    FutureOr<Map<String, dynamic>> Function(SurepassSanctionLetterRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SurepassSanctionLetterProvider._internal(
+        (ref) => create(ref as SurepassSanctionLetterRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
+    return _SurepassSanctionLetterProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SurepassSanctionLetterProvider && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin SurepassSanctionLetterRef
+    on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
+  /// The parameter `id` of this provider.
+  String? get id;
+}
+
+class _SurepassSanctionLetterProviderElement
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with SurepassSanctionLetterRef {
+  _SurepassSanctionLetterProviderElement(super.provider);
+
+  @override
+  String? get id => (origin as SurepassSanctionLetterProvider).id;
+}
+
+String _$sanctionHoldHash() => r'29f36eaa334b4c758a51624e02596641043050a6';
+
+/// See also [sanctionHold].
+@ProviderFor(sanctionHold)
+final sanctionHoldProvider =
+    AutoDisposeStreamProvider<SantionedLimitHoldModel>.internal(
+  sanctionHold,
+  name: r'sanctionHoldProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$sanctionHoldHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef SanctionHoldRef = AutoDisposeStreamProviderRef<SantionedLimitHoldModel>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

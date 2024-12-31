@@ -38,26 +38,29 @@ class _AppliedloanlistState extends ConsumerState<Appliedloanlist> {
                   fontWeight: FontWeight.bold),
             ),
             bottomNavigationBar: BottomNavigationBar(
-              currentIndex: ref.watch(indexProvider),
+                currentIndex: ref.watch(indexProvider),
                 onTap: (index) =>
                     ref.watch(indexProvider.notifier).state = index,
                 backgroundColor: ColorsConstant.primaryColor,
-                selectedItemColor: ColorsConstant.primaryColor,
+                type: BottomNavigationBarType.fixed,
+                selectedItemColor: Colors.white,
+                showSelectedLabels: true,
+                selectedIconTheme: IconThemeData(size: 32),
                 unselectedItemColor: ColorsConstant.secondaryColor,
                 selectedLabelStyle: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: Adaptive.sp(12)),
+                    fontWeight: FontWeight.bold, fontSize: Adaptive.sp(13)),
                 unselectedLabelStyle: TextStyle(
                     fontWeight: FontWeight.bold, fontSize: Adaptive.sp(12)),
-                items: [
-                  const BottomNavigationBarItem(
+                items: const [
+                  BottomNavigationBarItem(
                       icon: Icon(Icons.approval_outlined), label: "Approved"),
-                  const BottomNavigationBarItem(
+                  BottomNavigationBarItem(
                     icon: Icon(Icons.pending),
                     label: "Pending",
                   ),
-                  const BottomNavigationBarItem(
+                  BottomNavigationBarItem(
                       icon: Icon(Icons.close), label: "Rejected"),
-                  const BottomNavigationBarItem(
+                  BottomNavigationBarItem(
                       icon: Icon(Icons.check), label: "Closed")
                 ]),
             body: listOfScreens[ref.watch(indexProvider)]));
@@ -146,83 +149,90 @@ class _ApprovedloanRequestsState extends ConsumerState<ApprovedloanRequests> {
             ),
           ),
           ref.watch(approvedRequestsProvider).when(
-              data: (data) => (data.data??[]).isEmpty ?emptyData(): ListView.builder(
-                    itemCount: data.data?.length ?? 0,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) => Container(
-                      color: index % 2 == 0
-                          ? Colors.grey.withOpacity(0.2)
-                          : Colors.white,
-                      padding: const Pad(all: 10),
-                      child: IntrinsicHeight(
-                        child: Row(children: [
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].gatePass}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].terminal}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].commodityName}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].quantity}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].stackNumber}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${currencyFormat.format(double.tryParse("${data.data?[index].amount}"))}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                        ]),
+              data: (data) => (data.data ?? []).isEmpty
+                  ? emptyData()
+                  : ListView.builder(
+                      itemCount: data.data?.length ?? 0,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) => Container(
+                        color: index % 2 == 0
+                            ? Colors.grey.withOpacity(0.2)
+                            : Colors.white,
+                        padding: const Pad(all: 10),
+                        child: IntrinsicHeight(
+                          child: Row(children: [
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].gatePass}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].terminal}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].commodityName}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].quantity}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].stackNumber}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${currencyFormat.format(double.tryParse("${data.data?[index].amount}"))}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                          ]),
+                        ),
                       ),
                     ),
-                  ),
               error: (e, s) => emptyData(),
-              loading: () =>  Center(
-                    child: SizedBox(height: MediaQuery.of(context).size.height,child: Center(child: defaultLoader(),),),
+              loading: () => Center(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: Center(
+                        child: defaultLoader(),
+                      ),
+                    ),
                   ))
         ],
       ),
@@ -312,83 +322,90 @@ class _PendingloanRequestsState extends ConsumerState<PendingloanRequests> {
             ),
           ),
           ref.watch(pendingRequestsProvider).when(
-              data: (data) => (data.data??[]).isEmpty ?emptyData(): ListView.builder(
-                    itemCount: data.data?.length ?? 0,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) => Container(
-                      color: index % 2 == 0
-                          ? Colors.grey.withOpacity(0.2)
-                          : Colors.white,
-                      padding: const Pad(all: 10),
-                      child: IntrinsicHeight(
-                        child: Row(children: [
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].gatePass}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].terminal}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].commodityName}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].quantity}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].stackNumber}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${currencyFormat.format(double.tryParse("${data.data?[index].amount}"))}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                        ]),
+              data: (data) => (data.data ?? []).isEmpty
+                  ? emptyData()
+                  : ListView.builder(
+                      itemCount: data.data?.length ?? 0,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) => Container(
+                        color: index % 2 == 0
+                            ? Colors.grey.withOpacity(0.2)
+                            : Colors.white,
+                        padding: const Pad(all: 10),
+                        child: IntrinsicHeight(
+                          child: Row(children: [
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].gatePass}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].terminal}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].commodityName}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].quantity}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].stackNumber}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${currencyFormat.format(double.tryParse("${data.data?[index].amount}"))}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                          ]),
+                        ),
                       ),
                     ),
-                  ),
               error: (e, s) => Container(),
-              loading: () =>  Center(
-                    child:SizedBox(height: MediaQuery.of(context).size.height,child: Center(child: defaultLoader(),),),
+              loading: () => Center(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: Center(
+                        child: defaultLoader(),
+                      ),
+                    ),
                   ))
         ],
       ),
@@ -478,84 +495,90 @@ class _RejectedloanRequestsState extends ConsumerState<RejectedloanRequests> {
             ),
           ),
           ref.watch(approvedRequestsProvider).when(
-              data: (data) => (data.data??[]).isEmpty ?emptyData(): ListView.builder(
-                    itemCount: data.data?.length ?? 0,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) => Container(
-                      color: index % 2 == 0
-                          ? Colors.grey.withOpacity(0.2)
-                          : Colors.white,
-                      padding: const Pad(all: 10),
-                      child: IntrinsicHeight(
-                        child: Row(children: [
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].gatePass}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].terminal}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].commodityName}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].quantity}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].stackNumber}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${currencyFormat.format(double.tryParse("${data.data?[index].amount}"))}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                        ]),
+              data: (data) => (data.data ?? []).isEmpty
+                  ? emptyData()
+                  : ListView.builder(
+                      itemCount: data.data?.length ?? 0,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) => Container(
+                        color: index % 2 == 0
+                            ? Colors.grey.withOpacity(0.2)
+                            : Colors.white,
+                        padding: const Pad(all: 10),
+                        child: IntrinsicHeight(
+                          child: Row(children: [
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].gatePass}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].terminal}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].commodityName}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].quantity}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].stackNumber}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${currencyFormat.format(double.tryParse("${data.data?[index].amount}"))}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                          ]),
+                        ),
                       ),
                     ),
-                  ),
               error: (e, s) => Container(),
-              loading: () =>  Center(
-                    child: SizedBox(height: MediaQuery.of(context).size.height,child: Center(child: defaultLoader(),),)
-                  ))
+              loading: () => Center(
+                      child: SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: Center(
+                      child: defaultLoader(),
+                    ),
+                  )))
         ],
       ),
     );
@@ -643,83 +666,90 @@ class _ClosedloanRequestsState extends ConsumerState<ClosedloanRequests> {
             ),
           ),
           ref.watch(closedRequestsProvider).when(
-              data: (data) => (data.data??[]).isEmpty ?emptyData(): ListView.builder(
-                    itemCount: data.data?.length ?? 0,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) => Container(
-                      color: index % 2 == 0
-                          ? Colors.grey.withOpacity(0.2)
-                          : Colors.white,
-                      padding: const Pad(all: 10),
-                      child: IntrinsicHeight(
-                        child: Row(children: [
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].gatePass}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].terminal}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].commodityName}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].quantity}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${data.data?[index].stackNumber}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: Text(
-                            "${currencyFormat.format(double.tryParse("${data.data?[index].amount}"))}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: Adaptive.sp(12)),
-                          )),
-                        ]),
+              data: (data) => (data.data ?? []).isEmpty
+                  ? emptyData()
+                  : ListView.builder(
+                      itemCount: data.data?.length ?? 0,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) => Container(
+                        color: index % 2 == 0
+                            ? Colors.grey.withOpacity(0.2)
+                            : Colors.white,
+                        padding: const Pad(all: 10),
+                        child: IntrinsicHeight(
+                          child: Row(children: [
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].gatePass}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].terminal}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].commodityName}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].quantity}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${data.data?[index].stackNumber}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                            const VerticalDivider(),
+                            Expanded(
+                                child: Text(
+                              "${currencyFormat.format(double.tryParse("${data.data?[index].amount}"))}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: Adaptive.sp(12)),
+                            )),
+                          ]),
+                        ),
                       ),
                     ),
-                  ),
               error: (e, s) => Container(),
-              loading: () =>  Center(
-                    child: SizedBox(height: MediaQuery.of(context).size.height,child: Center(child: defaultLoader(),),),
+              loading: () => Center(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: Center(
+                        child: defaultLoader(),
+                      ),
+                    ),
                   ))
         ],
       ),

@@ -3,11 +3,13 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/ui/utils/routes.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/utils/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 import '../../../Data/Model/DistrictsResponseModel.dart';
 import '../../../Data/Model/StatesResponseModel.dart';
@@ -35,6 +37,48 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
       StateProvider<RegistrationType?>((ref) => null);
   var constitutionTypeProvider =
       StateProvider<ConstitutionType?>((ref) => null);
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      var db = await mongo.Db.create(
+          "mongodb+srv://apnagodam:WOU8uu5VoGWuaaZW@cluster0.humxj.mongodb.net/");
+      await db.open();
+
+      final mobileDeviceIdentifier =
+          await MobileDeviceIdentifier().getDeviceId();
+
+      var userDetailsCollection =
+          db.collection(mobileDeviceIdentifier.toString());
+
+      userDetailsCollection.find().first.then((value) {
+        if (value['constitution'] != null) {
+          if (value['constitution'].toString() == "1") {
+            ref.watch(constitutionTypeProvider.notifier).state =
+                ConstitutionType.individual;
+            setState(() {});
+          }
+          if (value['constitution'].toString() == "2") {
+            ref.watch(constitutionTypeProvider.notifier).state =
+                ConstitutionType.proprietorship;
+          }
+          if (value['constitution'].toString() == "3") {
+            ref.watch(constitutionTypeProvider.notifier).state =
+                ConstitutionType.partnership;
+          }
+          if (value['constitution'].toString() == "4") {
+            ref.watch(constitutionTypeProvider.notifier).state =
+                ConstitutionType.company;
+          } else {
+            ref.watch(constitutionTypeProvider.notifier).state =
+                ConstitutionType.defaultType;
+          }
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -253,7 +297,6 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                 switch (ref.watch(constitutionTypeProvider)) {
                   case null:
                     errorToast(context, 'Please select Constitution type');
-
                   case ConstitutionType.defaultType:
                     errorToast(context, 'Please select Constitution type');
                   case ConstitutionType.individual:
@@ -261,10 +304,30 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                   case ConstitutionType.proprietorship:
                     context.goNamed(RoutesStrings.propRegistration);
                   case ConstitutionType.partnership:
+
+                    // showAccountVerificationDialog(context,
+                    //     titleText: "Please contact administration!",
+                    //     messageText:
+                    //     "Please Verify account from administration by calling our support",
+                    //     action: () async {
+                    //       await launchUrl(Uri.parse('tel:+91 7733901154'));
+                    //       hideLoader(context);
+                    //     });
+                    //
                     ref
                         .watch(goRouterProvider)
                         .goNamed(RoutesStrings.partnershipRegistration);
                   case ConstitutionType.company:
+
+                    //
+                    // showAccountVerificationDialog(context,
+                    //     titleText: "Please contact administration!",
+                    //     messageText:
+                    //     "Please Verify account from administration by calling our support",
+                    //     action: () async {
+                    //       await launchUrl(Uri.parse('tel:+91 7733901154'));
+                    //       hideLoader(context);
+                    //     });
                     ref
                         .watch(goRouterProvider)
                         .goNamed(RoutesStrings.companyRegistration);

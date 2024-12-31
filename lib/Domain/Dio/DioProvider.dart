@@ -20,7 +20,6 @@ Dio dio(DioRef ref) {
 class ApiClient {
   static const baseUrl = "https://apnagodamfinance.com/api/";
   static const testBaseUrl = 'https://test.apnagodamfinance.com/api/';
-
 /*
 dashboard api
 *
@@ -58,6 +57,26 @@ Authentication api
   static const updateAddress = 'address_update';
 
   /*
+Partners and directors api
+*
+*
+*
+*/
+
+  static const directorSendOtp =
+      'director_partners_add_send_otp'; // api for partner and director
+
+  static const submitDirectorDetails =
+      'partenrs_director_add'; // api for partner and director submission
+  static const getListOfPartnersDirectors = 'partenrs_director_list';
+  static const updateDirectorPartner = 'partenrs_director_update';
+  static const sendDirectorVerifyOtp = 'director_partners_update_send_otp';
+
+  static const getAuthorisationLetter =
+      'auth_letter_download'; //auth_letter_upload
+
+  static const uploadAuthorisationLetter = 'auth_letter_upload';
+  /*
 Loan api
 *
 *
@@ -83,6 +102,15 @@ Loan api
 
   static const submitSanctionDocuments = 'post_sanction_document_upload';
   static const getSanctionSchemes = 'sanctiond-limit-schemes';
+
+  static const getLoansNearExpiry = "loan_near_expiry";
+  static const getExpiredLoans = "loan_expiry";
+
+  static const getPledgedCommodity = 'total_pledged_commodity';
+  static const getTotalLoanAmount = 'total_loan_amount';
+
+  static const downloadDrfLink = "download_drf";
+  static const getSanctionHoldList = 'limit-hold';
 
 /*
 Wallet api
@@ -137,4 +165,14 @@ repayment api
   static const getRepaymentData = "get-terminal-commodity-stack";
   static const getRepaymentSettlementList = 'repayment-details-drf-wise';
   static const repayGatepass = 'gate-pass-settlement-pay';
+
+/*
+surepass api
+*
+*
+*
+*/
+  static const getSurepassLoanAgreementUrl = 'loan_agr_download/';
+  static const getSurepassPdcUrl = 'pdc_download/';
+  static const getSurepassSanctionUrl = 'sanction_letter_download/';
 }

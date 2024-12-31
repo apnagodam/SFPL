@@ -2,10 +2,14 @@ import 'dart:io';
 
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:elevarm_ui/elevarm_ui.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:path/path.dart';
@@ -13,9 +17,13 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Data/Model/SanctionLimitListModel.dart';
 import 'package:swfl/Domain/Dio/DioProvider.dart';
 import 'package:swfl/Domain/LoanService/LoanService.dart';
+import 'package:swfl/main.dart';
+import 'package:swfl/ui/home/dashboard_screen.dart';
 import 'package:swfl/ui/home/home_screen.dart';
 import 'package:swfl/ui/utils/pdf.dart';
+import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/utils/widgets.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../utils/colors.dart';
 
@@ -61,7 +69,8 @@ class _SanctionedamountscreenState
                                     : appliedData?.status.toString() == "1"
                                         ? ColorsConstant.secondColorUltraDark
                                         : appliedData?.status.toString() == "2"
-                                            ? ColorsConstant.primaryColor
+                                            ? ColorsConstant
+                                                .secondColorUltraDark
                                             : appliedData?.status.toString() ==
                                                     "3"
                                                 ? ColorsConstant
@@ -405,7 +414,7 @@ class _SanctionedamountscreenState
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  '${currencyFormat.format(int.parse("${appliedData?.requestedAmount}"))}',
+                                  '${currencyFormat.format(num.parse("${appliedData?.requestedAmount ?? "0"}"))}',
                                   textAlign: TextAlign.end,
                                   style: TextStyle(
                                       fontSize: Adaptive.sp(15),
@@ -424,7 +433,7 @@ class _SanctionedamountscreenState
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  '${currencyFormat.format(int.parse(appliedData?.approvedAmount.toString() ?? "0"))}',
+                                  '${currencyFormat.format(num.parse(appliedData?.approvedAmount.toString() ?? "0"))}',
                                   textAlign: TextAlign.end,
                                   style: TextStyle(
                                       fontSize: Adaptive.sp(15),
@@ -443,9 +452,9 @@ class _SanctionedamountscreenState
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  appliedData?.verifiedDate == null
+                                  appliedData?.createdAt == null
                                       ? "--"
-                                      : "${DateFormat('dd-MMMM-yyyy').format(DateTime.parse(appliedData?.verifiedDate))}",
+                                      : "${DateFormat('dd-MMMM-yyyy').format((appliedData?.createdAt as DateTime))}",
                                   textAlign: TextAlign.end,
                                   style: TextStyle(
                                       fontSize: Adaptive.sp(15),
@@ -459,7 +468,7 @@ class _SanctionedamountscreenState
                                   ? downloadUploadAgreementLayout(
                                       appliedData, context)
                                   : TextOneLine(
-                                      'Status: ${appliedData?.status.toString() == "0" ? "Rejected" : appliedData?.status.toString() == "1" ? "Pending" : appliedData?.status.toString() == "2" ? "Approved" : appliedData?.status.toString() == "3" ? "Upload Document" : appliedData?.status.toString() == "4" ? "Document Verification Pending" : appliedData?.status.toString() == "5" ? "Approval Pending" : appliedData?.status.toString() == "6" ? "Limit Sanctioned" : "--"}',
+                                      'Status: ${appliedData?.status.toString() == "0" ? "Rejected" : appliedData?.status.toString() == "1" ? "Pending" : appliedData?.status.toString() == "2" ? "Pending" : appliedData?.status.toString() == "3" ? "Upload Document" : appliedData?.status.toString() == "4" ? "Document Verification Pending" : appliedData?.status.toString() == "5" ? "Approval Pending" : appliedData?.status.toString() == "6" ? "Limit Sanctioned" : "--"}',
                                       style: TextStyle(
                                           fontSize: Adaptive.sp(16),
                                           color: appliedData?.status
@@ -476,7 +485,7 @@ class _SanctionedamountscreenState
                                                               .toString() ==
                                                           "2"
                                                       ? ColorsConstant
-                                                          .primaryColor
+                                                          .secondColorUltraDark
                                                       : appliedData
                                                                   ?.status
                                                                   .toString() ==
@@ -525,16 +534,14 @@ class _SanctionedamountscreenState
           IconButton(
               onPressed: () async {
                 ref
-                    .watch(downloadFileProvider(
-                            fileName: "Sanction Letter",
-                            url:
-                                "${ref.watch(dioProvider).options.baseUrl}sanction_letter_download/${appliedData?.id}")
-                        .future)
-                    .then((value) {
-                  if (value != null) {
-                    successToast(context,
-                        "${basename(value.path)} successfully downloaded at ${value.path}");
-                  }
+                    .watch(
+                        surepassSanctionLetterProvider(id: "${appliedData?.id}")
+                            .future)
+                    .then((value) async {
+                  context.goNamed(RoutesStrings.surepassWebviewScreen, extra: {
+                    'url': value['data'],
+                    'docName': 'sanction_letter'
+                  });
                 });
               },
               icon: const Icon(
@@ -556,16 +563,12 @@ class _SanctionedamountscreenState
           IconButton(
               onPressed: () {
                 ref
-                    .watch(downloadFileProvider(
-                            fileName: "PDC",
-                            url:
-                                "${ref.watch(dioProvider).options.baseUrl}pdc_download/${appliedData?.id}")
-                        .future)
-                    .then((value) {
-                  if (value != null) {
-                    successToast(context,
-                        "${basename(value.path)} successfully downloaded at ${value.path}");
-                  }
+                    .watch(surepassPdcProvider(id: "${appliedData?.id}").future)
+                    .then((value) async {
+                  context.goNamed(RoutesStrings.surepassWebviewScreen,
+                      extra: {'url': value['data'], 'docName': 'pdc'});
+
+                  // successToast(context, "${value['data']}");
                 });
               },
               icon: const Icon(
@@ -585,18 +588,18 @@ class _SanctionedamountscreenState
                 fontSize: Adaptive.sp(15), fontWeight: FontWeight.bold),
           )),
           IconButton(
-              onPressed: () {
+              onPressed: () async {
                 ref
-                    .watch(downloadFileProvider(
-                            fileName: "Loan Agreement",
-                            url:
-                                "${ref.watch(dioProvider).options.baseUrl}loan_agr_download/${appliedData?.id}")
-                        .future)
-                    .then((value) {
-                  if (value != null) {
-                    successToast(context,
-                        "${basename(value.path)} successfully downloaded at ${value.path}");
-                  }
+                    .watch(
+                        surepassLoanAgreementProvider(id: "${appliedData?.id}")
+                            .future)
+                    .then((value) async {
+                  context.goNamed(RoutesStrings.surepassWebviewScreen, extra: {
+                    'url': value['data'],
+                    'docName': 'loan_agreement'
+                  });
+
+                  // successToast(context, "${value['data']}");
                 });
               },
               icon: const Icon(

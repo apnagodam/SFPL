@@ -34,7 +34,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_riverpod: ^2.5.1
-  intl: ^0.19.0
+  intl: 
   shared_preferences: ^2.2.3
   lottie: ^3.1.2
   riverpod_generator: ^2.4.0
@@ -72,7 +72,6 @@ dependencies:
   flutter_flip_card: ^0.0.6
   tab_container: ^3.5.3
   shimmer: ^3.0.0
-  syncfusion_flutter_pdfviewer: ^27.1.50
   url_launcher: ^6.3.0
   double_back_to_exit: ^1.1.0
   flutter_date_range_picker: ^0.1.1
@@ -86,6 +85,15 @@ dependencies:
   firebase_core: ^2.27.0
   cached_network_image: ^3.4.1
   flutter_svg: ^2.0.16
+  data_table_2: 2.5.15
+  background_downloader: ^8.8.1
+  flutter_file_dialog: ^3.0.2
+  flutter_inappwebview: ^6.1.5
+  webview_flutter: ^4.10.0
+  elevarm_ui: 0.11.1
+  mobile_device_identifier: ^0.0.3
+  mongo_dart: ^0.10.3
+
 
 
 
@@ -124,14 +132,14 @@ flutter_native_splash:
   # splash screen to a png image.  This is useful for gradients. The image will be stretch to the
   # size of the app. Only one parameter can be used, color and background_image cannot both be set.
   color: "#ffffff"
-  # background_image: "assets/logo.png"
+  background_image: "assets/finance_splash.png"
 
   # Optional parameters are listed below.  To enable a parameter, uncomment the line by removing
   # the leading # character.
 
   # The image parameter allows you to specify an image used in the splash screen.  It must be a
   # png file and should be sized for 4x pixel density.
-  image: assets/swfl.png
+  image: assets/finance_splash.png
 
   # The branding property allows you to specify an image used as branding in the splash screen.
   # It must be a png file. It is supported for Android, iOS and the Web.  For Android 12,
@@ -163,7 +171,7 @@ flutter_native_splash:
     # 640 pixels in diameter.
     # App icon without an icon background: This should be 1152×1152 pixels, and fit within a circle
     # 768 pixels in diameter.
-#    image: assets/swfl.png
+    image: assets/finance_splash.png
 
     # Splash screen background color.
     #color: "#42a5f5"

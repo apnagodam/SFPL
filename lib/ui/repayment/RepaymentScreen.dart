@@ -378,19 +378,22 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
                 height: 10,
               ),
               ref.watch(terminalProvider) == null ||
-                  ref.watch(commodityProvider) == null ||
-                  ref.watch(stackProvider) == null
-                  ? SizedBox(): Text(
-                'Select Gatepass',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
-              ),
+                      ref.watch(commodityProvider) == null ||
+                      ref.watch(stackProvider) == null
+                  ? SizedBox()
+                  : Text(
+                      'Select Gatepass',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: Adaptive.sp(16)),
+                    ),
               ref.watch(terminalProvider) == null ||
-                  ref.watch(commodityProvider) == null ||
-                  ref.watch(stackProvider) == null
-                  ? SizedBox():  SizedBox(
-                height: 10,
-              ),
+                      ref.watch(commodityProvider) == null ||
+                      ref.watch(stackProvider) == null
+                  ? SizedBox()
+                  : SizedBox(
+                      height: 10,
+                    ),
               ref.watch(terminalProvider) == null ||
                       ref.watch(commodityProvider) == null ||
                       ref.watch(stackProvider) == null
@@ -461,32 +464,53 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
                                                 ]),
                                       borderWidth: 2,
                                       child: ColumnSuper(
-                                        alignment: Alignment.topLeft,
+                                          alignment: Alignment.topLeft,
                                           children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              'DRF-${data.data?[index].drfNo ?? 0}',
-                                              style: TextStyle(
-                                                  height: 2,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: isSelected
-                                                      ? Colors.white
-                                                      : Colors.black,
-                                                  fontSize: Adaptive.sp(18)),
-                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  'DRF-${data.data?[index].drfNo ?? 0}',
+                                                  style: TextStyle(
+                                                      height: 2,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: isSelected
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                      fontSize:
+                                                          Adaptive.sp(18)),
+                                                ),
 
-                                            // Text(
-                                            //   "${data.data?[index].terminal}",
-                                            //   style: TextStyle(
-                                            //       height: 2,
-                                            //       fontWeight: FontWeight.normal,
-                                            //       fontSize: Adaptive.sp(16)),
-                                            // ),
+                                                // Text(
+                                                //   "${data.data?[index].terminal}",
+                                                //   style: TextStyle(
+                                                //       height: 2,
+                                                //       fontWeight: FontWeight.normal,
+                                                //       fontSize: Adaptive.sp(16)),
+                                                // ),
+                                                Text.rich(TextSpan(
+                                                    text: 'Gatepass:',
+                                                    style: TextStyle(
+                                                        height: 2,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: isSelected
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                        fontSize:
+                                                            Adaptive.sp(16)),
+                                                    children: [
+                                                      TextSpan(
+                                                          text:
+                                                              ' ${data.data?[index].gatePass ?? 0.0}')
+                                                    ])),
+                                              ],
+                                            ),
                                             Text.rich(TextSpan(
-                                                text: 'Gatepass:',
+                                                text: 'Quantity:',
                                                 style: TextStyle(
                                                     height: 2,
                                                     fontWeight: FontWeight.bold,
@@ -497,176 +521,176 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
                                                 children: [
                                                   TextSpan(
                                                       text:
-                                                          ' ${data.data?[index].gatePass ?? 0.0}')
+                                                          ' ${data.data?[index].quantity ?? 0.0}')
                                                 ])),
-                                          ],
-                                        ),
-                                      Text.rich(TextSpan(
-                                          text: 'Quantity:',
-                                          style: TextStyle(
-                                              height: 2,
-                                              fontWeight: FontWeight.bold,
-                                              color: isSelected
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                              fontSize: Adaptive.sp(16)),
-                                          children: [
-                                            TextSpan(
-                                                text:
-                                                ' ${data.data?[index].quantity ?? 0.0}')
-                                          ])),
 
-                                        // RowSuper(fill: true, children: [
-                                        //   // Text.rich(TextSpan(
-                                        //   //     text: 'Commodity:',
-                                        //   //     style: TextStyle(
-                                        //   //         height: 2,
-                                        //   //         fontWeight: FontWeight.bold,
-                                        //   //         fontSize: Adaptive.sp(16)),
-                                        //   //     children: [
-                                        //   //       TextSpan(
-                                        //   //           text:
-                                        //   //           ' ${data.data?[index].commodityName}')
-                                        //   //     ])),
-                                        //
-                                        // ]),
+                                            // RowSuper(fill: true, children: [
+                                            //   // Text.rich(TextSpan(
+                                            //   //     text: 'Commodity:',
+                                            //   //     style: TextStyle(
+                                            //   //         height: 2,
+                                            //   //         fontWeight: FontWeight.bold,
+                                            //   //         fontSize: Adaptive.sp(16)),
+                                            //   //     children: [
+                                            //   //       TextSpan(
+                                            //   //           text:
+                                            //   //           ' ${data.data?[index].commodityName}')
+                                            //   //     ])),
+                                            //
+                                            // ]),
 
-                                        Text.rich(
-                                          TextSpan(
-                                              text: 'Interest Amount:',
-                                              style: TextStyle(
-                                                  height: 2,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: isSelected
-                                                      ? Colors.white
-                                                      : Colors.black,
-                                                  fontSize: Adaptive.sp(16)),
-
-                                              children: [
-                                                TextSpan(
-                                                    text:
-                                                    ' ${currencyFormat.format(double.parse("${data.data?[index].interestAmount ?? 0.0}"))}')
-                                              ],),
-
-                                        ),
-                                        Text.rich(
-                                          TextSpan(
-                                              text: 'Settlement Amount:',
-                                              style: TextStyle(
-                                                  height: 2,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: isSelected
-                                                      ? Colors.white
-                                                      : Colors.black,
-                                                  fontSize: Adaptive.sp(16)),
-                                              children: [
-                                                TextSpan(
-                                                    text:
-                                                        ' ${currencyFormat.format(double.parse("${data.data?[index].totalSettlementAmount ?? 0.0}"))}')
-                                              ]),
-                                        ),
-
-                                        // RowSuper(fill: true, children: [
-                                        //   // Text.rich(
-                                        //   //   TextSpan(
-                                        //   //       text: 'Pi Amount: ',
-                                        //   //       style: TextStyle(
-                                        //   //           height: 2,
-                                        //   //           fontWeight: FontWeight.bold,
-                                        //   //           fontSize: Adaptive.sp(16)),
-                                        //   //       children: [
-                                        //   //         TextSpan(
-                                        //   //             text:
-                                        //   //             ' ${currencyFormat.format(
-                                        //   //                 double.parse(
-                                        //   //                     "${data.data?[index]
-                                        //   //                         .compoundPIAmount ??
-                                        //   //                         0.0}"))}')
-                                        //   //       ]),
-                                        //   // ),
-                                        //
-                                        // ]),
-                                        // RowSuper(fill: true, children: [
-                                        //   Text.rich(TextSpan(
-                                        //       text: 'Loan Amount: ',
-                                        //       style: TextStyle(
-                                        //           height: 2,
-                                        //           fontWeight: FontWeight.bold,
-                                        //           fontSize: Adaptive.sp(16)),
-                                        //       children: [
-                                        //         TextSpan(
-                                        //             text:
-                                        //             ' ${currencyFormat.format(
-                                        //                 double.parse("${data.data?[index]
-                                        //                     .totalLoanAmount ?? 0.0}"))}')
-                                        //       ])),
-                                        //   Text.rich(TextSpan(
-                                        //       text: 'Interest Amount:',
-                                        //       style: TextStyle(
-                                        //           height: 2,
-                                        //           fontWeight: FontWeight.bold,
-                                        //           fontSize: Adaptive.sp(16)),
-                                        //       children: [
-                                        //         TextSpan(
-                                        //             text:
-                                        //             '${currencyFormat.format(double.parse(
-                                        //                 "${data.data?[index]
-                                        //                     .interestAmount ?? 0.0}"))}')
-                                        //       ]))
-                                        // ])
-                                        if (isSelected)
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            child: ElevatedButton(
-                                              onPressed: () async {
-                                                showloader(context);
-                                                ref
-                                                    .watch(repayGatepassProvider(
-                                                            financeId: [
-                                                      "${data.data?[index].id}"
-                                                    ],
-                                                            finalAmount: data
-                                                                .data?[index]
-                                                                .totalSettlementAmount
-                                                                .toString())
-                                                        .future)
-                                                    .then((value) {
-                                                  hideLoader(context);
-                                                  if (value['status']
-                                                          .toString() ==
-                                                      "1") {
-                                                    ref.invalidate(
-                                                        repaymentSettlementListProvider);
-                                                  }
-                                                }).onError((e, s) {
-                                                  hideLoader(context);
-                                                });
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                  backgroundColor:
-                                                      ColorsConstant
-                                                          .secondColorDark,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10))),
-                                              child: Text(
-                                                "Pay",
+                                            Text.rich(
+                                              TextSpan(
+                                                text: 'Interest Amount:',
                                                 style: TextStyle(
-                                                    color: Colors.white,
-                                                    shadows: [
-                                                      const Shadow(
-                                                          color: Colors.white,
-                                                          blurRadius: 0.3)
-                                                    ],
-                                                    fontWeight: FontWeight.w700,
+                                                    height: 2,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: isSelected
+                                                        ? Colors.white
+                                                        : Colors.black,
                                                     fontSize: Adaptive.sp(16)),
+                                                children: [
+                                                  TextSpan(
+                                                      text:
+                                                          ' ${currencyFormat.format(double.parse("${data.data?[index].interestAmount ?? 0.0}"))}')
+                                                ],
                                               ),
                                             ),
-                                          ),
-                                      ])),
+                                            Text.rich(
+                                              TextSpan(
+                                                  text: 'Settlement Amount:',
+                                                  style: TextStyle(
+                                                      height: 2,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: isSelected
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                      fontSize:
+                                                          Adaptive.sp(16)),
+                                                  children: [
+                                                    TextSpan(
+                                                        text:
+                                                            ' ${currencyFormat.format(double.parse("${data.data?[index].totalSettlementAmount ?? 0.0}"))}')
+                                                  ]),
+                                            ),
+
+                                            // RowSuper(fill: true, children: [
+                                            //   // Text.rich(
+                                            //   //   TextSpan(
+                                            //   //       text: 'Pi Amount: ',
+                                            //   //       style: TextStyle(
+                                            //   //           height: 2,
+                                            //   //           fontWeight: FontWeight.bold,
+                                            //   //           fontSize: Adaptive.sp(16)),
+                                            //   //       children: [
+                                            //   //         TextSpan(
+                                            //   //             text:
+                                            //   //             ' ${currencyFormat.format(
+                                            //   //                 double.parse(
+                                            //   //                     "${data.data?[index]
+                                            //   //                         .compoundPIAmount ??
+                                            //   //                         0.0}"))}')
+                                            //   //       ]),
+                                            //   // ),
+                                            //
+                                            // ]),
+                                            // RowSuper(fill: true, children: [
+                                            //   Text.rich(TextSpan(
+                                            //       text: 'Loan Amount: ',
+                                            //       style: TextStyle(
+                                            //           height: 2,
+                                            //           fontWeight: FontWeight.bold,
+                                            //           fontSize: Adaptive.sp(16)),
+                                            //       children: [
+                                            //         TextSpan(
+                                            //             text:
+                                            //             ' ${currencyFormat.format(
+                                            //                 double.parse("${data.data?[index]
+                                            //                     .totalLoanAmount ?? 0.0}"))}')
+                                            //       ])),
+                                            //   Text.rich(TextSpan(
+                                            //       text: 'Interest Amount:',
+                                            //       style: TextStyle(
+                                            //           height: 2,
+                                            //           fontWeight: FontWeight.bold,
+                                            //           fontSize: Adaptive.sp(16)),
+                                            //       children: [
+                                            //         TextSpan(
+                                            //             text:
+                                            //             '${currencyFormat.format(double.parse(
+                                            //                 "${data.data?[index]
+                                            //                     .interestAmount ?? 0.0}"))}')
+                                            //       ]))
+                                            // ])
+                                            if (isSelected)
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                child: ElevatedButton(
+                                                  onPressed: () async {
+                                                    showloader(context);
+                                                    ref
+                                                        .watch(repayGatepassProvider(
+                                                                financeId: [
+                                                          "${data.data?[index].id}"
+                                                        ],
+                                                                finalAmount: data
+                                                                    .data?[
+                                                                        index]
+                                                                    .totalSettlementAmount
+                                                                    .toString())
+                                                            .future)
+                                                        .then((value) {
+                                                      hideLoader(context);
+                                                      if (value['status']
+                                                              .toString() ==
+                                                          "1") {
+                                                        successToast(
+                                                            context,
+                                                            value['message']
+                                                                .toString());
+                                                        ref.invalidate(
+                                                            repaymentSettlementListProvider);
+                                                      } else {
+                                                        errorToast(
+                                                            context,
+                                                            value['message']
+                                                                .toString());
+                                                      }
+                                                    }).onError((e, s) {
+                                                      hideLoader(context);
+                                                    });
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                      backgroundColor:
+                                                          ColorsConstant
+                                                              .secondColorDark,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10))),
+                                                  child: Text(
+                                                    "Pay",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        shadows: [
+                                                          const Shadow(
+                                                              color:
+                                                                  Colors.white,
+                                                              blurRadius: 0.3)
+                                                        ],
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize:
+                                                            Adaptive.sp(16)),
+                                                  ),
+                                                ),
+                                              ),
+                                          ])),
                                   onTap: () {
                                     ref.watch(selectedItem.notifier).state =
                                         data.data?[index].id;

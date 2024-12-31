@@ -8,9 +8,9 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
 import 'package:swfl/Domain/LoanService/LoanService.dart';
+import 'package:swfl/ui/utils/LoaderUtils.dart';
 import 'package:swfl/ui/utils/colors.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:tab_container/tab_container.dart';
@@ -284,7 +284,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       data: (data) => ColumnSuper(
                             children: [
                               homeLayoutWidget(LucideIcons.banknote,
-                                  'Commodity Wise Loan', '0',
+                                  'Commodity Wise Loan', '',
                                   imagePath:
                                       'https://cdn.iconscout.com/icon/premium/png-512-thumb/loan-2014155-1711062.png?f=webp&w=256',
                                   callback: () {
@@ -308,63 +308,62 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                 }
                               }),
                               homeLayoutWidget(
-                                  LucideIcons.hand_coins, 'Repayment', '0',
+                                  LucideIcons.hand_coins, 'Repayment', '',
                                   imagePath:
                                       'https://static.thenounproject.com/png/4814670-200.png',
                                   callback: () {
                                 context.goNamed(RoutesStrings.repayment);
                               }),
-                              homeLayoutWidget(LucideIcons.hand_coins,
-                                  'Loans Near Expiry', '${data.loanNearExpiry}',
+                              homeLayoutWidget(
+                                  LucideIcons.hand_coins,
+                                  'Loans Near Expiry(within 30 days)',
+                                  '${data.loanNearExpiry}',
                                   imagePath:
                                       'https://static.thenounproject.com/png/4814670-200.png',
                                   callback: () {
-                                context.goNamed(RoutesStrings.repayment);
+                                context.goNamed(RoutesStrings.loansNearExpiry);
                               }),
                               homeLayoutWidget(LucideIcons.hand_coins,
                                   'Expired Loans', '${data.loanExpiry}',
                                   imagePath:
                                       'https://static.thenounproject.com/png/4814670-200.png',
                                   callback: () {
-                                context.goNamed(RoutesStrings.repayment);
+                                context.goNamed(RoutesStrings.expiredLoans);
                               }),
                               homeLayoutWidget(
                                   LucideIcons.hand_coins,
                                   'Total Pledged Commodity',
-                                  '${data.totalPledgedCommodity}',
+                                  '${data.totalPledgedCommodity} (M.T.)',
                                   imagePath:
                                       'https://static.thenounproject.com/png/4814670-200.png',
                                   callback: () {
-                                context.goNamed(RoutesStrings.repayment);
+                                context.goNamed(
+                                    RoutesStrings.totalPledgedCommodity);
                               }),
                               homeLayoutWidget(
                                   LucideIcons.hand_coins,
                                   'Total Loan Amount',
-                                  '${data.totalLoanAmount}',
+                                  currencyFormat.format(double.parse(
+                                      "${data.totalLoanAmount ?? 0.0}")),
                                   imagePath:
                                       'https://static.thenounproject.com/png/4814670-200.png',
                                   callback: () {
-                                context.goNamed(RoutesStrings.repayment);
+                                context.goNamed(RoutesStrings.totalLoanAmount);
+                              }),
+                              homeLayoutWidget(
+                                  LucideIcons.hand_coins,
+                                  'Sanctioned Limit Balance',
+                                  currencyFormat.format(double.parse(
+                                      "${data.sanctionLimitBalance ?? 0.0}")),
+                                  imagePath:
+                                      'https://static.thenounproject.com/png/4814670-200.png',
+                                  callback: () {
+                                context.goNamed(RoutesStrings.holdStatement);
                               })
                             ],
                           ),
                       error: (e, s) => Container(),
-                      loading: () => SizedBox(
-                            width: 200.0,
-                            height: 100.0,
-                            child: Shimmer.fromColors(
-                              baseColor: Colors.red,
-                              highlightColor: Colors.yellow,
-                              child: Text(
-                                'Shimmer',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 40.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ))
+                      loading: () => homeShimmer())
                 ],
               ),
               onRefresh: () =>
@@ -420,35 +419,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             SizedBox(
               width: 10,
             ),
-            Expanded(
-                child: Text(
-              text,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
-            )),
-            Container(
-              padding: Pad(all: 10),
-              height: Adaptive.sh(10),
-              width: Adaptive.w(25),
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.transparent.withOpacity(0.6),
-                        ColorsConstant.primaryColor
-                      ]),
-                  color: const Color.fromARGB(255, 28, 42, 25),
-                  borderRadius: BorderRadius.circular(10)),
-              alignment: Alignment.center,
-              child: Text(
-                number,
+            ColumnSuper(alignment: Alignment.centerLeft, children: [
+              Text(
+                text,
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: Adaptive.sp(16),
-                    color: Colors.white),
+                    fontWeight: FontWeight.bold, fontSize: Adaptive.sp(15)),
               ),
-            )
+              if (number.isNotEmpty)
+                Text(
+                  number,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: Adaptive.sp(18),
+                      color: Colors.black),
+                ),
+            ]),
+
+            // Container(
+            //   padding: Pad(all: 10),
+            //   height: Adaptive.sh(10),
+            //   width: Adaptive.w(25),
+            //   decoration: BoxDecoration(
+            //       gradient: LinearGradient(
+            //           begin: Alignment.topLeft,
+            //           end: Alignment.bottomRight,
+            //           colors: [
+            //             Colors.transparent.withOpacity(0.6),
+            //             ColorsConstant.primaryColor
+            //           ]),
+            //       color: const Color.fromARGB(255, 28, 42, 25),
+            //       borderRadius: BorderRadius.circular(10)),
+            //   alignment: Alignment.center,
+            //   child:
+            // )
           ]),
         ),
       );

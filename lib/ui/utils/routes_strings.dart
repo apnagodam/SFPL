@@ -3,9 +3,23 @@ class RoutesStrings {
   static const login = '/login';
   static const error = '/error';
 
+  static const loansNearExpiry = "loansNearExpiry";
+  static const expiredLoans = "expiredLoans";
+  static const totalLoanAmount = "totalLoanAmount";
+  static const totalPledgedCommodity = "totalPledgedCommodity";
+
   static const verifyOtp = 'verifyOtp';
   static const onBoarding = '/onBoarding';
   static const register = 'register';
+  static const surepassWebviewScreen = 'surepassWebviewScreen';
+  static const surepassWebviewScreenVerification =
+      'surepassWebviewScreenVerification';
+
+  static const directorPartnersList = "directorPartnersList";
+  static const addDirectorPartner = "addDirectorPartner";
+  static const authorisationLetterScreen = "authorisationLetterScreen";
+  static const editDirectorPartner = "editDirectorPartner";
+
   static const individualRegistration = 'individualRegistration';
   static const bnplRegistration = 'bnplRegistration';
   static const bnplAadharRegistration = 'bnplAadharRegistration';
@@ -44,4 +58,6 @@ class RoutesStrings {
   static const walletStatement = 'walletStatement';
 
   static const verfication = 'verification';
+
+  static const holdStatement = 'holdStatement';
 }

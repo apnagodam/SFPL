@@ -117,6 +117,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     ),
                   ),
                 ),
+
                 SizedBox(
                   height: 10,
                 ),
@@ -218,6 +219,104 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 //       ],
                 //     )),
 
+                if (int.parse(
+                        '${ref.watch(sharedUtilityProvider).getUser()?.partnerDirectorCount ?? 0}') >
+                    0)
+                  SizedBox(
+                    height: 10,
+                  ),
+                if (int.parse(
+                        '${ref.watch(sharedUtilityProvider).getUser()?.partnerDirectorCount ?? 0}') >
+                    0)
+                  Visibility(
+                      visible: (int.parse(
+                                  '${ref.watch(sharedUtilityProvider).getUser()?.constitution ?? 0}') ==
+                              4 ||
+                          int.parse(
+                                  '${ref.watch(sharedUtilityProvider).getUser()?.constitution ?? 0}') ==
+                              3),
+                      child: ExpansionTile(
+                        title: Center(
+                          child: Text(
+                            int.parse('${ref.watch(sharedUtilityProvider).getUser()?.constitution ?? 0}') ==
+                                    4
+                                ? 'Directors'
+                                : int.parse('${ref.watch(sharedUtilityProvider).getUser()?.constitution ?? 0}') ==
+                                        3
+                                    ? "Partners"
+                                    : "",
+                            style: TextStyle(
+                                fontSize: Adaptive.sp(16),
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                        backgroundColor: Colors.white,
+                        collapsedBackgroundColor: Colors.white,
+                        collapsedShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            side: const BorderSide(
+                                color: ColorsConstant.primaryColor)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            side: const BorderSide(
+                                color: ColorsConstant.secondColorUltraDark)),
+                        children: [
+                          Divider(),
+                          ListTile(
+                              onTap: () {
+                                context.goNamed(
+                                    RoutesStrings.directorPartnersList);
+                              },
+                              title: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      int.parse('${ref.watch(sharedUtilityProvider).getUser()?.constitution ?? 0}') ==
+                                              4
+                                          ? 'Directors List'
+                                          : int.parse('${ref.watch(sharedUtilityProvider).getUser()?.constitution ?? 0}') ==
+                                                  3
+                                              ? "Partners List"
+                                              : "",
+                                      style: TextStyle(
+                                          fontSize: Adaptive.sp(16),
+                                          fontWeight: FontWeight.w700),
+                                    )
+                                  ],
+                                ),
+                              )),
+                          Divider(),
+                          ListTile(
+                              onTap: () {
+                                context.goNamed(
+                                    RoutesStrings.authorisationLetterScreen);
+                              },
+                              title: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      int.parse('${ref.watch(sharedUtilityProvider).getUser()?.constitution ?? 0}') ==
+                                              4
+                                          ? 'Directors Authorization'
+                                          : int.parse('${ref.watch(sharedUtilityProvider).getUser()?.constitution ?? 0}') ==
+                                                  3
+                                              ? "Partners Authorization"
+                                              : "",
+                                      style: TextStyle(
+                                          fontSize: Adaptive.sp(16),
+                                          fontWeight: FontWeight.w700),
+                                    )
+                                  ],
+                                ),
+                              )),
+                        ],
+                      )),
+
+                SizedBox(
+                  height: 10,
+                ),
                 ExpansionTile(
                   title: Center(
                     child: Text(
@@ -227,6 +326,16 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           fontSize: Adaptive.sp(16)),
                     ),
                   ),
+                  backgroundColor: Colors.white,
+                  collapsedBackgroundColor: Colors.white,
+                  collapsedShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side:
+                          const BorderSide(color: ColorsConstant.primaryColor)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(
+                          color: ColorsConstant.secondColorUltraDark)),
                   children: [
                     Divider(),
                     ListTile(
@@ -284,18 +393,36 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                   fontSize: Adaptive.sp(16),
                                   color: Colors.black,
                                   fontWeight: FontWeight.w500)),
+                        )),
+                    Divider(),
+                    ListTile(
+                        onTap: () {
+                          if ((ref
+                                      .watch(sharedUtilityProvider)
+                                      .getUser()
+                                      ?.triparty ??
+                                  [])
+                              .isEmpty) {
+                            showVerificationDialog(context,
+                                titleText: "Verify Tri-Party Agreement",
+                                messageText: "tri party agreement pending",
+                                action: () {
+                              hideLoader(context);
+                              context.goNamed(RoutesStrings.verfication);
+                            });
+                          } else {
+                            context.goNamed(RoutesStrings.holdStatement);
+                          }
+                        },
+                        title: Center(
+                          child: Text('Hold Statement',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(16),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500)),
                         ))
                   ],
-                  backgroundColor: Colors.white,
-                  collapsedBackgroundColor: Colors.white,
-                  collapsedShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side:
-                          const BorderSide(color: ColorsConstant.primaryColor)),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: const BorderSide(
-                          color: ColorsConstant.secondColorUltraDark)),
                 ),
                 SizedBox(
                   height: 10,
@@ -310,6 +437,16 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           fontSize: Adaptive.sp(16)),
                     ),
                   ),
+                  backgroundColor: Colors.white,
+                  collapsedBackgroundColor: Colors.white,
+                  collapsedShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side:
+                          const BorderSide(color: ColorsConstant.primaryColor)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(
+                          color: ColorsConstant.secondColorUltraDark)),
                   children: [
                     Divider(),
                     ListTile(
@@ -403,16 +540,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                   fontWeight: FontWeight.w500)),
                         )),
                   ],
-                  backgroundColor: Colors.white,
-                  collapsedBackgroundColor: Colors.white,
-                  collapsedShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side:
-                          const BorderSide(color: ColorsConstant.primaryColor)),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: const BorderSide(
-                          color: ColorsConstant.secondColorUltraDark)),
                 ),
                 SizedBox(
                   height: 10,
@@ -426,6 +553,16 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           fontSize: Adaptive.sp(16)),
                     ),
                   ),
+                  backgroundColor: Colors.white,
+                  collapsedBackgroundColor: Colors.white,
+                  collapsedShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side:
+                          const BorderSide(color: ColorsConstant.primaryColor)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(
+                          color: ColorsConstant.secondColorUltraDark)),
                   children: [
                     Divider(),
                     ListTile(
@@ -467,16 +604,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                   fontWeight: FontWeight.w500)),
                         )),
                   ],
-                  backgroundColor: Colors.white,
-                  collapsedBackgroundColor: Colors.white,
-                  collapsedShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side:
-                          const BorderSide(color: ColorsConstant.primaryColor)),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: const BorderSide(
-                          color: ColorsConstant.secondColorUltraDark)),
                 ),
                 // CupertinoActionSheet(
                 //   title: Center(
@@ -957,70 +1084,3 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   )));
   var activeStepProvider = StateProvider((ref) => 0);
 }
-
-tripartyDialog(BuildContext context, WidgetRef ref) => showBarModalBottomSheet(
-    context: context,
-    builder: (context) => ColumnSuper(children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            'How to Verify?',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: Adaptive.sp(18), fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          RowSuper(fill: true, children: [
-            ColumnSuper(children: [
-              CircleButton(
-                onTap: () async {},
-                icon: const Icon(
-                  LucideIcons.file_down,
-                ),
-                border: Border.all(color: ColorsConstant.primaryColor),
-              ),
-              Text(
-                'Download \nAgreement',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: Adaptive.sp(14), fontWeight: FontWeight.w700),
-              )
-            ]),
-            const Divider(
-              thickness: 1.0,
-            ),
-            ColumnSuper(children: [
-              CircleButton(
-                icon: const Icon(
-                  LucideIcons.stamp,
-                ),
-                border: Border.all(color: ColorsConstant.primaryColor),
-              ),
-              Text('Stamp \nAgreement',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: Adaptive.sp(14), fontWeight: FontWeight.w700))
-            ]),
-            const Divider(
-              thickness: 1.0,
-            ),
-            ColumnSuper(children: [
-              CircleButton(
-                icon: const Icon(
-                  LucideIcons.cloud_upload,
-                ),
-                border: Border.all(color: ColorsConstant.primaryColor),
-              ),
-              Text('Upload \nAgreement',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: Adaptive.sp(14), fontWeight: FontWeight.w700))
-            ]),
-          ]),
-          const SizedBox(
-            height: 10,
-          ),
-        ]));
