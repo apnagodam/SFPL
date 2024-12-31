@@ -6,6 +6,22 @@ part of 'LoanService.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$dashboardDataHash() => r'0d32c1b70935d2aaec9f84dc4a596aa0112a7d52';
+
+/// See also [dashboardData].
+@ProviderFor(dashboardData)
+final dashboardDataProvider =
+    AutoDisposeStreamProvider<DashboardModel>.internal(
+  dashboardData,
+  name: r'dashboardDataProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$dashboardDataHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef DashboardDataRef = AutoDisposeStreamProviderRef<DashboardModel>;
 String _$schemesHash() => r'39d34d88d06efdc9f1064ca8b608d61b7d880f05';
 
 /// See also [schemes].
@@ -183,7 +199,7 @@ class _TermsProviderElement extends AutoDisposeStreamProviderElement<TermsModel>
   TermsRequestModel get model => (origin as TermsProvider).model;
 }
 
-String _$applyForLoanHash() => r'87bd93b434a3eba1fff3f8729293c0046f1ff75f';
+String _$applyForLoanHash() => r'8c39d3b0ae54bb1313e6c3e4480576f781d19fb1';
 
 /// See also [applyForLoan].
 @ProviderFor(applyForLoan)

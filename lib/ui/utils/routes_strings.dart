@@ -14,6 +14,9 @@ class RoutesStrings {
   static const bnplUpdateAddress = 'bnplUpdateAddress';
 
   static const propRegistration = 'propRegistration';
+  static const companyRegistration = 'companyRegistration';
+  static const partnershipRegistration = 'partnershipRegistration';
+
   static const registrationOtp = 'registrationOtp';
 
   static const applyForSanctionLimit = 'applyForSanctionLimit';

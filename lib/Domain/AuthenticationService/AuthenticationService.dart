@@ -9,6 +9,7 @@ import 'package:swfl/Data/Model/BaseApiResponse.dart';
 import 'package:swfl/Data/Model/OtpVerifyModel.dart';
 import 'package:swfl/Domain/Dio/DioProvider.dart';
 
+import '../../Data/Model/BankListModel.dart';
 import '../../Data/SharedPrefs/SharedUtility.dart';
 
 part 'AuthenticationService.g.dart';
@@ -71,8 +72,8 @@ Future<Map<String, dynamic>> registerUser(RegisterUserRef ref,
         adharBackImage?.path ?? "",
         contentType: DioMediaType("image", "png"),
         filename: 'adharBackImage.png'),
-    'proprietorship_proof': await MultipartFile.fromFile(
-      proprietorProof?.path ?? "",
+   if(proprietorProof!=null) 'proprietorship_proof': await MultipartFile.fromFile(
+      proprietorProof.path,
       filename: 'proprietorProof.png',
       contentType: DioMediaType("image", "png"),
     ),
@@ -87,7 +88,7 @@ Future<Map<String, dynamic>> registerUser(RegisterUserRef ref,
 Future<OtpVerifyModel> verifyOtp(VerifyOtpRef ref,
     {String? panCard, String? otp}) async {
   var response = await ref.watch(dioProvider).post(ApiClient.verifyOtp,
-      queryParameters: {'pancard_no': panCard, 'otp': otp});
+      queryParameters: {'phone': panCard, 'otp': otp});
   var body = otpVerifyModelFromMap(jsonEncode(response.data));
   if (body.status.toString() == "1") {
     ref.watch(sharedUtilityProvider).setToken(body.data?.token ?? "");
@@ -124,7 +125,7 @@ Future<AdharVerifyOtpModel> verifyAadharOtp(VerifyAadharOtpRef ref,
 Future<Map<String, dynamic>> login(LoginRef ref, {String? panNumber}) async {
   var response = await ref
       .watch(dioProvider)
-      .post(ApiClient.login, queryParameters: {'pancard_no': panNumber});
+      .post(ApiClient.login, queryParameters: {'phone': panNumber});
   return response.data;
 }
 
@@ -160,12 +161,22 @@ Future<BaseApiResponse> registerBnpl(RegisterBnplRef ref,
 
 @riverpod
 Future<BaseApiResponse> updateAddress(UpdateAddressRef ref,
-    {String? address, String? stateAddress, String? district, String? pincode}) async {
-  var response = await ref.watch(dioProvider).post(ApiClient.updateAddress, data: {
+    {String? address,
+    String? stateAddress,
+    String? district,
+    String? pincode}) async {
+  var response =
+      await ref.watch(dioProvider).post(ApiClient.updateAddress, data: {
     'address': address,
     'state': stateAddress,
     'district': district,
     'pincode': pincode
   });
   return baseApiResponseFromMap(jsonEncode(response.data));
+}
+
+@riverpod
+Stream<BankListModel> bankList(BankListRef ref) async* {
+  var response = await ref.watch(dioProvider).get(ApiClient.bankList);
+  yield bankListModelFromJson(jsonEncode(response.data));
 }

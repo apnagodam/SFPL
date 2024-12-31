@@ -81,6 +81,13 @@ dependencies:
   faker: ^2.2.0
   in_app_update: ^4.2.3
   tap_to_expand: ^0.7.2
+  firebase_messaging: ^14.7.10
+  flutter_local_notifications: ^18.0.0
+  firebase_core: ^2.27.0
+  cached_network_image: ^3.4.1
+  flutter_svg: ^2.0.16
+
+
 
 
 

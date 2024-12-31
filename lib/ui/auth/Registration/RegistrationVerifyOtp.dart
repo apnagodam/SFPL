@@ -6,8 +6,8 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
 import 'package:swfl/Domain/AuthenticationService/AuthenticationService.dart';
 
-import '../utils/colors.dart';
-import '../utils/routes_strings.dart';
+import '../../utils/colors.dart';
+import '../../utils/routes_strings.dart';
 
 class Registrationverifyotp extends ConsumerStatefulWidget {
   const Registrationverifyotp({super.key, required this.panCard});

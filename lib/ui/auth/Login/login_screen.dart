@@ -56,33 +56,42 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   height: 10,
                 ),
                 Text(
-                  "Login",
+                  "Welcome Back!",
                   style: TextStyle(
                       color: ColorsConstant.secondaryColor,
                       fontWeight: FontWeight.bold,
                       fontSize: Adaptive.sp(20)),
                 ),
                 const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Login to avail and manage loan facilities",
+                  style: TextStyle(
+                      color: Colors.grey.shade500,
+                      fontWeight: FontWeight.bold,
+                      fontSize: Adaptive.sp(17)),
+                ),
+                const SizedBox(
                   height: 20,
                 ),
                 TextFormField(
                   validator: (value) {
-                    if (value == null ||
-                        value.isEmpty ||
-                        !value.isValidPanCardNo()) {
-                      return 'Please input Valid Pan Number';
+                    if (value == null || value.isEmpty || value.length != 10) {
+                      return 'Please input Valid Mobile Number';
                     }
                     return null;
                   },
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                   ],
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.number,
                   controller: panController,
+                  maxLength: 10,
                   textCapitalization: TextCapitalization.characters,
                   decoration: InputDecoration(
-                      hintText: "Enter Pan Number",
-                      label: const Text("Enter Pan Number"),
+                      hintText: "Enter Mobile Number",
+                      label: const Text("Enter Mobile Number"),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                       border: OutlineInputBorder(

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:swfl/Data/Model/DashboarModel.dart';
 import 'package:swfl/Data/Model/LoanApplyListModel.dart';
 import 'package:swfl/Data/Model/LoanDetailsModel.dart';
 import 'package:swfl/Data/Model/LoanRequestFormModel.dart';
@@ -18,6 +19,12 @@ import '../../Data/Model/SchemeResponseModel.dart';
 import '../../Data/Model/TermsRequestModel.dart';
 
 part 'LoanService.g.dart';
+
+@riverpod
+Stream<DashboardModel> dashboardData(DashboardDataRef ref) async* {
+  var response = await ref.watch(dioProvider).get(ApiClient.getdashboardData);
+  yield dashboardModelFromJson(jsonEncode(response.data));
+}
 
 @riverpod
 Future<SchemeResponseModel> schemes(SchemesRef ref) async {

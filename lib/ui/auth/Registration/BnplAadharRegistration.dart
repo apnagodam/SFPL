@@ -5,14 +5,14 @@ import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
-import 'package:swfl/ui/auth/BnplRegistration.dart';
+import 'package:swfl/ui/auth/Registration/BnplRegistration.dart';
 import 'package:swfl/ui/utils/extensions.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 
-import '../../Domain/AuthenticationService/AuthenticationService.dart';
-import '../utils/colors.dart';
-import '../utils/debouncer.dart';
-import '../utils/widgets.dart';
+import '../../../Domain/AuthenticationService/AuthenticationService.dart';
+import '../../utils/colors.dart';
+import '../../utils/debouncer.dart';
+import '../../utils/widgets.dart';
 
 class Bnplaadharregistration extends ConsumerStatefulWidget {
   const Bnplaadharregistration({super.key});

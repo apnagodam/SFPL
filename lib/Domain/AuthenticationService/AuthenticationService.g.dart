@@ -6,7 +6,7 @@ part of 'AuthenticationService.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$registerUserHash() => r'9c5757dd4e5f19710f7a64d43de385d748cb019c';
+String _$registerUserHash() => r'fa129e068fc018f5a742a45fd00b8358399b1237';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -510,7 +510,7 @@ class _RegisterUserProviderElement
   File? get proprietorProof => (origin as RegisterUserProvider).proprietorProof;
 }
 
-String _$verifyOtpHash() => r'b36b4d9de00ac027b302118e15a47113b700feab';
+String _$verifyOtpHash() => r'824c292b749ddb3c81039f670998facfe3f9a893';
 
 /// See also [verifyOtp].
 @ProviderFor(verifyOtp)
@@ -947,7 +947,7 @@ class _VerifyAadharOtpProviderElement
   String? get aadharNumber => (origin as VerifyAadharOtpProvider).aadharNumber;
 }
 
-String _$loginHash() => r'759668ab01a83f8765bb1f01961fbb0fe0aceb51';
+String _$loginHash() => r'e719bff1331dfbcc903989bdbceb5a55331cf4a6';
 
 /// See also [login].
 @ProviderFor(login)
@@ -1474,5 +1474,20 @@ class _UpdateAddressProviderElement
   @override
   String? get pincode => (origin as UpdateAddressProvider).pincode;
 }
+
+String _$bankListHash() => r'f534e452a4bfa28afada87c0264bb9dc64e81b97';
+
+/// See also [bankList].
+@ProviderFor(bankList)
+final bankListProvider = AutoDisposeStreamProvider<BankListModel>.internal(
+  bankList,
+  name: r'bankListProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$bankListHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef BankListRef = AutoDisposeStreamProviderRef<BankListModel>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

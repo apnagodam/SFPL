@@ -11,7 +11,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 
 @riverpod
 Dio dio(DioRef ref) {
-  return Dio(BaseOptions(baseUrl: ApiClient.baseUrl, headers: {
+  return Dio(BaseOptions(baseUrl: ApiClient.testBaseUrl, headers: {
     "Authorization": "Bearer ${ref.watch(sharedUtilityProvider).getToken()}",
   }))
     ..interceptors.add(Diointerceptor(ref));
@@ -20,6 +20,14 @@ Dio dio(DioRef ref) {
 class ApiClient {
   static const baseUrl = "https://apnagodamfinance.com/api/";
   static const testBaseUrl = 'https://test.apnagodamfinance.com/api/';
+
+/*
+dashboard api
+*
+*
+*
+*/
+  static const getdashboardData = "dashboard_data";
 
 /*
 state and district api
@@ -37,8 +45,8 @@ Authentication api
 *
 */
   static const registerUser = 'register';
-  static const verifyOtp = 'otp_verify';
-  static const login = 'login';
+  static const verifyOtp = 'v1/otp_verify';
+  static const login = 'v1/login';
   static const logout = 'logout';
   static const loginInfo = 'login-info';
 
@@ -117,7 +125,7 @@ Bank api
 *
 *
 */
-  static const bankList = 'sbt_api/bnpl_bank_list';
+  static const bankList = 'bank_list';
 
 /*
 repayment api

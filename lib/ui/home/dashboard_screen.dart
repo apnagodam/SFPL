@@ -69,7 +69,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             const IconThemeData(color: ColorsConstant.secondColorSuperDark),
       ),
       drawer: Drawer(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.grey.shade100,
           child: SafeArea(
             child: ListView(
               padding: Pad(
@@ -81,36 +81,40 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   onTap: () {
                     context.goNamed(RoutesStrings.profile);
                   },
-                  child: Column(
-                    children: [
-                      Container(
-                        height: Adaptive.sp(45),
-                        width: Adaptive.sp(45),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                  ref
-                                      .watch(sharedUtilityProvider)
-                                      .getUser()
-                                      ?.profileImage ??
-                                      "",
-                                ),
-                                repeat: ImageRepeat.repeat,
-                                fit: BoxFit.contain)),
+                  child: Card(
+                    elevation: 5,
+                    color: Colors.white,
+                    child: Padding(
+                      padding: Pad(all: 10),
+                      child: Column(
+                        children: [
+                          roundedProfileImage(
+                            imageUrl: ref
+                                    .watch(sharedUtilityProvider)
+                                    .getUser()
+                                    ?.profileImage ??
+                                "",
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            '${ref.watch(sharedUtilityProvider).getUser()?.firmName}',
+                            style: TextStyle(
+                                fontSize: Adaptive.sp(16),
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          Text(
+                            '+91-${ref.watch(sharedUtilityProvider).getUser()?.phone}',
+                            style: TextStyle(
+                                fontSize: Adaptive.sp(14),
+                                color: Colors.black.withOpacity(0.3),
+                                fontWeight: FontWeight.w700),
+                          )
+                        ],
                       ),
-
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        '${ref.watch(sharedUtilityProvider).getUser()?.firmName}',
-                        style: TextStyle(
-                            fontSize: Adaptive.sp(16),
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700),
-                      )
-                    ],
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -437,7 +441,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                   fontWeight: FontWeight.w500)),
                         )),
                     Divider(),
-
                     ListTile(
                         onTap: () {
                           context.goNamed(RoutesStrings.withdrawMoney);
@@ -455,13 +458,14 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         onTap: () {
                           context.goNamed(RoutesStrings.walletStatement);
                         },
-                        title: Center(child: Text('Wallet Statement',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                fontSize: Adaptive.sp(16),
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500)),)),
-
+                        title: Center(
+                          child: Text('Wallet Statement',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(16),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500)),
+                        )),
                   ],
                   backgroundColor: Colors.white,
                   collapsedBackgroundColor: Colors.white,
@@ -855,9 +859,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                 .then((value) async {});
 
                             hideLoader(context);
-
                           });
-
                         },
                         child: Text(
                           'Logout',

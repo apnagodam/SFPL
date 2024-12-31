@@ -8,9 +8,9 @@ import 'package:swfl/ui/utils/debouncer.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/utils/widgets.dart';
 
-import '../../Data/SharedPrefs/SharedUtility.dart';
-import '../../Domain/AuthenticationService/AuthenticationService.dart';
-import '../../Domain/Dio/DioProvider.dart';
+import '../../../Data/SharedPrefs/SharedUtility.dart';
+import '../../../Domain/AuthenticationService/AuthenticationService.dart';
+import '../../../Domain/Dio/DioProvider.dart';
 
 class VerifyOtpScreen extends ConsumerStatefulWidget {
   const VerifyOtpScreen({super.key, required this.panCard});

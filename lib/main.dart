@@ -1,7 +1,9 @@
 import 'dart:io';
 
-import 'package:double_back_to_exit/double_back_to_exit.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_update/in_app_update.dart';
@@ -10,17 +12,20 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swfl/ui/utils/MyHttpOverrides.dart';
 import 'package:swfl/ui/utils/colors.dart';
+import 'package:swfl/ui/utils/notification_service.dart';
 import 'package:swfl/ui/utils/routes.dart';
 import 'package:toastification/toastification.dart';
 
 import 'Data/SharedPrefs/SharedUtility.dart';
-import 'package:double_back_to_exit/double_back_to_exit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final sharedPreferences = await SharedPreferences.getInstance();
   HttpOverrides.global = MyHttpOverrides();
-
+  await Firebase.initializeApp();
+  await NotificationService.init();
+  var token = await FirebaseMessaging.instance.getToken();
+  print(token);
   if (Platform.isAndroid) {
     InAppUpdate.checkForUpdate().then((updateInfo) {
       if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
@@ -50,13 +55,13 @@ void main() async {
     ],
     child: ResponsiveSizer(
       builder: (context, orientation, screenType) {
-        return  ToastificationWrapper(
+        return ToastificationWrapper(
             child: MaterialApp(
-              // Configure Navigator key
-              navigatorKey: OneContext().key,
+          // Configure Navigator key
+          navigatorKey: OneContext().key,
 
-              // Configure [OneContext] to dialogs, overlays, snackbars, and ThemeMode
-              builder: OneContext().builder,
+          // Configure [OneContext] to dialogs, overlays, snackbars, and ThemeMode
+          builder: OneContext().builder,
           debugShowCheckedModeBanner: false,
           home: MyApp(),
         ));
@@ -65,39 +70,84 @@ void main() async {
   ));
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return
-      MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        routerConfig: ref.watch(goRouterProvider),
-        title: 'SFPL',
-        theme: ThemeData(
-          scaffoldBackgroundColor: Colors.white,
-          appBarTheme: AppBarTheme(
-              color: Colors.white,
-              iconTheme: IconThemeData(color: ColorsConstant.primaryColor),
-              titleTextStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: Adaptive.sp(18),
-                  color: Colors.black)),
-          fontFamily: GoogleFonts.inter().fontFamily,
-          colorScheme:
-          ColorScheme.fromSeed(seedColor: ColorsConstant.secondColorDark),
-          useMaterial3: true,
-          pageTransitionsTheme: const PageTransitionsTheme(
-            builders: <TargetPlatform, PageTransitionsBuilder>{
-              TargetPlatform.android:FadeUpwardsPageTransitionsBuilder(),
-              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-              TargetPlatform.linux: OpenUpwardsPageTransitionsBuilder(),
-              TargetPlatform.macOS: FadeUpwardsPageTransitionsBuilder(),
-            },
-          ),
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    const DarwinInitializationSettings initializationSettingsIOS =
+        DarwinInitializationSettings(
+      requestSoundPermission: false,
+      requestBadgePermission: false,
+      requestAlertPermission: false,
+    );
+
+    /// Foreground notification handler
+    FirebaseMessaging.onMessage.listen((message) async {
+      await FlutterLocalNotificationsPlugin().initialize(
+        const InitializationSettings(
+          android: initializationSettingsAndroid,
+          iOS: initializationSettingsIOS,
         ),
+        onDidReceiveNotificationResponse: (response) {
+          debugPrint(response.toString());
+        },
       );
+    });
+
+    /// Background notification handler
+    FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+      await FlutterLocalNotificationsPlugin().initialize(
+        const InitializationSettings(
+          android: initializationSettingsAndroid,
+          iOS: initializationSettingsIOS,
+        ),
+        onDidReceiveNotificationResponse: (response) {
+          debugPrint(response.toString());
+        },
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      routerConfig: ref.watch(goRouterProvider),
+      title: 'SFPL',
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.grey.shade100,
+        appBarTheme: AppBarTheme(
+            color: Colors.grey.shade100,
+            iconTheme: IconThemeData(color: ColorsConstant.primaryColor),
+            titleTextStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: Adaptive.sp(18),
+                color: Colors.black)),
+        fontFamily: GoogleFonts.inter().fontFamily,
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: ColorsConstant.primaryColor),
+        useMaterial3: true,
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: <TargetPlatform, PageTransitionsBuilder>{
+            TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.linux: OpenUpwardsPageTransitionsBuilder(),
+            TargetPlatform.macOS: FadeUpwardsPageTransitionsBuilder(),
+          },
+        ),
+      ),
+    );
+    ;
   }
 }

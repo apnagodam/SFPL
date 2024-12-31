@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
 import 'package:swfl/Domain/AuthenticationService/AuthenticationService.dart';
-import 'package:swfl/ui/auth/BnplAadharRegistration.dart';
+import 'package:swfl/ui/auth/Registration/BnplAadharRegistration.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 
 import '../utils/colors.dart';

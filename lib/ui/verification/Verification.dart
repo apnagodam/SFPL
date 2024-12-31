@@ -14,6 +14,7 @@ import 'package:path/path.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Domain/LoanService/LoanService.dart';
 import 'package:swfl/ui/utils/pdf.dart';
+import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/utils/widgets.dart';
 
 import '../../Data/Model/WspListModel.dart';
@@ -153,54 +154,51 @@ class _VerificationState extends ConsumerState<Verification> {
                     )),
             Visibility(
                 visible: ref.watch(wspProvider) != null,
-                child:  IconsButton(
-                        onPressed: () async {
-                          if( !ref.watch(isFileDownloading)){
-  ref.watch(isAgreementDownloading.notifier).state =
-                              true;
-                          ref
-                              .watch(wspAgreementProvider(
-                                      wspId:
-                                          "${ref.watch(wspProvider)?.id ?? ""}")
+                child: IconsButton(
+                  onPressed: () async {
+                    if (!ref.watch(isFileDownloading)) {
+                      ref.watch(isAgreementDownloading.notifier).state = true;
+                      ref
+                          .watch(wspAgreementProvider(
+                                  wspId: "${ref.watch(wspProvider)?.id ?? ""}")
+                              .future)
+                          .then((value) async {
+                        ref.watch(isAgreementDownloading.notifier).state =
+                            false;
+
+                        if ("${value.status ?? "0"}" == "1") {
+                          await ref
+                              .watch(convertAndDownloadHtmlPdfProvider(
+                                      data: value.data)
                                   .future)
-                              .then((value) async {
+                              .then((value) {})
+                              .onError((e, s) {
                             ref.watch(isAgreementDownloading.notifier).state =
                                 false;
 
-                            if ("${value.status ?? "0"}" == "1") {
-                             await  ref
-                                  .watch(convertAndDownloadHtmlPdfProvider(
-                                          data: value.data)
-                                      .future)
-                                  .then((value) {
-                             
-                              }).onError((e, s) {
-                                ref
-                                    .watch(isAgreementDownloading.notifier)
-                                    .state = false;
-
-                                errorToast(context, e.toString());
-                              });
-
-                              // showBarModalBottomSheet(
-                              //     context: context,
-                              //     builder: (context) => Padding(
-                              //           padding: Pad(all: 10),
-                              //           child: ListView(
-                              //             children: [HtmlWidget(value.data ?? "")],
-                              //           ),
-                              //         ));
-                            }
+                            errorToast(context, e.toString());
                           });
-                   
-                          }
-                             },
-                        text: ref.watch(isFileDownloading)?"Downloading...${ref.watch(downloadProgressProvider)}": 'Download Agreement',
-                        iconData: Icons.cloud_download,
-                        color: ColorsConstant.primaryColor,
-                        textStyle: const TextStyle(color: Colors.white),
-                        iconColor: Colors.white,
-                      )),
+
+                          // showBarModalBottomSheet(
+                          //     context: context,
+                          //     builder: (context) => Padding(
+                          //           padding: Pad(all: 10),
+                          //           child: ListView(
+                          //             children: [HtmlWidget(value.data ?? "")],
+                          //           ),
+                          //         ));
+                        }
+                      });
+                    }
+                  },
+                  text: ref.watch(isFileDownloading)
+                      ? "Downloading...${ref.watch(downloadProgressProvider)}"
+                      : 'Download Agreement',
+                  iconData: Icons.cloud_download,
+                  color: ColorsConstant.primaryColor,
+                  textStyle: const TextStyle(color: Colors.white),
+                  iconColor: Colors.white,
+                )),
             const SizedBox(
               height: 10,
             ),
@@ -285,7 +283,7 @@ class _VerificationState extends ConsumerState<Verification> {
                     .then((value) {
                   hideLoader(context);
                   if (value['status'].toString() == "1") {
-                    ref.watch(goRouterProvider).pop();
+                    ref.watch(goRouterProvider).go(RoutesStrings.dashboard);
                     successToast(context, value['message'].toString());
                   } else {
                     errorToast(context, value['message'].toString());

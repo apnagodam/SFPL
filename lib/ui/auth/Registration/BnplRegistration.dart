@@ -9,10 +9,10 @@ import 'package:swfl/ui/utils/extensions.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/utils/widgets.dart';
 
-import '../../Data/SharedPrefs/SharedUtility.dart';
-import '../../Domain/Dio/DioProvider.dart';
-import '../utils/colors.dart';
-import '../utils/debouncer.dart';
+import '../../../Data/SharedPrefs/SharedUtility.dart';
+import '../../../Domain/Dio/DioProvider.dart';
+import '../../utils/colors.dart';
+import '../../utils/debouncer.dart';
 
 class Bnplregistration extends ConsumerStatefulWidget {
   const Bnplregistration(

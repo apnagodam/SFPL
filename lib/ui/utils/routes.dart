@@ -6,15 +6,17 @@ import 'package:swfl/ui/BNPL/BnplRequests.dart';
 import 'package:swfl/ui/BNPL/BnplScreen.dart';
 import 'package:swfl/ui/BNPL/BnplStatement.dart';
 import 'package:swfl/ui/BNPL/Withdraw.dart';
-import 'package:swfl/ui/auth/BnplAadharRegistration.dart';
-import 'package:swfl/ui/auth/BnplRegistration.dart';
+import 'package:swfl/ui/auth/Registration/BnplAadharRegistration.dart';
+import 'package:swfl/ui/auth/Registration/BnplRegistration.dart';
 import 'package:swfl/ui/auth/BnplUpdateAddress.dart';
-import 'package:swfl/ui/auth/IndividualRegistration.dart';
-import 'package:swfl/ui/auth/PropRegistration.dart';
-import 'package:swfl/ui/auth/RegistrationScreen.dart';
-import 'package:swfl/ui/auth/RegistrationVerifyOtp.dart';
-import 'package:swfl/ui/auth/login_screen.dart';
-import 'package:swfl/ui/auth/verify_otp_screen.dart';
+import 'package:swfl/ui/auth/Registration/CompanyRegistration.dart';
+import 'package:swfl/ui/auth/Registration/IndividualRegistration.dart';
+import 'package:swfl/ui/auth/Registration/PartnershipRegistration.dart';
+import 'package:swfl/ui/auth/Registration/PropRegistration.dart';
+import 'package:swfl/ui/auth/Registration/RegistrationScreen.dart';
+import 'package:swfl/ui/auth/Registration/RegistrationVerifyOtp.dart';
+import 'package:swfl/ui/auth/Login/login_screen.dart';
+import 'package:swfl/ui/auth/Login/verify_otp_screen.dart';
 import 'package:swfl/ui/error/ErrorScreen.dart';
 import 'package:swfl/ui/home/DashboardMenu/ApplyForCommodityLoan/AppliedLoanList.dart';
 import 'package:swfl/ui/home/DashboardMenu/ApplyForCommodityLoan/ApplyLoanScreen.dart';
@@ -193,6 +195,14 @@ GoRouter goRouter(GoRouterRef ref) {
                         path: RoutesStrings.propRegistration,
                         name: RoutesStrings.propRegistration,
                         builder: (context, state) => const Propregistration()),
+                    GoRoute(
+                        path: RoutesStrings.companyRegistration,
+                        name: RoutesStrings.companyRegistration,
+                        builder: (context, state) => const Companyregistration()),
+                    GoRoute(
+                        path: RoutesStrings.partnershipRegistration,
+                        name: RoutesStrings.partnershipRegistration,
+                        builder: (context, state) => const Partnershipregistration()),
                     GoRoute(
                         path: RoutesStrings.registrationOtp,
                         name: RoutesStrings.registrationOtp,

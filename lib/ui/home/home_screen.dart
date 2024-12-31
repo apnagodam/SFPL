@@ -8,7 +8,9 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
+import 'package:swfl/Domain/LoanService/LoanService.dart';
 import 'package:swfl/ui/utils/colors.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:tab_container/tab_container.dart';
@@ -278,71 +280,105 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   SizedBox(
                     height: 10,
                   ),
-                  homeLayoutWidget(
-                      LucideIcons.banknote, 'Commodity Wise Loan', '0',
-                      imagePath:
-                          'https://cdn.iconscout.com/icon/premium/png-512-thumb/loan-2014155-1711062.png?f=webp&w=256',
-                      callback: () {
-                    if ((ref.watch(sharedUtilityProvider).getUser()?.triparty ??
-                            [])
-                        .isEmpty) {
-                      showVerificationDialog(context,
-                          titleText: "Verify Tri-Party Agreement",
-                          messageText: "tri party agreement pending",
-                          action: () {
-                        hideLoader(context);
-                        context.goNamed(RoutesStrings.verfication);
-                      });
-                    } else {
-                      context.goNamed(RoutesStrings.applyForCommodityLoan);
-                    }
-                  }),
-                  // homeLayoutWidget(LucideIcons.hand_coins, 'BNPL', '0',
-                  //     imagePath:
-                  //         'https://cdn.iconscout.com/icon/premium/png-512-thumb/loan-82-1066968.png?f=webp&w=256',
-                  //     callback: () {
-                  //   if (ref
-                  //           .watch(sharedUtilityProvider)
-                  //           .getUser()
-                  //           ?.aadharVerify
-                  //           .toString() ==
-                  //       "0") {
-                  //     showVerificationDialog(context,
-                  //         titleText: "Verify Aadhar",
-                  //         messageText: "Your Aadhar verification is pending",
-                  //         action: () {
-                  //       hideLoader(context);
-                  //       context.goNamed(RoutesStrings.bnplAadharRegistrationHome);
-                  //     });
-                  //   } else {
-                  //     context.goNamed(RoutesStrings.bnpl);
-                  //   }
-                  // }),
-                  homeLayoutWidget(LucideIcons.hand_coins, 'Repayment', '0',
-                      imagePath:
-                          'https://static.thenounproject.com/png/4814670-200.png',
-                      callback: () {
-                    context.goNamed(RoutesStrings.repayment);
-                  }),
-                  // homeLayoutWidget(LucideIcons.percent, 'Due Loans', '0',
-                  //     imagePath:
-                  //         'https://cdn.iconscout.com/icon/premium/png-512-thumb/due-date-10983830-8792274.png?f=webp&w=256'),
-                  // homeLayoutWidget(LucideIcons.workflow, 'M2M Shortfalls', '0',
-                  //     imagePath:
-                  //         'https://cdn.iconscout.com/icon/premium/png-512-thumb/trading-3256014-2712970.png?f=webp&w=256')
+                  ref.watch(dashboardDataProvider).when(
+                      data: (data) => ColumnSuper(
+                            children: [
+                              homeLayoutWidget(LucideIcons.banknote,
+                                  'Commodity Wise Loan', '0',
+                                  imagePath:
+                                      'https://cdn.iconscout.com/icon/premium/png-512-thumb/loan-2014155-1711062.png?f=webp&w=256',
+                                  callback: () {
+                                if ((ref
+                                            .watch(sharedUtilityProvider)
+                                            .getUser()
+                                            ?.triparty ??
+                                        [])
+                                    .isEmpty) {
+                                  showVerificationDialog(context,
+                                      titleText: "Verify Tri-Party Agreement",
+                                      messageText:
+                                          "tri party agreement pending",
+                                      action: () {
+                                    hideLoader(context);
+                                    context.goNamed(RoutesStrings.verfication);
+                                  });
+                                } else {
+                                  context.goNamed(
+                                      RoutesStrings.applyForCommodityLoan);
+                                }
+                              }),
+                              homeLayoutWidget(
+                                  LucideIcons.hand_coins, 'Repayment', '0',
+                                  imagePath:
+                                      'https://static.thenounproject.com/png/4814670-200.png',
+                                  callback: () {
+                                context.goNamed(RoutesStrings.repayment);
+                              }),
+                              homeLayoutWidget(LucideIcons.hand_coins,
+                                  'Loans Near Expiry', '${data.loanNearExpiry}',
+                                  imagePath:
+                                      'https://static.thenounproject.com/png/4814670-200.png',
+                                  callback: () {
+                                context.goNamed(RoutesStrings.repayment);
+                              }),
+                              homeLayoutWidget(LucideIcons.hand_coins,
+                                  'Expired Loans', '${data.loanExpiry}',
+                                  imagePath:
+                                      'https://static.thenounproject.com/png/4814670-200.png',
+                                  callback: () {
+                                context.goNamed(RoutesStrings.repayment);
+                              }),
+                              homeLayoutWidget(
+                                  LucideIcons.hand_coins,
+                                  'Total Pledged Commodity',
+                                  '${data.totalPledgedCommodity}',
+                                  imagePath:
+                                      'https://static.thenounproject.com/png/4814670-200.png',
+                                  callback: () {
+                                context.goNamed(RoutesStrings.repayment);
+                              }),
+                              homeLayoutWidget(
+                                  LucideIcons.hand_coins,
+                                  'Total Loan Amount',
+                                  '${data.totalLoanAmount}',
+                                  imagePath:
+                                      'https://static.thenounproject.com/png/4814670-200.png',
+                                  callback: () {
+                                context.goNamed(RoutesStrings.repayment);
+                              })
+                            ],
+                          ),
+                      error: (e, s) => Container(),
+                      loading: () => SizedBox(
+                            width: 200.0,
+                            height: 100.0,
+                            child: Shimmer.fromColors(
+                              baseColor: Colors.red,
+                              highlightColor: Colors.yellow,
+                              child: Text(
+                                'Shimmer',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 40.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ))
                 ],
               ),
-              onRefresh: () => Future.delayed(Duration(seconds: 1)).then((value){
-                ref.watch(loginInfoProvider.future).then((data) {
-                  if (data.data?.isLogin != false) {
-
-                    ref.watch(sharedUtilityProvider).setUser(data.data);
-                  } else {
-                    ref.watch(sharedPreferencesProvider).clear();
-                    context.go(RoutesStrings.login);
-                  }
-                });
-              }))),
+              onRefresh: () =>
+                  Future.delayed(Duration(seconds: 1)).then((value) {
+                    ref.invalidate(dashboardDataProvider);
+                    ref.watch(loginInfoProvider.future).then((data) {
+                      if (data.data?.isLogin != false) {
+                        ref.watch(sharedUtilityProvider).setUser(data.data);
+                      } else {
+                        ref.watch(sharedPreferencesProvider).clear();
+                        context.go(RoutesStrings.login);
+                      }
+                    });
+                  }))),
     );
   }
 
@@ -360,7 +396,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           surfaceTintColor: Colors.white,
           child: Row(children: [
             Container(
-              height: Adaptive.sw(15),
+              height: Adaptive.sh(10),
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -370,7 +406,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                         Colors.transparent.withOpacity(0.6),
                         ColorsConstant.primaryColor
                       ]),
-                  color: ColorsConstant.primaryColor,
+                  color: const Color.fromARGB(255, 28, 42, 25),
                   borderRadius: BorderRadius.circular(10)),
               child: Padding(
                   padding: Pad(all: 20),
@@ -388,25 +424,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 child: Text(
               text,
               style: TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: Adaptive.sp(19)),
+                  fontWeight: FontWeight.bold, fontSize: Adaptive.sp(16)),
             )),
-            // Container(
-            //   padding: Pad(all: 10),
-            //   height: Adaptive.sw(15),
-            //   decoration: BoxDecoration(
-            //       color: ColorsConstant.primaryColor,
-            //       borderRadius: BorderRadius.only(
-            //           topRight: Radius.circular(10),
-            //           bottomRight: Radius.circular(10))),
-            //   alignment: Alignment.center,
-            //   child: Text(
-            //     number,
-            //     style: TextStyle(
-            //         fontWeight: FontWeight.bold,
-            //         fontSize: Adaptive.sp(20),
-            //         color: Colors.white),
-            //   ),
-            // )
+            Container(
+              padding: Pad(all: 10),
+              height: Adaptive.sh(10),
+              width: Adaptive.w(25),
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.transparent.withOpacity(0.6),
+                        ColorsConstant.primaryColor
+                      ]),
+                  color: const Color.fromARGB(255, 28, 42, 25),
+                  borderRadius: BorderRadius.circular(10)),
+              alignment: Alignment.center,
+              child: Text(
+                number,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: Adaptive.sp(16),
+                    color: Colors.white),
+              ),
+            )
           ]),
         ),
       );
