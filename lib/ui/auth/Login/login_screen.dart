@@ -1,14 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mobile_device_identifier/mobile_device_identifier.dart';
-import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Domain/AuthenticationService/AuthenticationService.dart';
 import 'package:swfl/ui/utils/colors.dart';
@@ -23,94 +18,15 @@ class LoginScreen extends ConsumerStatefulWidget {
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen>
-    with WidgetsBindingObserver {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final formKey = GlobalKey<FormState>();
   TextEditingController panController = TextEditingController();
   var isLoading = StateProvider((ref) => false);
-  var phoneNumber = StateProvider((ref) => '');
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) async {
-    //   var db = await mongo.Db.create(
-    //       "mongodb+srv://apnagodam:WOU8uu5VoGWuaaZW@cluster0.humxj.mongodb.net/");
-    //   await db.open();
-
-    //   final mobileDeviceIdentifier =
-    //       await MobileDeviceIdentifier().getDeviceId();
-
-    //   var userDetailsCollection =
-    //       db.collection(mobileDeviceIdentifier.toString());
-    //   showloader(context);
-
-    //   userDetailsCollection.find().first.then((value) {
-    //     if (value['phone'] != null) {
-    //       ref
-    //           .watch(loginProvider(panNumber: value['phone']).future)
-    //           .then((value) {
-    //         hideLoader(context);
-    //         ref.watch(isLoading.notifier).state = false;
-
-    //         if (value['status'].toString() == "1") {
-    //           context.goNamed(RoutesStrings.verifyOtp,
-    //               extra: {'panCard': value['phone'].toString().toUpperCase()});
-    //           successToast(context, '${value['message']}');
-    //         } else {
-    //           context.goNamed(RoutesStrings.register);
-    //         }
-    //       });
-    //     } else {
-    //       hideLoader(context);
-    //     }
-    //   });
-    // });
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    if (state == AppLifecycleState.resumed) {
-      // var db = await mongo.Db.create(
-      //     "mongodb+srv://apnagodam:WOU8uu5VoGWuaaZW@cluster0.humxj.mongodb.net/");
-      // await db.open();
-
-      // final mobileDeviceIdentifier =
-      //     await MobileDeviceIdentifier().getDeviceId();
-
-      // var userDetailsCollection =
-      //     db.collection(mobileDeviceIdentifier.toString());
-      // showloader(context);
-
-      // userDetailsCollection.find().first.then((value) {
-      //   if (value['phone'] != null) {
-      //     ref
-      //         .watch(loginProvider(panNumber: value['phone']).future)
-      //         .then((value) {
-      //       hideLoader(context);
-      //       ref.watch(isLoading.notifier).state = false;
-
-      //       if (value['status'].toString() == "1") {
-      //         context.goNamed(RoutesStrings.verifyOtp,
-      //             extra: {'panCard': value['phone'].toString().toUpperCase()});
-      //         successToast(context, '${value['message']}');
-      //       } else {
-      //         context.goNamed(RoutesStrings.register);
-      //       }
-      //     });
-      //   } else {
-      //     hideLoader(context);
-      //   }
-      // });
-    }
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
   }
 
   @override
@@ -193,7 +109,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                     : SizedBox(
                         width: MediaQuery.of(context).size.width,
                         child: ElevatedButton(
-                          onPressed: () async {
+                          onPressed: () {
                             if (formKey.currentState!.validate()) {
                               ref.watch(isLoading.notifier).state = true;
 

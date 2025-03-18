@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,8 +13,6 @@ import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/ui/utils/colors.dart';
 import 'package:toastification/toastification.dart';
-
-import 'Styles.dart';
 
 roundedWidget({required Widget child, double width = 35, double height = 35}) =>
     Container(
@@ -67,7 +64,6 @@ roundedProfileImage(
         ),
       ),
     );
-
 emptyData() => SizedBox(
       height: MediaQuery.of(OneContext().context!).size.height / 2,
       child: Column(
@@ -305,59 +301,6 @@ showErrorDialog(BuildContext context,
         // action!();
       },
       widget: const Text(''),
-    );
-
-showForceLogoutDialog(BuildContext context,
-        {required String titleText,
-        required String messageText,
-        VoidCallback? action}) =>
-    QuickAlert.show(
-      context: context,
-      type: QuickAlertType.error,
-      headerBackgroundColor: ColorsConstant.primaryColor,
-      title: titleText,
-      text: messageText,
-      showCancelBtn: false,
-      showConfirmBtn: true,
-      confirmBtnText: "Okay",
-      confirmBtnColor: ColorsConstant.primaryColor,
-      onConfirmBtnTap: () {
-        action!();
-        hideLoader(context);
-      },
-      widget: const Text(''),
-    );
-showCustomAlertDialog(BuildContext context, Widget child, String title) =>
-    AlertDialog(
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-                fontSize: Adaptive.sp(18), fontWeight: FontWeight.bold),
-          ),
-          Divider(
-            endIndent: 150,
-            thickness: 4,
-          )
-        ],
-      ),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      backgroundColor: Colors.white,
-      content: child,
-      actions: [
-        ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text(
-            'OK',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-          style: buttonStyle,
-        )
-      ],
     );
 
 var downloadProgressProvider = StateProvider((ref) => "0");

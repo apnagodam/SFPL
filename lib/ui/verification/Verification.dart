@@ -7,12 +7,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
-import 'package:one_context/one_context.dart';
 import 'package:path/path.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Domain/LoanService/LoanService.dart';
@@ -160,7 +157,7 @@ class _VerificationState extends ConsumerState<Verification> {
                 child: IconsButton(
                   onPressed: () async {
                     if (!ref.watch(isFileDownloading)) {
-                      // ref.watch(isAgreementDownloading.notifier).state = true;
+                      ref.watch(isAgreementDownloading.notifier).state = true;
                       ref
                           .watch(wspAgreementProvider(
                                   wspId: "${ref.watch(wspProvider)?.id ?? ""}")
@@ -169,22 +166,18 @@ class _VerificationState extends ConsumerState<Verification> {
                         ref.watch(isAgreementDownloading.notifier).state =
                             false;
 
-                        if (value.data != null) {
-                          context.goNamed(
-                              RoutesStrings.surepassWebviewScreenVerification,
-                              extra: {
-                                'url': value.data,
-                                'docName': 'triparty_agreement'
-                              });
-                          // var downloadedFile = await ref
-                          //     .watch(downloadFileBGProvider(
-                          //             fileName: 'tp agreement', url: value.data)
-                          //         .future)
-                          //     .onError((e, s) {
-                          //   ref.watch(isAgreementDownloading.notifier).state =
-                          //       false;
-                          //   errorToast(context, e.toString());
-                          // });
+                        if ("${value.status ?? "0"}" == "1") {
+                          await ref
+                              .watch(convertAndDownloadHtmlPdfProvider(
+                                      data: value.data)
+                                  .future)
+                              .then((value) {})
+                              .onError((e, s) {
+                            ref.watch(isAgreementDownloading.notifier).state =
+                                false;
+
+                            errorToast(context, e.toString());
+                          });
 
                           // showBarModalBottomSheet(
                           //     context: context,
@@ -229,9 +222,7 @@ class _VerificationState extends ConsumerState<Verification> {
                 if (result != null) {
                   File file = File(result.files.single.path!);
                   ref.watch(triPartyImageProvider.notifier).state = file;
-                } else {
-                  errorToast(context, result.toString());
-                }
+                } else {}
               },
               child: DottedBorder(
                   borderType: BorderType.RRect,
@@ -240,9 +231,9 @@ class _VerificationState extends ConsumerState<Verification> {
                   child: Padding(
                     padding: const Pad(all: 20),
                     child: Center(
-                      child: ref.watch(triPartyImageProvider) != null
+                      child: ref.watch(downloadFilePath) != null
                           ? Text(
-                              "${basename(ref.watch(triPartyImageProvider)?.path ?? "")}",
+                              "${basename(ref.watch(downloadFilePath)?.path ?? "")}",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: ColorsConstant.primaryColor,
@@ -287,7 +278,7 @@ class _VerificationState extends ConsumerState<Verification> {
                 ref
                     .watch(uploadPdfProvider(
                             wspId: "${ref.watch(wspProvider)?.id.toString()}",
-                            agreementFile: ref.watch(triPartyImageProvider))
+                            agreementFile: ref.watch(downloadFilePath))
                         .future)
                     .then((value) {
                   hideLoader(context);

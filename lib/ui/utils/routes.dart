@@ -1,46 +1,35 @@
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:swfl/Data/Model/ListOfDirectorsModel.dart';
 import 'package:swfl/ui/BNPL/BnplDebitStatement.dart';
 import 'package:swfl/ui/BNPL/BnplRequests.dart';
 import 'package:swfl/ui/BNPL/BnplScreen.dart';
 import 'package:swfl/ui/BNPL/BnplStatement.dart';
 import 'package:swfl/ui/BNPL/Withdraw.dart';
-import 'package:swfl/ui/auth/BnplUpdateAddress.dart';
-import 'package:swfl/ui/auth/Login/login_screen.dart';
-import 'package:swfl/ui/auth/Login/verify_otp_screen.dart';
 import 'package:swfl/ui/auth/Registration/BnplAadharRegistration.dart';
 import 'package:swfl/ui/auth/Registration/BnplRegistration.dart';
+import 'package:swfl/ui/auth/BnplUpdateAddress.dart';
 import 'package:swfl/ui/auth/Registration/CompanyRegistration.dart';
 import 'package:swfl/ui/auth/Registration/IndividualRegistration.dart';
 import 'package:swfl/ui/auth/Registration/PartnershipRegistration.dart';
 import 'package:swfl/ui/auth/Registration/PropRegistration.dart';
 import 'package:swfl/ui/auth/Registration/RegistrationScreen.dart';
 import 'package:swfl/ui/auth/Registration/RegistrationVerifyOtp.dart';
+import 'package:swfl/ui/auth/Login/login_screen.dart';
+import 'package:swfl/ui/auth/Login/verify_otp_screen.dart';
 import 'package:swfl/ui/error/ErrorScreen.dart';
-import 'package:swfl/ui/home/DashboardMenu/AddDirectorPartner/AddDirectorPartnerScreen.dart';
-import 'package:swfl/ui/home/DashboardMenu/AddDirectorPartner/AuthorizationVerificationScreen.dart';
-import 'package:swfl/ui/home/DashboardMenu/AddDirectorPartner/EditDirectorPartnerScreen.dart';
-import 'package:swfl/ui/home/DashboardMenu/AddDirectorPartner/PartnersDirectorsListScreen.dart';
 import 'package:swfl/ui/home/DashboardMenu/ApplyForCommodityLoan/AppliedLoanList.dart';
 import 'package:swfl/ui/home/DashboardMenu/ApplyForCommodityLoan/ApplyLoanScreen.dart';
-import 'package:swfl/ui/home/DashboardMenu/SanctionHoldStatement/SanctionedHoldStatementScreen.dart';
 import 'package:swfl/ui/home/DashboardMenu/SanctionedAmount/SanctionedAmountScreen.dart';
 import 'package:swfl/ui/home/DashboardMenu/Wallet/AddMoney.dart';
 import 'package:swfl/ui/home/DashboardMenu/Wallet/MoneyRequest.dart';
 import 'package:swfl/ui/home/DashboardMenu/Wallet/WalletStatement.dart';
 import 'package:swfl/ui/home/DashboardMenu/Wallet/WithdrawMoney.dart';
 import 'package:swfl/ui/home/DashboardMenu/Wallet/WithdrawRequests.dart';
-import 'package:swfl/ui/home/HomeLoanScreens/ExpiredLoanScreen.dart';
-import 'package:swfl/ui/home/HomeLoanScreens/LoansNearExpiryScreen.dart';
-import 'package:swfl/ui/home/HomeLoanScreens/TotalLoanAmountScreen.dart';
-import 'package:swfl/ui/home/HomeLoanScreens/TotalPledgedCommodityScreen.dart';
 import 'package:swfl/ui/home/dashboard_screen.dart';
 import 'package:swfl/ui/profile/ProfileScreen.dart';
 import 'package:swfl/ui/repayment/RepaymentScreen.dart';
 import 'package:swfl/ui/splash/onboarding_screen.dart';
-import 'package:swfl/ui/utils/SurepassWebviewScreen.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/verification/Verification.dart';
 
@@ -76,32 +65,6 @@ GoRouter goRouter(GoRouterRef ref) {
             name: RoutesStrings.dashboard,
             routes: [
               GoRoute(
-                  path: RoutesStrings.directorPartnersList,
-                  name: RoutesStrings.directorPartnersList,
-                  builder: (context, state) =>
-                      const Partnersdirectorslistscreen(),
-                  routes: [
-                    GoRoute(
-                        path: RoutesStrings.addDirectorPartner,
-                        name: RoutesStrings.addDirectorPartner,
-                        builder: (context, state) =>
-                            const Adddirectorpartnerscreen()),
-                    GoRoute(
-                        path: RoutesStrings.editDirectorPartner,
-                        name: RoutesStrings.editDirectorPartner,
-                        builder: (context, state) {
-                          final data = state.extra! as DirectorDatum;
-                          return Editdirectorpartnerscreen(
-                            data: data,
-                          );
-                        })
-                  ]),
-              GoRoute(
-                  path: RoutesStrings.authorisationLetterScreen,
-                  name: RoutesStrings.authorisationLetterScreen,
-                  builder: (context, state) =>
-                      const Authorizationverificationscreen()),
-              GoRoute(
                   path: RoutesStrings.bnpl,
                   name: RoutesStrings.bnpl,
                   builder: (context, state) => const Bnplscreen()),
@@ -132,29 +95,11 @@ GoRouter goRouter(GoRouterRef ref) {
               GoRoute(
                   path: RoutesStrings.verfication,
                   name: RoutesStrings.verfication,
-                  builder: (context, state) => const Verification(),
-                  routes: [
-                    GoRoute(
-                        path: RoutesStrings.surepassWebviewScreenVerification,
-                        name: RoutesStrings.surepassWebviewScreenVerification,
-                        builder: (context, state) {
-                          final data = state.extra! as Map<String, dynamic>;
-                          return Surepasswebviewscreen(
-                            url: data['url'],
-                            docName: data['docName'],
-                          );
-                        }),
-                  ]),
+                  builder: (context, state) => const Verification()),
               GoRoute(
                 path: RoutesStrings.applyForSanctionLimit,
                 name: RoutesStrings.applyForSanctionLimit,
                 builder: (context, state) => const ApplyForSanctionLimit(),
-              ),
-              GoRoute(
-                path: RoutesStrings.holdStatement,
-                name: RoutesStrings.holdStatement,
-                builder: (context, state) =>
-                    const Sanctionedholdstatementscreen(),
               ),
               GoRoute(
                 path: RoutesStrings.profile,
@@ -162,21 +107,10 @@ GoRouter goRouter(GoRouterRef ref) {
                 builder: (context, state) => const Profilescreen(),
               ),
               GoRoute(
-                  path: RoutesStrings.sanctionedAmount,
-                  name: RoutesStrings.sanctionedAmount,
-                  builder: (context, state) => const Sanctionedamountscreen(),
-                  routes: [
-                    GoRoute(
-                        path: RoutesStrings.surepassWebviewScreen,
-                        name: RoutesStrings.surepassWebviewScreen,
-                        builder: (context, state) {
-                          final data = state.extra! as Map<String, dynamic>;
-                          return Surepasswebviewscreen(
-                            url: data['url'],
-                            docName: data['docName'],
-                          );
-                        }),
-                  ]),
+                path: RoutesStrings.sanctionedAmount,
+                name: RoutesStrings.sanctionedAmount,
+                builder: (context, state) => const Sanctionedamountscreen(),
+              ),
               GoRoute(
                 path: RoutesStrings.addMoney,
                 name: RoutesStrings.addMoney,
@@ -210,23 +144,6 @@ GoRouter goRouter(GoRouterRef ref) {
                   path: RoutesStrings.repayment,
                   name: RoutesStrings.repayment,
                   builder: (context, state) => const Repaymentscreen()),
-              GoRoute(
-                  path: RoutesStrings.loansNearExpiry,
-                  name: RoutesStrings.loansNearExpiry,
-                  builder: (context, state) => const Loansnearexpiryscreen()),
-              GoRoute(
-                  path: RoutesStrings.expiredLoans,
-                  name: RoutesStrings.expiredLoans,
-                  builder: (context, state) => const Expiredloanscreen()),
-              GoRoute(
-                  path: RoutesStrings.totalLoanAmount,
-                  name: RoutesStrings.totalLoanAmount,
-                  builder: (context, state) => const Totalloanamountscreen()),
-              GoRoute(
-                  path: RoutesStrings.totalPledgedCommodity,
-                  name: RoutesStrings.totalPledgedCommodity,
-                  builder: (context, state) =>
-                      const Totalpledgedcommodityscreen()),
             ],
             builder: (context, state) => const DashboardScreen()),
         GoRoute(
@@ -281,13 +198,11 @@ GoRouter goRouter(GoRouterRef ref) {
                     GoRoute(
                         path: RoutesStrings.companyRegistration,
                         name: RoutesStrings.companyRegistration,
-                        builder: (context, state) =>
-                            const Companyregistration()),
+                        builder: (context, state) => const Companyregistration()),
                     GoRoute(
                         path: RoutesStrings.partnershipRegistration,
                         name: RoutesStrings.partnershipRegistration,
-                        builder: (context, state) =>
-                            const Partnershipregistration()),
+                        builder: (context, state) => const Partnershipregistration()),
                     GoRoute(
                         path: RoutesStrings.registrationOtp,
                         name: RoutesStrings.registrationOtp,

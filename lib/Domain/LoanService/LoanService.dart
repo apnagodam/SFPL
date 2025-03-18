@@ -2,20 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:swfl/Data/Model/DashboarModel.dart';
 import 'package:swfl/Data/Model/LoanApplyListModel.dart';
 import 'package:swfl/Data/Model/LoanDetailsModel.dart';
-import 'package:swfl/Data/Model/LoanNearExpiryModel.dart';
 import 'package:swfl/Data/Model/LoanRequestFormModel.dart';
 import 'package:swfl/Data/Model/LoanRequestsStatusModel.dart';
-import 'package:swfl/Data/Model/PledgedCommodityModel.dart';
 import 'package:swfl/Data/Model/SanctionLimitListModel.dart';
 import 'package:swfl/Data/Model/SanctionSchemeListModel.dart';
-import 'package:swfl/Data/Model/SantionedLimitHoldModel.dart';
 import 'package:swfl/Data/Model/TermsModel.dart';
-import 'package:swfl/Data/Model/TotalLoanAmountModel.dart';
 import 'package:swfl/Data/Model/TripartyAgreementModel.dart';
 import 'package:swfl/Data/Model/WspListModel.dart';
 import 'package:swfl/Domain/Dio/DioProvider.dart';
@@ -29,40 +24,6 @@ part 'LoanService.g.dart';
 Stream<DashboardModel> dashboardData(DashboardDataRef ref) async* {
   var response = await ref.watch(dioProvider).get(ApiClient.getdashboardData);
   yield dashboardModelFromJson(jsonEncode(response.data));
-}
-
-@riverpod
-Future<Map<String, dynamic>> drfLink(DrfLinkRef ref,
-    {String? financeId}) async {
-  var response = await ref
-      .watch(dioProvider)
-      .post(ApiClient.downloadDrfLink, data: {"id": financeId});
-  return response.data;
-}
-
-@riverpod
-Stream<LoanNearExpiryModel> nearExpiryLoans(NearExpiryLoansRef ref) async* {
-  var response = await ref.watch(dioProvider).get(ApiClient.getLoansNearExpiry);
-  yield loanNearExpiryModelFromJson(jsonEncode(response.data));
-}
-
-@riverpod
-Stream<LoanNearExpiryModel> expiredLoans(ExpiredLoansRef ref) async* {
-  var response = await ref.watch(dioProvider).get(ApiClient.getExpiredLoans);
-  yield loanNearExpiryModelFromJson(jsonEncode(response.data));
-}
-
-@riverpod
-Stream<PledgedCommodityModel> pledgedCommodity(PledgedCommodityRef ref) async* {
-  var response =
-      await ref.watch(dioProvider).get(ApiClient.getPledgedCommodity);
-  yield pledgedCommodityModelFromJson(jsonEncode(response.data));
-}
-
-@riverpod
-Stream<TotalLoanAmountModel> totalLoanAmount(TotalLoanAmountRef ref) async* {
-  var response = await ref.watch(dioProvider).get(ApiClient.getTotalLoanAmount);
-  yield totalLoanAmountModelFromJson(jsonEncode(response.data));
 }
 
 @riverpod
@@ -318,41 +279,4 @@ Future<LoanRequestsStatusModel> closedRequests(ClosedRequestsRef ref) async {
   var response = await ref.watch(dioProvider).get(ApiClient.closedRequests);
 
   return loanRequestsStatusModelFromMap(jsonEncode(response.data));
-}
-
-@riverpod
-Future<Map<String, dynamic>> surepassLoanAgreement(SurepassLoanAgreementRef ref,
-    {String? id}) async {
-  var response = await ref
-      .watch(dioProvider)
-      .get(ApiClient.getSurepassLoanAgreementUrl + "$id");
-  return response.data;
-}
-
-@riverpod
-Future<Map<String, dynamic>> surepassPdc(SurepassPdcRef ref,
-    {String? id}) async {
-  var response =
-      await ref.watch(dioProvider).get(ApiClient.getSurepassPdcUrl + "$id");
-  return response.data;
-}
-
-@riverpod
-Future<Map<String, dynamic>> surepassSanctionLetter(
-    SurepassSanctionLetterRef ref,
-    {String? id}) async {
-  var response = await ref
-      .watch(dioProvider)
-      .get(ApiClient.getSurepassSanctionUrl + "$id");
-  return response.data;
-}
-
-@riverpod
-Stream<SantionedLimitHoldModel> sanctionHold(
-  SanctionHoldRef ref,
-) async* {
-  var response = await ref.watch(dioProvider).get(
-        ApiClient.getSanctionHoldList,
-      );
-  yield santionedLimitHoldModelFromJson(jsonEncode(response.data));
 }

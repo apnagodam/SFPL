@@ -15,11 +15,11 @@ class Diointerceptor extends InterceptorsWrapper {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     if (response.data['status'].toString() == '3') {
-      showForceLogoutDialog(OneContext().context!,
+      showErrorDialog(OneContext().context!,
           titleText: 'You have been Logged out!',
           messageText: "Please Login Again!", action: () {
+        ref.watch(goRouterProvider).goNamed(RoutesStrings.login);
         ref.watch(sharedUtilityProvider).sharedPreferences.clear();
-        ref.watch(goRouterProvider).go(RoutesStrings.login);
       });
     } else if (response.data['status'] == "0") {
       if (response.data['message']

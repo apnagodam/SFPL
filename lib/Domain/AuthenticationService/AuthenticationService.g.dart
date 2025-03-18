@@ -6,7 +6,7 @@ part of 'AuthenticationService.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$registerUserHash() => r'4ce5531d7487368890925b411a3664a39ed55781';
+String _$registerUserHash() => r'fa129e068fc018f5a742a45fd00b8358399b1237';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -57,16 +57,12 @@ class RegisterUserFamily extends Family<AsyncValue<Map<String, dynamic>>> {
     String? propDocType,
     String? propDocNumber,
     String? firmName,
-    String? partnerDirectorCount,
     File? panCardImage,
     File? profileImage,
     File? chequeImage,
     File? aadharImage,
     File? adharBackImage,
     File? proprietorProof,
-    File? moaAoa,
-    File? boardResolution,
-    File? directorProof,
   }) {
     return RegisterUserProvider(
       panCard: panCard,
@@ -86,16 +82,12 @@ class RegisterUserFamily extends Family<AsyncValue<Map<String, dynamic>>> {
       propDocType: propDocType,
       propDocNumber: propDocNumber,
       firmName: firmName,
-      partnerDirectorCount: partnerDirectorCount,
       panCardImage: panCardImage,
       profileImage: profileImage,
       chequeImage: chequeImage,
       aadharImage: aadharImage,
       adharBackImage: adharBackImage,
       proprietorProof: proprietorProof,
-      moaAoa: moaAoa,
-      boardResolution: boardResolution,
-      directorProof: directorProof,
     );
   }
 
@@ -121,16 +113,12 @@ class RegisterUserFamily extends Family<AsyncValue<Map<String, dynamic>>> {
       propDocType: provider.propDocType,
       propDocNumber: provider.propDocNumber,
       firmName: provider.firmName,
-      partnerDirectorCount: provider.partnerDirectorCount,
       panCardImage: provider.panCardImage,
       profileImage: provider.profileImage,
       chequeImage: provider.chequeImage,
       aadharImage: provider.aadharImage,
       adharBackImage: provider.adharBackImage,
       proprietorProof: provider.proprietorProof,
-      moaAoa: provider.moaAoa,
-      boardResolution: provider.boardResolution,
-      directorProof: provider.directorProof,
     );
   }
 
@@ -171,16 +159,12 @@ class RegisterUserProvider
     String? propDocType,
     String? propDocNumber,
     String? firmName,
-    String? partnerDirectorCount,
     File? panCardImage,
     File? profileImage,
     File? chequeImage,
     File? aadharImage,
     File? adharBackImage,
     File? proprietorProof,
-    File? moaAoa,
-    File? boardResolution,
-    File? directorProof,
   }) : this._internal(
           (ref) => registerUser(
             ref as RegisterUserRef,
@@ -201,16 +185,12 @@ class RegisterUserProvider
             propDocType: propDocType,
             propDocNumber: propDocNumber,
             firmName: firmName,
-            partnerDirectorCount: partnerDirectorCount,
             panCardImage: panCardImage,
             profileImage: profileImage,
             chequeImage: chequeImage,
             aadharImage: aadharImage,
             adharBackImage: adharBackImage,
             proprietorProof: proprietorProof,
-            moaAoa: moaAoa,
-            boardResolution: boardResolution,
-            directorProof: directorProof,
           ),
           from: registerUserProvider,
           name: r'registerUserProvider',
@@ -238,16 +218,12 @@ class RegisterUserProvider
           propDocType: propDocType,
           propDocNumber: propDocNumber,
           firmName: firmName,
-          partnerDirectorCount: partnerDirectorCount,
           panCardImage: panCardImage,
           profileImage: profileImage,
           chequeImage: chequeImage,
           aadharImage: aadharImage,
           adharBackImage: adharBackImage,
           proprietorProof: proprietorProof,
-          moaAoa: moaAoa,
-          boardResolution: boardResolution,
-          directorProof: directorProof,
         );
 
   RegisterUserProvider._internal(
@@ -274,16 +250,12 @@ class RegisterUserProvider
     required this.propDocType,
     required this.propDocNumber,
     required this.firmName,
-    required this.partnerDirectorCount,
     required this.panCardImage,
     required this.profileImage,
     required this.chequeImage,
     required this.aadharImage,
     required this.adharBackImage,
     required this.proprietorProof,
-    required this.moaAoa,
-    required this.boardResolution,
-    required this.directorProof,
   }) : super.internal();
 
   final String? panCard;
@@ -303,16 +275,12 @@ class RegisterUserProvider
   final String? propDocType;
   final String? propDocNumber;
   final String? firmName;
-  final String? partnerDirectorCount;
   final File? panCardImage;
   final File? profileImage;
   final File? chequeImage;
   final File? aadharImage;
   final File? adharBackImage;
   final File? proprietorProof;
-  final File? moaAoa;
-  final File? boardResolution;
-  final File? directorProof;
 
   @override
   Override overrideWith(
@@ -344,16 +312,12 @@ class RegisterUserProvider
         propDocType: propDocType,
         propDocNumber: propDocNumber,
         firmName: firmName,
-        partnerDirectorCount: partnerDirectorCount,
         panCardImage: panCardImage,
         profileImage: profileImage,
         chequeImage: chequeImage,
         aadharImage: aadharImage,
         adharBackImage: adharBackImage,
         proprietorProof: proprietorProof,
-        moaAoa: moaAoa,
-        boardResolution: boardResolution,
-        directorProof: directorProof,
       ),
     );
   }
@@ -383,16 +347,12 @@ class RegisterUserProvider
         other.propDocType == propDocType &&
         other.propDocNumber == propDocNumber &&
         other.firmName == firmName &&
-        other.partnerDirectorCount == partnerDirectorCount &&
         other.panCardImage == panCardImage &&
         other.profileImage == profileImage &&
         other.chequeImage == chequeImage &&
         other.aadharImage == aadharImage &&
         other.adharBackImage == adharBackImage &&
-        other.proprietorProof == proprietorProof &&
-        other.moaAoa == moaAoa &&
-        other.boardResolution == boardResolution &&
-        other.directorProof == directorProof;
+        other.proprietorProof == proprietorProof;
   }
 
   @override
@@ -415,16 +375,12 @@ class RegisterUserProvider
     hash = _SystemHash.combine(hash, propDocType.hashCode);
     hash = _SystemHash.combine(hash, propDocNumber.hashCode);
     hash = _SystemHash.combine(hash, firmName.hashCode);
-    hash = _SystemHash.combine(hash, partnerDirectorCount.hashCode);
     hash = _SystemHash.combine(hash, panCardImage.hashCode);
     hash = _SystemHash.combine(hash, profileImage.hashCode);
     hash = _SystemHash.combine(hash, chequeImage.hashCode);
     hash = _SystemHash.combine(hash, aadharImage.hashCode);
     hash = _SystemHash.combine(hash, adharBackImage.hashCode);
     hash = _SystemHash.combine(hash, proprietorProof.hashCode);
-    hash = _SystemHash.combine(hash, moaAoa.hashCode);
-    hash = _SystemHash.combine(hash, boardResolution.hashCode);
-    hash = _SystemHash.combine(hash, directorProof.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -482,9 +438,6 @@ mixin RegisterUserRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
   /// The parameter `firmName` of this provider.
   String? get firmName;
 
-  /// The parameter `partnerDirectorCount` of this provider.
-  String? get partnerDirectorCount;
-
   /// The parameter `panCardImage` of this provider.
   File? get panCardImage;
 
@@ -502,15 +455,6 @@ mixin RegisterUserRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
 
   /// The parameter `proprietorProof` of this provider.
   File? get proprietorProof;
-
-  /// The parameter `moaAoa` of this provider.
-  File? get moaAoa;
-
-  /// The parameter `boardResolution` of this provider.
-  File? get boardResolution;
-
-  /// The parameter `directorProof` of this provider.
-  File? get directorProof;
 }
 
 class _RegisterUserProviderElement
@@ -553,9 +497,6 @@ class _RegisterUserProviderElement
   @override
   String? get firmName => (origin as RegisterUserProvider).firmName;
   @override
-  String? get partnerDirectorCount =>
-      (origin as RegisterUserProvider).partnerDirectorCount;
-  @override
   File? get panCardImage => (origin as RegisterUserProvider).panCardImage;
   @override
   File? get profileImage => (origin as RegisterUserProvider).profileImage;
@@ -567,12 +508,6 @@ class _RegisterUserProviderElement
   File? get adharBackImage => (origin as RegisterUserProvider).adharBackImage;
   @override
   File? get proprietorProof => (origin as RegisterUserProvider).proprietorProof;
-  @override
-  File? get moaAoa => (origin as RegisterUserProvider).moaAoa;
-  @override
-  File? get boardResolution => (origin as RegisterUserProvider).boardResolution;
-  @override
-  File? get directorProof => (origin as RegisterUserProvider).directorProof;
 }
 
 String _$verifyOtpHash() => r'824c292b749ddb3c81039f670998facfe3f9a893';
@@ -1554,351 +1489,5 @@ final bankListProvider = AutoDisposeStreamProvider<BankListModel>.internal(
 );
 
 typedef BankListRef = AutoDisposeStreamProviderRef<BankListModel>;
-String _$sendDirectorOtpHash() => r'66a3c83a48743fbeac01a5d1ff1a48586a399cd5';
-
-/// See also [sendDirectorOtp].
-@ProviderFor(sendDirectorOtp)
-const sendDirectorOtpProvider = SendDirectorOtpFamily();
-
-/// See also [sendDirectorOtp].
-class SendDirectorOtpFamily extends Family<AsyncValue<Map<String, dynamic>>> {
-  /// See also [sendDirectorOtp].
-  const SendDirectorOtpFamily();
-
-  /// See also [sendDirectorOtp].
-  SendDirectorOtpProvider call({
-    String? phoneNumber,
-  }) {
-    return SendDirectorOtpProvider(
-      phoneNumber: phoneNumber,
-    );
-  }
-
-  @override
-  SendDirectorOtpProvider getProviderOverride(
-    covariant SendDirectorOtpProvider provider,
-  ) {
-    return call(
-      phoneNumber: provider.phoneNumber,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'sendDirectorOtpProvider';
-}
-
-/// See also [sendDirectorOtp].
-class SendDirectorOtpProvider
-    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
-  /// See also [sendDirectorOtp].
-  SendDirectorOtpProvider({
-    String? phoneNumber,
-  }) : this._internal(
-          (ref) => sendDirectorOtp(
-            ref as SendDirectorOtpRef,
-            phoneNumber: phoneNumber,
-          ),
-          from: sendDirectorOtpProvider,
-          name: r'sendDirectorOtpProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$sendDirectorOtpHash,
-          dependencies: SendDirectorOtpFamily._dependencies,
-          allTransitiveDependencies:
-              SendDirectorOtpFamily._allTransitiveDependencies,
-          phoneNumber: phoneNumber,
-        );
-
-  SendDirectorOtpProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.phoneNumber,
-  }) : super.internal();
-
-  final String? phoneNumber;
-
-  @override
-  Override overrideWith(
-    FutureOr<Map<String, dynamic>> Function(SendDirectorOtpRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: SendDirectorOtpProvider._internal(
-        (ref) => create(ref as SendDirectorOtpRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        phoneNumber: phoneNumber,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
-    return _SendDirectorOtpProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is SendDirectorOtpProvider && other.phoneNumber == phoneNumber;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, phoneNumber.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-mixin SendDirectorOtpRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
-  /// The parameter `phoneNumber` of this provider.
-  String? get phoneNumber;
-}
-
-class _SendDirectorOtpProviderElement
-    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
-    with SendDirectorOtpRef {
-  _SendDirectorOtpProviderElement(super.provider);
-
-  @override
-  String? get phoneNumber => (origin as SendDirectorOtpProvider).phoneNumber;
-}
-
-String _$submitDirectorDetailsHash() =>
-    r'a732e85283b2a7a61989b3617d9348771ea7868e';
-
-/// See also [submitDirectorDetails].
-@ProviderFor(submitDirectorDetails)
-const submitDirectorDetailsProvider = SubmitDirectorDetailsFamily();
-
-/// See also [submitDirectorDetails].
-class SubmitDirectorDetailsFamily
-    extends Family<AsyncValue<Map<String, dynamic>>> {
-  /// See also [submitDirectorDetails].
-  const SubmitDirectorDetailsFamily();
-
-  /// See also [submitDirectorDetails].
-  SubmitDirectorDetailsProvider call({
-    required String personName,
-    required String phoneNumber,
-    required String panNo,
-    required String aadharNo,
-    required String otp,
-    required File profilePhoto,
-  }) {
-    return SubmitDirectorDetailsProvider(
-      personName: personName,
-      phoneNumber: phoneNumber,
-      panNo: panNo,
-      aadharNo: aadharNo,
-      otp: otp,
-      profilePhoto: profilePhoto,
-    );
-  }
-
-  @override
-  SubmitDirectorDetailsProvider getProviderOverride(
-    covariant SubmitDirectorDetailsProvider provider,
-  ) {
-    return call(
-      personName: provider.personName,
-      phoneNumber: provider.phoneNumber,
-      panNo: provider.panNo,
-      aadharNo: provider.aadharNo,
-      otp: provider.otp,
-      profilePhoto: provider.profilePhoto,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'submitDirectorDetailsProvider';
-}
-
-/// See also [submitDirectorDetails].
-class SubmitDirectorDetailsProvider
-    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
-  /// See also [submitDirectorDetails].
-  SubmitDirectorDetailsProvider({
-    required String personName,
-    required String phoneNumber,
-    required String panNo,
-    required String aadharNo,
-    required String otp,
-    required File profilePhoto,
-  }) : this._internal(
-          (ref) => submitDirectorDetails(
-            ref as SubmitDirectorDetailsRef,
-            personName: personName,
-            phoneNumber: phoneNumber,
-            panNo: panNo,
-            aadharNo: aadharNo,
-            otp: otp,
-            profilePhoto: profilePhoto,
-          ),
-          from: submitDirectorDetailsProvider,
-          name: r'submitDirectorDetailsProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$submitDirectorDetailsHash,
-          dependencies: SubmitDirectorDetailsFamily._dependencies,
-          allTransitiveDependencies:
-              SubmitDirectorDetailsFamily._allTransitiveDependencies,
-          personName: personName,
-          phoneNumber: phoneNumber,
-          panNo: panNo,
-          aadharNo: aadharNo,
-          otp: otp,
-          profilePhoto: profilePhoto,
-        );
-
-  SubmitDirectorDetailsProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.personName,
-    required this.phoneNumber,
-    required this.panNo,
-    required this.aadharNo,
-    required this.otp,
-    required this.profilePhoto,
-  }) : super.internal();
-
-  final String personName;
-  final String phoneNumber;
-  final String panNo;
-  final String aadharNo;
-  final String otp;
-  final File profilePhoto;
-
-  @override
-  Override overrideWith(
-    FutureOr<Map<String, dynamic>> Function(SubmitDirectorDetailsRef provider)
-        create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: SubmitDirectorDetailsProvider._internal(
-        (ref) => create(ref as SubmitDirectorDetailsRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        personName: personName,
-        phoneNumber: phoneNumber,
-        panNo: panNo,
-        aadharNo: aadharNo,
-        otp: otp,
-        profilePhoto: profilePhoto,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
-    return _SubmitDirectorDetailsProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is SubmitDirectorDetailsProvider &&
-        other.personName == personName &&
-        other.phoneNumber == phoneNumber &&
-        other.panNo == panNo &&
-        other.aadharNo == aadharNo &&
-        other.otp == otp &&
-        other.profilePhoto == profilePhoto;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, personName.hashCode);
-    hash = _SystemHash.combine(hash, phoneNumber.hashCode);
-    hash = _SystemHash.combine(hash, panNo.hashCode);
-    hash = _SystemHash.combine(hash, aadharNo.hashCode);
-    hash = _SystemHash.combine(hash, otp.hashCode);
-    hash = _SystemHash.combine(hash, profilePhoto.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-mixin SubmitDirectorDetailsRef
-    on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
-  /// The parameter `personName` of this provider.
-  String get personName;
-
-  /// The parameter `phoneNumber` of this provider.
-  String get phoneNumber;
-
-  /// The parameter `panNo` of this provider.
-  String get panNo;
-
-  /// The parameter `aadharNo` of this provider.
-  String get aadharNo;
-
-  /// The parameter `otp` of this provider.
-  String get otp;
-
-  /// The parameter `profilePhoto` of this provider.
-  File get profilePhoto;
-}
-
-class _SubmitDirectorDetailsProviderElement
-    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
-    with SubmitDirectorDetailsRef {
-  _SubmitDirectorDetailsProviderElement(super.provider);
-
-  @override
-  String get personName => (origin as SubmitDirectorDetailsProvider).personName;
-  @override
-  String get phoneNumber =>
-      (origin as SubmitDirectorDetailsProvider).phoneNumber;
-  @override
-  String get panNo => (origin as SubmitDirectorDetailsProvider).panNo;
-  @override
-  String get aadharNo => (origin as SubmitDirectorDetailsProvider).aadharNo;
-  @override
-  String get otp => (origin as SubmitDirectorDetailsProvider).otp;
-  @override
-  File get profilePhoto =>
-      (origin as SubmitDirectorDetailsProvider).profilePhoto;
-}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

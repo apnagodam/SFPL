@@ -13,7 +13,6 @@ import 'package:path/path.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Data/Model/TermsRequestModel.dart';
 import 'package:swfl/Domain/LoanService/LoanService.dart';
-import 'package:swfl/ui/utils/Styles.dart';
 import 'package:swfl/ui/utils/routes.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/utils/widgets.dart';
@@ -1034,7 +1033,10 @@ class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
                         // }
                       }
                     },
-                    style: buttonStyle,
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorsConstant.secondColorDark,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
                     child: Text(
                       "Submit",
                       style: TextStyle(

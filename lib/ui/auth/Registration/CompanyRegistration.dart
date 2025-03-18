@@ -11,7 +11,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:swfl/ui/utils/enums.dart';
 import 'package:swfl/ui/utils/extensions.dart';
 
 import '../../../Data/Model/BankListModel.dart';
@@ -23,6 +22,7 @@ import '../../utils/colors.dart';
 import '../../utils/routes_strings.dart';
 import '../../utils/widgets.dart';
 import '../Login/login_screen.dart';
+import 'RegistrationScreen.dart';
 
 class Companyregistration extends ConsumerStatefulWidget {
   const Companyregistration({super.key});
@@ -87,9 +87,9 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
   Widget build(BuildContext context) {
     var widgetList = [
       firmLayout(context, ref),
-      //identificationLayout(context, ref),
+      identificationLayout(context, ref),
       bankLayout(context, ref),
-      // personalDetailsLayout(context, ref),
+     // personalDetailsLayout(context, ref),
     ];
     return Scaffold(
         body: Form(
@@ -154,20 +154,20 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        // EasyStep(
-                        //   customStep: ClipRRect(
-                        //     borderRadius: BorderRadius.circular(15),
-                        //     child: Opacity(
-                        //       opacity:
-                        //           ref.watch(activeStepProvider) >= 0 ? 1 : 0.3,
-                        //       child: Icon(LucideIcons.credit_card),
-                        //     ),
-                        //   ),
-                        //   customTitle: const Text(
-                        //     'Authorized Signatory',
-                        //     textAlign: TextAlign.center,
-                        //   ),
-                        // ),
+                        EasyStep(
+                          customStep: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Opacity(
+                              opacity:
+                                  ref.watch(activeStepProvider) >= 0 ? 1 : 0.3,
+                              child: Icon(LucideIcons.credit_card),
+                            ),
+                          ),
+                          customTitle: const Text(
+                            'Authorized Signatory',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                         EasyStep(
                           customStep: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
@@ -212,7 +212,7 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                     ),
                     ref.watch(isRegisteringProvider) == true
                         ? defaultLoader()
-                        : ref.watch(activeStepProvider) < 1
+                        : ref.watch(activeStepProvider) < 3
                             ? ElevatedButton(
                                 onPressed: () async {
                                   if (ref.watch(activeStepProvider) == 0) {
@@ -224,51 +224,34 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                                       if (ref.watch(panImageProvider) == null) {
                                         errorToast(context,
                                             'Please select PAN card Image');
-                                      } else if (ref
-                                              .watch(moaAoaImageProvider) ==
-                                          null) {
-                                        errorToast(context,
-                                            'Please select MOA/AOA  Image');
-                                      } else if (ref
-                                              .watch(boardResolutionImage) ==
-                                          null) {
-                                        errorToast(context,
-                                            'Please select Board Resolution  Image');
-                                      } else if (ref
-                                              .watch(directorProofImage) ==
-                                          null) {
-                                        errorToast(context,
-                                            'Please select Director Proof  Image');
                                       }
-                                      // if (ref.watch(propDocImageProvider) ==
-                                      //     null) {
-                                      //   errorToast(context,
-                                      //       'Please select document Image');
-                                      // }
+                                      if (ref.watch(propDocImageProvider) ==
+                                          null) {
+                                        errorToast(context,
+                                            'Please select document Image');
+                                      }
                                     }
-                                  }
-
-                                  // else if (ref.watch(activeStepProvider) ==
-                                  //     1) {
-                                  //   if (identificationKey.currentState!
-                                  //       .validate()) {
-                                  //     ref
-                                  //         .watch(activeStepProvider.notifier)
-                                  //         .state += 1;
-                                  //   } else {
-                                  //     if (ref.watch(panImageProvider) == null) {
-                                  //       errorToast(context,
-                                  //           'Please select PAN card Image');
-                                  //     }
-                                  //     if (ref.watch(authorisedImageProvider) ==
-                                  //         null) {
-                                  //       errorToast(context,
-                                  //           'Please select authorized  Image');
-                                  //     }
-                                  //      else {}
-                                  //   }
-                                  // }
-                                  else if (ref.watch(activeStepProvider) == 2) {
+                                  } else if (ref.watch(activeStepProvider) ==
+                                      1) {
+                                    if (identificationKey.currentState!
+                                        .validate()) {
+                                      ref
+                                          .watch(activeStepProvider.notifier)
+                                          .state += 1;
+                                    } else {
+                                      if (ref.watch(panImageProvider) == null) {
+                                        errorToast(context,
+                                            'Please select PAN card Image');
+                                      }
+                                      if (ref.watch(authorisedImageProvider) ==
+                                          null) {
+                                        errorToast(context,
+                                            'Please select authorized  Image');
+                                      }
+                                       else {}
+                                    }
+                                  } else if (ref.watch(activeStepProvider) ==
+                                      2) {
                                     if (bankDetailsKey.currentState!
                                         .validate()) {
                                       if (ref.watch(chequeImageProvider) ==
@@ -326,9 +309,9 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                                                   panCard: panController.text,
                                                   phone: phoneController.text
                                                       .toString(),
-                                                  // userName: nameController.text
-                                                  //     .toString(),
-                                                  constitution: "${ConstitutionType.company.type}",
+                                                  userName: nameController.text
+                                                      .toString(),
+                                                  constitution: "2",
                                                   email: emailController.text
                                                       .toString(),
                                                   adharNo: adharController.text
@@ -350,8 +333,7 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                                                       ?.bankName,
                                                   bankBranch: branchController.text
                                                       .toString(),
-                                                  bankAccount: accountController
-                                                      .text
+                                                  bankAccount: accountController.text
                                                       .toString(),
                                                   ifscCode: ifscController.text
                                                       .toString(),
@@ -366,20 +348,10 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                                                       .watch(panImageProvider),
                                                   profileImage: ref
                                                       .watch(panImageProvider),
-                                                  aadharImage: ref.watch(
-                                                      authorisedImageProvider),
-                                                  chequeImage: ref.watch(
-                                                      chequeImageProvider),
-                                                  proprietorProof: ref.watch(
-                                                    propDocImageProvider,
-                                                  ),
-                                                  moaAoa: ref.watch(
-                                                      moaAoaImageProvider),
-                                                  boardResolution: ref.watch(
-                                                      boardResolutionImage),
-                                                  directorProof:
-                                                      ref.watch(directorProofImage),
-                                                  partnerDirectorCount: directorController.text.toString())
+
+                                                  aadharImage: ref.watch(authorisedImageProvider),
+                                                  chequeImage: ref.watch(chequeImageProvider),
+                                                  proprietorProof: ref.watch(propDocImageProvider))
                                               .future)
                                           .then((value) {
                                         ref
@@ -418,18 +390,16 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                                           null) {
                                         errorToast(context,
                                             'Please select cheque Image');
-                                      }
-                                      // else if (ref.watch(propDocProvider) ==
-                                      //     'Select Proprietorship Document Type') {
-                                      //   errorToast(context,
-                                      //       'Please select document type');
-                                      // } else if (ref
-                                      //         .watch(propDocImageProvider) ==
-                                      //     null) {
-                                      //   errorToast(context,
-                                      //       'Please select document Image');
-                                      // }
-                                      else if (ref.watch(statesProvider) ==
+                                      } else if (ref.watch(propDocProvider) ==
+                                          'Select Proprietorship Document Type') {
+                                        errorToast(context,
+                                            'Please select document type');
+                                      } else if (ref
+                                              .watch(propDocImageProvider) ==
+                                          null) {
+                                        errorToast(context,
+                                            'Please select document Image');
+                                      } else if (ref.watch(statesProvider) ==
                                           null) {
                                         errorToast(
                                             context, 'Please select state');
@@ -469,6 +439,7 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
               ),
             )));
   }
+
 
   identificationLayout(BuildContext context, WidgetRef ref) => Form(
       key: identificationKey,
@@ -517,11 +488,11 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
               hintText: "Enter Authorised Name",
               label: const Text("Enter Authorised Name"),
               enabledBorder:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+              OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
               border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+              OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
               disabledBorder:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+              OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
         ),
         const SizedBox(
           height: 10,
@@ -599,6 +570,7 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
         const SizedBox(
           height: 10,
         ),
+
       ]));
 
   addressLayout(BuildContext context, WidgetRef ref) => Form(
@@ -1153,28 +1125,29 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
         ),
         ColumnSuper(
           children: [
-            // TextFormField(
-            //   keyboardType: TextInputType.text,
-            //   controller: nameController,
-            //   validator: (value) {
-            //     if (value == null || value.isEmpty) {
-            //       return 'Please input value';
-            //     }
-            //     return null;
-            //   },
-            //   decoration: InputDecoration(
-            //       hintText: "Enter Full Name",
-            //       label: const Text("Enter Full Name"),
-            //       enabledBorder: OutlineInputBorder(
-            //           borderRadius: BorderRadius.circular(10)),
-            //       border: OutlineInputBorder(
-            //           borderRadius: BorderRadius.circular(10)),
-            //       disabledBorder: OutlineInputBorder(
-            //           borderRadius: BorderRadius.circular(10))),
-            // ),
-            // const SizedBox(
-            //   height: 10,
-            // ),
+
+            TextFormField(
+              keyboardType: TextInputType.text,
+              controller: nameController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please input value';
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                  hintText: "Enter Full Name",
+                  label: const Text("Enter Full Name"),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10))),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
             TextFormField(
               keyboardType: TextInputType.emailAddress,
               controller: emailController,
@@ -1505,8 +1478,7 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
             onTap: () async {
               imagePicker.pickImage(source: ImageSource.gallery).then((value) {
                 if (value != null) {
-                  ref.watch(moaAoaImageProvider.notifier).state =
-                      File(value.path);
+                  ref.watch(moaAoaImageProvider.notifier).state = File(value.path);
                 }
               });
             },
@@ -1519,52 +1491,52 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                   child: Center(
                     child: ref.watch(moaAoaImageProvider) != null
                         ? Stack(
-                            children: [
-                              Image.file(ref.watch(moaAoaImageProvider) ??
-                                  File('path')),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.6),
-                                    shape: BoxShape.circle),
-                                child: IconButton(
-                                    onPressed: () {
-                                      ref.invalidate(moaAoaImageProvider);
-                                    },
-                                    icon: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    )),
-                              )
-                            ],
-                          )
+                      children: [
+                        Image.file(
+                            ref.watch(moaAoaImageProvider) ?? File('path')),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.6),
+                              shape: BoxShape.circle),
+                          child: IconButton(
+                              onPressed: () {
+                                ref.invalidate(moaAoaImageProvider);
+                              },
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              )),
+                        )
+                      ],
+                    )
                         : ColumnSuper(children: [
-                            Icon(
-                              LucideIcons.cloud_upload,
-                              color: ColorsConstant.primaryColor,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Select MOA/AOA Image",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Adaptive.sp(16)),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Upload Document Image,\n  Supports JPG, JPEG, PNG",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: Adaptive.sp(13)),
-                            )
-                          ]),
+                      Icon(
+                        LucideIcons.cloud_upload,
+                        color: ColorsConstant.primaryColor,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "Select MOA/AOA Image",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: ColorsConstant.primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: Adaptive.sp(16)),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: ColorsConstant.primaryColor,
+                            fontWeight: FontWeight.w700,
+                            fontSize: Adaptive.sp(13)),
+                      )
+                    ]),
                   ),
                 )),
           ),
@@ -1579,8 +1551,7 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
             onTap: () async {
               imagePicker.pickImage(source: ImageSource.gallery).then((value) {
                 if (value != null) {
-                  ref.watch(boardResolutionImage.notifier).state =
-                      File(value.path);
+                  ref.watch(boardResolutionImage.notifier).state = File(value.path);
                 }
               });
             },
@@ -1593,52 +1564,52 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                   child: Center(
                     child: ref.watch(boardResolutionImage) != null
                         ? Stack(
-                            children: [
-                              Image.file(ref.watch(boardResolutionImage) ??
-                                  File('path')),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.6),
-                                    shape: BoxShape.circle),
-                                child: IconButton(
-                                    onPressed: () {
-                                      ref.invalidate(boardResolutionImage);
-                                    },
-                                    icon: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    )),
-                              )
-                            ],
-                          )
+                      children: [
+                        Image.file(
+                            ref.watch(boardResolutionImage) ?? File('path')),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.6),
+                              shape: BoxShape.circle),
+                          child: IconButton(
+                              onPressed: () {
+                                ref.invalidate(boardResolutionImage);
+                              },
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              )),
+                        )
+                      ],
+                    )
                         : ColumnSuper(children: [
-                            Icon(
-                              LucideIcons.cloud_upload,
-                              color: ColorsConstant.primaryColor,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Select Board Resolution Image",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Adaptive.sp(16)),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Upload Document Image,\n  Supports JPG, JPEG, PNG",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: Adaptive.sp(13)),
-                            )
-                          ]),
+                      Icon(
+                        LucideIcons.cloud_upload,
+                        color: ColorsConstant.primaryColor,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "Select Board Resolution Image",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: ColorsConstant.primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: Adaptive.sp(16)),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: ColorsConstant.primaryColor,
+                            fontWeight: FontWeight.w700,
+                            fontSize: Adaptive.sp(13)),
+                      )
+                    ]),
                   ),
                 )),
           ),
@@ -1651,7 +1622,7 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
           keyboardType: TextInputType.text,
           textCapitalization: TextCapitalization.words,
           validator: (value) {
-            if (value == null || value.isEmpty ) {
+            if (value == null || value.isEmpty || !value.isValidPanCardNo()) {
               return 'input no of Directors';
             }
             return null;
@@ -1663,11 +1634,11 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
               hintText: "Enter No of Directors",
               label: const Text("Enter No of Directors"),
               enabledBorder:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+              OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
               border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+              OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
               disabledBorder:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+              OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
         ),
         const SizedBox(
           height: 10,
@@ -1678,8 +1649,7 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
             onTap: () async {
               imagePicker.pickImage(source: ImageSource.gallery).then((value) {
                 if (value != null) {
-                  ref.watch(directorProofImage.notifier).state =
-                      File(value.path);
+                  ref.watch(directorProofImage.notifier).state = File(value.path);
                 }
               });
             },
@@ -1692,52 +1662,52 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                   child: Center(
                     child: ref.watch(directorProofImage) != null
                         ? Stack(
-                            children: [
-                              Image.file(ref.watch(directorProofImage) ??
-                                  File('path')),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.6),
-                                    shape: BoxShape.circle),
-                                child: IconButton(
-                                    onPressed: () {
-                                      ref.invalidate(directorProofImage);
-                                    },
-                                    icon: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    )),
-                              )
-                            ],
-                          )
+                      children: [
+                        Image.file(
+                            ref.watch(directorProofImage) ?? File('path')),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.6),
+                              shape: BoxShape.circle),
+                          child: IconButton(
+                              onPressed: () {
+                                ref.invalidate(directorProofImage);
+                              },
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              )),
+                        )
+                      ],
+                    )
                         : ColumnSuper(children: [
-                            Icon(
-                              LucideIcons.cloud_upload,
-                              color: ColorsConstant.primaryColor,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Select Director Proof  Image",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Adaptive.sp(16)),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Upload Document Image,\n  Supports JPG, JPEG, PNG",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: Adaptive.sp(13)),
-                            )
-                          ]),
+                      Icon(
+                        LucideIcons.cloud_upload,
+                        color: ColorsConstant.primaryColor,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "Select Director Proof  Image",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: ColorsConstant.primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: Adaptive.sp(16)),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: ColorsConstant.primaryColor,
+                            fontWeight: FontWeight.w700,
+                            fontSize: Adaptive.sp(13)),
+                      )
+                    ]),
                   ),
                 )),
           ),
