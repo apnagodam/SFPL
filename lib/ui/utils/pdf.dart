@@ -69,7 +69,6 @@ Future<File?> downloadFileBG(DownloadFileBGRef ref,
   Directory documents = Directory('/storage/emulated/0/Download');
 
   filePath = documents.path;
-
   FileDownloader()
       .configureNotification(
           running: TaskNotification('Downloading', 'file: ${fileName}'),
@@ -78,6 +77,10 @@ Future<File?> downloadFileBG(DownloadFileBGRef ref,
           tapOpensFile: true)
       .download(
           DownloadTask(
+            headers: {
+              'Authorization':
+                  "Bearer ${ref.watch(sharedUtilityProvider).getToken()}"
+            },
             url: url ?? "",
 
             filename: "${fileName}.pdf",
@@ -85,7 +88,7 @@ Future<File?> downloadFileBG(DownloadFileBGRef ref,
             // request status and progress updates
             requiresWiFi: false,
             retries: 5,
-            baseDirectory: BaseDirectory.applicationSupport,
+            directory: filePath,
             allowPause: true,
           ),
           onProgress: (progress) => print('Progress: ${progress * 100}%'),
@@ -96,14 +99,15 @@ Future<File?> downloadFileBG(DownloadFileBGRef ref,
       case TaskStatus.running:
       case TaskStatus.complete:
         var filePath = await value.task.filePath();
-        final params = SaveFileDialogParams(sourceFilePath: filePath);
-        FlutterFileDialog.saveFile(params: params).then((value) {
-          successToast(OneContext().context!, 'File saved successfully');
-        });
-      // successToast(OneContext().context!, 'File Downloaded successfully');
-      // file =
-      //     await File("/data/user/0/com.swfl.swfl/app_flutter/${fileName}.pdf")
-      //         .copy('/storage/emulated/0/Download/${fileName}.pdf');
+        file = File(filePath);
+
+        await file!.copy("${documents.path}/$fileName.pdf");
+        await file!.delete();
+        // final params = SaveFileDialogParams(sourceFilePath: filePath);
+        // FlutterFileDialog.saveFile(params: params).then((value) {
+        //   successToast(OneContext().context!, 'File saved successfully');
+        // });
+        successToast(OneContext().context!, 'File Downloaded successfully');
 
       case TaskStatus.notFound:
       case TaskStatus.failed:
@@ -112,7 +116,6 @@ Future<File?> downloadFileBG(DownloadFileBGRef ref,
       case TaskStatus.paused:
     }
   });
-
   return file;
 }
 
@@ -177,7 +180,7 @@ Future<File?> downloadFile(DownloadFileRef ref,
     {required String? fileName, required String? url}) async {
   var filePath = '';
   Directory documents = await getApplicationCacheDirectory();
-  filePath = documents.path + "/";
+  filePath = "${documents.path}/";
 
   ref.watch(isFileDownloading.notifier).state = true;
 

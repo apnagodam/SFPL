@@ -7,7 +7,7 @@ part of 'RepaymentService.dart';
 // **************************************************************************
 
 String _$repaymentTerminalDataHash() =>
-    r'3a60e0935f65889ed9cf4c186cbf9c31bcfa75f7';
+    r'dc283bb9a9853274a44d0a32ddc1fa51901999eb';
 
 /// See also [repaymentTerminalData].
 @ProviderFor(repaymentTerminalData)
@@ -378,7 +378,7 @@ class _RepaymentSettlementListProviderElement
       (origin as RepaymentSettlementListProvider).stackNumber;
 }
 
-String _$repayGatepassHash() => r'e9840f4f32545915db421cac2e6729e1ab44cf8a';
+String _$repayGatepassHash() => r'1647ad993a8df606eafb32f4de1c936d3f06b3d5';
 
 /// See also [repayGatepass].
 @ProviderFor(repayGatepass)
@@ -393,10 +393,14 @@ class RepayGatepassFamily extends Family<AsyncValue<Map<String, dynamic>>> {
   RepayGatepassProvider call({
     List<String>? financeId,
     String? finalAmount,
+    String? paymentType,
+    String? partPaymentAmount,
   }) {
     return RepayGatepassProvider(
       financeId: financeId,
       finalAmount: finalAmount,
+      paymentType: paymentType,
+      partPaymentAmount: partPaymentAmount,
     );
   }
 
@@ -407,6 +411,8 @@ class RepayGatepassFamily extends Family<AsyncValue<Map<String, dynamic>>> {
     return call(
       financeId: provider.financeId,
       finalAmount: provider.finalAmount,
+      paymentType: provider.paymentType,
+      partPaymentAmount: provider.partPaymentAmount,
     );
   }
 
@@ -432,11 +438,15 @@ class RepayGatepassProvider
   RepayGatepassProvider({
     List<String>? financeId,
     String? finalAmount,
+    String? paymentType,
+    String? partPaymentAmount,
   }) : this._internal(
           (ref) => repayGatepass(
             ref as RepayGatepassRef,
             financeId: financeId,
             finalAmount: finalAmount,
+            paymentType: paymentType,
+            partPaymentAmount: partPaymentAmount,
           ),
           from: repayGatepassProvider,
           name: r'repayGatepassProvider',
@@ -449,6 +459,8 @@ class RepayGatepassProvider
               RepayGatepassFamily._allTransitiveDependencies,
           financeId: financeId,
           finalAmount: finalAmount,
+          paymentType: paymentType,
+          partPaymentAmount: partPaymentAmount,
         );
 
   RepayGatepassProvider._internal(
@@ -460,10 +472,14 @@ class RepayGatepassProvider
     required super.from,
     required this.financeId,
     required this.finalAmount,
+    required this.paymentType,
+    required this.partPaymentAmount,
   }) : super.internal();
 
   final List<String>? financeId;
   final String? finalAmount;
+  final String? paymentType;
+  final String? partPaymentAmount;
 
   @override
   Override overrideWith(
@@ -480,6 +496,8 @@ class RepayGatepassProvider
         debugGetCreateSourceHash: null,
         financeId: financeId,
         finalAmount: finalAmount,
+        paymentType: paymentType,
+        partPaymentAmount: partPaymentAmount,
       ),
     );
   }
@@ -493,7 +511,9 @@ class RepayGatepassProvider
   bool operator ==(Object other) {
     return other is RepayGatepassProvider &&
         other.financeId == financeId &&
-        other.finalAmount == finalAmount;
+        other.finalAmount == finalAmount &&
+        other.paymentType == paymentType &&
+        other.partPaymentAmount == partPaymentAmount;
   }
 
   @override
@@ -501,6 +521,8 @@ class RepayGatepassProvider
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, financeId.hashCode);
     hash = _SystemHash.combine(hash, finalAmount.hashCode);
+    hash = _SystemHash.combine(hash, paymentType.hashCode);
+    hash = _SystemHash.combine(hash, partPaymentAmount.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -512,6 +534,12 @@ mixin RepayGatepassRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
 
   /// The parameter `finalAmount` of this provider.
   String? get finalAmount;
+
+  /// The parameter `paymentType` of this provider.
+  String? get paymentType;
+
+  /// The parameter `partPaymentAmount` of this provider.
+  String? get partPaymentAmount;
 }
 
 class _RepayGatepassProviderElement
@@ -523,6 +551,11 @@ class _RepayGatepassProviderElement
   List<String>? get financeId => (origin as RepayGatepassProvider).financeId;
   @override
   String? get finalAmount => (origin as RepayGatepassProvider).finalAmount;
+  @override
+  String? get paymentType => (origin as RepayGatepassProvider).paymentType;
+  @override
+  String? get partPaymentAmount =>
+      (origin as RepayGatepassProvider).partPaymentAmount;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -26,6 +26,9 @@ class _PartnersdirectorslistscreenState
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.invalidate(directorsPartnersListProvider);
+    });
   }
 
   @override
@@ -154,7 +157,7 @@ class _PartnersdirectorslistscreenState
                                     text: "Edit",
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        context.goNamed(
+                                        context.go(
                                             RoutesStrings.editDirectorPartner,
                                             extra: data.data![index]);
                                       }),

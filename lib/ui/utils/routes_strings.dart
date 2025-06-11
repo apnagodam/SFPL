@@ -17,21 +17,29 @@ class RoutesStrings {
 
   static const directorPartnersList = "directorPartnersList";
   static const addDirectorPartner = "addDirectorPartner";
+  static const addDirectorPartnerHome = 'addDirectorPartnerHome';
+
+  static const addDirectorPartnerAutoRegistration =
+      "addDirectorPartnerAutoRegistration";
   static const authorisationLetterScreen = "authorisationLetterScreen";
   static const editDirectorPartner = "editDirectorPartner";
 
-  static const individualRegistration = 'individualRegistration';
+  static const individualRegistration = '/individualRegistration';
+  static const propRegistration = '/propRegistration';
+  static const companyRegistration = '/companyRegistration';
+  static const partnershipRegistration = '/partnershipRegistration';
+
   static const bnplRegistration = 'bnplRegistration';
   static const bnplAadharRegistration = 'bnplAadharRegistration';
   static const bnplAadharRegistrationHome = 'bnplAadharRegistrationHome';
 
   static const bnplUpdateAddress = 'bnplUpdateAddress';
 
-  static const propRegistration = 'propRegistration';
-  static const companyRegistration = 'companyRegistration';
-  static const partnershipRegistration = 'partnershipRegistration';
-
   static const registrationOtp = 'registrationOtp';
+
+  static const gstProfileScreen = "gstProfileScreen";
+  static const businessProfile = "businessProfile";
+  static const mandiTaxProfile = "mandiTaxProfile";
 
   static const applyForSanctionLimit = 'applyForSanctionLimit';
 

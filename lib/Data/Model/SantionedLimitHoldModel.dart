@@ -17,6 +17,7 @@ class SantionedLimitHoldModel {
   dynamic usedLimit;
   dynamic totalHoldLimit;
   dynamic balance;
+  dynamic type;
   List<Datum>? data;
 
   SantionedLimitHoldModel({
@@ -26,6 +27,7 @@ class SantionedLimitHoldModel {
     this.usedLimit,
     this.totalHoldLimit,
     this.balance,
+    this.type,
     this.data,
   });
 
@@ -37,6 +39,7 @@ class SantionedLimitHoldModel {
         usedLimit: json["used_limit"],
         totalHoldLimit: json["total_hold_limit"],
         balance: json["balance"],
+        type: json['type'],
         data: json["data"] == null
             ? []
             : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
@@ -49,6 +52,7 @@ class SantionedLimitHoldModel {
         "used_limit": usedLimit,
         "total_hold_limit": totalHoldLimit,
         "balance": balance,
+        'type': type,
         "data": data == null
             ? []
             : List<dynamic>.from(data!.map((x) => x.toJson())),

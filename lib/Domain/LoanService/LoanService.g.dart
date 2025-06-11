@@ -391,7 +391,7 @@ class _TermsProviderElement extends AutoDisposeStreamProviderElement<TermsModel>
   TermsRequestModel get model => (origin as TermsProvider).model;
 }
 
-String _$applyForLoanHash() => r'8c39d3b0ae54bb1313e6c3e4480576f781d19fb1';
+String _$applyForLoanHash() => r'b572320c91b3464533f906b662a0152e74036836';
 
 /// See also [applyForLoan].
 @ProviderFor(applyForLoan)
@@ -407,6 +407,7 @@ class ApplyForLoanFamily extends Family<AsyncValue<Map<String, dynamic>>> {
     String? amount,
     String? loanType,
     List<int>? schemeId,
+    String? type,
     File? itr1,
     File? itr2,
     File? itr3,
@@ -418,6 +419,7 @@ class ApplyForLoanFamily extends Family<AsyncValue<Map<String, dynamic>>> {
       amount: amount,
       loanType: loanType,
       schemeId: schemeId,
+      type: type,
       itr1: itr1,
       itr2: itr2,
       itr3: itr3,
@@ -435,6 +437,7 @@ class ApplyForLoanFamily extends Family<AsyncValue<Map<String, dynamic>>> {
       amount: provider.amount,
       loanType: provider.loanType,
       schemeId: provider.schemeId,
+      type: provider.type,
       itr1: provider.itr1,
       itr2: provider.itr2,
       itr3: provider.itr3,
@@ -467,6 +470,7 @@ class ApplyForLoanProvider
     String? amount,
     String? loanType,
     List<int>? schemeId,
+    String? type,
     File? itr1,
     File? itr2,
     File? itr3,
@@ -479,6 +483,7 @@ class ApplyForLoanProvider
             amount: amount,
             loanType: loanType,
             schemeId: schemeId,
+            type: type,
             itr1: itr1,
             itr2: itr2,
             itr3: itr3,
@@ -498,6 +503,7 @@ class ApplyForLoanProvider
           amount: amount,
           loanType: loanType,
           schemeId: schemeId,
+          type: type,
           itr1: itr1,
           itr2: itr2,
           itr3: itr3,
@@ -516,6 +522,7 @@ class ApplyForLoanProvider
     required this.amount,
     required this.loanType,
     required this.schemeId,
+    required this.type,
     required this.itr1,
     required this.itr2,
     required this.itr3,
@@ -527,6 +534,7 @@ class ApplyForLoanProvider
   final String? amount;
   final String? loanType;
   final List<int>? schemeId;
+  final String? type;
   final File? itr1;
   final File? itr2;
   final File? itr3;
@@ -550,6 +558,7 @@ class ApplyForLoanProvider
         amount: amount,
         loanType: loanType,
         schemeId: schemeId,
+        type: type,
         itr1: itr1,
         itr2: itr2,
         itr3: itr3,
@@ -571,6 +580,7 @@ class ApplyForLoanProvider
         other.amount == amount &&
         other.loanType == loanType &&
         other.schemeId == schemeId &&
+        other.type == type &&
         other.itr1 == itr1 &&
         other.itr2 == itr2 &&
         other.itr3 == itr3 &&
@@ -585,6 +595,7 @@ class ApplyForLoanProvider
     hash = _SystemHash.combine(hash, amount.hashCode);
     hash = _SystemHash.combine(hash, loanType.hashCode);
     hash = _SystemHash.combine(hash, schemeId.hashCode);
+    hash = _SystemHash.combine(hash, type.hashCode);
     hash = _SystemHash.combine(hash, itr1.hashCode);
     hash = _SystemHash.combine(hash, itr2.hashCode);
     hash = _SystemHash.combine(hash, itr3.hashCode);
@@ -605,6 +616,9 @@ mixin ApplyForLoanRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
 
   /// The parameter `schemeId` of this provider.
   List<int>? get schemeId;
+
+  /// The parameter `type` of this provider.
+  String? get type;
 
   /// The parameter `itr1` of this provider.
   File? get itr1;
@@ -636,6 +650,8 @@ class _ApplyForLoanProviderElement
   String? get loanType => (origin as ApplyForLoanProvider).loanType;
   @override
   List<int>? get schemeId => (origin as ApplyForLoanProvider).schemeId;
+  @override
+  String? get type => (origin as ApplyForLoanProvider).type;
   @override
   File? get itr1 => (origin as ApplyForLoanProvider).itr1;
   @override
@@ -784,7 +800,7 @@ class _SanctionSchemesProviderElement
 }
 
 String _$submitSanctionDocumentsHash() =>
-    r'268867b5444ba8dc19932743d8ad9daf57b05339';
+    r'e61c19edf752733204671f3c101ad80cbd44b5b2';
 
 /// See also [submitSanctionDocuments].
 @ProviderFor(submitSanctionDocuments)
@@ -2130,7 +2146,7 @@ class _SurepassLoanAgreementProviderElement
   String? get id => (origin as SurepassLoanAgreementProvider).id;
 }
 
-String _$surepassPdcHash() => r'e148e87eb5f73808c53cb903ac0d26db4f4811e5';
+String _$surepassPdcHash() => r'ab813b46a56710f641fb3fe8e5761d11c34584f2';
 
 /// See also [surepassPdc].
 @ProviderFor(surepassPdc)
@@ -2144,9 +2160,23 @@ class SurepassPdcFamily extends Family<AsyncValue<Map<String, dynamic>>> {
   /// See also [surepassPdc].
   SurepassPdcProvider call({
     String? id,
+    String? bankName,
+    String? accountNumber,
+    String? bankBranch,
+    String? chequeNo1,
+    String? chequeNo2,
+    File? chequeImage,
+    File? stampImage,
   }) {
     return SurepassPdcProvider(
       id: id,
+      bankName: bankName,
+      accountNumber: accountNumber,
+      bankBranch: bankBranch,
+      chequeNo1: chequeNo1,
+      chequeNo2: chequeNo2,
+      chequeImage: chequeImage,
+      stampImage: stampImage,
     );
   }
 
@@ -2156,6 +2186,13 @@ class SurepassPdcFamily extends Family<AsyncValue<Map<String, dynamic>>> {
   ) {
     return call(
       id: provider.id,
+      bankName: provider.bankName,
+      accountNumber: provider.accountNumber,
+      bankBranch: provider.bankBranch,
+      chequeNo1: provider.chequeNo1,
+      chequeNo2: provider.chequeNo2,
+      chequeImage: provider.chequeImage,
+      stampImage: provider.stampImage,
     );
   }
 
@@ -2180,10 +2217,24 @@ class SurepassPdcProvider
   /// See also [surepassPdc].
   SurepassPdcProvider({
     String? id,
+    String? bankName,
+    String? accountNumber,
+    String? bankBranch,
+    String? chequeNo1,
+    String? chequeNo2,
+    File? chequeImage,
+    File? stampImage,
   }) : this._internal(
           (ref) => surepassPdc(
             ref as SurepassPdcRef,
             id: id,
+            bankName: bankName,
+            accountNumber: accountNumber,
+            bankBranch: bankBranch,
+            chequeNo1: chequeNo1,
+            chequeNo2: chequeNo2,
+            chequeImage: chequeImage,
+            stampImage: stampImage,
           ),
           from: surepassPdcProvider,
           name: r'surepassPdcProvider',
@@ -2195,6 +2246,13 @@ class SurepassPdcProvider
           allTransitiveDependencies:
               SurepassPdcFamily._allTransitiveDependencies,
           id: id,
+          bankName: bankName,
+          accountNumber: accountNumber,
+          bankBranch: bankBranch,
+          chequeNo1: chequeNo1,
+          chequeNo2: chequeNo2,
+          chequeImage: chequeImage,
+          stampImage: stampImage,
         );
 
   SurepassPdcProvider._internal(
@@ -2205,9 +2263,23 @@ class SurepassPdcProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.id,
+    required this.bankName,
+    required this.accountNumber,
+    required this.bankBranch,
+    required this.chequeNo1,
+    required this.chequeNo2,
+    required this.chequeImage,
+    required this.stampImage,
   }) : super.internal();
 
   final String? id;
+  final String? bankName;
+  final String? accountNumber;
+  final String? bankBranch;
+  final String? chequeNo1;
+  final String? chequeNo2;
+  final File? chequeImage;
+  final File? stampImage;
 
   @override
   Override overrideWith(
@@ -2223,6 +2295,13 @@ class SurepassPdcProvider
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         id: id,
+        bankName: bankName,
+        accountNumber: accountNumber,
+        bankBranch: bankBranch,
+        chequeNo1: chequeNo1,
+        chequeNo2: chequeNo2,
+        chequeImage: chequeImage,
+        stampImage: stampImage,
       ),
     );
   }
@@ -2234,13 +2313,28 @@ class SurepassPdcProvider
 
   @override
   bool operator ==(Object other) {
-    return other is SurepassPdcProvider && other.id == id;
+    return other is SurepassPdcProvider &&
+        other.id == id &&
+        other.bankName == bankName &&
+        other.accountNumber == accountNumber &&
+        other.bankBranch == bankBranch &&
+        other.chequeNo1 == chequeNo1 &&
+        other.chequeNo2 == chequeNo2 &&
+        other.chequeImage == chequeImage &&
+        other.stampImage == stampImage;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, bankName.hashCode);
+    hash = _SystemHash.combine(hash, accountNumber.hashCode);
+    hash = _SystemHash.combine(hash, bankBranch.hashCode);
+    hash = _SystemHash.combine(hash, chequeNo1.hashCode);
+    hash = _SystemHash.combine(hash, chequeNo2.hashCode);
+    hash = _SystemHash.combine(hash, chequeImage.hashCode);
+    hash = _SystemHash.combine(hash, stampImage.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -2249,6 +2343,27 @@ class SurepassPdcProvider
 mixin SurepassPdcRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
   /// The parameter `id` of this provider.
   String? get id;
+
+  /// The parameter `bankName` of this provider.
+  String? get bankName;
+
+  /// The parameter `accountNumber` of this provider.
+  String? get accountNumber;
+
+  /// The parameter `bankBranch` of this provider.
+  String? get bankBranch;
+
+  /// The parameter `chequeNo1` of this provider.
+  String? get chequeNo1;
+
+  /// The parameter `chequeNo2` of this provider.
+  String? get chequeNo2;
+
+  /// The parameter `chequeImage` of this provider.
+  File? get chequeImage;
+
+  /// The parameter `stampImage` of this provider.
+  File? get stampImage;
 }
 
 class _SurepassPdcProviderElement
@@ -2258,6 +2373,20 @@ class _SurepassPdcProviderElement
 
   @override
   String? get id => (origin as SurepassPdcProvider).id;
+  @override
+  String? get bankName => (origin as SurepassPdcProvider).bankName;
+  @override
+  String? get accountNumber => (origin as SurepassPdcProvider).accountNumber;
+  @override
+  String? get bankBranch => (origin as SurepassPdcProvider).bankBranch;
+  @override
+  String? get chequeNo1 => (origin as SurepassPdcProvider).chequeNo1;
+  @override
+  String? get chequeNo2 => (origin as SurepassPdcProvider).chequeNo2;
+  @override
+  File? get chequeImage => (origin as SurepassPdcProvider).chequeImage;
+  @override
+  File? get stampImage => (origin as SurepassPdcProvider).stampImage;
 }
 
 String _$surepassSanctionLetterHash() =>

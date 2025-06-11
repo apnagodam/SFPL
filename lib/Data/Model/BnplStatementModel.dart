@@ -13,7 +13,7 @@ String bnplStatementModelToMap(BnplStatementModel data) =>
 class BnplStatementModel {
   dynamic status;
   dynamic message;
-  List<Datum>? data;
+  List<StatementDatum>? data;
 
   BnplStatementModel({
     this.status,
@@ -27,7 +27,7 @@ class BnplStatementModel {
         message: json["message"],
         data: json["data"] == null
             ? []
-            : List<Datum>.from(json["data"]!.map((x) => Datum.fromMap(x))),
+            : List<StatementDatum>.from(json["data"]!.map((x) => StatementDatum.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
@@ -38,7 +38,7 @@ class BnplStatementModel {
       };
 }
 
-class Datum {
+class StatementDatum {
   dynamic date;
   dynamic narration;
   dynamic label;
@@ -50,7 +50,7 @@ class Datum {
   dynamic commodityPrice;
   dynamic weight;
 
-  Datum(
+  StatementDatum(
       {this.date,
       this.narration,
       this.label,
@@ -62,12 +62,12 @@ class Datum {
       this.commodityPrice,
       this.weight});
 
-  factory Datum.fromMap(Map<String, dynamic> json) => Datum(
+  factory StatementDatum.fromMap(Map<String, dynamic> json) => StatementDatum(
       date: json["date"],
       narration: json["narration"],
       label: json['label'],
       gatepass: json["gatepass"],
-      reference: json["reference"],
+      reference: json["reference_no"],
       type: json["type"],
       amount: json["amount"],
       balance: json['balance'],
@@ -79,7 +79,7 @@ class Datum {
         "narration": narration,
     "label":label,
         "gatepass": gatepass,
-        "reference": reference,
+        "reference_no": reference,
         "type": type,
         "amount": amount,
     "balance":balance,

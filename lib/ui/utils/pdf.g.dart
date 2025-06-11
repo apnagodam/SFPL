@@ -158,7 +158,7 @@ class _ConvertAndDownloadHtmlPdfProviderElement
   String? get data => (origin as ConvertAndDownloadHtmlPdfProvider).data;
 }
 
-String _$downloadFileBGHash() => r'deb813d2810c34096b13d1e31c1681793d8fcd5b';
+String _$downloadFileBGHash() => r'4d81af36a408dd1c4eae79e49245bef2b2528e40';
 
 /// See also [downloadFileBG].
 @ProviderFor(downloadFileBG)
@@ -450,7 +450,7 @@ class _DownloadFileBGAgreementProviderElement
   String? get url => (origin as DownloadFileBGAgreementProvider).url;
 }
 
-String _$downloadFileHash() => r'6c2f7f45facdb719202965a62d90fc479d5ebb89';
+String _$downloadFileHash() => r'942857f9c9baa053f8ab8c465bf70e4a2050102b';
 
 /// See also [downloadFile].
 @ProviderFor(downloadFile)

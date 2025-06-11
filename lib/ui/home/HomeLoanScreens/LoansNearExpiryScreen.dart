@@ -279,6 +279,7 @@ class Loansnearexpiryscreen extends ConsumerWidget {
                                                   ),
                                                   TextButton(
                                                       onPressed: () {
+                                                        showloader(context);
                                                         ref
                                                             .watch(drfLinkProvider(
                                                                     financeId:
@@ -296,6 +297,8 @@ class Loansnearexpiryscreen extends ConsumerWidget {
                                                                             "${value['data']}")
                                                                     .future)
                                                                 .then((file) {
+                                                              hideLoader(
+                                                                  context);
                                                               if (file !=
                                                                   null) {
                                                                 Navigator.of(
@@ -304,7 +307,10 @@ class Loansnearexpiryscreen extends ConsumerWidget {
                                                                 successToast(
                                                                     context,
                                                                     "File Downloaded Successfully");
-                                                              } else {}
+                                                              } else {
+                                                                hideLoader(
+                                                                    context);
+                                                              }
                                                             });
                                                           }
                                                         });

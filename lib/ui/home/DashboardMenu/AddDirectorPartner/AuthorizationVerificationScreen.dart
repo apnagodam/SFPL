@@ -174,6 +174,7 @@ class _AuthorizationverificationscreenState
                 visible: ref.watch(directorProvider) != null,
                 child: IconsButton(
                   onPressed: () async {
+                    showloader(context);
                     ref
                         .watch(authorisationLetterProvider(
                                 id: "${ref.watch(directorProvider)?.id}")
@@ -184,7 +185,9 @@ class _AuthorizationverificationscreenState
                             fileName:
                                 "auth_letter_${ref.watch(directorProvider)?.name}",
                             url: value['data'].toString()));
+                        hideLoader(context);
                       } else {
+                        hideLoader(context);
                         errorToast(context, value['message'].toString());
                       }
                     });

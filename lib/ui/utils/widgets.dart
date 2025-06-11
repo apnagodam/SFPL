@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
+import 'package:background_downloader/background_downloader.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:elevarm_ui/elevarm_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
@@ -12,6 +14,7 @@ import 'package:one_context/one_context.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
 import 'package:swfl/ui/utils/colors.dart';
 import 'package:toastification/toastification.dart';
 
@@ -99,8 +102,10 @@ errorToast(BuildContext context, String text) => toastification.show(
       backgroundColor: Colors.red,
       primaryColor: Colors.red,
       style: ToastificationStyle.fillColored,
-      applyBlurEffect: true,
-      autoCloseDuration: const Duration(seconds: 5),
+      applyBlurEffect: false,
+      showProgressBar: false,
+
+      autoCloseDuration: const Duration(seconds: 10),
     );
 
 successToast(BuildContext context, String text) => toastification.show(
@@ -109,10 +114,10 @@ successToast(BuildContext context, String text) => toastification.show(
       title: Text(text),
       backgroundColor: Colors.green,
       primaryColor: Colors.green,
-      applyBlurEffect: true,
+      applyBlurEffect: false,
       alignment: Alignment.topRight,
       style: ToastificationStyle.fillColored,
-      autoCloseDuration: const Duration(seconds: 5),
+      autoCloseDuration: const Duration(seconds: 10),
     );
 
 successToastIndefinite(BuildContext context, String text) =>
@@ -154,8 +159,8 @@ showVerificationDialog(BuildContext context,
       headerBackgroundColor: ColorsConstant.primaryColor,
       title: titleText,
       text: messageText,
-      barrierDismissible: false,
-      showCancelBtn: false,
+      barrierDismissible: true,
+      showCancelBtn: true,
       showConfirmBtn: true,
       confirmBtnText: "Verify",
       confirmBtnColor: ColorsConstant.primaryColor,
@@ -327,6 +332,7 @@ showForceLogoutDialog(BuildContext context,
       },
       widget: const Text(''),
     );
+
 showCustomAlertDialog(BuildContext context, Widget child, String title) =>
     AlertDialog(
       title: Column(
@@ -363,3 +369,156 @@ showCustomAlertDialog(BuildContext context, Widget child, String title) =>
 var downloadProgressProvider = StateProvider((ref) => "0");
 var isFileDownloading = StateProvider((ref) => false);
 var downloadFilePath = StateProvider<File?>((ref) => null);
+
+class Downloader extends ConsumerWidget {
+  Downloader({super.key, required this.fileName, required this.url});
+
+  final String? fileName;
+  final String? url;
+
+  // State providers for download progress and status
+  final isFileDownloading = StateProvider((ref) => false);
+  final progressProvider = StateProvider((ref) => 0.0);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isDownloading = ref.watch(isFileDownloading);
+    final progress = ref.watch(progressProvider);
+
+    return Container(
+      alignment: Alignment.center,
+      child: isDownloading
+          ? CircularProgressIndicator(
+              value: progress,
+              backgroundColor: Colors.grey[200],
+              valueColor:
+                  AlwaysStoppedAnimation<Color>(ColorsConstant.primaryColor),
+            )
+          : ElevarmLinkPrimaryButton.icon(
+              text: 'Download',
+              onPressed: () async {
+                await _startDownload(context, ref);
+              },
+              leadingIconAssetName: null,
+              trailingIconAssetName: Icons.download_outlined,
+            ),
+    );
+  }
+
+  Future<void> _startDownload(BuildContext context, WidgetRef ref) async {
+    ref.read(isFileDownloading.notifier).state = true;
+
+    try {
+      // Define the download directory
+      final Directory documents = Directory('/storage/emulated/0/Download');
+      final String filePath = documents.path;
+
+      // Configure and start the download
+      final FileDownloader downloader = FileDownloader()
+        ..configureNotification(
+          running: TaskNotification(
+            'Downloading',
+            'File: $fileName',
+          ),
+          complete: TaskNotification(
+            'Download finished',
+            'File: $fileName',
+          ),
+          progressBar: true,
+          tapOpensFile: true,
+        );
+
+      final DownloadTask task = DownloadTask(
+        headers: {
+          'Authorization':
+              "Bearer ${ref.watch(sharedUtilityProvider).getToken()}",
+        },
+        url: url ?? "",
+        filename: "$fileName.pdf",
+        updates: Updates.statusAndProgress,
+        requiresWiFi: false,
+        retries: 5,
+        directory: filePath,
+        allowPause: true,
+      );
+
+      final result = await downloader.download(
+        task,
+        onProgress: (progress) {
+          ref.read(progressProvider.notifier).state = progress;
+        },
+        onStatus: (status) {
+          debugPrint('Download Status: $status');
+        },
+      );
+
+      // Handle the result based on the task status
+      await _handleDownloadResult(context, ref, result, documents);
+    } catch (e) {
+      // Handle errors gracefully
+      ref.read(isFileDownloading.notifier).state = false;
+      errorToast(context, 'Download failed: ${e.toString()}');
+    }
+  }
+
+  Future<void> _handleDownloadResult(
+    BuildContext context,
+    WidgetRef ref,
+    TaskStatusUpdate result,
+    Directory documents,
+  ) async {
+    switch (result.status) {
+      case TaskStatus.complete:
+        ref.read(isFileDownloading.notifier).state = false;
+
+        // Copy the file to the desired location
+        final String? filePath = await result.task.filePath();
+        if (filePath != null) {
+          final File file = File(filePath);
+          await file.copy("${documents.path}/$fileName.pdf");
+          await file.delete();
+
+          successToast(context, 'File downloaded successfully');
+        } else {
+          errorToast(context, 'File path not found');
+        }
+        break;
+
+      case TaskStatus.failed:
+        ref.read(isFileDownloading.notifier).state = false;
+        errorToast(context, 'Download failed');
+        break;
+
+      case TaskStatus.canceled:
+        ref.read(isFileDownloading.notifier).state = false;
+        errorToast(context, 'Download canceled');
+        break;
+
+      case TaskStatus.notFound:
+        ref.read(isFileDownloading.notifier).state = false;
+        errorToast(context, 'File not found');
+        break;
+
+      default:
+        ref.read(isFileDownloading.notifier).state = false;
+        errorToast(context, 'Unexpected error occurred');
+        break;
+    }
+  }
+}
+
+Widget buildRichText({
+  required String mainText,
+  required TextStyle mainTextStyle,
+  List<InlineSpan>? children,
+  TextAlign textAlign = TextAlign.start,
+}) {
+  return Text.rich(
+    TextSpan(
+      text: mainText,
+      style: mainTextStyle,
+      children: children,
+    ),
+    textAlign: textAlign,
+  );
+}

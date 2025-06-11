@@ -5,12 +5,19 @@ import 'package:go_router/go_router.dart';
 import 'package:swfl/ui/home/dashboard_screen.dart';
 import 'package:swfl/ui/utils/pdf.dart';
 import 'package:swfl/ui/utils/routes.dart';
+import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/utils/widgets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../Domain/LoanService/LoanService.dart';
+
 class Surepasswebviewscreen extends ConsumerStatefulWidget {
   const Surepasswebviewscreen(
-      {super.key, required this.url, required this.docName});
+      {super.key,
+      required this.url,
+      required this.docName,
+   });
+
   final String url;
   final String docName;
   @override
@@ -46,9 +53,7 @@ class _SurepasswebviewscreenState extends ConsumerState<Surepasswebviewscreen> {
                   errorToast(context, 'something went wrong');
                 }
               });
-            } else if (url.contains('success-esign')) {
-              Navigator.of(context, rootNavigator: true).pop();
-            }
+            } else if (url.contains('success')) {}
           },
           onPageFinished: (String url) {
             if (url.toLowerCase().contains('signature')) {
@@ -64,8 +69,12 @@ class _SurepasswebviewscreenState extends ConsumerState<Surepasswebviewscreen> {
                   errorToast(context, 'something went wrong');
                 }
               });
-            } else if (url.contains('success-esign')) {
-              Navigator.of(context, rootNavigator: true).pop();
+            } else if (url.contains('success')) {
+              ref.invalidate(appliedListProvider);
+
+              successToast(context, 'Document Upload Successfully!');
+
+              context.pop();
             }
             print(url);
           },
@@ -85,10 +94,7 @@ class _SurepasswebviewscreenState extends ConsumerState<Surepasswebviewscreen> {
               });
 
               return NavigationDecision.prevent;
-            } else if (request.url.contains('success-esign')) {
-              context.pop();
-              return NavigationDecision.prevent;
-            }
+            } else if (request.url.contains('success')) {}
             //success-esign
             // if (request.url
             //     .startsWith('https://www.youtube.com/')) {

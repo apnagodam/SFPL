@@ -6,7 +6,7 @@ part of 'AuthenticationService.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$registerUserHash() => r'4ce5531d7487368890925b411a3664a39ed55781';
+String _$registerUserHash() => r'18a585aeddf56cee0693b7fc1c2e576daccaf7e9';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -58,15 +58,16 @@ class RegisterUserFamily extends Family<AsyncValue<Map<String, dynamic>>> {
     String? propDocNumber,
     String? firmName,
     String? partnerDirectorCount,
-    File? panCardImage,
-    File? profileImage,
-    File? chequeImage,
-    File? aadharImage,
-    File? adharBackImage,
-    File? proprietorProof,
-    File? moaAoa,
-    File? boardResolution,
-    File? directorProof,
+    dynamic panCardImage,
+    dynamic profileImage,
+    dynamic chequeImage,
+    dynamic aadharImage,
+    dynamic adharBackImage,
+    dynamic proprietorProof,
+    dynamic moaAoa,
+    dynamic boardResolution,
+    dynamic directorProof,
+    dynamic addressProof,
   }) {
     return RegisterUserProvider(
       panCard: panCard,
@@ -96,6 +97,7 @@ class RegisterUserFamily extends Family<AsyncValue<Map<String, dynamic>>> {
       moaAoa: moaAoa,
       boardResolution: boardResolution,
       directorProof: directorProof,
+      addressProof: addressProof,
     );
   }
 
@@ -131,6 +133,7 @@ class RegisterUserFamily extends Family<AsyncValue<Map<String, dynamic>>> {
       moaAoa: provider.moaAoa,
       boardResolution: provider.boardResolution,
       directorProof: provider.directorProof,
+      addressProof: provider.addressProof,
     );
   }
 
@@ -172,15 +175,16 @@ class RegisterUserProvider
     String? propDocNumber,
     String? firmName,
     String? partnerDirectorCount,
-    File? panCardImage,
-    File? profileImage,
-    File? chequeImage,
-    File? aadharImage,
-    File? adharBackImage,
-    File? proprietorProof,
-    File? moaAoa,
-    File? boardResolution,
-    File? directorProof,
+    dynamic panCardImage,
+    dynamic profileImage,
+    dynamic chequeImage,
+    dynamic aadharImage,
+    dynamic adharBackImage,
+    dynamic proprietorProof,
+    dynamic moaAoa,
+    dynamic boardResolution,
+    dynamic directorProof,
+    dynamic addressProof,
   }) : this._internal(
           (ref) => registerUser(
             ref as RegisterUserRef,
@@ -211,6 +215,7 @@ class RegisterUserProvider
             moaAoa: moaAoa,
             boardResolution: boardResolution,
             directorProof: directorProof,
+            addressProof: addressProof,
           ),
           from: registerUserProvider,
           name: r'registerUserProvider',
@@ -248,6 +253,7 @@ class RegisterUserProvider
           moaAoa: moaAoa,
           boardResolution: boardResolution,
           directorProof: directorProof,
+          addressProof: addressProof,
         );
 
   RegisterUserProvider._internal(
@@ -284,6 +290,7 @@ class RegisterUserProvider
     required this.moaAoa,
     required this.boardResolution,
     required this.directorProof,
+    required this.addressProof,
   }) : super.internal();
 
   final String? panCard;
@@ -304,15 +311,16 @@ class RegisterUserProvider
   final String? propDocNumber;
   final String? firmName;
   final String? partnerDirectorCount;
-  final File? panCardImage;
-  final File? profileImage;
-  final File? chequeImage;
-  final File? aadharImage;
-  final File? adharBackImage;
-  final File? proprietorProof;
-  final File? moaAoa;
-  final File? boardResolution;
-  final File? directorProof;
+  final dynamic panCardImage;
+  final dynamic profileImage;
+  final dynamic chequeImage;
+  final dynamic aadharImage;
+  final dynamic adharBackImage;
+  final dynamic proprietorProof;
+  final dynamic moaAoa;
+  final dynamic boardResolution;
+  final dynamic directorProof;
+  final dynamic addressProof;
 
   @override
   Override overrideWith(
@@ -354,6 +362,7 @@ class RegisterUserProvider
         moaAoa: moaAoa,
         boardResolution: boardResolution,
         directorProof: directorProof,
+        addressProof: addressProof,
       ),
     );
   }
@@ -392,7 +401,8 @@ class RegisterUserProvider
         other.proprietorProof == proprietorProof &&
         other.moaAoa == moaAoa &&
         other.boardResolution == boardResolution &&
-        other.directorProof == directorProof;
+        other.directorProof == directorProof &&
+        other.addressProof == addressProof;
   }
 
   @override
@@ -425,6 +435,7 @@ class RegisterUserProvider
     hash = _SystemHash.combine(hash, moaAoa.hashCode);
     hash = _SystemHash.combine(hash, boardResolution.hashCode);
     hash = _SystemHash.combine(hash, directorProof.hashCode);
+    hash = _SystemHash.combine(hash, addressProof.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -486,31 +497,34 @@ mixin RegisterUserRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
   String? get partnerDirectorCount;
 
   /// The parameter `panCardImage` of this provider.
-  File? get panCardImage;
+  dynamic get panCardImage;
 
   /// The parameter `profileImage` of this provider.
-  File? get profileImage;
+  dynamic get profileImage;
 
   /// The parameter `chequeImage` of this provider.
-  File? get chequeImage;
+  dynamic get chequeImage;
 
   /// The parameter `aadharImage` of this provider.
-  File? get aadharImage;
+  dynamic get aadharImage;
 
   /// The parameter `adharBackImage` of this provider.
-  File? get adharBackImage;
+  dynamic get adharBackImage;
 
   /// The parameter `proprietorProof` of this provider.
-  File? get proprietorProof;
+  dynamic get proprietorProof;
 
   /// The parameter `moaAoa` of this provider.
-  File? get moaAoa;
+  dynamic get moaAoa;
 
   /// The parameter `boardResolution` of this provider.
-  File? get boardResolution;
+  dynamic get boardResolution;
 
   /// The parameter `directorProof` of this provider.
-  File? get directorProof;
+  dynamic get directorProof;
+
+  /// The parameter `addressProof` of this provider.
+  dynamic get addressProof;
 }
 
 class _RegisterUserProviderElement
@@ -556,23 +570,27 @@ class _RegisterUserProviderElement
   String? get partnerDirectorCount =>
       (origin as RegisterUserProvider).partnerDirectorCount;
   @override
-  File? get panCardImage => (origin as RegisterUserProvider).panCardImage;
+  dynamic get panCardImage => (origin as RegisterUserProvider).panCardImage;
   @override
-  File? get profileImage => (origin as RegisterUserProvider).profileImage;
+  dynamic get profileImage => (origin as RegisterUserProvider).profileImage;
   @override
-  File? get chequeImage => (origin as RegisterUserProvider).chequeImage;
+  dynamic get chequeImage => (origin as RegisterUserProvider).chequeImage;
   @override
-  File? get aadharImage => (origin as RegisterUserProvider).aadharImage;
+  dynamic get aadharImage => (origin as RegisterUserProvider).aadharImage;
   @override
-  File? get adharBackImage => (origin as RegisterUserProvider).adharBackImage;
+  dynamic get adharBackImage => (origin as RegisterUserProvider).adharBackImage;
   @override
-  File? get proprietorProof => (origin as RegisterUserProvider).proprietorProof;
+  dynamic get proprietorProof =>
+      (origin as RegisterUserProvider).proprietorProof;
   @override
-  File? get moaAoa => (origin as RegisterUserProvider).moaAoa;
+  dynamic get moaAoa => (origin as RegisterUserProvider).moaAoa;
   @override
-  File? get boardResolution => (origin as RegisterUserProvider).boardResolution;
+  dynamic get boardResolution =>
+      (origin as RegisterUserProvider).boardResolution;
   @override
-  File? get directorProof => (origin as RegisterUserProvider).directorProof;
+  dynamic get directorProof => (origin as RegisterUserProvider).directorProof;
+  @override
+  dynamic get addressProof => (origin as RegisterUserProvider).addressProof;
 }
 
 String _$verifyOtpHash() => r'824c292b749ddb3c81039f670998facfe3f9a893';
@@ -1154,7 +1172,7 @@ final logoutProvider = AutoDisposeFutureProvider<Map<String, dynamic>>.internal(
 );
 
 typedef LogoutRef = AutoDisposeFutureProviderRef<Map<String, dynamic>>;
-String _$loginInfoHash() => r'4c9427cecbefce698f2fc317361dbd0e5d3e3a12';
+String _$loginInfoHash() => r'df444bcbbf4d2fd02e8aa6650d300d2dc28e9a8a';
 
 /// See also [loginInfo].
 @ProviderFor(loginInfo)
@@ -1685,7 +1703,7 @@ class _SendDirectorOtpProviderElement
 }
 
 String _$submitDirectorDetailsHash() =>
-    r'a732e85283b2a7a61989b3617d9348771ea7868e';
+    r'b85b4baefbcd8070c6ff75b1cd4fb8112df27314';
 
 /// See also [submitDirectorDetails].
 @ProviderFor(submitDirectorDetails)
@@ -1704,7 +1722,7 @@ class SubmitDirectorDetailsFamily
     required String panNo,
     required String aadharNo,
     required String otp,
-    required File profilePhoto,
+    required dynamic profilePhoto,
   }) {
     return SubmitDirectorDetailsProvider(
       personName: personName,
@@ -1755,7 +1773,7 @@ class SubmitDirectorDetailsProvider
     required String panNo,
     required String aadharNo,
     required String otp,
-    required File profilePhoto,
+    required dynamic profilePhoto,
   }) : this._internal(
           (ref) => submitDirectorDetails(
             ref as SubmitDirectorDetailsRef,
@@ -1803,7 +1821,7 @@ class SubmitDirectorDetailsProvider
   final String panNo;
   final String aadharNo;
   final String otp;
-  final File profilePhoto;
+  final dynamic profilePhoto;
 
   @override
   Override overrideWith(
@@ -1877,7 +1895,7 @@ mixin SubmitDirectorDetailsRef
   String get otp;
 
   /// The parameter `profilePhoto` of this provider.
-  File get profilePhoto;
+  dynamic get profilePhoto;
 }
 
 class _SubmitDirectorDetailsProviderElement
@@ -1897,8 +1915,600 @@ class _SubmitDirectorDetailsProviderElement
   @override
   String get otp => (origin as SubmitDirectorDetailsProvider).otp;
   @override
-  File get profilePhoto =>
+  dynamic get profilePhoto =>
       (origin as SubmitDirectorDetailsProvider).profilePhoto;
+}
+
+String _$fetchRegisteredUserDataHash() =>
+    r'2f2bd545f816b661eaa8bb9504217ad0c7749608';
+
+/// See also [fetchRegisteredUserData].
+@ProviderFor(fetchRegisteredUserData)
+const fetchRegisteredUserDataProvider = FetchRegisteredUserDataFamily();
+
+/// See also [fetchRegisteredUserData].
+class FetchRegisteredUserDataFamily
+    extends Family<AsyncValue<Map<String, dynamic>>> {
+  /// See also [fetchRegisteredUserData].
+  const FetchRegisteredUserDataFamily();
+
+  /// See also [fetchRegisteredUserData].
+  FetchRegisteredUserDataProvider call({
+    required String panCardNo,
+    required String phone,
+  }) {
+    return FetchRegisteredUserDataProvider(
+      panCardNo: panCardNo,
+      phone: phone,
+    );
+  }
+
+  @override
+  FetchRegisteredUserDataProvider getProviderOverride(
+    covariant FetchRegisteredUserDataProvider provider,
+  ) {
+    return call(
+      panCardNo: provider.panCardNo,
+      phone: provider.phone,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'fetchRegisteredUserDataProvider';
+}
+
+/// See also [fetchRegisteredUserData].
+class FetchRegisteredUserDataProvider
+    extends AutoDisposeStreamProvider<Map<String, dynamic>> {
+  /// See also [fetchRegisteredUserData].
+  FetchRegisteredUserDataProvider({
+    required String panCardNo,
+    required String phone,
+  }) : this._internal(
+          (ref) => fetchRegisteredUserData(
+            ref as FetchRegisteredUserDataRef,
+            panCardNo: panCardNo,
+            phone: phone,
+          ),
+          from: fetchRegisteredUserDataProvider,
+          name: r'fetchRegisteredUserDataProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$fetchRegisteredUserDataHash,
+          dependencies: FetchRegisteredUserDataFamily._dependencies,
+          allTransitiveDependencies:
+              FetchRegisteredUserDataFamily._allTransitiveDependencies,
+          panCardNo: panCardNo,
+          phone: phone,
+        );
+
+  FetchRegisteredUserDataProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.panCardNo,
+    required this.phone,
+  }) : super.internal();
+
+  final String panCardNo;
+  final String phone;
+
+  @override
+  Override overrideWith(
+    Stream<Map<String, dynamic>> Function(FetchRegisteredUserDataRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: FetchRegisteredUserDataProvider._internal(
+        (ref) => create(ref as FetchRegisteredUserDataRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        panCardNo: panCardNo,
+        phone: phone,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeStreamProviderElement<Map<String, dynamic>> createElement() {
+    return _FetchRegisteredUserDataProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FetchRegisteredUserDataProvider &&
+        other.panCardNo == panCardNo &&
+        other.phone == phone;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, panCardNo.hashCode);
+    hash = _SystemHash.combine(hash, phone.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin FetchRegisteredUserDataRef
+    on AutoDisposeStreamProviderRef<Map<String, dynamic>> {
+  /// The parameter `panCardNo` of this provider.
+  String get panCardNo;
+
+  /// The parameter `phone` of this provider.
+  String get phone;
+}
+
+class _FetchRegisteredUserDataProviderElement
+    extends AutoDisposeStreamProviderElement<Map<String, dynamic>>
+    with FetchRegisteredUserDataRef {
+  _FetchRegisteredUserDataProviderElement(super.provider);
+
+  @override
+  String get panCardNo => (origin as FetchRegisteredUserDataProvider).panCardNo;
+  @override
+  String get phone => (origin as FetchRegisteredUserDataProvider).phone;
+}
+
+String _$verifyRegisteredUserOtpHash() =>
+    r'fcaadd5cf4e90a546729fc8638a1d0fd49cef118';
+
+/// See also [verifyRegisteredUserOtp].
+@ProviderFor(verifyRegisteredUserOtp)
+const verifyRegisteredUserOtpProvider = VerifyRegisteredUserOtpFamily();
+
+/// See also [verifyRegisteredUserOtp].
+class VerifyRegisteredUserOtpFamily
+    extends Family<AsyncValue<Map<String, dynamic>>> {
+  /// See also [verifyRegisteredUserOtp].
+  const VerifyRegisteredUserOtpFamily();
+
+  /// See also [verifyRegisteredUserOtp].
+  VerifyRegisteredUserOtpProvider call({
+    required Map<String, dynamic> data,
+  }) {
+    return VerifyRegisteredUserOtpProvider(
+      data: data,
+    );
+  }
+
+  @override
+  VerifyRegisteredUserOtpProvider getProviderOverride(
+    covariant VerifyRegisteredUserOtpProvider provider,
+  ) {
+    return call(
+      data: provider.data,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'verifyRegisteredUserOtpProvider';
+}
+
+/// See also [verifyRegisteredUserOtp].
+class VerifyRegisteredUserOtpProvider
+    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+  /// See also [verifyRegisteredUserOtp].
+  VerifyRegisteredUserOtpProvider({
+    required Map<String, dynamic> data,
+  }) : this._internal(
+          (ref) => verifyRegisteredUserOtp(
+            ref as VerifyRegisteredUserOtpRef,
+            data: data,
+          ),
+          from: verifyRegisteredUserOtpProvider,
+          name: r'verifyRegisteredUserOtpProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$verifyRegisteredUserOtpHash,
+          dependencies: VerifyRegisteredUserOtpFamily._dependencies,
+          allTransitiveDependencies:
+              VerifyRegisteredUserOtpFamily._allTransitiveDependencies,
+          data: data,
+        );
+
+  VerifyRegisteredUserOtpProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.data,
+  }) : super.internal();
+
+  final Map<String, dynamic> data;
+
+  @override
+  Override overrideWith(
+    FutureOr<Map<String, dynamic>> Function(VerifyRegisteredUserOtpRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: VerifyRegisteredUserOtpProvider._internal(
+        (ref) => create(ref as VerifyRegisteredUserOtpRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        data: data,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
+    return _VerifyRegisteredUserOtpProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is VerifyRegisteredUserOtpProvider && other.data == data;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, data.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin VerifyRegisteredUserOtpRef
+    on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
+  /// The parameter `data` of this provider.
+  Map<String, dynamic> get data;
+}
+
+class _VerifyRegisteredUserOtpProviderElement
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with VerifyRegisteredUserOtpRef {
+  _VerifyRegisteredUserOtpProviderElement(super.provider);
+
+  @override
+  Map<String, dynamic> get data =>
+      (origin as VerifyRegisteredUserOtpProvider).data;
+}
+
+String _$sendAadharVerificationOtpHash() =>
+    r'33c046548a5efcfaa8626d41157194bff99df169';
+
+/// See also [sendAadharVerificationOtp].
+@ProviderFor(sendAadharVerificationOtp)
+const sendAadharVerificationOtpProvider = SendAadharVerificationOtpFamily();
+
+/// See also [sendAadharVerificationOtp].
+class SendAadharVerificationOtpFamily
+    extends Family<AsyncValue<Map<String, dynamic>>> {
+  /// See also [sendAadharVerificationOtp].
+  const SendAadharVerificationOtpFamily();
+
+  /// See also [sendAadharVerificationOtp].
+  SendAadharVerificationOtpProvider call({
+    required String aadharNo,
+  }) {
+    return SendAadharVerificationOtpProvider(
+      aadharNo: aadharNo,
+    );
+  }
+
+  @override
+  SendAadharVerificationOtpProvider getProviderOverride(
+    covariant SendAadharVerificationOtpProvider provider,
+  ) {
+    return call(
+      aadharNo: provider.aadharNo,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'sendAadharVerificationOtpProvider';
+}
+
+/// See also [sendAadharVerificationOtp].
+class SendAadharVerificationOtpProvider
+    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+  /// See also [sendAadharVerificationOtp].
+  SendAadharVerificationOtpProvider({
+    required String aadharNo,
+  }) : this._internal(
+          (ref) => sendAadharVerificationOtp(
+            ref as SendAadharVerificationOtpRef,
+            aadharNo: aadharNo,
+          ),
+          from: sendAadharVerificationOtpProvider,
+          name: r'sendAadharVerificationOtpProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$sendAadharVerificationOtpHash,
+          dependencies: SendAadharVerificationOtpFamily._dependencies,
+          allTransitiveDependencies:
+              SendAadharVerificationOtpFamily._allTransitiveDependencies,
+          aadharNo: aadharNo,
+        );
+
+  SendAadharVerificationOtpProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.aadharNo,
+  }) : super.internal();
+
+  final String aadharNo;
+
+  @override
+  Override overrideWith(
+    FutureOr<Map<String, dynamic>> Function(
+            SendAadharVerificationOtpRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SendAadharVerificationOtpProvider._internal(
+        (ref) => create(ref as SendAadharVerificationOtpRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        aadharNo: aadharNo,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
+    return _SendAadharVerificationOtpProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SendAadharVerificationOtpProvider &&
+        other.aadharNo == aadharNo;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, aadharNo.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin SendAadharVerificationOtpRef
+    on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
+  /// The parameter `aadharNo` of this provider.
+  String get aadharNo;
+}
+
+class _SendAadharVerificationOtpProviderElement
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with SendAadharVerificationOtpRef {
+  _SendAadharVerificationOtpProviderElement(super.provider);
+
+  @override
+  String get aadharNo => (origin as SendAadharVerificationOtpProvider).aadharNo;
+}
+
+String _$verifyAadharVerificationOtpHash() =>
+    r'5c81d08de1eb5d75c2d68053e30aeabe9be0906c';
+
+/// See also [verifyAadharVerificationOtp].
+@ProviderFor(verifyAadharVerificationOtp)
+const verifyAadharVerificationOtpProvider = VerifyAadharVerificationOtpFamily();
+
+/// See also [verifyAadharVerificationOtp].
+class VerifyAadharVerificationOtpFamily
+    extends Family<AsyncValue<Map<String, dynamic>>> {
+  /// See also [verifyAadharVerificationOtp].
+  const VerifyAadharVerificationOtpFamily();
+
+  /// See also [verifyAadharVerificationOtp].
+  VerifyAadharVerificationOtpProvider call({
+    required String aadharNo,
+    required String requestId,
+    required String otp,
+  }) {
+    return VerifyAadharVerificationOtpProvider(
+      aadharNo: aadharNo,
+      requestId: requestId,
+      otp: otp,
+    );
+  }
+
+  @override
+  VerifyAadharVerificationOtpProvider getProviderOverride(
+    covariant VerifyAadharVerificationOtpProvider provider,
+  ) {
+    return call(
+      aadharNo: provider.aadharNo,
+      requestId: provider.requestId,
+      otp: provider.otp,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'verifyAadharVerificationOtpProvider';
+}
+
+/// See also [verifyAadharVerificationOtp].
+class VerifyAadharVerificationOtpProvider
+    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+  /// See also [verifyAadharVerificationOtp].
+  VerifyAadharVerificationOtpProvider({
+    required String aadharNo,
+    required String requestId,
+    required String otp,
+  }) : this._internal(
+          (ref) => verifyAadharVerificationOtp(
+            ref as VerifyAadharVerificationOtpRef,
+            aadharNo: aadharNo,
+            requestId: requestId,
+            otp: otp,
+          ),
+          from: verifyAadharVerificationOtpProvider,
+          name: r'verifyAadharVerificationOtpProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$verifyAadharVerificationOtpHash,
+          dependencies: VerifyAadharVerificationOtpFamily._dependencies,
+          allTransitiveDependencies:
+              VerifyAadharVerificationOtpFamily._allTransitiveDependencies,
+          aadharNo: aadharNo,
+          requestId: requestId,
+          otp: otp,
+        );
+
+  VerifyAadharVerificationOtpProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.aadharNo,
+    required this.requestId,
+    required this.otp,
+  }) : super.internal();
+
+  final String aadharNo;
+  final String requestId;
+  final String otp;
+
+  @override
+  Override overrideWith(
+    FutureOr<Map<String, dynamic>> Function(
+            VerifyAadharVerificationOtpRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: VerifyAadharVerificationOtpProvider._internal(
+        (ref) => create(ref as VerifyAadharVerificationOtpRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        aadharNo: aadharNo,
+        requestId: requestId,
+        otp: otp,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
+    return _VerifyAadharVerificationOtpProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is VerifyAadharVerificationOtpProvider &&
+        other.aadharNo == aadharNo &&
+        other.requestId == requestId &&
+        other.otp == otp;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, aadharNo.hashCode);
+    hash = _SystemHash.combine(hash, requestId.hashCode);
+    hash = _SystemHash.combine(hash, otp.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin VerifyAadharVerificationOtpRef
+    on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
+  /// The parameter `aadharNo` of this provider.
+  String get aadharNo;
+
+  /// The parameter `requestId` of this provider.
+  String get requestId;
+
+  /// The parameter `otp` of this provider.
+  String get otp;
+}
+
+class _VerifyAadharVerificationOtpProviderElement
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with VerifyAadharVerificationOtpRef {
+  _VerifyAadharVerificationOtpProviderElement(super.provider);
+
+  @override
+  String get aadharNo =>
+      (origin as VerifyAadharVerificationOtpProvider).aadharNo;
+  @override
+  String get requestId =>
+      (origin as VerifyAadharVerificationOtpProvider).requestId;
+  @override
+  String get otp => (origin as VerifyAadharVerificationOtpProvider).otp;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

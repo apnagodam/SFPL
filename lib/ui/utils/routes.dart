@@ -19,12 +19,16 @@ import 'package:swfl/ui/auth/Registration/PropRegistration.dart';
 import 'package:swfl/ui/auth/Registration/RegistrationScreen.dart';
 import 'package:swfl/ui/auth/Registration/RegistrationVerifyOtp.dart';
 import 'package:swfl/ui/error/ErrorScreen.dart';
+import 'package:swfl/ui/home/DashboardMenu/AddDirectorPartner/AddDirectorPartnerAutoRegister/AddDirectorPartnerAutoRegisterScreen.dart';
 import 'package:swfl/ui/home/DashboardMenu/AddDirectorPartner/AddDirectorPartnerScreen.dart';
 import 'package:swfl/ui/home/DashboardMenu/AddDirectorPartner/AuthorizationVerificationScreen.dart';
 import 'package:swfl/ui/home/DashboardMenu/AddDirectorPartner/EditDirectorPartnerScreen.dart';
 import 'package:swfl/ui/home/DashboardMenu/AddDirectorPartner/PartnersDirectorsListScreen.dart';
 import 'package:swfl/ui/home/DashboardMenu/ApplyForCommodityLoan/AppliedLoanList.dart';
 import 'package:swfl/ui/home/DashboardMenu/ApplyForCommodityLoan/ApplyLoanScreen.dart';
+import 'package:swfl/ui/home/DashboardMenu/Profile/BusinessProfile.dart';
+import 'package:swfl/ui/home/DashboardMenu/Profile/GstProfileScreen.dart';
+import 'package:swfl/ui/home/DashboardMenu/Profile/MandiTaxProfileScreen.dart';
 import 'package:swfl/ui/home/DashboardMenu/SanctionHoldStatement/SanctionedHoldStatementScreen.dart';
 import 'package:swfl/ui/home/DashboardMenu/SanctionedAmount/SanctionedAmountScreen.dart';
 import 'package:swfl/ui/home/DashboardMenu/Wallet/AddMoney.dart';
@@ -70,11 +74,44 @@ GoRouter goRouter(GoRouterRef ref) {
             path: RoutesStrings.onBoarding,
             name: RoutesStrings.onBoarding,
             builder: (context, state) => const OnBoardingScreen()),
-
+        GoRoute(
+            path: RoutesStrings.individualRegistration,
+            name: RoutesStrings.individualRegistration,
+            builder: (context, state) => const Individualregistration()),
+        GoRoute(
+            path: RoutesStrings.propRegistration,
+            name: RoutesStrings.propRegistration,
+            builder: (context, state) => const Propregistration()),
+        GoRoute(
+            path: RoutesStrings.companyRegistration,
+            name: RoutesStrings.companyRegistration,
+            builder: (context, state) => const Companyregistration(),
+            routes: [
+              GoRoute(
+                path: RoutesStrings.addDirectorPartnerAutoRegistration,
+                name: RoutesStrings.addDirectorPartnerAutoRegistration,
+                builder: (context, state) {
+                  final data = state.extra! as Map<String, dynamic>;
+                  return Adddirectorpartnerautoregisterscreen(
+                    isLastIndex: data['isLastIndex'],
+                    data: data['data'] as List<Map<String, dynamic>>,
+                  );
+                },
+              )
+            ]),
+        GoRoute(
+            path: RoutesStrings.partnershipRegistration,
+            name: RoutesStrings.partnershipRegistration,
+            builder: (context, state) => const Partnershipregistration()),
         GoRoute(
             path: RoutesStrings.dashboard,
             name: RoutesStrings.dashboard,
             routes: [
+              GoRoute(
+                  path: RoutesStrings.addDirectorPartnerHome,
+                  name: RoutesStrings.addDirectorPartnerHome,
+                  builder: (context, state) =>
+                      const Adddirectorpartnerscreen()),
               GoRoute(
                   path: RoutesStrings.directorPartnersList,
                   name: RoutesStrings.directorPartnersList,
@@ -122,6 +159,18 @@ GoRouter goRouter(GoRouterRef ref) {
                   name: RoutesStrings.applyForCommodityLoan,
                   builder: (context, state) => const Applyloanscreen()),
               GoRoute(
+                  path: RoutesStrings.businessProfile,
+                  name: RoutesStrings.businessProfile,
+                  builder: (context, state) => const Businessprofile()),
+              GoRoute(
+                  path: RoutesStrings.mandiTaxProfile,
+                  name: RoutesStrings.mandiTaxProfile,
+                  builder: (context, state) => const Manditaxprofilescreen()),
+              GoRoute(
+                  path: RoutesStrings.gstProfileScreen,
+                  name: RoutesStrings.gstProfileScreen,
+                  builder: (context, state) => const Gstprofilescreen()),
+              GoRoute(
                   path: RoutesStrings.appliedLoanList,
                   name: RoutesStrings.appliedLoanList,
                   builder: (context, state) => const Appliedloanlist()),
@@ -142,6 +191,7 @@ GoRouter goRouter(GoRouterRef ref) {
                           return Surepasswebviewscreen(
                             url: data['url'],
                             docName: data['docName'],
+                          
                           );
                         }),
                   ]),
@@ -171,10 +221,9 @@ GoRouter goRouter(GoRouterRef ref) {
                         name: RoutesStrings.surepassWebviewScreen,
                         builder: (context, state) {
                           final data = state.extra! as Map<String, dynamic>;
-                          return Surepasswebviewscreen(
+                           return Surepasswebviewscreen(
                             url: data['url'],
-                            docName: data['docName'],
-                          );
+                            docName: data['docName'],                          );
                         }),
                   ]),
               GoRoute(
@@ -269,25 +318,6 @@ GoRouter goRouter(GoRouterRef ref) {
                               builder: (context, state) =>
                                   const Bnplupdateaddress()),
                         ]),
-                    GoRoute(
-                        path: RoutesStrings.individualRegistration,
-                        name: RoutesStrings.individualRegistration,
-                        builder: (context, state) =>
-                            const Individualregistration()),
-                    GoRoute(
-                        path: RoutesStrings.propRegistration,
-                        name: RoutesStrings.propRegistration,
-                        builder: (context, state) => const Propregistration()),
-                    GoRoute(
-                        path: RoutesStrings.companyRegistration,
-                        name: RoutesStrings.companyRegistration,
-                        builder: (context, state) =>
-                            const Companyregistration()),
-                    GoRoute(
-                        path: RoutesStrings.partnershipRegistration,
-                        name: RoutesStrings.partnershipRegistration,
-                        builder: (context, state) =>
-                            const Partnershipregistration()),
                     GoRoute(
                         path: RoutesStrings.registrationOtp,
                         name: RoutesStrings.registrationOtp,

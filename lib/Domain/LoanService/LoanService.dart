@@ -75,8 +75,7 @@ Future<SchemeResponseModel> schemes(SchemesRef ref) async {
 @riverpod
 Future<SanctionLimitListModel> appliedList(AppliedListRef ref) async {
   var response = await ref.watch(dioProvider).get(ApiClient.appliedList);
-
-  return sanctionLimitListModelFromMap(jsonEncode(response.data));
+  return  sanctionLimitListModelFromMap(jsonEncode(response.data));
 }
 
 @riverpod
@@ -94,6 +93,7 @@ Future<Map<String, dynamic>> applyForLoan(ApplyForLoanRef ref,
     {String? amount,
     String? loanType,
     List<int>? schemeId,
+    String? type,
     File? itr1,
     File? itr2,
     File? itr3,
@@ -103,6 +103,7 @@ Future<Map<String, dynamic>> applyForLoan(ApplyForLoanRef ref,
   FormData formData = new FormData.fromMap({
     "amount": amount,
     'loan_type': loanType,
+    "type": type,
     if (itr1 != null)
       'itr_first_year': await MultipartFile.fromFile(
         itr1?.path ?? "",
@@ -121,7 +122,7 @@ Future<Map<String, dynamic>> applyForLoan(ApplyForLoanRef ref,
     if (bs2 != null)
       'bal_second_year': await MultipartFile.fromFile(bs2?.path ?? "",
           contentType: DioMediaType("document", "pdf"), filename: 'bal2.pdf'),
-    if (bs2 != null)
+    if (bs3 != null)
       'bal_third_year': await MultipartFile.fromFile(
         bs3?.path ?? "",
         filename: 'bal2.pdf',
@@ -159,13 +160,8 @@ Future<Map<String, dynamic>> submitSanctionDocuments(
 }) async {
   FormData formData = new FormData.fromMap({
     "id": id,
-    'tri_agreement': await MultipartFile.fromFile(triAgreement?.path ?? "",
-        filename: 'triagreement.pdf'),
     'pdc': await MultipartFile.fromFile(pdc?.path ?? "",
         contentType: DioMediaType("document", "pdf"), filename: 'pdf.pdf'),
-    'agreement': await MultipartFile.fromFile(agreement?.path ?? "",
-        contentType: DioMediaType("document", "pdf"),
-        filename: 'agreement.pdf'),
   });
   var response = await ref
       .watch(dioProvider)
@@ -294,7 +290,6 @@ Future<Map<String, dynamic>> cancelLoanRequest(CancelLoanRequestRef ref,
 Stream<LoanRequestsStatusModel> approvedRequests(
     ApprovedRequestsRef ref) async* {
   var response = await ref.watch(dioProvider).get(ApiClient.approvedRequests);
-
   yield loanRequestsStatusModelFromMap(jsonEncode(response.data));
 }
 
@@ -331,9 +326,34 @@ Future<Map<String, dynamic>> surepassLoanAgreement(SurepassLoanAgreementRef ref,
 
 @riverpod
 Future<Map<String, dynamic>> surepassPdc(SurepassPdcRef ref,
-    {String? id}) async {
-  var response =
-      await ref.watch(dioProvider).get(ApiClient.getSurepassPdcUrl + "$id");
+    {String? id,
+    String? bankName,
+    String? accountNumber,
+    String? bankBranch,
+    String? chequeNo1,
+    String? chequeNo2,
+    File? chequeImage,
+    File? stampImage}) async {
+  FormData formData = FormData.fromMap({
+    'check_bank_name': bankName,
+    'check_bank_ac_no': accountNumber,
+    'check_bank_branch': bankBranch,
+    'check_no': chequeNo1,
+    'check_no2': chequeNo2,
+    if (chequeImage != null)
+      'check_image': await MultipartFile.fromFile(
+        chequeImage?.path ?? "",
+        filename: 'itr1.pdf',
+        contentType: DioMediaType("image", "png"),
+      ),
+    if (stampImage != null)
+      'stamp_image': await MultipartFile.fromFile(stampImage?.path ?? "",
+          contentType: DioMediaType("image", "png"),
+          filename: 'stamp_image.png'),
+  });
+  var response = await ref
+      .watch(dioProvider)
+      .post(ApiClient.getSurepassPdcUrl + "$id", data: formData);
   return response.data;
 }
 

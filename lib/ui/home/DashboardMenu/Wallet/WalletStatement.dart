@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:swfl/Data/Model/BnplStatementModel.dart';
 import 'package:swfl/Domain/WalletService/WalletService.dart';
 import 'package:swfl/ui/home/home_screen.dart';
+import 'package:swfl/ui/utils/PdfCreator.dart';
 import 'package:swfl/ui/utils/colors.dart';
 import 'package:swfl/ui/utils/widgets.dart';
 
@@ -22,10 +25,45 @@ class _WalletstatementState extends ConsumerState<Walletstatement> {
   var startDate = StateProvider<DateTime?>((ref) => null);
   var endDate = StateProvider<DateTime?>((ref) => null);
   final format = DateFormat("dd-MM-yyyy");
+  var localData = StateProvider<List<StatementDatum>>((ref) => []);
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // floatingActionButton: FloatingActionButton(onPressed: () async {
+      //   makePdf(
+      //           ref.watch(localData),
+      //           ref.watch(localData).fold<List<StatementDatum>>(
+      //             [],
+      //             (previousList, element) {
+      //               String label = element.label;
+      //               num amount = num.parse(element.amount.toString());
+
+      //               int existingIndex =
+      //                   previousList.indexWhere((item) => item.label == label);
+
+      //               if (existingIndex != -1) {
+      //                 previousList[existingIndex].amount =
+      //                     (num.parse(previousList[existingIndex].amount) +
+      //                             num.parse(amount.toString()))
+      //                         .toString();
+      //               } else {
+      //                 previousList.add(element);
+      //               }
+      //               return previousList;
+      //             },
+      //           ),
+      //           "0",
+      //           '0',
+      //           ref)
+      //       .then((value) {
+      //     if (value != null) OpenFile.open(value.path);
+      //   });
+      // }),
       appBar: AppBar(
         title: const Text('Wallet Statement'),
       ),
@@ -175,19 +213,29 @@ class _WalletstatementState extends ConsumerState<Walletstatement> {
                   currentDate:
                       format.format(ref.watch(endDate) ?? DateTime.now())))
               .when(
-                  data: (statementData) => (statementData.data ?? []).isEmpty
-                      ? emptyData()
-                      : ListView.builder(
-                          itemCount: statementData.data?.length ?? 0,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) => Card(
+                  data: (statementData) {
+                    // Future.delayed(Duration.zero).then((_) {
+                    //   ref.watch(localData.notifier).state = statementData.data!;
+                    // });
+                    return (statementData.data ?? []).isEmpty
+                        ? emptyData()
+                        : ListView.builder(
+                            itemCount: statementData.data?.length ?? 0,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return Card(
                                 color: Colors.white,
                                 margin: Pad(top: 10, bottom: 10),
                                 elevation: 10,
                                 shape: RoundedRectangleBorder(
                                     side: BorderSide(
-                                        color: statementData.data?[index].type.toString().toLowerCase()=="debit"?Colors.red:Colors.green),
+                                        color: statementData.data?[index].type
+                                                    .toString()
+                                                    .toLowerCase() ==
+                                                "debit"
+                                            ? Colors.red
+                                            : Colors.green),
                                     borderRadius: BorderRadius.circular(10)),
                                 surfaceTintColor: Colors.white,
                                 child: Padding(
@@ -207,7 +255,12 @@ class _WalletstatementState extends ConsumerState<Walletstatement> {
                                           )),
                                         ]),
                                     Divider(
-                                      color:  statementData.data?[index].type.toString().toLowerCase()=="debit"?Colors.red:Colors.green,
+                                      color: statementData.data?[index].type
+                                                  .toString()
+                                                  .toLowerCase() ==
+                                              "debit"
+                                          ? Colors.red
+                                          : Colors.green,
                                     ),
                                     SizedBox(
                                       height: 10,
@@ -239,11 +292,17 @@ class _WalletstatementState extends ConsumerState<Walletstatement> {
                                             fontWeight: FontWeight.bold),
                                       )),
                                       Text(
-                                        "${statementData.data?[index].type.toString().toLowerCase()=="debit"?"-":"+"} ${currencyFormat.format(double.tryParse("${statementData.data?[index].amount ?? 0}"))}",
+                                        "${statementData.data?[index].type.toString().toLowerCase() == "debit" ? "-" : "+"} ${currencyFormat.format(double.tryParse("${statementData.data?[index].amount ?? 0}"))}",
                                         style: TextStyle(
                                             fontSize: Adaptive.sp(15),
                                             fontWeight: FontWeight.bold,
-                                            color: statementData.data?[index].type.toString().toLowerCase()=="debit"?Colors.red:Colors.green),
+                                            color: statementData
+                                                        .data?[index].type
+                                                        .toString()
+                                                        .toLowerCase() ==
+                                                    "debit"
+                                                ? Colors.red
+                                                : Colors.green),
                                       ),
                                     ]),
                                     SizedBox(
@@ -281,8 +340,14 @@ class _WalletstatementState extends ConsumerState<Walletstatement> {
                                         textAlign: TextAlign.end,
                                         style: TextStyle(
                                             fontSize: Adaptive.sp(15),
-                                            fontWeight: FontWeight.bold
-                                        ,color: statementData.data?[index].type.toString().toLowerCase()=="debit"?Colors.red:Colors.green),
+                                            fontWeight: FontWeight.bold,
+                                            color: statementData
+                                                        .data?[index].type
+                                                        .toString()
+                                                        .toLowerCase() ==
+                                                    "debit"
+                                                ? Colors.red
+                                                : Colors.green),
                                       )
                                     ]),
                                     SizedBox(
@@ -307,7 +372,9 @@ class _WalletstatementState extends ConsumerState<Walletstatement> {
                                     ])
                                   ]),
                                 ),
-                              )),
+                              );
+                            });
+                  },
                   error: (e, s) => Container(),
                   loading: () => Center(
                         child: defaultLoader(),

@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:swfl/Data/Model/AadharResponseModel.dart';
 import 'package:swfl/Data/Model/AdharVerifyOtpModel.dart';
 import 'package:swfl/Data/Model/BaseApiResponse.dart';
 import 'package:swfl/Data/Model/OtpVerifyModel.dart';
 import 'package:swfl/Domain/Dio/DioProvider.dart';
+import 'package:swfl/ui/utils/routes.dart';
 
 import '../../Data/Model/BankListModel.dart';
 import '../../Data/SharedPrefs/SharedUtility.dart';
@@ -34,16 +36,18 @@ Future<Map<String, dynamic>> registerUser(RegisterUserRef ref,
     String? propDocNumber,
     String? firmName,
     String? partnerDirectorCount,
-    File? panCardImage,
-    File? profileImage,
-    File? chequeImage,
-    File? aadharImage,
-    File? adharBackImage,
-    File? proprietorProof,
-    File? moaAoa,
-    File? boardResolution,
-    File? directorProof}) async {
-  FormData formData = new FormData.fromMap({
+    dynamic? panCardImage,
+    dynamic? profileImage,
+    dynamic? chequeImage,
+    dynamic? aadharImage,
+    dynamic? adharBackImage,
+    dynamic? proprietorProof,
+    dynamic? moaAoa,
+    dynamic? boardResolution,
+    dynamic? directorProof,
+    dynamic addressProof}) async {
+  if (panCardImage is String) {}
+  FormData formData = FormData.fromMap({
     "pancard_no": panCard,
     'phone': phone,
     'name': userName,
@@ -62,60 +66,91 @@ Future<Map<String, dynamic>> registerUser(RegisterUserRef ref,
     'proprietorship_proof_no': propDocNumber,
     'firm_name': firmName,
     "partner_director_count": partnerDirectorCount,
-    'pancard_image': await MultipartFile.fromFile(
-      panCardImage?.path ?? "",
-      filename: 'pan.png',
-      contentType: DioMediaType("image", "png"),
-    ),
+    if (panCardImage != null)
+      'pancard_image': panCardImage is String
+          ? panCardImage
+          : await MultipartFile.fromFile(
+              panCardImage?.path ?? "",
+              filename: 'pan.png',
+              contentType: DioMediaType("image", "png"),
+            ),
     if (profileImage != null)
-      'profile_image': await MultipartFile.fromFile(profileImage?.path ?? "",
-          contentType: DioMediaType("image", "png"), filename: 'profile.png'),
+      'profile_image': profileImage is String
+          ? profileImage
+          : await MultipartFile.fromFile(profileImage?.path ?? "",
+              contentType: DioMediaType("image", "png"),
+              filename: 'profile.png'),
     if (chequeImage != null)
-      'cheque_image': await MultipartFile.fromFile(chequeImage?.path ?? "",
-          contentType: DioMediaType("image", "png"), filename: 'cheque.png'),
+      'cheque_image': chequeImage is String
+          ? chequeImage
+          : await MultipartFile.fromFile(chequeImage?.path ?? "",
+              contentType: DioMediaType("image", "png"),
+              filename: 'cheque.png'),
     if (aadharImage != null)
-      'aadhar_image': await MultipartFile.fromFile(aadharImage?.path ?? "",
-          contentType: DioMediaType("image", "png"),
-          filename: 'aadharImage.png'),
+      'aadhar_image': aadharImage is String
+          ? aadharImage
+          : await MultipartFile.fromFile(aadharImage?.path ?? "",
+              contentType: DioMediaType("image", "png"),
+              filename: 'aadharImage.png'),
     if (adharBackImage != null)
-      'aadhar_back_image': await MultipartFile.fromFile(
-          adharBackImage?.path ?? "",
-          contentType: DioMediaType("image", "png"),
-          filename: 'adharBackImage.png'),
+      'aadhar_back_image': adharBackImage is String
+          ? adharBackImage
+          : await MultipartFile.fromFile(adharBackImage?.path ?? "",
+              contentType: DioMediaType("image", "png"),
+              filename: 'adharBackImage.png'),
     if (proprietorProof != null)
-      'proprietorship_proof': await MultipartFile.fromFile(
-        proprietorProof.path,
-        filename: 'proprietorProof.png',
-        contentType: DioMediaType("image", "png"),
-      ),
+      'proprietorship_proof': proprietorProof is String
+          ? proprietorProof
+          : await MultipartFile.fromFile(
+              proprietorProof.path,
+              filename: 'proprietorProof.png',
+              contentType: DioMediaType("image", "png"),
+            ),
     if (moaAoa != null)
-      'moa_aoa': await MultipartFile.fromFile(
-        moaAoa.path,
-        filename: 'moaAoa.png',
-        contentType: DioMediaType("image", "png"),
-      ),
+      'moa_aoa': moaAoa is String
+          ? moaAoa
+          : await MultipartFile.fromFile(
+              moaAoa.path,
+              filename: 'moaAoa.png',
+              contentType: DioMediaType("image", "png"),
+            ),
     if (boardResolution != null)
-      'partnership_deed': await MultipartFile.fromFile(
-        boardResolution.path,
-        filename: 'partnershipdeed.png',
-        contentType: DioMediaType("image", "png"),
-      ),
+      'partnership_deed': boardResolution is String
+          ? boardResolution
+          : await MultipartFile.fromFile(
+              boardResolution.path,
+              filename: 'partnershipdeed.png',
+              contentType: DioMediaType("image", "png"),
+            ),
     if (boardResolution != null)
-      'board_resolution': await MultipartFile.fromFile(
-        boardResolution.path,
-        filename: 'boardResolution.png',
-        contentType: DioMediaType("image", "png"),
-      ),
+      'board_resolution': boardResolution is String
+          ? boardResolution
+          : await MultipartFile.fromFile(
+              boardResolution.path,
+              filename: 'boardResolution.png',
+              contentType: DioMediaType("image", "png"),
+            ),
     if (directorProof != null)
-      'proof_director': await MultipartFile.fromFile(
-        directorProof.path,
-        filename: 'directorProof.png',
-        contentType: DioMediaType("image", "png"),
-      ),
+      'proof_director': directorProof is String
+          ? directorProof
+          : await MultipartFile.fromFile(
+              directorProof.path,
+              filename: 'directorProof.png',
+              contentType: DioMediaType("image", "png"),
+            ),
+    if (addressProof != null)
+      'address_proof': addressProof is String
+          ? addressProof
+          : await MultipartFile.fromFile(
+              addressProof.path,
+              filename: 'addressProof.png',
+              contentType: DioMediaType("image", "png"),
+            ),
   });
 
   var response =
       await ref.watch(dioProvider).post(ApiClient.registerUser, data: formData);
+
   return response.data;
 }
 
@@ -173,6 +208,10 @@ Future<Map<String, dynamic>> logout(LogoutRef ref) async {
 @riverpod
 Stream<OtpVerifyModel> loginInfo(LoginInfoRef ref) async* {
   var response = await ref.watch(dioProvider).get(ApiClient.loginInfo);
+  ref
+      .watch(sharedUtilityProvider)
+      .setUser(otpVerifyModelFromMap(jsonEncode(response.data)).data);
+
   yield otpVerifyModelFromMap(jsonEncode(response.data));
 }
 
@@ -234,23 +273,77 @@ Future<Map<String, dynamic>> submitDirectorDetails(SubmitDirectorDetailsRef ref,
     required String panNo,
     required String aadharNo,
     required String otp,
-    required File profilePhoto}) async {
+    required dynamic profilePhoto}) async {
   FormData formData = new FormData.fromMap({
     'name': personName,
     'phone': phoneNumber,
     'pancard_no': panNo,
     'aadhar_no': aadharNo,
     "otp": otp,
-    'profile_photo': await MultipartFile.fromFile(
-      profilePhoto?.path ?? "",
-      filename: 'profile.png',
-      contentType: DioMediaType("image", "png"),
-    ),
+    'profile_photo': profilePhoto is String
+        ? profilePhoto
+        : await MultipartFile.fromFile(
+            profilePhoto?.path ?? "",
+            filename: 'profile.png',
+            contentType: DioMediaType("image", "png"),
+          ),
   });
 
   var response = await ref
       .watch(dioProvider)
       .post(ApiClient.submitDirectorDetails, data: formData);
 
+  return response.data;
+}
+
+@riverpod
+Stream<Map<String, dynamic>> fetchRegisteredUserData(
+    FetchRegisteredUserDataRef ref,
+    {required String panCardNo,
+    required String phone}) async* {
+  var response = await ref.watch(dioProvider).post(
+      ApiClient.fetchRegisteredUserData,
+      data: {'pancard_no': panCardNo, 'phone': phone});
+
+  yield response.data;
+}
+
+@riverpod
+Future<Map<String, dynamic>> verifyRegisteredUserOtp(
+    VerifyRegisteredUserOtpRef ref,
+    {required Map<String, dynamic> data}) async {
+  var response = await ref
+      .watch(dioProvider)
+      .post(ApiClient.verifyRegisteredUserData, data: data);
+
+  return response.data;
+}
+
+@riverpod
+Future<Map<String, dynamic>> sendAadharVerificationOtp(
+    SendAadharVerificationOtpRef ref,
+    {required String aadharNo}) async {
+  // return {"status": "1", "message": "yay!"};
+
+  var response = await ref.watch(dioProvider).post(
+      ApiClient.sendAadharVerificationOtp,
+      queryParameters: {"aadhar_no": aadharNo});
+  return response.data;
+}
+
+@riverpod
+Future<Map<String, dynamic>> verifyAadharVerificationOtp(
+    VerifyAadharVerificationOtpRef ref,
+    {required String aadharNo,
+    required String requestId,
+    required String otp}) async {
+  // return {"status": "1", "message": "tet!"};
+
+  var response = await ref.watch(dioProvider).post(ApiClient.verifAadharOtp,
+      queryParameters: {
+        "aadhar_no": aadharNo,
+        "request_id": requestId,
+        "otp": otp
+      });
   return response.data;
 }

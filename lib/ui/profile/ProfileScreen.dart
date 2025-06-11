@@ -190,29 +190,14 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
           const SizedBox(
             height: 10,
           ),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Address:',
-                style: TextStyle(
+          
+         Text.rich(TextSpan(
+            text: "Address: ${ref.watch(sharedUtilityProvider).getUser()?.address ?? ""} ",
+            style: TextStyle(
                     color: Colors.black,
                     fontSize: Adaptive.sp(14),
                     fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Text(
-                ref.watch(sharedUtilityProvider).getUser()?.address ?? "",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: Adaptive.sp(14),
-                    fontWeight: FontWeight.bold),
-              )
-            ],
-          ),
+          )),
           const SizedBox(
             height: 10,
           ),
@@ -238,7 +223,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                 '${ref.watch(sharedUtilityProvider).getUser()?.pancardImage}',
                 errorBuilder: (context, ob, s) =>
                     const Icon(LucideIcons.circle_stop),
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ))),
             ],
           ),
@@ -267,7 +252,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                   '${ref.watch(sharedUtilityProvider).getUser()?.aadharImage}',
                   errorBuilder: (context, ob, s) =>
                       const Icon(LucideIcons.circle_stop),
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 )),
               )
             ],
@@ -297,7 +282,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                   '${ref.watch(sharedUtilityProvider).getUser()?.aadharBackImage}',
                   errorBuilder: (context, ob, s) =>
                       const Icon(LucideIcons.circle_stop),
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 )),
               )
             ],
@@ -439,7 +424,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                 '${ref.watch(sharedUtilityProvider).getUser()?.chequeImage}',
                 errorBuilder: (context, ob, s) =>
                     const Icon(LucideIcons.circle_stop),
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ))),
             ],
           ),
@@ -544,7 +529,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                       '${ref.watch(sharedUtilityProvider).getUser()?.proprietorshipProofDoc}',
                       errorBuilder: (context, ob, s) =>
                           const Icon(LucideIcons.circle_stop),
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                     ))),
                   ],
                 )

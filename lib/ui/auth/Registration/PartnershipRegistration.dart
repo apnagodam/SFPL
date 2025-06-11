@@ -10,7 +10,11 @@ import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile_device_identifier/mobile_device_identifier.dart';
+// import 'package:pdfrx/pdfrx.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
+import 'package:swfl/Domain/Dio/DioProvider.dart';
 import 'package:swfl/ui/utils/enums.dart';
 import 'package:swfl/ui/utils/extensions.dart';
 
@@ -23,6 +27,7 @@ import '../../utils/colors.dart';
 import '../../utils/routes_strings.dart';
 import '../../utils/widgets.dart';
 import '../Login/login_screen.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 class Partnershipregistration extends ConsumerStatefulWidget {
   const Partnershipregistration({super.key});
@@ -53,6 +58,7 @@ class _PartnershipregistrationState
   var chequeImageProvider = StateProvider<File?>((ref) => null);
 
   var authorisedImageProvider = StateProvider<File?>((ref) => null);
+  var addressProofImageProvider = StateProvider<File?>((ref) => null);
 
   var isRegisteringProvider = StateProvider((ref) => false);
 
@@ -72,6 +78,10 @@ class _PartnershipregistrationState
   TextEditingController ifscController = TextEditingController();
   TextEditingController firmController = TextEditingController();
   TextEditingController gstController = TextEditingController();
+  TextEditingController stateController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+  TextEditingController bankNameController = TextEditingController();
+
   var propTypeList = ['GST', 'License', 'MSME'];
   var propTypeProvider = StateProvider((ref) => '');
   var activeStepProvider = StateProvider((ref) => 0);
@@ -84,6 +94,53 @@ class _PartnershipregistrationState
   var statesProvider = StateProvider<Datum?>((ref) => null);
 
   var districtProvider = StateProvider<StateDatum?>((ref) => null);
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      firmController.text =
+          ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.firmName ?? "";
+
+      emailController.text =
+          ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.email ?? "";
+      phoneController.text =
+          ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.phone ?? "";
+      pinController.text =
+          ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.pincode ?? "";
+      addressController.text =
+          ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.address ?? "";
+      panController.text =
+          ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.pancardNo ?? "";
+      branchController.text =
+          ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.bankBranch ?? "";
+      accountController.text =
+          ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.bankAccNo ?? "";
+      ifscController.text =
+          ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.bankIfscCode ??
+              "";
+      adharController.text =
+          ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.aadharNo ?? "";
+      nameController.text =
+          ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.fname ?? "";
+      stateController.text =
+          ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.state ?? "";
+
+      cityController.text =
+          ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.district ?? "";
+
+      bankNameController.text =
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.bankName;
+
+      gstController.text =
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.propProofNo;
+
+      directorController.text = ref
+          .watch(sharedUtilityProvider)
+          .getMongoDbUser()
+          ?.partnerDirectorCount;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -223,30 +280,30 @@ class _PartnershipregistrationState
                                           .watch(activeStepProvider.notifier)
                                           .state += 1;
                                     } else {
-                                      if (ref.watch(panImageProvider) == null) {
-                                        errorToast(context,
-                                            'Please select PAN card Image');
-                                      } else if (ref
-                                              .watch(propDocImageProvider) ==
-                                          null) {
-                                        errorToast(context,
-                                            'Please select document Image');
-                                      } else if (ref
-                                              .watch(moaAoaImageProvider) ==
-                                          null) {
-                                        errorToast(context,
-                                            'Please select profile Image');
-                                      } else if (ref
-                                              .watch(boardResolutionImage) ==
-                                          null) {
-                                        errorToast(context,
-                                            'Please select partnership deed Image');
-                                      } else if (ref
-                                              .watch(directorProofImage) ==
-                                          null) {
-                                        errorToast(context,
-                                            'Please select partnership proof Image');
-                                      }
+                                      // if (ref.watch(panImageProvider) == null) {
+                                      //   errorToast(context,
+                                      //       'Please select PAN card Image');
+                                      // } else if (ref
+                                      //         .watch(propDocImageProvider) ==
+                                      //     null) {
+                                      //   errorToast(context,
+                                      //       'Please select document Image');
+                                      // } else if (ref
+                                      //         .watch(moaAoaImageProvider) ==
+                                      //     null) {
+                                      //   errorToast(context,
+                                      //       'Please select profile Image');
+                                      // } else if (ref
+                                      //         .watch(boardResolutionImage) ==
+                                      //     null) {
+                                      //   errorToast(context,
+                                      //       'Please select partnership deed Image');
+                                      // } else if (ref
+                                      //         .watch(directorProofImage) ==
+                                      //     null) {
+                                      //   errorToast(context,
+                                      //       'Please select partnership proof Image');
+                                      // }
                                     }
                                   }
                                   // else if (ref.watch(activeStepProvider) ==
@@ -271,15 +328,16 @@ class _PartnershipregistrationState
                                   else if (ref.watch(activeStepProvider) == 2) {
                                     if (bankDetailsKey.currentState!
                                         .validate()) {
-                                      if (ref.watch(chequeImageProvider) ==
-                                          null) {
-                                        errorToast(context,
-                                            'Please select cheque Image');
-                                      } else {
-                                        ref
-                                            .watch(activeStepProvider.notifier)
-                                            .state += 1;
-                                      }
+                                      ref
+                                          .watch(activeStepProvider.notifier)
+                                          .state += 1;
+                                      // if (ref.watch(chequeImageProvider) ==
+                                      //     null) {
+                                      //   errorToast(context,
+                                      //       'Please select cheque Image');
+                                      // } else {
+
+                                      // }
                                     } else {}
                                   }
                                   //
@@ -318,122 +376,173 @@ class _PartnershipregistrationState
                                 child: ElevatedButton(
                                   onPressed: () async {
                                     if (formKey.currentState!.validate()) {
-                                      ref
-                                          .watch(isRegisteringProvider.notifier)
-                                          .state = true;
-                                      ref
-                                          .watch(registerUserProvider(
-                                                  panCard: panController.text,
-                                                  phone: phoneController.text
-                                                      .toString(),
-                                                  userName: nameController.text
-                                                      .toString(),
-                                                  constitution:
-                                                      "${ConstitutionType.partnership.type}",
-                                                  email: emailController.text
-                                                      .toString(),
-                                                  adharNo: adharController.text
-                                                      .toString(),
-                                                  address: addressController
-                                                      .text
-                                                      .toString(),
-                                                  locationState: ref
-                                                      .watch(statesProvider)
-                                                      ?.name
-                                                      .toString(),
-                                                  district: ref
-                                                      .watch(districtProvider)
-                                                      ?.name
-                                                      .toString(),
-                                                  pincode: pinController.text
-                                                      .toString(),
-                                                  bankName: ref
-                                                      .watch(bankProvider)
-                                                      ?.bankName,
-                                                  bankBranch: branchController.text
-                                                      .toString(),
-                                                  bankAccount: accountController
-                                                      .text
-                                                      .toString(),
-                                                  ifscCode: ifscController.text
-                                                      .toString(),
-                                                  propDocType: ref
-                                                      .watch(propDocProvider)
-                                                      .toString(),
-                                                  propDocNumber: gstController
-                                                      .text
-                                                      .toString(),
-                                                  firmName: firmController.text
-                                                      .toString(),
-                                                  panCardImage: ref
-                                                      .watch(panImageProvider),
-                                                  profileImage: ref.watch(
-                                                      moaAoaImageProvider),
-                                                  aadharImage: ref.watch(
-                                                      authorisedImageProvider),
-                                                  chequeImage: ref.watch(
-                                                      chequeImageProvider),
-                                                  proprietorProof: ref.watch(
-                                                    propDocImageProvider,
-                                                  ),
-                                                  boardResolution: ref.watch(boardResolutionImage),
-                                                  partnerDirectorCount:
-                                                      directorController.text
-                                                          .toString())
-                                              .future)
-                                          .then((value) {
+                                      if (ref.watch(
+                                                  addressProofImageProvider) ==
+                                              null &&
+                                          ref
+                                                  .watch(sharedUtilityProvider)
+                                                  .getMongoDbUser()
+                                                  ?.addressProofImage ==
+                                              null) {
+                                        errorToast(context,
+                                            'Please select address proof Image');
+                                      } else {
                                         ref
                                             .watch(
                                                 isRegisteringProvider.notifier)
-                                            .state = false;
-                                        if (value['status'].toString() == "1") {
-                                          context.goNamed(
-                                              RoutesStrings.registrationOtp,
-                                              extra: {
-                                                "panCard": phoneController.text
-                                                    .toString()
-                                              });
-                                        } else {
-                                          errorToast(context,
-                                              value['message'].toString());
-                                        }
-                                      }).onError((e, s) {
+                                            .state = true;
                                         ref
-                                            .watch(
-                                                isRegisteringProvider.notifier)
-                                            .state = false;
-                                        //toastification.show(title: Text(e.toString()));
-                                      });
-                                    } else {
-                                      if (ref.watch(panImageProvider) == null) {
-                                        errorToast(
-                                            context, 'Please select Pan Image');
+                                            .watch(registerUserProvider(
+                                                    panCard: panController.text,
+                                                    phone: phoneController.text
+                                                        .toString(),
+                                                    userName: nameController.text
+                                                        .toString(),
+                                                    constitution:
+                                                        "${ConstitutionType.partnership.type}",
+                                                    email: emailController.text
+                                                        .toString(),
+                                                    adharNo: adharController
+                                                        .text
+                                                        .toString(),
+                                                    address: addressController
+                                                        .text
+                                                        .toString(),
+                                                    locationState:
+                                                        ref.watch(sharedUtilityProvider).getMongoDbUser()?.state ??
+                                                            ref
+                                                                .watch(
+                                                                    statesProvider)
+                                                                ?.name
+                                                                .toString(),
+                                                    district: ref.watch(sharedUtilityProvider).getMongoDbUser()?.district ??
+                                                        ref
+                                                            .watch(
+                                                                districtProvider)
+                                                            ?.name
+                                                            .toString(),
+                                                    pincode: pinController.text
+                                                        .toString(),
+                                                    bankName: ref
+                                                            .watch(
+                                                                sharedUtilityProvider)
+                                                            .getMongoDbUser()
+                                                            ?.bankName ??
+                                                        ref
+                                                            .watch(bankProvider)
+                                                            ?.bankName,
+                                                    bankBranch: ref
+                                                            .watch(sharedUtilityProvider)
+                                                            .getMongoDbUser()
+                                                            ?.bankBranch ??
+                                                        branchController.text.toString(),
+                                                    bankAccount: accountController.text.toString(),
+                                                    ifscCode: ifscController.text.toString(),
+                                                    propDocType: ref.watch(propDocProvider).toString(),
+                                                    propDocNumber: gstController.text.toString(),
+                                                    firmName: firmController.text.toString(),
+                                                    panCardImage: ref.watch(sharedUtilityProvider).getMongoDbUser()?.pancardImage != null && ref.watch(panImageProvider) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.pancardImage : ref.watch(panImageProvider),
+                                                    profileImage: ref.watch(sharedUtilityProvider).getMongoDbUser()?.profileImage != null && ref.watch(moaAoaImageProvider) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.profileImage : ref.watch(moaAoaImageProvider),
+                                                    aadharImage: ref.watch(sharedUtilityProvider).getMongoDbUser()?.aadharImage != null && ref.watch(authorisedImageProvider) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.aadharImage : ref.watch(authorisedImageProvider),
+                                                    chequeImage: ref.watch(sharedUtilityProvider).getMongoDbUser()?.chequeImage != null && ref.watch(chequeImageProvider) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.chequeImage : ref.watch(chequeImageProvider),
+                                                    proprietorProof: ref.watch(sharedUtilityProvider).getMongoDbUser()?.propProofDoc != null &&
+                                                            ref.watch(
+                                                                  propDocImageProvider,
+                                                                ) ==
+                                                                null
+                                                        ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.propProofDoc
+                                                        : ref.watch(propDocImageProvider),
+                                                    boardResolution: ref.watch(sharedUtilityProvider).getMongoDbUser()?.partnershipDeepImage != null && ref.watch(boardResolutionImage) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.partnershipDeepImage : ref.watch(boardResolutionImage),
+                                                    partnerDirectorCount: directorController.text.toString(),
+                                                    addressProof: ref.watch(sharedUtilityProvider).getMongoDbUser()?.addressProofImage != null && ref.watch(addressProofImageProvider) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.addressProofImage : ref.watch(addressProofImageProvider))
+                                                .future)
+                                            .then((value) {
+                                          ref
+                                              .watch(isRegisteringProvider
+                                                  .notifier)
+                                              .state = false;
+                                          if (value['status'].toString() ==
+                                              "1") {
+                                            ref
+                                                .read(sharedUtilityProvider)
+                                                .setToken(value['data']
+                                                    ['api_access_token']);
+                                            ref.invalidate(dioProvider);
+                                            List<Map<String, dynamic>>
+                                                dataList = [];
+
+                                            (value['Partners_diretor_list'])
+                                                .forEach(
+                                                    (e) => {dataList.add(e)});
+                                            context.goNamed(
+                                                RoutesStrings
+                                                    .addDirectorPartnerAutoRegistration,
+                                                extra: {
+                                                  'isLastIndex': false,
+                                                  'data': dataList
+                                                });
+                                            successToast(
+                                                context, value['message']);
+
+                                            // successToast(
+                                            //     context, value['message']);
+                                            // context.go(
+                                            //   RoutesStrings.dashboard,
+                                            // );
+                                          } else {
+                                            errorToast(context,
+                                                value['message'].toString());
+                                          }
+                                        }).onError((e, s) {
+                                          ref
+                                              .watch(isRegisteringProvider
+                                                  .notifier)
+                                              .state = false;
+                                          //toastification.show(title: Text(e.toString()));
+                                        });
                                       }
-                                      // else if (ref
-                                      //     .watch(authorisedImageProvider) ==
+                                    } else {
+                                      // if (ref.watch(panImageProvider) == null) {
+                                      //   errorToast(
+                                      //       context, 'Please select Pan Image');
+                                      // }
+                                      // // else if (ref
+                                      // //     .watch(authorisedImageProvider) ==
+                                      // //     null) {
+                                      // //   errorToast(context,
+                                      // //       'Please select authorised Image');
+                                      // // }
+                                      // else if (ref.watch(chequeImageProvider) ==
                                       //     null) {
                                       //   errorToast(context,
-                                      //       'Please select authorised Image');
+                                      //       'Please select cheque Image');
+                                      // } else if (ref.watch(propDocProvider) ==
+                                      //     'Select Proprietorship Document Type') {
+                                      //   errorToast(context,
+                                      //       'Please select document type');
+                                      // } else if (ref
+                                      //         .watch(propDocImageProvider) ==
+                                      //     null) {
+                                      //   errorToast(context,
+                                      //       'Please select document Image');
+                                      // } else if (ref.watch(statesProvider) ==
+                                      //     null && ref
+                                      //             .watch(sharedUtilityProvider)
+                                      //             .getMongoDbUser()
+                                      //             ?.state ==
+                                      //         null) {
+                                      //   errorToast(
+                                      //       context, 'Please select state');
                                       // }
-                                      else if (ref.watch(chequeImageProvider) ==
-                                          null) {
-                                        errorToast(context,
-                                            'Please select cheque Image');
-                                      } else if (ref.watch(propDocProvider) ==
-                                          'Select Proprietorship Document Type') {
-                                        errorToast(context,
-                                            'Please select document type');
-                                      } else if (ref
-                                              .watch(propDocImageProvider) ==
-                                          null) {
-                                        errorToast(context,
-                                            'Please select document Image');
-                                      } else if (ref.watch(statesProvider) ==
-                                          null) {
-                                        errorToast(
-                                            context, 'Please select state');
-                                      } else if (ref.watch(districtProvider) ==
-                                          null) {
+
+                                      // else
+
+                                      if (ref.watch(districtProvider) == null &&
+                                          ref
+                                                  .watch(sharedUtilityProvider)
+                                                  .getMongoDbUser()
+                                                  ?.district ==
+                                              null) {
                                         errorToast(
                                             context, 'Please select District');
                                       } else {
@@ -602,209 +711,270 @@ class _PartnershipregistrationState
 
   addressLayout(BuildContext context, WidgetRef ref) => Form(
           child: ColumnSuper(children: [
-        ref.watch(stateListProvider).when(
-            data: (states) => DropdownSearch<Datum?>(
-                  popupProps: PopupProps.menu(
-                      searchFieldProps: const TextFieldProps(
-                          autofocus: true,
-                          cursorColor: ColorsConstant.primaryColor,
-                          padding: Pad(left: 10, right: 10),
-                          decoration: InputDecoration(
-                            contentPadding: Pad(left: 10, right: 10),
-                            focusedErrorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                            disabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                            errorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                          )),
-                      menuProps: MenuProps(
-                          shape: RoundedRectangleBorder(
-                              side: const BorderSide(
-                                  color: ColorsConstant.primaryColor),
-                              borderRadius: BorderRadius.circular(8))),
-                      itemBuilder: (context, terminal, isVisible) =>
-                          ColumnSuper(
-                              alignment: Alignment.centerLeft,
-                              children: [
-                                Padding(
-                                  padding: const Pad(all: 10),
-                                  child: Text(
-                                    "${terminal?.name}",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: Adaptive.sp(16)),
-                                  ),
-                                ),
-                                Container(
-                                  height: 1,
-                                  color: Colors.grey.withOpacity(0.3),
-                                ),
-                              ]),
-                      isFilterOnline: true,
-                      title: Padding(
-                        padding: const Pad(all: 10),
-                        child: Text(
-                          'Select State',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      showSearchBox: true,
-                      searchDelay: const Duration(microseconds: 500)),
-                  filterFn: (user, filter) =>
-                      user?.stateFilterByName(filter) ?? false,
-                  // asyncItems: (String filter) => getData(filter),
+        ref.watch(sharedUtilityProvider).getMongoDbUser()?.state != null &&
+                stateController.text.isNotEmpty
+            ? TextFormField(
+                keyboardType: TextInputType.number,
+                controller: stateController,
+                readOnly:
+                    ref.watch(sharedUtilityProvider).getMongoDbUser()?.state !=
+                        null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please input Valid State';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                    hintText: "Enter State Name",
+                    label: const Text("Enter State Name"),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))),
+              )
+            : ref.watch(stateListProvider).when(
+                data: (states) => DropdownSearch<Datum?>(
+                      popupProps: PopupProps.menu(
+                          searchFieldProps: const TextFieldProps(
+                              autofocus: true,
+                              cursorColor: ColorsConstant.primaryColor,
+                              padding: Pad(left: 10, right: 10),
+                              decoration: InputDecoration(
+                                contentPadding: Pad(left: 10, right: 10),
+                                focusedErrorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color: ColorsConstant.primaryColor)),
+                                disabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color: ColorsConstant.primaryColor)),
+                                errorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color: ColorsConstant.primaryColor)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color: ColorsConstant.primaryColor)),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color: ColorsConstant.primaryColor)),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color: ColorsConstant.primaryColor)),
+                              )),
+                          menuProps: MenuProps(
+                              shape: RoundedRectangleBorder(
+                                  side: const BorderSide(
+                                      color: ColorsConstant.primaryColor),
+                                  borderRadius: BorderRadius.circular(8))),
+                          itemBuilder: (context, terminal, isVisible) =>
+                              ColumnSuper(
+                                  alignment: Alignment.centerLeft,
+                                  children: [
+                                    Padding(
+                                      padding: const Pad(all: 10),
+                                      child: Text(
+                                        "${terminal?.name}",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Adaptive.sp(16)),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 1,
+                                      color: Colors.grey.withOpacity(0.3),
+                                    ),
+                                  ]),
+                          isFilterOnline: true,
+                          title: Padding(
+                            padding: const Pad(all: 10),
+                            child: Text(
+                              'Select State',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(16),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          showSearchBox: true,
+                          searchDelay: const Duration(microseconds: 500)),
+                      filterFn: (user, filter) =>
+                          user?.stateFilterByName(filter) ?? false,
+                      // asyncItems: (String filter) => getData(filter),
 
-                  items: states.data ?? [],
-                  itemAsString: (Datum? u) => u?.name ?? "",
-                  onChanged: (Datum? data) =>
-                      ref.watch(statesProvider.notifier).state = data,
-                  dropdownDecoratorProps: const DropDownDecoratorProps(
-                    dropdownSearchDecoration: InputDecoration(
-                        contentPadding: Pad(left: 10, bottom: 5, top: 5),
-                        hintText: "Select State",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            borderSide: BorderSide(
-                                color: ColorsConstant.secondColorUltraDark))),
-                  ),
-                ),
-            error: (e, s) => Container(),
-            loading: () => defaultLoader()),
+                      items: states.data ?? [],
+                      itemAsString: (Datum? u) => u?.name ?? "",
+                      onChanged: (Datum? data) =>
+                          ref.watch(statesProvider.notifier).state = data,
+                      dropdownDecoratorProps: const DropDownDecoratorProps(
+                        dropdownSearchDecoration: InputDecoration(
+                            contentPadding: Pad(left: 10, bottom: 5, top: 5),
+                            hintText: "Select State",
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                                borderSide: BorderSide(
+                                    color:
+                                        ColorsConstant.secondColorUltraDark))),
+                      ),
+                    ),
+                error: (e, s) => Container(),
+                loading: () => defaultLoader()),
         const SizedBox(
           height: 10,
         ),
-        ref.watch(statesProvider) == null
-            ? const SizedBox()
-            : ref
-                .watch(districtListProvider(
-                    code: ref.watch(statesProvider)?.code.toString()))
-                .when(
-                    data: (states) => DropdownSearch<StateDatum?>(
-                          popupProps: PopupProps.menu(
-                              searchFieldProps: const TextFieldProps(
-                                  autofocus: true,
-                                  cursorColor: ColorsConstant.primaryColor,
-                                  padding: Pad(left: 10, right: 10),
-                                  decoration: InputDecoration(
-                                    contentPadding: Pad(left: 10, right: 10),
-                                    focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            style: BorderStyle.solid,
-                                            color:
-                                                ColorsConstant.primaryColor)),
-                                    disabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            style: BorderStyle.solid,
-                                            color:
-                                                ColorsConstant.primaryColor)),
-                                    errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            style: BorderStyle.solid,
-                                            color:
-                                                ColorsConstant.primaryColor)),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            style: BorderStyle.solid,
-                                            color:
-                                                ColorsConstant.primaryColor)),
-                                    border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            style: BorderStyle.solid,
-                                            color:
-                                                ColorsConstant.primaryColor)),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            style: BorderStyle.solid,
-                                            color:
-                                                ColorsConstant.primaryColor)),
-                                  )),
-                              menuProps: MenuProps(
-                                  shape: RoundedRectangleBorder(
-                                      side: const BorderSide(
-                                          color: ColorsConstant.primaryColor),
-                                      borderRadius: BorderRadius.circular(8))),
-                              itemBuilder: (context, terminal, isVisible) =>
-                                  ColumnSuper(
-                                      alignment: Alignment.centerLeft,
-                                      children: [
-                                        Padding(
-                                          padding: const Pad(all: 10),
-                                          child: Text(
-                                            "${terminal?.name}",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: Adaptive.sp(16)),
-                                          ),
-                                        ),
-                                        Container(
-                                          height: 1,
-                                          color: Colors.grey.withOpacity(0.3),
-                                        ),
-                                      ]),
-                              isFilterOnline: true,
-                              title: Padding(
-                                padding: const Pad(all: 10),
-                                child: Text(
-                                  'Select District',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: Adaptive.sp(16),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              showSearchBox: true,
-                              searchDelay: const Duration(microseconds: 500)),
-                          filterFn: (user, filter) =>
-                              user?.districtFilterByName(filter) ?? false,
-                          // asyncItems: (String filter) => getData(filter),
+        ref.watch(sharedUtilityProvider).getMongoDbUser()?.district != null &&
+                cityController.text.isNotEmpty
+            ? TextFormField(
+                keyboardType: TextInputType.number,
+                controller: cityController,
+                readOnly: ref
+                        .watch(sharedUtilityProvider)
+                        .getMongoDbUser()
+                        ?.district !=
+                    null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please input Valid city';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                    hintText: "Enter city Name",
+                    label: const Text("Enter city Name"),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))))
+            : ref.watch(statesProvider) == null
+                ? const SizedBox()
+                : ref
+                    .watch(districtListProvider(
+                        code: ref.watch(statesProvider)?.code.toString()))
+                    .when(
+                        data: (states) => DropdownSearch<StateDatum?>(
+                              popupProps: PopupProps.menu(
+                                  searchFieldProps: const TextFieldProps(
+                                      autofocus: true,
+                                      cursorColor: ColorsConstant.primaryColor,
+                                      padding: Pad(left: 10, right: 10),
+                                      decoration: InputDecoration(
+                                        contentPadding:
+                                            Pad(left: 10, right: 10),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                style: BorderStyle.solid,
+                                                color: ColorsConstant
+                                                    .primaryColor)),
+                                        disabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                style: BorderStyle.solid,
+                                                color: ColorsConstant
+                                                    .primaryColor)),
+                                        errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                style: BorderStyle.solid,
+                                                color: ColorsConstant
+                                                    .primaryColor)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                style: BorderStyle.solid,
+                                                color: ColorsConstant
+                                                    .primaryColor)),
+                                        border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                style: BorderStyle.solid,
+                                                color: ColorsConstant
+                                                    .primaryColor)),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                style: BorderStyle.solid,
+                                                color: ColorsConstant
+                                                    .primaryColor)),
+                                      )),
+                                  menuProps: MenuProps(
+                                      shape: RoundedRectangleBorder(
+                                          side: const BorderSide(
+                                              color:
+                                                  ColorsConstant.primaryColor),
+                                          borderRadius:
+                                              BorderRadius.circular(8))),
+                                  itemBuilder: (context, terminal, isVisible) =>
+                                      ColumnSuper(
+                                          alignment: Alignment.centerLeft,
+                                          children: [
+                                            Padding(
+                                              padding: const Pad(all: 10),
+                                              child: Text(
+                                                "${terminal?.name}",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: Adaptive.sp(16)),
+                                              ),
+                                            ),
+                                            Container(
+                                              height: 1,
+                                              color:
+                                                  Colors.grey.withOpacity(0.3),
+                                            ),
+                                          ]),
+                                  isFilterOnline: true,
+                                  title: Padding(
+                                    padding: const Pad(all: 10),
+                                    child: Text(
+                                      'Select District',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: Adaptive.sp(16),
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  showSearchBox: true,
+                                  searchDelay:
+                                      const Duration(microseconds: 500)),
+                              filterFn: (user, filter) =>
+                                  user?.districtFilterByName(filter) ?? false,
+                              // asyncItems: (String filter) => getData(filter),
 
-                          items: states.data ?? [],
-                          itemAsString: (StateDatum? u) => u?.name ?? "",
-                          onChanged: (StateDatum? data) =>
-                              ref.watch(districtProvider.notifier).state = data,
-                          dropdownDecoratorProps: const DropDownDecoratorProps(
-                            dropdownSearchDecoration: InputDecoration(
-                                contentPadding:
-                                    Pad(left: 10, bottom: 5, top: 5),
-                                hintText: "Select District",
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8)),
-                                    borderSide: BorderSide(
-                                        color: ColorsConstant
-                                            .secondColorUltraDark))),
-                          ),
-                        ),
-                    error: (e, s) => Container(),
-                    loading: () => const CupertinoActivityIndicator()),
+                              items: states.data ?? [],
+                              itemAsString: (StateDatum? u) => u?.name ?? "",
+                              onChanged: (StateDatum? data) => ref
+                                  .watch(districtProvider.notifier)
+                                  .state = data,
+                              dropdownDecoratorProps:
+                                  const DropDownDecoratorProps(
+                                dropdownSearchDecoration: InputDecoration(
+                                    contentPadding:
+                                        Pad(left: 10, bottom: 5, top: 5),
+                                    hintText: "Select District",
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8)),
+                                        borderSide: BorderSide(
+                                            color: ColorsConstant
+                                                .secondColorUltraDark))),
+                              ),
+                            ),
+                        error: (e, s) => Container(),
+                        loading: () => const CupertinoActivityIndicator()),
         const SizedBox(
           height: 10,
         ),
         TextFormField(
           keyboardType: TextInputType.number,
           textInputAction: TextInputAction.next,
+          readOnly:
+              ref.watch(sharedUtilityProvider).getMongoDbUser()?.pincode !=
+                  null,
           controller: pinController,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -828,6 +998,9 @@ class _PartnershipregistrationState
         TextFormField(
           keyboardType: TextInputType.text,
           controller: addressController,
+          readOnly:
+              ref.watch(sharedUtilityProvider).getMongoDbUser()?.address !=
+                  null,
           textInputAction: TextInputAction.next,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -863,103 +1036,129 @@ class _PartnershipregistrationState
                     fontSize: Adaptive.sp(17)),
               ),
               onPressed: () {}),
-          ref.watch(bankListProvider).when(
-              data: (states) => DropdownSearch<BankDatum?>(
-                    validator: (value) {
-                      if (value == null || value.bankName.isEmpty) {
-                        return 'Please input valid bank name';
-                      }
-                      return null;
-                    },
-                    popupProps: PopupProps.menu(
-                        searchFieldProps: const TextFieldProps(
-                            autofocus: true,
-                            cursorColor: ColorsConstant.primaryColor,
-                            padding: Pad(left: 10, right: 10),
-                            decoration: InputDecoration(
-                              contentPadding: Pad(left: 10, right: 10),
-                              focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      style: BorderStyle.solid,
-                                      color: ColorsConstant.primaryColor)),
-                              disabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      style: BorderStyle.solid,
-                                      color: ColorsConstant.primaryColor)),
-                              errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      style: BorderStyle.solid,
-                                      color: ColorsConstant.primaryColor)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      style: BorderStyle.solid,
-                                      color: ColorsConstant.primaryColor)),
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      style: BorderStyle.solid,
-                                      color: ColorsConstant.primaryColor)),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      style: BorderStyle.solid,
-                                      color: ColorsConstant.primaryColor)),
-                            )),
-                        menuProps: MenuProps(
-                            shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                    color: ColorsConstant.primaryColor),
-                                borderRadius: BorderRadius.circular(8))),
-                        itemBuilder: (context, terminal, isVisible) =>
-                            ColumnSuper(
-                                alignment: Alignment.centerLeft,
-                                children: [
-                                  Padding(
-                                    padding: const Pad(all: 10),
-                                    child: Text(
-                                      "${terminal?.bankName}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: Adaptive.sp(16)),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 1,
-                                    color: Colors.grey.withOpacity(0.3),
-                                  ),
-                                ]),
-                        isFilterOnline: true,
-                        title: Padding(
-                          padding: const Pad(all: 10),
-                          child: Text(
-                            'Select Bank',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: Adaptive.sp(16),
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        showSearchBox: true,
-                        searchDelay: const Duration(microseconds: 500)),
-                    filterFn: (user, filter) =>
-                        user?.stateFilterByName(filter) ?? false,
-                    // asyncItems: (String filter) => getData(filter),
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.bankName != null
+              ? TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: bankNameController,
+                  readOnly: ref
+                          .watch(sharedUtilityProvider)
+                          .getMongoDbUser()
+                          ?.bankName !=
+                      null,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please input Valid Bank Name';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                      hintText: "Enter Bank Name",
+                      label: const Text("Enter Bank Name"),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                )
+              : ref.watch(bankListProvider).when(
+                  data: (states) => DropdownSearch<BankDatum?>(
+                        validator: (value) {
+                          if (value == null || value.bankName.isEmpty) {
+                            return 'Please input valid bank name';
+                          }
+                          return null;
+                        },
+                        popupProps: PopupProps.menu(
+                            searchFieldProps: const TextFieldProps(
+                                autofocus: true,
+                                cursorColor: ColorsConstant.primaryColor,
+                                padding: Pad(left: 10, right: 10),
+                                decoration: InputDecoration(
+                                  contentPadding: Pad(left: 10, right: 10),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          style: BorderStyle.solid,
+                                          color: ColorsConstant.primaryColor)),
+                                  disabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          style: BorderStyle.solid,
+                                          color: ColorsConstant.primaryColor)),
+                                  errorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          style: BorderStyle.solid,
+                                          color: ColorsConstant.primaryColor)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          style: BorderStyle.solid,
+                                          color: ColorsConstant.primaryColor)),
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          style: BorderStyle.solid,
+                                          color: ColorsConstant.primaryColor)),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          style: BorderStyle.solid,
+                                          color: ColorsConstant.primaryColor)),
+                                )),
+                            menuProps: MenuProps(
+                                shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                        color: ColorsConstant.primaryColor),
+                                    borderRadius: BorderRadius.circular(8))),
+                            itemBuilder: (context, terminal, isVisible) =>
+                                ColumnSuper(
+                                    alignment: Alignment.centerLeft,
+                                    children: [
+                                      Padding(
+                                        padding: const Pad(all: 10),
+                                        child: Text(
+                                          "${terminal?.bankName}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: Adaptive.sp(16)),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 1,
+                                        color: Colors.grey.withOpacity(0.3),
+                                      ),
+                                    ]),
+                            isFilterOnline: true,
+                            title: Padding(
+                              padding: const Pad(all: 10),
+                              child: Text(
+                                'Select Bank',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: Adaptive.sp(16),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            showSearchBox: true,
+                            searchDelay: const Duration(microseconds: 500)),
+                        filterFn: (user, filter) =>
+                            user?.stateFilterByName(filter) ?? false,
+                        // asyncItems: (String filter) => getData(filter),
 
-                    items: states.data ?? [],
-                    itemAsString: (BankDatum? u) => "${u?.bankName}",
-                    onChanged: (BankDatum? data) =>
-                        ref.watch(bankProvider.notifier).state = data,
-                    dropdownDecoratorProps: const DropDownDecoratorProps(
-                      dropdownSearchDecoration: InputDecoration(
-                          contentPadding: Pad(left: 10, bottom: 5, top: 5),
-                          hintText: "Select Bank",
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                              borderSide: BorderSide(
-                                  color: ColorsConstant.secondColorUltraDark))),
-                    ),
-                  ),
-              error: (e, s) => Container(),
-              loading: () => defaultLoader()),
+                        items: states.data ?? [],
+                        itemAsString: (BankDatum? u) => "${u?.bankName}",
+                        onChanged: (BankDatum? data) =>
+                            ref.watch(bankProvider.notifier).state = data,
+                        dropdownDecoratorProps: const DropDownDecoratorProps(
+                          dropdownSearchDecoration: InputDecoration(
+                              contentPadding: Pad(left: 10, bottom: 5, top: 5),
+                              hintText: "Select Bank",
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                  borderSide: BorderSide(
+                                      color: ColorsConstant
+                                          .secondColorUltraDark))),
+                        ),
+                      ),
+                  error: (e, s) => Container(),
+                  loading: () => defaultLoader()),
           const SizedBox(
             height: 10,
           ),
@@ -967,6 +1166,9 @@ class _PartnershipregistrationState
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.next,
             controller: branchController,
+            readOnly:
+                ref.watch(sharedUtilityProvider).getMongoDbUser()?.bankBranch !=
+                    null,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please input valid branch name';
@@ -989,6 +1191,9 @@ class _PartnershipregistrationState
           TextFormField(
             keyboardType: TextInputType.number,
             controller: accountController,
+            readOnly:
+                ref.watch(sharedUtilityProvider).getMongoDbUser()?.bankAccNo !=
+                    null,
             textInputAction: TextInputAction.next,
             validator: (value) {
               if (value == null ||
@@ -1014,6 +1219,11 @@ class _PartnershipregistrationState
           TextFormField(
             keyboardType: TextInputType.text,
             controller: ifscController,
+            readOnly: ref
+                    .watch(sharedUtilityProvider)
+                    .getMongoDbUser()
+                    ?.bankIfscCode !=
+                null,
             textInputAction: TextInputAction.next,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -1034,78 +1244,173 @@ class _PartnershipregistrationState
           const SizedBox(
             height: 10,
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: InkWell(
-              onTap: () async {
-                imagePicker
-                    .pickImage(source: ImageSource.gallery)
-                    .then((value) {
-                  if (value != null) {
-                    ref.watch(chequeImageProvider.notifier).state =
-                        File(value.path);
-                  }
-                });
-              },
-              child: dottedBorder.DottedBorder(
-                  borderType: dottedBorder.BorderType.RRect,
-                  dashPattern: const [5, 5, 5, 5],
-                  color: ColorsConstant.primaryColor,
-                  child: Padding(
-                    padding: const Pad(all: 20),
-                    child: Center(
-                      child: ref.watch(chequeImageProvider) != null
-                          ? Stack(
-                              children: [
-                                Image.file(ref.watch(chequeImageProvider) ??
-                                    File('path')),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.black.withOpacity(0.6),
-                                      shape: BoxShape.circle),
-                                  child: IconButton(
-                                      onPressed: () {
-                                        ref.invalidate(chequeImageProvider);
-                                      },
-                                      icon: const Icon(
-                                        Icons.close,
-                                        color: Colors.white,
-                                      )),
-                                )
-                              ],
-                            )
-                          : ColumnSuper(children: [
-                              Icon(
-                                LucideIcons.cloud_upload,
-                                color: ColorsConstant.primaryColor,
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                "Select Cheque Image",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: ColorsConstant.primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Adaptive.sp(16)),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                "Upload Document Image,\n  Supports JPG, JPEG, PNG",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: ColorsConstant.primaryColor,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: Adaptive.sp(13)),
-                              )
-                            ]),
-                    ),
-                  )),
-            ),
-          ),
+          CupertinoButton(
+              child: Text(
+                "Cheque Image",
+                style: TextStyle(
+                    color: ColorsConstant.primaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: Adaptive.sp(17)),
+              ),
+              onPressed: () {}),
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.chequeImage !=
+                      null &&
+                  ref.watch(chequeImageProvider) == null
+              ? SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: InkWell(
+                    onTap: () async {
+                      imagePicker
+                          .pickImage(source: ImageSource.gallery)
+                          .then((value) {
+                        if (value != null) {
+                          ref.watch(chequeImageProvider.notifier).state =
+                              File(value.path);
+                        }
+                      });
+                    },
+                    child: dottedBorder.DottedBorder(
+                        borderType: dottedBorder.BorderType.RRect,
+                        dashPattern: const [5, 5, 5, 5],
+                        color: ColorsConstant.primaryColor,
+                        child: Padding(
+                          padding: const Pad(all: 20),
+                          child: Center(
+                            child: ref
+                                        .watch(sharedUtilityProvider)
+                                        .getMongoDbUser()
+                                        ?.chequeImage !=
+                                    null
+                                ? Stack(
+                                    children: [
+                                      Image.network(ref
+                                          .watch(sharedUtilityProvider)
+                                          .getMongoDbUser()
+                                          ?.chequeImage),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.6),
+                                            shape: BoxShape.circle),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              ref.invalidate(
+                                                  chequeImageProvider);
+                                            },
+                                            icon: const Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                            )),
+                                      )
+                                    ],
+                                  )
+                                : ColumnSuper(children: [
+                                    Icon(
+                                      LucideIcons.cloud_upload,
+                                      color: ColorsConstant.primaryColor,
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "Select Cheque Image",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: ColorsConstant.primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Adaptive.sp(16)),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: ColorsConstant.primaryColor,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: Adaptive.sp(13)),
+                                    )
+                                  ]),
+                          ),
+                        )),
+                  ),
+                )
+              : SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: InkWell(
+                    onTap: () async {
+                      imagePicker
+                          .pickImage(source: ImageSource.gallery)
+                          .then((value) {
+                        if (value != null) {
+                          ref.watch(chequeImageProvider.notifier).state =
+                              File(value.path);
+                        }
+                      });
+                    },
+                    child: dottedBorder.DottedBorder(
+                        borderType: dottedBorder.BorderType.RRect,
+                        dashPattern: const [5, 5, 5, 5],
+                        color: ColorsConstant.primaryColor,
+                        child: Padding(
+                          padding: const Pad(all: 20),
+                          child: Center(
+                            child: ref.watch(chequeImageProvider) != null
+                                ? Stack(
+                                    children: [
+                                      Image.file(
+                                          ref.watch(chequeImageProvider) ??
+                                              File('path')),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.6),
+                                            shape: BoxShape.circle),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              ref.invalidate(
+                                                  chequeImageProvider);
+                                            },
+                                            icon: const Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                            )),
+                                      )
+                                    ],
+                                  )
+                                : ColumnSuper(children: [
+                                    Icon(
+                                      LucideIcons.cloud_upload,
+                                      color: ColorsConstant.primaryColor,
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "Select Cheque Image",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: ColorsConstant.primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Adaptive.sp(16)),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: ColorsConstant.primaryColor,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: Adaptive.sp(13)),
+                                    )
+                                  ]),
+                          ),
+                        )),
+                  ),
+                ),
           const SizedBox(
             height: 10,
           ),
@@ -1131,6 +1436,9 @@ class _PartnershipregistrationState
           keyboardType: TextInputType.text,
           controller: firmController,
           textInputAction: TextInputAction.next,
+          readOnly:
+              ref.watch(sharedUtilityProvider).getMongoDbUser()?.firmName !=
+                  null,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please input Firm name';
@@ -1155,6 +1463,9 @@ class _PartnershipregistrationState
             TextFormField(
               keyboardType: TextInputType.text,
               controller: nameController,
+              readOnly:
+                  ref.watch(sharedUtilityProvider).getMongoDbUser()?.fname !=
+                      null,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please input value';
@@ -1176,6 +1487,7 @@ class _PartnershipregistrationState
             ),
             TextFormField(
               keyboardType: TextInputType.emailAddress,
+             
               controller: emailController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -1198,6 +1510,9 @@ class _PartnershipregistrationState
             ),
             TextFormField(
               keyboardType: TextInputType.number,
+              readOnly:
+                  ref.watch(sharedUtilityProvider).getMongoDbUser()?.phone !=
+                      null,
               maxLength: 10,
               controller: phoneController,
               validator: (value) {
@@ -1225,75 +1540,79 @@ class _PartnershipregistrationState
         SizedBox(
           height: 10,
         ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: ElevatedButton(
-            onPressed: () {
-              showCupertinoModalPopup(
-                  context: context,
-                  builder: (context) => CupertinoActionSheet(
-                        title: Text(
-                          "Select Proprietorship Document Type",
-                          style: TextStyle(
-                              color: ColorsConstant.secondColorUltraDark,
-                              fontWeight: FontWeight.bold,
-                              fontSize: Adaptive.sp(16)),
-                        ),
-                        actions: [
-                          CupertinoActionSheetAction(
-                            onPressed: () {
-                              ref.watch(propDocProvider.notifier).state = "GST";
-                              Navigator.pop(context);
-                            },
-                            isDefaultAction: true,
-                            child: Text("GST",
-                                style: TextStyle(
-                                    color: ColorsConstant.primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Adaptive.sp(16))),
+        if (ref.watch(propDocProvider).isEmpty)
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: ElevatedButton(
+              onPressed: () {
+                showCupertinoModalPopup(
+                    context: context,
+                    builder: (context) => CupertinoActionSheet(
+                          title: Text(
+                            "Select Proprietorship Document Type",
+                            style: TextStyle(
+                                color: ColorsConstant.secondColorUltraDark,
+                                fontWeight: FontWeight.bold,
+                                fontSize: Adaptive.sp(16)),
                           ),
-                          CupertinoActionSheetAction(
-                            onPressed: () {
-                              ref.watch(propDocProvider.notifier).state =
-                                  "License";
-                              Navigator.pop(context);
-                            },
-                            isDefaultAction: true,
-                            child: Text("License",
-                                style: TextStyle(
-                                    color: ColorsConstant.primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Adaptive.sp(16))),
-                          ),
-                          CupertinoActionSheetAction(
+                          actions: [
+                            CupertinoActionSheetAction(
                               onPressed: () {
                                 ref.watch(propDocProvider.notifier).state =
-                                    "MSME";
+                                    "GST";
                                 Navigator.pop(context);
                               },
                               isDefaultAction: true,
-                              child: Text("MSME",
+                              child: Text("GST",
                                   style: TextStyle(
                                       color: ColorsConstant.primaryColor,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: Adaptive.sp(16))))
-                        ],
-                      ));
-            },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: ColorsConstant.secondColorDark,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10))),
-            child: Text(
-              ref.watch(propDocProvider),
-              style: TextStyle(
-                  color: Colors.white,
-                  shadows: [const Shadow(color: Colors.white, blurRadius: 0.3)],
-                  fontWeight: FontWeight.w700,
-                  fontSize: Adaptive.sp(16)),
+                                      fontSize: Adaptive.sp(16))),
+                            ),
+                            CupertinoActionSheetAction(
+                              onPressed: () {
+                                ref.watch(propDocProvider.notifier).state =
+                                    "License";
+                                Navigator.pop(context);
+                              },
+                              isDefaultAction: true,
+                              child: Text("License",
+                                  style: TextStyle(
+                                      color: ColorsConstant.primaryColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Adaptive.sp(16))),
+                            ),
+                            CupertinoActionSheetAction(
+                                onPressed: () {
+                                  ref.watch(propDocProvider.notifier).state =
+                                      "MSME";
+                                  Navigator.pop(context);
+                                },
+                                isDefaultAction: true,
+                                child: Text("MSME",
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16))))
+                          ],
+                        ));
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: ColorsConstant.secondColorDark,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10))),
+              child: Text(
+                ref.watch(propDocProvider),
+                style: TextStyle(
+                    color: Colors.white,
+                    shadows: [
+                      const Shadow(color: Colors.white, blurRadius: 0.3)
+                    ],
+                    fontWeight: FontWeight.w700,
+                    fontSize: Adaptive.sp(16)),
+              ),
             ),
           ),
-        ),
         const SizedBox(
           height: 10,
         ),
@@ -1302,6 +1621,11 @@ class _PartnershipregistrationState
             child: TextFormField(
               keyboardType: TextInputType.text,
               textInputAction: TextInputAction.next,
+              readOnly: ref
+                      .watch(sharedUtilityProvider)
+                      .getMongoDbUser()
+                      ?.propProofNo !=
+                  null,
               controller: gstController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -1310,8 +1634,10 @@ class _PartnershipregistrationState
                 return null;
               },
               decoration: InputDecoration(
-                  hintText: "Enter ${ref.watch(propDocProvider)} Number",
-                  label: Text("Enter ${ref.watch(propDocProvider)} Number"),
+                  hintText:
+                      "Enter ${ref.watch(sharedUtilityProvider).getMongoDbUser()?.propProof.toString() == "1" ? ' GST' : ref.watch(sharedUtilityProvider).getMongoDbUser()?.propProof.toString() == "2" ? " License" : "MSME"} Number",
+                  label: Text(
+                      "Enter${ref.watch(sharedUtilityProvider).getMongoDbUser()?.propProof.toString() == "1" ? ' GST' : ref.watch(sharedUtilityProvider).getMongoDbUser()?.propProof.toString() == "2" ? "License" : " MSME"} Number"),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
                   border: OutlineInputBorder(
@@ -1322,76 +1648,162 @@ class _PartnershipregistrationState
         const SizedBox(
           height: 10,
         ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: InkWell(
-            onTap: () async {
-              imagePicker.pickImage(source: ImageSource.gallery).then((value) {
-                if (value != null) {
-                  ref.watch(propDocImageProvider.notifier).state =
-                      File(value.path);
-                }
-              });
-            },
-            child: dottedBorder.DottedBorder(
-                borderType: dottedBorder.BorderType.RRect,
-                dashPattern: const [5, 5, 5, 5],
-                color: ColorsConstant.primaryColor,
-                child: Padding(
-                  padding: const Pad(all: 20),
-                  child: Center(
-                    child: ref.watch(propDocImageProvider) != null
-                        ? Stack(
-                            children: [
-                              Image.file(ref.watch(propDocImageProvider) ??
-                                  File('path')),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.6),
-                                    shape: BoxShape.circle),
-                                child: IconButton(
-                                    onPressed: () {
-                                      ref.invalidate(propDocImageProvider);
-                                    },
-                                    icon: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    )),
-                              )
-                            ],
-                          )
-                        : ColumnSuper(children: [
-                            Icon(
-                              LucideIcons.cloud_upload,
-                              color: ColorsConstant.primaryColor,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Select ${ref.watch(propDocProvider)} Image",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Adaptive.sp(16)),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Upload Document Image,\n  Supports JPG, JPEG, PNG",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: Adaptive.sp(13)),
-                            )
-                          ]),
-                  ),
-                )),
-          ),
-        ),
+        ref.watch(sharedUtilityProvider).getMongoDbUser()?.propProofDoc !=
+                    null &&
+                ref.watch(propDocImageProvider) == null
+            ? SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () async {
+                    imagePicker
+                        .pickImage(source: ImageSource.gallery)
+                        .then((value) {
+                      if (value != null) {
+                        ref.watch(propDocImageProvider.notifier).state =
+                            File(value.path);
+                      }
+                    });
+                  },
+                  child: dottedBorder.DottedBorder(
+                      borderType: dottedBorder.BorderType.RRect,
+                      dashPattern: const [5, 5, 5, 5],
+                      color: ColorsConstant.primaryColor,
+                      child: Padding(
+                        padding: const Pad(all: 20),
+                        child: Center(
+                          child: ref
+                                      .watch(sharedUtilityProvider)
+                                      .getMongoDbUser()
+                                      ?.propProofDoc !=
+                                  null
+                              ? Stack(
+                                  children: [
+                                    Image.network(ref
+                                        .watch(sharedUtilityProvider)
+                                        .getMongoDbUser()
+                                        ?.propProofDoc),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(
+                                                propDocImageProvider);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : ColumnSuper(children: [
+                                  Icon(
+                                    LucideIcons.cloud_upload,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Select ${ref.watch(propDocProvider)} Image",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Adaptive.sp(13)),
+                                  )
+                                ]),
+                        ),
+                      )),
+                ),
+              )
+            : SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () async {
+                    imagePicker
+                        .pickImage(source: ImageSource.gallery)
+                        .then((value) {
+                      if (value != null) {
+                        ref.watch(propDocImageProvider.notifier).state =
+                            File(value.path);
+                      }
+                    });
+                  },
+                  child: dottedBorder.DottedBorder(
+                      borderType: dottedBorder.BorderType.RRect,
+                      dashPattern: const [5, 5, 5, 5],
+                      color: ColorsConstant.primaryColor,
+                      child: Padding(
+                        padding: const Pad(all: 20),
+                        child: Center(
+                          child: ref.watch(propDocImageProvider) != null
+                              ? Stack(
+                                  children: [
+                                    Image.file(
+                                        ref.watch(propDocImageProvider) ??
+                                            File('path')),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(
+                                                propDocImageProvider);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : ColumnSuper(children: [
+                                  Icon(
+                                    LucideIcons.cloud_upload,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Select ${ref.watch(propDocProvider)} Image",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Adaptive.sp(13)),
+                                  )
+                                ]),
+                        ),
+                      )),
+                ),
+              ),
         const SizedBox(),
         const SizedBox(
           height: 10,
@@ -1399,6 +1811,9 @@ class _PartnershipregistrationState
         TextFormField(
           controller: panController,
           keyboardType: TextInputType.text,
+          readOnly:
+              ref.watch(sharedUtilityProvider).getMongoDbUser()?.pancardNo !=
+                  null,
           textCapitalization: TextCapitalization.words,
           validator: (value) {
             if (value == null || value.isEmpty || !value.isValidPanCardNo()) {
@@ -1422,221 +1837,516 @@ class _PartnershipregistrationState
         const SizedBox(
           height: 10,
         ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: InkWell(
-            onTap: () async {
-              imagePicker.pickImage(source: ImageSource.gallery).then((value) {
-                if (value != null) {
-                  ref.watch(panImageProvider.notifier).state = File(value.path);
-                }
-              });
-            },
-            child: dottedBorder.DottedBorder(
-                borderType: dottedBorder.BorderType.RRect,
-                dashPattern: const [5, 5, 5, 5],
-                color: ColorsConstant.primaryColor,
-                child: Padding(
-                  padding: const Pad(all: 20),
-                  child: Center(
-                    child: ref.watch(panImageProvider) != null
-                        ? Stack(
-                            children: [
-                              Image.file(
-                                  ref.watch(panImageProvider) ?? File('path')),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.6),
-                                    shape: BoxShape.circle),
-                                child: IconButton(
-                                    onPressed: () {
-                                      ref.invalidate(panImageProvider);
-                                    },
-                                    icon: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    )),
-                              )
-                            ],
-                          )
-                        : ColumnSuper(children: [
-                            Icon(
-                              LucideIcons.cloud_upload,
-                              color: ColorsConstant.primaryColor,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Select Pan Image",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Adaptive.sp(16)),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Upload Document Image,\n  Supports JPG, JPEG, PNG",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: Adaptive.sp(13)),
-                            )
-                          ]),
-                  ),
-                )),
-          ),
-        ),
+        CupertinoButton(
+            child: Text(
+              "Pancard Image",
+              style: TextStyle(
+                  color: ColorsConstant.primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Adaptive.sp(17)),
+            ),
+            onPressed: () {}),
+        ref.watch(sharedUtilityProvider).getMongoDbUser()?.pancardImage !=
+                    null &&
+                ref.watch(panImageProvider) == null
+            ? SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () async {
+                    imagePicker
+                        .pickImage(source: ImageSource.gallery)
+                        .then((value) {
+                      if (value != null) {
+                        ref.watch(panImageProvider.notifier).state =
+                            File(value.path);
+                      }
+                    });
+                  },
+                  child: dottedBorder.DottedBorder(
+                      borderType: dottedBorder.BorderType.RRect,
+                      dashPattern: const [5, 5, 5, 5],
+                      color: ColorsConstant.primaryColor,
+                      child: Padding(
+                        padding: const Pad(all: 20),
+                        child: Center(
+                          child: ref
+                                      .watch(sharedUtilityProvider)
+                                      .getMongoDbUser()
+                                      ?.pancardImage !=
+                                  null
+                              ? Stack(
+                                  children: [
+                                    Image.network(ref
+                                        .watch(sharedUtilityProvider)
+                                        .getMongoDbUser()
+                                        ?.pancardImage),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(panImageProvider);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : ColumnSuper(children: [
+                                  Icon(
+                                    LucideIcons.cloud_upload,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Select Pan Image",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Adaptive.sp(13)),
+                                  )
+                                ]),
+                        ),
+                      )),
+                ),
+              )
+            : SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () async {
+                    imagePicker
+                        .pickImage(source: ImageSource.gallery)
+                        .then((value) {
+                      if (value != null) {
+                        ref.watch(panImageProvider.notifier).state =
+                            File(value.path);
+                      }
+                    });
+                  },
+                  child: dottedBorder.DottedBorder(
+                      borderType: dottedBorder.BorderType.RRect,
+                      dashPattern: const [5, 5, 5, 5],
+                      color: ColorsConstant.primaryColor,
+                      child: Padding(
+                        padding: const Pad(all: 20),
+                        child: Center(
+                          child: ref.watch(panImageProvider) != null
+                              ? Stack(
+                                  children: [
+                                    Image.file(ref.watch(panImageProvider) ??
+                                        File('path')),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(panImageProvider);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : ColumnSuper(children: [
+                                  Icon(
+                                    LucideIcons.cloud_upload,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Select Pan Image",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Adaptive.sp(13)),
+                                  )
+                                ]),
+                        ),
+                      )),
+                ),
+              ),
         const SizedBox(
           height: 10,
         ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: InkWell(
-            onTap: () async {
-              imagePicker.pickImage(source: ImageSource.gallery).then((value) {
-                if (value != null) {
-                  ref.watch(moaAoaImageProvider.notifier).state =
-                      File(value.path);
-                }
-              });
-            },
-            child: dottedBorder.DottedBorder(
-                borderType: dottedBorder.BorderType.RRect,
-                dashPattern: const [5, 5, 5, 5],
-                color: ColorsConstant.primaryColor,
-                child: Padding(
-                  padding: const Pad(all: 20),
-                  child: Center(
-                    child: ref.watch(moaAoaImageProvider) != null
-                        ? Stack(
-                            children: [
-                              Image.file(ref.watch(moaAoaImageProvider) ??
-                                  File('path')),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.6),
-                                    shape: BoxShape.circle),
-                                child: IconButton(
-                                    onPressed: () {
-                                      ref.invalidate(moaAoaImageProvider);
-                                    },
-                                    icon: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    )),
-                              )
-                            ],
-                          )
-                        : ColumnSuper(children: [
-                            Icon(
-                              LucideIcons.cloud_upload,
-                              color: ColorsConstant.primaryColor,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Select Firm Profile Image",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Adaptive.sp(16)),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Upload Document Image,\n  Supports JPG, JPEG, PNG",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: Adaptive.sp(13)),
-                            )
-                          ]),
-                  ),
-                )),
-          ),
-        ),
+        CupertinoButton(
+            child: Text(
+              "Firm Image",
+              style: TextStyle(
+                  color: ColorsConstant.primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Adaptive.sp(17)),
+            ),
+            onPressed: () {}),
+        ref.watch(sharedUtilityProvider).getMongoDbUser()?.profileImage !=
+                    null &&
+                ref.watch(moaAoaImageProvider) == null
+            ? SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () async {
+                    imagePicker
+                        .pickImage(source: ImageSource.gallery)
+                        .then((value) {
+                      if (value != null) {
+                        ref.watch(moaAoaImageProvider.notifier).state =
+                            File(value.path);
+                      }
+                    });
+                  },
+                  child: dottedBorder.DottedBorder(
+                      borderType: dottedBorder.BorderType.RRect,
+                      dashPattern: const [5, 5, 5, 5],
+                      color: ColorsConstant.primaryColor,
+                      child: Padding(
+                        padding: const Pad(all: 20),
+                        child: Center(
+                          child: ref
+                                      .watch(sharedUtilityProvider)
+                                      .getMongoDbUser()
+                                      ?.profileImage !=
+                                  null
+                              ? Stack(
+                                  children: [
+                                    Image.network(ref
+                                        .watch(sharedUtilityProvider)
+                                        .getMongoDbUser()
+                                        ?.profileImage),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(moaAoaImageProvider);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : ColumnSuper(children: [
+                                  Icon(
+                                    LucideIcons.cloud_upload,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Select Firm Profile Image",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Adaptive.sp(13)),
+                                  )
+                                ]),
+                        ),
+                      )),
+                ),
+              )
+            : SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () async {
+                    imagePicker
+                        .pickImage(source: ImageSource.gallery)
+                        .then((value) {
+                      if (value != null) {
+                        ref.watch(moaAoaImageProvider.notifier).state =
+                            File(value.path);
+                      }
+                    });
+                  },
+                  child: dottedBorder.DottedBorder(
+                      borderType: dottedBorder.BorderType.RRect,
+                      dashPattern: const [5, 5, 5, 5],
+                      color: ColorsConstant.primaryColor,
+                      child: Padding(
+                        padding: const Pad(all: 20),
+                        child: Center(
+                          child: ref.watch(moaAoaImageProvider) != null
+                              ? Stack(
+                                  children: [
+                                    Image.file(ref.watch(moaAoaImageProvider) ??
+                                        File('path')),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(moaAoaImageProvider);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : ColumnSuper(children: [
+                                  Icon(
+                                    LucideIcons.cloud_upload,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Select Firm Profile Image",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Adaptive.sp(13)),
+                                  )
+                                ]),
+                        ),
+                      )),
+                ),
+              ),
         const SizedBox(
           height: 10,
         ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: InkWell(
-            onTap: () async {
-              imagePicker.pickImage(source: ImageSource.gallery).then((value) {
-                if (value != null) {
-                  ref.watch(boardResolutionImage.notifier).state =
-                      File(value.path);
-                }
-              });
-            },
-            child: dottedBorder.DottedBorder(
-                borderType: dottedBorder.BorderType.RRect,
-                dashPattern: const [5, 5, 5, 5],
-                color: ColorsConstant.primaryColor,
-                child: Padding(
-                  padding: const Pad(all: 20),
-                  child: Center(
-                    child: ref.watch(boardResolutionImage) != null
-                        ? Stack(
-                            children: [
-                              Image.file(ref.watch(boardResolutionImage) ??
-                                  File('path')),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.6),
-                                    shape: BoxShape.circle),
-                                child: IconButton(
-                                    onPressed: () {
-                                      ref.invalidate(boardResolutionImage);
-                                    },
-                                    icon: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    )),
-                              )
-                            ],
-                          )
-                        : ColumnSuper(children: [
-                            Icon(
-                              LucideIcons.cloud_upload,
-                              color: ColorsConstant.primaryColor,
+        CupertinoButton(
+            child: Text(
+              "Partnership Deed Image",
+              style: TextStyle(
+                  color: ColorsConstant.primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Adaptive.sp(17)),
+            ),
+            onPressed: () {}),
+        ref
+                        .watch(sharedUtilityProvider)
+                        .getMongoDbUser()
+                        ?.partnershipDeepImage !=
+                    null &&
+                ref.watch(boardResolutionImage) == null
+            ? (ref
+                            .watch(sharedUtilityProvider)
+                            .getMongoDbUser()
+                            ?.partnershipDeepImage ??
+                        "")
+                    .toString()
+                    .contains('pdf')
+                ? SizedBox(
+                    height: MediaQuery.of(context).size.height / 1.3,
+                    child: Text(''),
+                  )
+                : SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: InkWell(
+                      onTap: () async {
+                        imagePicker
+                            .pickImage(source: ImageSource.gallery)
+                            .then((value) {
+                          if (value != null) {
+                            ref.watch(boardResolutionImage.notifier).state =
+                                File(value.path);
+                          }
+                        });
+                      },
+                      child: dottedBorder.DottedBorder(
+                          borderType: dottedBorder.BorderType.RRect,
+                          dashPattern: const [5, 5, 5, 5],
+                          color: ColorsConstant.primaryColor,
+                          child: Padding(
+                            padding: const Pad(all: 20),
+                            child: Center(
+                              child: ref
+                                          .watch(sharedUtilityProvider)
+                                          .getMongoDbUser()
+                                          ?.partnershipDeepImage !=
+                                      null
+                                  ? Stack(
+                                      children: [
+                                        Image.network(ref
+                                            .watch(sharedUtilityProvider)
+                                            .getMongoDbUser()
+                                            ?.partnershipDeepImage),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color:
+                                                  Colors.black.withOpacity(0.6),
+                                              shape: BoxShape.circle),
+                                          child: IconButton(
+                                              onPressed: () {
+                                                ref.invalidate(
+                                                    boardResolutionImage);
+                                              },
+                                              icon: const Icon(
+                                                Icons.close,
+                                                color: Colors.white,
+                                              )),
+                                        )
+                                      ],
+                                    )
+                                  : ColumnSuper(children: [
+                                      Icon(
+                                        LucideIcons.cloud_upload,
+                                        color: ColorsConstant.primaryColor,
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        "Select Partnership Deed Image",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: ColorsConstant.primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Adaptive.sp(16)),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: ColorsConstant.primaryColor,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: Adaptive.sp(13)),
+                                      )
+                                    ]),
                             ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Select Partnership Deed Image",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Adaptive.sp(16)),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Upload Document Image,\n  Supports JPG, JPEG, PNG",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: Adaptive.sp(13)),
-                            )
-                          ]),
-                  ),
-                )),
-          ),
-        ),
+                          )),
+                    ),
+                  )
+            : SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () async {
+                    imagePicker
+                        .pickImage(source: ImageSource.gallery)
+                        .then((value) {
+                      if (value != null) {
+                        ref.watch(boardResolutionImage.notifier).state =
+                            File(value.path);
+                      }
+                    });
+                  },
+                  child: dottedBorder.DottedBorder(
+                      borderType: dottedBorder.BorderType.RRect,
+                      dashPattern: const [5, 5, 5, 5],
+                      color: ColorsConstant.primaryColor,
+                      child: Padding(
+                        padding: const Pad(all: 20),
+                        child: Center(
+                          child: ref.watch(boardResolutionImage) != null
+                              ? Stack(
+                                  children: [
+                                    Image.file(
+                                        ref.watch(boardResolutionImage) ??
+                                            File('path')),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(
+                                                boardResolutionImage);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : ColumnSuper(children: [
+                                  Icon(
+                                    LucideIcons.cloud_upload,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Select Partnership Deed Image",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Adaptive.sp(13)),
+                                  )
+                                ]),
+                        ),
+                      )),
+                ),
+              ),
         const SizedBox(
           height: 10,
         ),
@@ -1644,6 +2354,11 @@ class _PartnershipregistrationState
           controller: directorController,
           keyboardType: TextInputType.text,
           textCapitalization: TextCapitalization.words,
+          readOnly: ref
+                  .watch(sharedUtilityProvider)
+                  .getMongoDbUser()
+                  ?.partnerDirectorCount !=
+              null,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'input no of Partners';
@@ -1666,78 +2381,335 @@ class _PartnershipregistrationState
         const SizedBox(
           height: 10,
         ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: InkWell(
-            onTap: () async {
-              imagePicker.pickImage(source: ImageSource.gallery).then((value) {
-                if (value != null) {
-                  ref.watch(directorProofImage.notifier).state =
-                      File(value.path);
-                }
-              });
-            },
-            child: dottedBorder.DottedBorder(
-                borderType: dottedBorder.BorderType.RRect,
-                dashPattern: const [5, 5, 5, 5],
-                color: ColorsConstant.primaryColor,
-                child: Padding(
-                  padding: const Pad(all: 20),
-                  child: Center(
-                    child: ref.watch(directorProofImage) != null
-                        ? Stack(
-                            children: [
-                              Image.file(ref.watch(directorProofImage) ??
-                                  File('path')),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.6),
-                                    shape: BoxShape.circle),
-                                child: IconButton(
-                                    onPressed: () {
-                                      ref.invalidate(directorProofImage);
-                                    },
-                                    icon: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    )),
-                              )
-                            ],
-                          )
-                        : ColumnSuper(children: [
-                            Icon(
-                              LucideIcons.cloud_upload,
-                              color: ColorsConstant.primaryColor,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Select Partner Proof  Image",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Adaptive.sp(16)),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Upload Document Image,\n  Supports JPG, JPEG, PNG",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: Adaptive.sp(13)),
-                            )
-                          ]),
-                  ),
-                )),
-          ),
-        ),
+        CupertinoButton(
+            child: Text(
+              "Partnership Proof Image",
+              style: TextStyle(
+                  color: ColorsConstant.primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Adaptive.sp(17)),
+            ),
+            onPressed: () {}),
+        ref.watch(sharedUtilityProvider).getMongoDbUser()?.propProofDoc !=
+                    null &&
+                ref.watch(directorProofImage) == null
+            ? SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () async {
+                    imagePicker
+                        .pickImage(source: ImageSource.gallery)
+                        .then((value) {
+                      if (value != null) {
+                        ref.watch(directorProofImage.notifier).state =
+                            File(value.path);
+                      }
+                    });
+                  },
+                  child: dottedBorder.DottedBorder(
+                      borderType: dottedBorder.BorderType.RRect,
+                      dashPattern: const [5, 5, 5, 5],
+                      color: ColorsConstant.primaryColor,
+                      child: Padding(
+                        padding: const Pad(all: 20),
+                        child: Center(
+                          child: ref
+                                      .watch(sharedUtilityProvider)
+                                      .getMongoDbUser()
+                                      ?.propProofDoc !=
+                                  null
+                              ? Stack(
+                                  children: [
+                                    Image.network(ref
+                                        .watch(sharedUtilityProvider)
+                                        .getMongoDbUser()
+                                        ?.propProofDoc),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(directorProofImage);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : ColumnSuper(children: [
+                                  Icon(
+                                    LucideIcons.cloud_upload,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Select Partner Proof Image",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Adaptive.sp(13)),
+                                  )
+                                ]),
+                        ),
+                      )),
+                ),
+              )
+            : SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () async {
+                    imagePicker
+                        .pickImage(source: ImageSource.gallery)
+                        .then((value) {
+                      if (value != null) {
+                        ref.watch(directorProofImage.notifier).state =
+                            File(value.path);
+                      }
+                    });
+                  },
+                  child: dottedBorder.DottedBorder(
+                      borderType: dottedBorder.BorderType.RRect,
+                      dashPattern: const [5, 5, 5, 5],
+                      color: ColorsConstant.primaryColor,
+                      child: Padding(
+                        padding: const Pad(all: 20),
+                        child: Center(
+                          child: ref.watch(directorProofImage) != null
+                              ? Stack(
+                                  children: [
+                                    Image.file(ref.watch(directorProofImage) ??
+                                        File('path')),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(directorProofImage);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : ColumnSuper(children: [
+                                  Icon(
+                                    LucideIcons.cloud_upload,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Select Partner Proof  Image",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Adaptive.sp(13)),
+                                  )
+                                ]),
+                        ),
+                      )),
+                ),
+              ),
         const SizedBox(
           height: 10,
         ),
+        CupertinoButton(
+            child: Text(
+              "Address Proof Image",
+              style: TextStyle(
+                  color: ColorsConstant.primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Adaptive.sp(17)),
+            ),
+            onPressed: () {}),
+        ref.watch(sharedUtilityProvider).getMongoDbUser()?.addressProofImage !=
+                    null &&
+                ref.watch(addressProofImageProvider) == null
+            ? SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () async {
+                    imagePicker
+                        .pickImage(source: ImageSource.gallery)
+                        .then((value) {
+                      if (value != null) {
+                        ref.watch(addressProofImageProvider.notifier).state =
+                            File(value.path);
+                      }
+                    });
+                  },
+                  child: dottedBorder.DottedBorder(
+                      borderType: dottedBorder.BorderType.RRect,
+                      dashPattern: const [5, 5, 5, 5],
+                      color: ColorsConstant.primaryColor,
+                      child: Padding(
+                        padding: const Pad(all: 20),
+                        child: Center(
+                          child: ref
+                                      .watch(sharedUtilityProvider)
+                                      .getMongoDbUser()
+                                      ?.addressProofImage !=
+                                  null
+                              ? Stack(
+                                  children: [
+                                    Image.network(ref
+                                        .watch(sharedUtilityProvider)
+                                        .getMongoDbUser()
+                                        ?.addressProofImage),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(
+                                                addressProofImageProvider);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : ColumnSuper(children: [
+                                  Icon(
+                                    LucideIcons.cloud_upload,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Select Address proof Image",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Adaptive.sp(13)),
+                                  )
+                                ]),
+                        ),
+                      )),
+                ),
+              )
+            : SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () async {
+                    imagePicker
+                        .pickImage(source: ImageSource.gallery)
+                        .then((value) {
+                      if (value != null) {
+                        ref.watch(addressProofImageProvider.notifier).state =
+                            File(value.path);
+                      }
+                    });
+                  },
+                  child: dottedBorder.DottedBorder(
+                      borderType: dottedBorder.BorderType.RRect,
+                      dashPattern: const [5, 5, 5, 5],
+                      color: ColorsConstant.primaryColor,
+                      child: Padding(
+                        padding: const Pad(all: 20),
+                        child: Center(
+                          child: ref.watch(addressProofImageProvider) != null
+                              ? Stack(
+                                  children: [
+                                    Image.file(
+                                        ref.watch(addressProofImageProvider) ??
+                                            File('path')),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(
+                                                addressProofImageProvider);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : ColumnSuper(children: [
+                                  Icon(
+                                    LucideIcons.cloud_upload,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Select Address proof Image",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Adaptive.sp(13)),
+                                  )
+                                ]),
+                        ),
+                      )),
+                ),
+              ),
       ]));
 }

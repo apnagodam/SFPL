@@ -49,6 +49,7 @@ class Datum {
   dynamic approvedDate;
   dynamic createdAt;
   dynamic updatedAt;
+  dynamic type;
   Scheme? scheme;
 
   Datum({
@@ -68,6 +69,7 @@ class Datum {
     this.approvedDate,
     this.createdAt,
     this.updatedAt,
+    this.type,
     this.scheme,
   });
 
@@ -88,6 +90,7 @@ class Datum {
     approvedDate: json["approved_date"],
     createdAt: json["created_at"],
     updatedAt: json["updated_at"],
+    type: json['type'],
     scheme: json["scheme"] == null ? null : Scheme.fromMap(json["scheme"]),
   );
 
@@ -108,6 +111,7 @@ class Datum {
     "approved_date": approvedDate,
     "created_at": createdAt,
     "updated_at": updatedAt,
+    "type":type,
     "scheme": scheme?.toMap(),
   };
 }

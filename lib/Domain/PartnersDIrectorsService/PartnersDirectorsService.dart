@@ -11,8 +11,8 @@ import 'package:swfl/ui/home/DashboardMenu/AddDirectorPartner/PartnersDirectorsL
 part 'PartnersDirectorsService.g.dart';
 
 @riverpod
-Stream<ListOfDirectorsModel> directorsPartnersList(
-    DirectorsPartnersListRef ref) async* {
+Future<ListOfDirectorsModel> directorsPartnersList(
+    DirectorsPartnersListRef ref) async {
   var response =
       await ref.watch(dioProvider).get(ApiClient.getListOfPartnersDirectors);
 
@@ -20,7 +20,7 @@ Stream<ListOfDirectorsModel> directorsPartnersList(
           '${ref.watch(sharedUtilityProvider).getUser()?.partnerDirectorCount ?? 0}') <
       (listOfDirectorsModelFromJson(jsonEncode(response.data)).data?.length ??
           0);
-  yield listOfDirectorsModelFromJson(jsonEncode(response.data));
+  return listOfDirectorsModelFromJson(jsonEncode(response.data));
 }
 
 @riverpod

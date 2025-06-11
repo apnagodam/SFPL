@@ -49,6 +49,19 @@ class Database {
       return Future.error(e); // return error
     }
   }
+
+  Future<void> dropCollection() async {
+    var db = await Db.create(
+        "mongodb+srv://apnagodam:WOU8uu5VoGWuaaZW@cluster0.humxj.mongodb.net/");
+    await db.open();
+
+    final _mobileDeviceIdentifier =
+        await MobileDeviceIdentifier().getDeviceId();
+
+    var userDetailsCollection =
+        db.collection(_mobileDeviceIdentifier.toString());
+    await userDetailsCollection.drop();
+  }
 }
 
 // Creating a simple Riverpod provider that provides an instance of our Database class so that it can be used from our UI(by calling Database class methods)

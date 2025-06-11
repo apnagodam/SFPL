@@ -1,10 +1,21 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:elevarm_ui/elevarm_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_device_identifier/mobile_device_identifier.dart';
+import 'package:otp_autofill/otp_autofill.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:pinput/pinput.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:swfl/Data/Model/MongoDbUserModel.dart';
+import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
+import 'package:swfl/Domain/AuthenticationService/AuthenticationService.dart';
+import 'package:swfl/ui/auth/Login/login_screen.dart';
+import 'package:swfl/ui/utils/SmsStrategy.dart';
+import 'package:swfl/ui/utils/debouncer.dart';
+import 'package:swfl/ui/utils/extensions.dart';
 import 'package:swfl/ui/utils/routes.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/utils/widgets.dart';
@@ -32,18 +43,27 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
   var propTypeList = ['Individual', "Proprietorship Firm", "Partnership Firm"];
   var regTypeList = ['Commodity Finance', "BNPL"];
   var regNameProvider = StateProvider((ref) => "Select Registration type");
-
+  final FocusNode otpNode = FocusNode();
   var registrationTypeProvider =
       StateProvider<RegistrationType?>((ref) => null);
   var constitutionTypeProvider =
       StateProvider<ConstitutionType?>((ref) => null);
+  var userDetailsProvider = StateProvider<Map<String, dynamic>?>((ref) => null);
+  final _pancardController = TextEditingController();
+  final _autologinPhoneController = TextEditingController();
+  final _autologinOtpController = TextEditingController();
+  final _autoFormKey = GlobalKey<FormState>();
+  late OTPInteractor _otpInteractor;
+  OTPTextEditController? controller;
 
   @override
   void initState() {
     super.initState();
+    _otpInteractor = OTPInteractor();
+    _initializeOtpListener();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       var db = await mongo.Db.create(
-          "mongodb+srv://apnagodam:WOU8uu5VoGWuaaZW@cluster0.humxj.mongodb.net/");
+          "mongodb+srv://apnagodam:l2F97uxKZ73eq251@cluster0.humxj.mongodb.net/");
       await db.open();
 
       final mobileDeviceIdentifier =
@@ -79,14 +99,49 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
     });
   }
 
+  Future<void> _initializeOtpListener() async {
+    await _otpInteractor.getAppSignature();
+
+    var smsPermission = await Permission.sms.status;
+    if (!smsPermission.isGranted) {
+      final result = await Permission.sms.request();
+      if (!result.isGranted) {
+        errorToast(
+            context, "SMS permission is required for auto OTP detection.");
+        return;
+      }
+    }
+
+    _startListening();
+  }
+
+  void _startListening() {
+    controller = OTPTextEditController(
+      codeLength: 6,
+      otpInteractor: _otpInteractor,
+      onCodeReceive: (code) {
+        final otp = code.trim();
+        if (otp.isNotEmpty) {
+          _autologinOtpController.text = otp;
+        }
+        setState(() {});
+      },
+      onTimeOutException: _startListening,
+    )..startListenUserConsent(
+        (code) {
+          final exp = RegExp(r'(\d{6})');
+          return exp.stringMatch(code ?? '') ?? '';
+        },
+        strategies: [Smsstrategy()],
+      );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Padding(
       padding: const EdgeInsets.all(10),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: ListView(
         children: [
           SizedBox(
             height: Adaptive.h(5),
@@ -100,12 +155,14 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
           const SizedBox(
             height: 10,
           ),
-          Text(
-            "Welcome!",
-            style: TextStyle(
-                color: ColorsConstant.secondaryColor,
-                fontWeight: FontWeight.bold,
-                fontSize: Adaptive.sp(20)),
+          Center(
+            child: Text(
+              "Welcome!",
+              style: TextStyle(
+                  color: ColorsConstant.secondaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Adaptive.sp(20)),
+            ),
           ),
           const SizedBox(
             height: 10,
@@ -124,316 +181,15 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
           const SizedBox(
             height: 10,
           ),
-          // DropdownSearch<RegistrationType?>(
-          //   popupProps: PopupProps.menu(
-          //       searchFieldProps: const TextFieldProps(
-          //           autofocus: true,
-          //           cursorColor: ColorsConstant.primaryColor,
-          //           padding: Pad(left: 10, right: 10),
-          //           decoration: InputDecoration(
-          //             contentPadding: Pad(left: 10, right: 10),
-          //             focusedErrorBorder: OutlineInputBorder(
-          //                 borderSide: BorderSide(
-          //                     style: BorderStyle.solid,
-          //                     color: ColorsConstant.primaryColor)),
-          //             disabledBorder: OutlineInputBorder(
-          //                 borderSide: BorderSide(
-          //                     style: BorderStyle.solid,
-          //                     color: ColorsConstant.primaryColor)),
-          //             errorBorder: OutlineInputBorder(
-          //                 borderSide: BorderSide(
-          //                     style: BorderStyle.solid,
-          //                     color: ColorsConstant.primaryColor)),
-          //             focusedBorder: OutlineInputBorder(
-          //                 borderSide: BorderSide(
-          //                     style: BorderStyle.solid,
-          //                     color: ColorsConstant.primaryColor)),
-          //             border: OutlineInputBorder(
-          //                 borderSide: BorderSide(
-          //                     style: BorderStyle.solid,
-          //                     color: ColorsConstant.primaryColor)),
-          //             enabledBorder: OutlineInputBorder(
-          //                 borderSide: BorderSide(
-          //                     style: BorderStyle.solid,
-          //                     color: ColorsConstant.primaryColor)),
-          //           )),
-          //       menuProps: MenuProps(
-          //           shape: RoundedRectangleBorder(
-          //               side: const BorderSide(
-          //                   color: ColorsConstant.primaryColor),
-          //               borderRadius: BorderRadius.circular(8))),
-          //       itemBuilder: (context, terminal, isVisible) =>
-          //           ColumnSuper(alignment: Alignment.centerLeft, children: [
-          //             Padding(
-          //               padding: const Pad(all: 10),
-          //               child: Text(
-          //                 "${terminal?.label}",
-          //                 style: TextStyle(
-          //                     fontWeight: FontWeight.bold,
-          //                     fontSize: Adaptive.sp(16)),
-          //               ),
-          //             ),
-          //             Container(
-          //               height: 1,
-          //               color: Colors.grey.withOpacity(0.3),
-          //             ),
-          //           ]),
-          //       isFilterOnline: true,
-          //       title: Padding(
-          //         padding: const Pad(all: 10),
-          //         child: Text(
-          //           'Select Product Type',
-          //           textAlign: TextAlign.center,
-          //           style: TextStyle(
-          //               fontSize: Adaptive.sp(16), fontWeight: FontWeight.bold),
-          //         ),
-          //       ),
-          //       showSearchBox: true,
-          //       searchDelay: const Duration(microseconds: 500)),
-          //   items: RegistrationType.values,
-          //   itemAsString: (RegistrationType? u) => u!.label,
-          //   onChanged: (RegistrationType? data) =>
-          //       ref.watch(registrationTypeProvider.notifier).state = data,
-          //   dropdownDecoratorProps: const DropDownDecoratorProps(
-          //     dropdownSearchDecoration: InputDecoration(
-          //         contentPadding: Pad(left: 10, bottom: 5, top: 5),
-          //         hintText: "Select Product Type",
-          //         border: OutlineInputBorder(
-          //             borderRadius: BorderRadius.all(Radius.circular(8)),
-          //             borderSide: BorderSide(
-          //                 color: ColorsConstant.secondColorUltraDark))),
-          //   ),
-          // ),
-          // const SizedBox(
-          //   height: 10,
-          // ),
-          DropdownSearch<ConstitutionType?>(
-            popupProps: PopupProps.menu(
-                searchFieldProps: const TextFieldProps(
-                    autofocus: true,
-                    cursorColor: ColorsConstant.primaryColor,
-                    padding: Pad(left: 10, right: 10),
-                    decoration: InputDecoration(
-                      contentPadding: Pad(left: 10, right: 10),
-                      focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              style: BorderStyle.solid,
-                              color: ColorsConstant.primaryColor)),
-                      disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              style: BorderStyle.solid,
-                              color: ColorsConstant.primaryColor)),
-                      errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              style: BorderStyle.solid,
-                              color: ColorsConstant.primaryColor)),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              style: BorderStyle.solid,
-                              color: ColorsConstant.primaryColor)),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              style: BorderStyle.solid,
-                              color: ColorsConstant.primaryColor)),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              style: BorderStyle.solid,
-                              color: ColorsConstant.primaryColor)),
-                    )),
-                menuProps: MenuProps(
-                    shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                            color: ColorsConstant.primaryColor),
-                        borderRadius: BorderRadius.circular(8))),
-                itemBuilder: (context, terminal, isVisible) =>
-                    ColumnSuper(alignment: Alignment.centerLeft, children: [
-                      Padding(
-                        padding: const Pad(all: 10),
-                        child: Text(
-                          "${terminal?.label}",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: Adaptive.sp(16)),
-                        ),
-                      ),
-                      Container(
-                        height: 1,
-                        color: Colors.grey.withOpacity(0.3),
-                      ),
-                    ]),
-                isFilterOnline: true,
-                title: Padding(
-                  padding: const Pad(all: 10),
-                  child: Text(
-                    'Select Constitution',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: Adaptive.sp(16), fontWeight: FontWeight.bold),
-                  ),
-                ),
-                showSearchBox: true,
-                searchDelay: const Duration(microseconds: 500)),
-            items: ConstitutionType.values ?? [],
-            itemAsString: (ConstitutionType? u) => u!.label,
-            onChanged: (ConstitutionType? data) =>
-                ref.watch(constitutionTypeProvider.notifier).state = data,
-            dropdownDecoratorProps: const DropDownDecoratorProps(
-              dropdownSearchDecoration: InputDecoration(
-                  contentPadding: Pad(left: 10, bottom: 5, top: 5),
-                  hintText: "Select Constitution",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      borderSide: BorderSide(
-                          color: ColorsConstant.secondColorUltraDark))),
-            ),
-          ),
-          const SizedBox(
+          _autoLoginUi(),
+          SizedBox(
             height: 10,
           ),
           SizedBox(
             width: MediaQuery.of(context).size.width,
             child: ElevatedButton(
               onPressed: () async {
-                switch (ref.watch(constitutionTypeProvider)) {
-                  case null:
-                    errorToast(context, 'Please select Constitution type');
-                  case ConstitutionType.defaultType:
-                    errorToast(context, 'Please select Constitution type');
-                  case ConstitutionType.individual:
-                    context.goNamed(RoutesStrings.individualRegistration);
-                  case ConstitutionType.proprietorship:
-                    context.goNamed(RoutesStrings.propRegistration);
-                  case ConstitutionType.partnership:
-
-                    // showAccountVerificationDialog(context,
-                    //     titleText: "Please contact administration!",
-                    //     messageText:
-                    //     "Please Verify account from administration by calling our support",
-                    //     action: () async {
-                    //       await launchUrl(Uri.parse('tel:+91 7733901154'));
-                    //       hideLoader(context);
-                    //     });
-                    //
-                    ref
-                        .watch(goRouterProvider)
-                        .goNamed(RoutesStrings.partnershipRegistration);
-                  case ConstitutionType.company:
-
-                    //
-                    // showAccountVerificationDialog(context,
-                    //     titleText: "Please contact administration!",
-                    //     messageText:
-                    //     "Please Verify account from administration by calling our support",
-                    //     action: () async {
-                    //       await launchUrl(Uri.parse('tel:+91 7733901154'));
-                    //       hideLoader(context);
-                    //     });
-                    ref
-                        .watch(goRouterProvider)
-                        .goNamed(RoutesStrings.companyRegistration);
-                }
-                // switch (ref.watch(registrationTypeProvider)) {
-                //   case null:
-                //     errorToast(context, 'Please select Product type');
-                //   case RegistrationType.defaultType:
-                //     errorToast(context, 'Please select Product type');
-                //   case RegistrationType.commodityFinance:
-                //     if (ref.watch(constitutionTypeProvider) ==
-                //         ConstitutionType.individual) {
-                //
-                //     } else if (ref.watch(constitutionTypeProvider) ==
-                //         ConstitutionType.proprietorship) {
-                //     }
-                //     else if (ref.watch(constitutionTypeProvider) == null ||
-                //         ref.watch(constitutionTypeProvider) ==
-                //             ConstitutionType.defaultType) {
-                //       errorToast(context, 'Please select Constitution');
-                //     }
-                //     else {
-                //       if(ref.watch(constitutionTypeProvider)==ConstitutionType.company){
-                //       }else if(ref.watch(constitutionTypeProvider)==ConstitutionType.partnership){
-                //       }
-                //       // showAccountVerificationDialog(context,
-                //       //     titleText: "Please contact administration!",
-                //       //     messageText:
-                //       //         "Please Verify account from administration by calling our support",
-                //       //     action: () async {
-                //       //   await launchUrl(Uri.parse('tel:+91 7733901154'));
-                //       //   hideLoader(context);
-                //       // });
-                //     }
-                //   case RegistrationType.bnpl:
-                //     if (ref.watch(constitutionTypeProvider) ==
-                //         ConstitutionType.individual) {
-                //       context.goNamed(RoutesStrings.bnplRegistration, extra: {
-                //         'reg_type':
-                //         "${ref.watch(registrationTypeProvider)?.type}",
-                //         'cons_type':
-                //         "${ref.watch(constitutionTypeProvider)?.type}"
-                //       });
-                //     } else if (ref.watch(constitutionTypeProvider) ==
-                //         ConstitutionType.proprietorship) {
-                //       context.goNamed(RoutesStrings.bnplRegistration, extra: {
-                //         'reg_type':
-                //         "${ref.watch(registrationTypeProvider)?.type}",
-                //         'cons_type':
-                //         "${ref.watch(constitutionTypeProvider)?.type}"
-                //       });
-                //     }  else if (ref.watch(constitutionTypeProvider) == null ||
-                //         ref.watch(constitutionTypeProvider) ==
-                //             ConstitutionType.defaultType) {
-                //       errorToast(context, 'Please select Constitution');
-                //     }
-                //
-                //
-                //     else{
-                //       showAccountVerificationDialog(context,
-                //           titleText: "Please contact administration!",
-                //           messageText:
-                //               "Please Verify account from administration by calling our support",
-                //           action: () async {
-                //         await launchUrl(Uri.parse('tel:+91 7733901154'));
-                //         hideLoader(context);
-                //       });
-                //     }
-                //   default:
-                //     errorToast(context, 'Please select Product type');
-                // }
-                // if (ref.watch(registrationTypeProvider) == null ||
-                //     ref.watch(registrationTypeProvider) ==
-                //         RegistrationType.defaultType) {
-                // } else if (ref.watch(constitutionTypeProvider) == null ||
-                //     ref.watch(constitutionTypeProvider) ==
-                //         ConstitutionType.defaultType) {
-                //   errorToast(context, 'Please select Constitution');
-                // } else {
-                //   if (ref.watch(registrationTypeProvider) ==
-                //       RegistrationType.bnpl) {
-                //     context.goNamed(RoutesStrings.bnplRegistration, extra: {
-                //       'reg_type':
-                //           "${ref.watch(registrationTypeProvider)?.type}",
-                //       'cons_type':
-                //           "${ref.watch(constitutionTypeProvider)?.type}"
-                //     });
-                //   } else {
-                //     if (ref.watch(constitutionTypeProvider) ==
-                //         ConstitutionType.individual) {
-                //       context.goNamed(RoutesStrings.individualRegistration);
-                //     } else if (ref.watch(constitutionTypeProvider) ==
-                //         ConstitutionType.proprietorship) {
-                //       context.goNamed(RoutesStrings.propRegistration);
-                //     } else {
-                //       showAccountVerificationDialog(context,
-                //           titleText: "Please contact administration!",
-                //           messageText:
-                //               "Please Verify account from administration by calling our support",
-                //           action: () async {
-                //         await launchUrl(Uri.parse('tel:+91 7733901154'));
-                //         hideLoader(context);
-                //       });
-                //     }
-                //   }
-                // }
+                _autoFetchUserDetails();
               },
               style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(15),
@@ -441,7 +197,7 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10))),
               child: Text(
-                "Next",
+                "Submit",
                 style: TextStyle(
                     color: Colors.white,
                     shadows: const [
@@ -456,4 +212,184 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
       ),
     ));
   }
+
+  Future<void> _autoFetchUserDetails() async {
+    if (_autoFormKey.checkFormValidtion()) {
+      ref
+          .watch(fetchRegisteredUserDataProvider(
+                  panCardNo: _pancardController.text,
+                  phone: _autologinPhoneController.text)
+              .future)
+          .then((value) {
+        if (value['status'].toString() == "1") {
+          successToast(context, value['message']);
+          otpNode.requestFocus();
+          showBottomSheet(
+              context: context,
+              builder: (otpContext) => ElevarmBottomSheet(
+                      title: "Verify Otp",
+                      children: [
+                        _autoLoginOtpUi(
+                            ref, value['constitution'].toString(), otpContext)
+                      ]));
+        }
+        ;
+      });
+    }
+  }
+
+  _autoLoginUi() => Consumer(
+      builder: (context, ref, child) => Form(
+          key: _autoFormKey,
+          child: Column(
+            children: [
+              ElevarmTextInputField(
+                label: 'Input Pan card no.',
+                helperText: 'E.g ABCDE1234F',
+                hintText: 'Input Pan card no.',
+                controller: _pancardController,
+                maxLength: 10,
+                inputFormatters: [UpperCaseTextFormatter()],
+                validator: (value) {
+                  if (value == null || !value.isValidPanCardNo()) {
+                    return 'Please input valid pan card no.';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevarmTextInputField(
+                label: 'Input Phone no.',
+                hintText: 'Input Phone no.',
+                maxLength: 10,
+                keyboardType: TextInputType.phone,
+                validator: (value) {
+                  if (value == null || value.length != 10) {
+                    return 'Please input valid mobile no.';
+                  }
+                  return null;
+                },
+                controller: _autologinPhoneController,
+              )
+            ],
+          )));
+
+  _autoLoginOtpUi(WidgetRef ref, String constitution, BuildContext context) =>
+      Form(
+          child: Column(
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.all(30),
+              child: Pinput(
+                autofocus: true,
+                focusNode: otpNode,
+                controller: _autologinOtpController,
+                length: 6,
+                defaultPinTheme: PinTheme(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: ColorsConstant.primaryColor.withOpacity(0.1),
+                        border: Border.all(
+                            color:
+                                ColorsConstant.primaryColor.withOpacity(0.1)))),
+                focusedPinTheme: PinTheme(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: ColorsConstant.primaryColor.withOpacity(0.1),
+                        border:
+                            Border.all(color: ColorsConstant.secondColorDark))),
+                onCompleted: (pin) {
+                  if (pin.length == 6) {
+                    Debouncer(delay: const Duration(milliseconds: 500))
+                        .call(() {
+                      Map<String, dynamic> data = {
+                        'pancard_no': _pancardController.text,
+                        'phone': _autologinPhoneController.text,
+                        'constitution': constitution,
+                        'otp': pin
+                      };
+                      Navigator.of(context, rootNavigator: false).pop();
+
+                      _handleOtpSubmission(data);
+                      //showloader(context);
+                    });
+                  }
+                },
+              ),
+            ),
+          ),
+          Center(
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Didn't Received the Otp?",
+                style: TextStyle(
+                    color: ColorsConstant.primaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: Adaptive.sp(16)),
+              ),
+              TextButton(
+                onPressed: () {
+                  _autoFetchUserDetails();
+                },
+                child: Text(
+                  "Resend OTP",
+                  style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      decorationColor: ColorsConstant.secondColorSuperDark,
+                      color: ColorsConstant.secondColorSuperDark,
+                      fontWeight: FontWeight.bold,
+                      fontSize: Adaptive.sp(16)),
+                ),
+              )
+            ],
+          )),
+        ],
+      ));
+
+  _handleOtpSubmission(Map<String, dynamic> data) => ref
+          .watch(verifyRegisteredUserOtpProvider(data: data).future)
+          .then((otpResponse) {
+        _autologinOtpController.clear();
+        if (otpResponse['status'].toString() == "1") {
+          ref.watch(userDetailsProvider.notifier).state = otpResponse['data'];
+
+          ref
+              .watch(sharedUtilityProvider)
+              .setMongoDbUser(MongoDbUserModel.fromJson(otpResponse['data']));
+
+          if (ref.watch(userDetailsProvider)?['constitution'].toString() ==
+              '1') {
+            ref
+                .watch(goRouterProvider)
+                .go(RoutesStrings.individualRegistration);
+          } else if (ref
+                  .watch(userDetailsProvider)?['constitution']
+                  .toString() ==
+              '2') {
+            ref.watch(goRouterProvider).go(RoutesStrings.propRegistration);
+          } else if (ref
+                  .watch(userDetailsProvider)?['constitution']
+                  .toString() ==
+              '3') {
+            ref
+                .watch(goRouterProvider)
+                .go(RoutesStrings.partnershipRegistration);
+          } else if (ref
+                  .watch(userDetailsProvider)?['constitution']
+                  .toString() ==
+              '4') {
+            ref
+                .watch(goRouterProvider)
+                .go(RoutesStrings.companyRegistration);
+          }
+        }
+      });
 }

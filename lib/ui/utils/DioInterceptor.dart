@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 import 'package:one_context/one_context.dart';
 import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
 import 'package:swfl/Domain/Dio/DioProvider.dart';
 import 'package:swfl/ui/utils/routes.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/utils/widgets.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 class Diointerceptor extends InterceptorsWrapper {
   Diointerceptor(this.ref);
@@ -13,7 +15,7 @@ class Diointerceptor extends InterceptorsWrapper {
   DioRef ref;
 
   @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
+  void onResponse(Response response, ResponseInterceptorHandler handler) async {
     if (response.data['status'].toString() == '3') {
       showForceLogoutDialog(OneContext().context!,
           titleText: 'You have been Logged out!',
@@ -32,16 +34,16 @@ class Diointerceptor extends InterceptorsWrapper {
             titleText: "Verify Tri-Party Agreement",
             messageText: "tri party agreement pending", action: () {
           hideLoader(OneContext().context!);
-
+    
           ref.watch(goRouterProvider).goNamed(RoutesStrings.verfication);
         });
-        debugPrint(" \x1B[31m${response.data}\x1B[0m");
-        return;
+        // debugPrint(" \x1B[31m${response.data}\x1B[0m");
       }
-      debugPrint(" \x1B[31m${response.data}\x1B[0m");
+
+      // debugPrint(" \x1B[31m${response.data}\x1B[0m");
       errorToast(OneContext().context!, '${response.data['message']}');
     } else {
-      debugPrint(" \x1B[32m${response.data}\x1B[0m");
+      // debugPrint(" \x1B[32m${response.data}\x1B[0m");
     }
 
     super.onResponse(response, handler);
@@ -104,9 +106,9 @@ class Diointerceptor extends InterceptorsWrapper {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    debugPrint(" \x1B[32m${options.baseUrl}${options.path}\x1B[0m");
-    debugPrint(" \x1B[32m${options.headers}\x1B[0m");
-    debugPrint(" \x1B[32m${options.queryParameters}\x1B[0m");
+    // debugPrint(" \x1B[32m${options.baseUrl}${options.path}\x1B[0m");
+    // debugPrint(" \x1B[32m${options.headers}\x1B[0m");
+    // debugPrint(" \x1B[32m${options.queryParameters}\x1B[0m");
 
     super.onRequest(options, handler);
   }

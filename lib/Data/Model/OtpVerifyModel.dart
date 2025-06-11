@@ -99,7 +99,10 @@ class Data {
     this.wallet,
     this.triparty,
   });
+   bool checkIfVerified(){
 
+    return false;
+   }
   factory Data.fromMap(Map<String, dynamic> json) => Data(
         isLogin: json["is_login"],
         token: json["token"],

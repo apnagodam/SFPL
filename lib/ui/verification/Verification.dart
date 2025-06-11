@@ -194,13 +194,12 @@ class _VerificationState extends ConsumerState<Verification> {
                           //             children: [HtmlWidget(value.data ?? "")],
                           //           ),
                           //         ));
+                          //
                         }
                       });
                     }
                   },
-                  text: ref.watch(isFileDownloading)
-                      ? "Downloading...${ref.watch(downloadProgressProvider)}"
-                      : 'Download Agreement',
+                  text: 'E-Sign Agreement',
                   iconData: Icons.cloud_download,
                   color: ColorsConstant.primaryColor,
                   textStyle: const TextStyle(color: Colors.white),
@@ -209,127 +208,127 @@ class _VerificationState extends ConsumerState<Verification> {
             const SizedBox(
               height: 10,
             ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Upload Agreement',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: Adaptive.sp(18), fontWeight: FontWeight.bold),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            InkWell(
-              onTap: () async {
-                FilePickerResult? result = await FilePicker.platform.pickFiles(
-                    type: FileType.custom, allowedExtensions: ['pdf']);
+            // Align(
+            //   alignment: Alignment.centerLeft,
+            //   child: Text(
+            //     'E-Sign Agreement',
+            //     textAlign: TextAlign.center,
+            //     style: TextStyle(
+            //         fontSize: Adaptive.sp(18), fontWeight: FontWeight.bold),
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
+            // InkWell(
+            //   onTap: () async {
+            //     FilePickerResult? result = await FilePicker.platform.pickFiles(
+            //         type: FileType.custom, allowedExtensions: ['pdf']);
 
-                if (result != null) {
-                  File file = File(result.files.single.path!);
-                  ref.watch(triPartyImageProvider.notifier).state = file;
-                } else {
-                  errorToast(context, result.toString());
-                }
-              },
-              child: DottedBorder(
-                  borderType: BorderType.RRect,
-                  dashPattern: const [5, 5, 5, 5],
-                  color: ColorsConstant.primaryColor,
-                  child: Padding(
-                    padding: const Pad(all: 20),
-                    child: Center(
-                      child: ref.watch(triPartyImageProvider) != null
-                          ? Text(
-                              "${basename(ref.watch(triPartyImageProvider)?.path ?? "")}",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Adaptive.sp(16)),
-                            )
-                          : ColumnSuper(children: [
-                              const Icon(
-                                LucideIcons.cloud_upload,
-                                color: ColorsConstant.primaryColor,
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                "Select Agreement",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: ColorsConstant.primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Adaptive.sp(16)),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                "Upload Agreement,\n  Supports PDF",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: ColorsConstant.primaryColor,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: Adaptive.sp(13)),
-                              )
-                            ]),
-                    ),
-                  )),
-            ),
-            IconsButton(
-              onPressed: () async {
-                // print(ref.watch(wspProvider)?.id.toString());
-                showloader(context);
-                ref
-                    .watch(uploadPdfProvider(
-                            wspId: "${ref.watch(wspProvider)?.id.toString()}",
-                            agreementFile: ref.watch(triPartyImageProvider))
-                        .future)
-                    .then((value) {
-                  hideLoader(context);
-                  if (value['status'].toString() == "1") {
-                    ref.watch(goRouterProvider).go(RoutesStrings.dashboard);
-                    successToast(context, value['message'].toString());
-                  } else {
-                    errorToast(context, value['message'].toString());
-                  }
-                }).onError((e, s) {
-                  hideLoader(context);
-                });
-              },
-              text: 'Upload',
-              iconData: Icons.cloud_upload,
-              color: ColorsConstant.primaryColor,
-              textStyle: const TextStyle(color: Colors.white),
-              iconColor: Colors.white,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text.rich(TextSpan(
-                text: 'Having trouble uploading docs?',
-                style: TextStyle(
-                    fontWeight: FontWeight.w700, fontSize: Adaptive.sp(15)),
-                children: [
-                  TextSpan(
-                      text: 'click here',
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          showHelpDialog(context,
-                              titleText: '', messageText: '', action: () {
-                            hideLoader(context);
-                          });
-                          // tripartyDialog(context, ref);
-                        },
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: ColorsConstant.secondColorSuperDark,
-                          fontSize: Adaptive.sp(15)))
-                ])),
+            //     if (result != null) {
+            //       File file = File(result.files.single.path!);
+            //       ref.watch(triPartyImageProvider.notifier).state = file;
+            //     } else {
+            //       errorToast(context, result.toString());
+            //     }
+            //   },
+            //   child: DottedBorder(
+            //       borderType: BorderType.RRect,
+            //       dashPattern: const [5, 5, 5, 5],
+            //       color: ColorsConstant.primaryColor,
+            //       child: Padding(
+            //         padding: const Pad(all: 20),
+            //         child: Center(
+            //           child: ref.watch(triPartyImageProvider) != null
+            //               ? Text(
+            //                   "${basename(ref.watch(triPartyImageProvider)?.path ?? "")}",
+            //                   textAlign: TextAlign.center,
+            //                   style: TextStyle(
+            //                       color: ColorsConstant.primaryColor,
+            //                       fontWeight: FontWeight.bold,
+            //                       fontSize: Adaptive.sp(16)),
+            //                 )
+            //               : ColumnSuper(children: [
+            //                   const Icon(
+            //                     LucideIcons.cloud_upload,
+            //                     color: ColorsConstant.primaryColor,
+            //                   ),
+            //                   const SizedBox(
+            //                     height: 5,
+            //                   ),
+            //                   Text(
+            //                     "Select Agreement",
+            //                     textAlign: TextAlign.center,
+            //                     style: TextStyle(
+            //                         color: ColorsConstant.primaryColor,
+            //                         fontWeight: FontWeight.bold,
+            //                         fontSize: Adaptive.sp(16)),
+            //                   ),
+            //                   const SizedBox(
+            //                     height: 5,
+            //                   ),
+            //                   Text(
+            //                     "Upload Agreement,\n  Supports PDF",
+            //                     textAlign: TextAlign.center,
+            //                     style: TextStyle(
+            //                         color: ColorsConstant.primaryColor,
+            //                         fontWeight: FontWeight.w700,
+            //                         fontSize: Adaptive.sp(13)),
+            //                   )
+            //                 ]),
+            //         ),
+            //       )),
+            // ),
+            // IconsButton(
+            //   onPressed: () async {
+            //     // print(ref.watch(wspProvider)?.id.toString());
+            //     showloader(context);
+            //     ref
+            //         .watch(uploadPdfProvider(
+            //                 wspId: "${ref.watch(wspProvider)?.id.toString()}",
+            //                 agreementFile: ref.watch(triPartyImageProvider))
+            //             .future)
+            //         .then((value) {
+            //       hideLoader(context);
+            //       if (value['status'].toString() == "1") {
+            //         ref.watch(goRouterProvider).go(RoutesStrings.dashboard);
+            //         successToast(context, value['message'].toString());
+            //       } else {
+            //         errorToast(context, value['message'].toString());
+            //       }
+            //     }).onError((e, s) {
+            //       hideLoader(context);
+            //     });
+            //   },
+            //   text: 'Upload',
+            //   iconData: Icons.cloud_upload,
+            //   color: ColorsConstant.primaryColor,
+            //   textStyle: const TextStyle(color: Colors.white),
+            //   iconColor: Colors.white,
+            // ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
+            // Text.rich(TextSpan(
+            //     text: 'Having trouble uploading docs?',
+            //     style: TextStyle(
+            //         fontWeight: FontWeight.w700, fontSize: Adaptive.sp(15)),
+            //     children: [
+            //       TextSpan(
+            //           text: 'click here',
+            //           recognizer: TapGestureRecognizer()
+            //             ..onTap = () {
+            //               showHelpDialog(context,
+            //                   titleText: '', messageText: '', action: () {
+            //                 hideLoader(context);
+            //               });
+            //               // tripartyDialog(context, ref);
+            //             },
+            //           style: TextStyle(
+            //               fontWeight: FontWeight.w700,
+            //               color: ColorsConstant.secondColorSuperDark,
+            //               fontSize: Adaptive.sp(15)))
+            //     ])),
           ],
         ),
       )),

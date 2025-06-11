@@ -10,8 +10,11 @@ import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Data/Model/BankListModel.dart';
+import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
+import 'package:swfl/Domain/Dio/DioProvider.dart';
 import 'package:swfl/ui/auth/Login/login_screen.dart';
 import 'package:swfl/ui/utils/extensions.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
@@ -23,6 +26,7 @@ import '../../../Domain/AuthenticationService/AuthenticationService.dart';
 import '../../../Domain/StateService/StateService.dart';
 import '../../utils/colors.dart';
 import 'RegistrationScreen.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 class Individualregistration extends ConsumerStatefulWidget {
   const Individualregistration({super.key});
@@ -36,21 +40,21 @@ class _IndividualregistrationState
     extends ConsumerState<Individualregistration> {
   var propProvider = StateProvider((ref) => 0);
   var propNameProvider = StateProvider((ref) => "Select Constitution");
-  var propDocProvider =
-      StateProvider((ref) => "");
+  var propDocProvider = StateProvider((ref) => "");
   var panImageProvider = StateProvider<File?>((ref) => null);
+  var profileImageProvider = StateProvider<File?>((ref) => null);
   var propDocImageProvider = StateProvider<File?>((ref) => null);
 
   var chequeImageProvider = StateProvider<File?>((ref) => null);
 
   var adharImageProvider = StateProvider<File?>((ref) => null);
   var adhaBackImageProvider = StateProvider<File?>((ref) => null);
+  var addressProofImageProvider = StateProvider<File?>((ref) => null);
 
   var isRegisteringProvider = StateProvider((ref) => false);
 
   final imagePicker = ImagePicker();
-  var bankProvider =
-  StateProvider<BankDatum?>((ref) => null);
+  var bankProvider = StateProvider<BankDatum?>((ref) => null);
 
   TextEditingController panController = TextEditingController();
   TextEditingController adharController = TextEditingController();
@@ -65,6 +69,9 @@ class _IndividualregistrationState
   TextEditingController ifscController = TextEditingController();
   TextEditingController firmController = TextEditingController();
   TextEditingController gstController = TextEditingController();
+
+  TextEditingController stateController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   final identificationKey = GlobalKey<FormState>();
   final bankDetailsKey = GlobalKey<FormState>();
@@ -73,6 +80,41 @@ class _IndividualregistrationState
   var statesProvider = StateProvider<Datum?>((ref) => null);
 
   var districtProvider = StateProvider<StateDatum?>((ref) => null);
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      firmController.text =
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.firmName ?? "";
+      emailController.text =
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.email ?? "";
+      phoneController.text =
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.phone ?? "";
+      pinController.text =
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.pincode ?? "";
+      addressController.text =
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.address ?? "";
+      panController.text =
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.pancardNo ?? "";
+      branchController.text =
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.bankBranch ?? "";
+      accountController.text =
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.bankAccNo ?? "";
+      ifscController.text =
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.bankIfscCode ?? "";
+      bankNameController.text =
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.bankName ?? "";
+      adharController.text =
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.aadharNo ?? "";
+      nameController.text =
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.fname ?? "";
+      stateController.text =
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.state ?? "";
+      cityController.text =
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.district ?? "";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -180,31 +222,31 @@ class _IndividualregistrationState
                           if (ref.watch(activeStepProvider) == 0) {
                             if (identificationKey.currentState!.validate()) {
                             } else {
-                              if (ref.watch(panImageProvider) == null) {
-                                errorToast(
-                                    context, 'Please select PAN card Image');
-                              }
-                              if (ref.watch(adharImageProvider) == null) {
-                                errorToast(
-                                    context, 'Please select aadhar card Image');
-                              }
-                              if (ref.watch(adhaBackImageProvider) == null) {
-                                errorToast(
-                                    context, 'Please select adhar back Image');
-                              } else {
-                                ref.watch(activeStepProvider.notifier).state +=
-                                    1;
-                              }
+                              ref.watch(activeStepProvider.notifier).state += 1;
+                              // if (ref.watch(panImageProvider) == null) {
+                              //   errorToast(
+                              //       context, 'Please select PAN card Image');
+                              // }
+                              // if (ref.watch(adharImageProvider) == null) {
+                              //   errorToast(
+                              //       context, 'Please select aadhar card Image');
+                              // }
+                              // if (ref.watch(adhaBackImageProvider) == null) {
+                              //   errorToast(
+                              //       context, 'Please select adhar back Image');
+                              // } else {
+
+                              // }
                             }
                           } else if (ref.watch(activeStepProvider) == 1) {
                             if (bankDetailsKey.currentState!.validate()) {
-                              if (ref.watch(chequeImageProvider) == null) {
-                                errorToast(
-                                    context, 'Please select cheque Image');
-                              } else {
-                                ref.watch(activeStepProvider.notifier).state +=
-                                    1;
-                              }
+                              ref.watch(activeStepProvider.notifier).state += 1;
+                              // if (ref.watch(chequeImageProvider) == null) {
+                              //   errorToast(
+                              //       context, 'Please select cheque Image');
+                              // } else {
+
+                              // }
                             } else {}
                           } else if (ref.watch(activeStepProvider) == 2) {
                             if (personalDetailsKey.currentState!.validate()) {
@@ -232,25 +274,42 @@ class _IndividualregistrationState
                         width: MediaQuery.of(context).size.width,
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (formKey.currentState!.validate()) {
-                              if (ref.watch(panImageProvider) == null) {
+                            if (formKey.currentState!.validate() &&
+                                personalDetailsKey.currentState!.validate()) {
+                              if (ref.watch(panImageProvider) == null &&
+                                  ref
+                                          .watch(sharedUtilityProvider)
+                                          .getMongoDbUser()
+                                          ?.pancardImage ==
+                                      null) {
                                 errorToast(context, 'Please select Pan Image');
-                              } else if (ref.watch(adharImageProvider) ==
-                                  null) {
+                              } else if (ref.watch(profileImageProvider) ==
+                                      null &&
+                                  ref
+                                          .watch(sharedUtilityProvider)
+                                          .getMongoDbUser()
+                                          ?.profileImage ==
+                                      null) {
                                 errorToast(
-                                    context, 'Please select aadhar Image');
-                              } else if (ref.watch(adhaBackImageProvider) ==
-                                  null) {
-                                errorToast(
-                                    context, 'Please select aadhar back Image');
+                                    context, 'Please select profile Image');
                               } else if (ref.watch(chequeImageProvider) ==
-                                  null) {
+                                      null &&
+                                  ref
+                                          .watch(sharedUtilityProvider)
+                                          .getMongoDbUser()
+                                          ?.chequeImage ==
+                                      null) {
                                 errorToast(
                                     context, 'Please select cheque Image');
-                              } else if (ref.watch(statesProvider) == null) {
-                                errorToast(context, 'Please select state');
-                              } else if (ref.watch(districtProvider) == null) {
-                                errorToast(context, 'Please select District');
+                              } else if (ref.watch(addressProofImageProvider) ==
+                                      null &&
+                                  ref
+                                          .watch(sharedUtilityProvider)
+                                          .getMongoDbUser()
+                                          ?.addressProofImage ==
+                                      null) {
+                                errorToast(context,
+                                    'Please select address proof Image');
                               } else {
                                 ref
                                     .watch(isRegisteringProvider.notifier)
@@ -269,41 +328,47 @@ class _IndividualregistrationState
                                                 adharController.text.toString(),
                                             address: addressController.text
                                                 .toString(),
-                                            locationState: ref
-                                                .watch(statesProvider)
-                                                ?.name
-                                                .toString(),
+                                            locationState:
+                                                ref.watch(sharedUtilityProvider).getMongoDbUser()?.state ??
+                                                    ref
+                                                        .watch(statesProvider)
+                                                        ?.name
+                                                        .toString(),
                                             district: ref
-                                                .watch(districtProvider)
-                                                ?.name
-                                                .toString(),
+                                                    .watch(
+                                                        sharedUtilityProvider)
+                                                    .getMongoDbUser()
+                                                    ?.district ??
+                                                ref
+                                                    .watch(districtProvider)
+                                                    ?.name
+                                                    .toString(),
                                             pincode:
                                                 pinController.text.toString(),
-                                            bankName:ref.watch(bankProvider)?.bankName,
-                                            bankBranch: branchController.text
-                                                .toString(),
-                                            bankAccount: accountController.text
-                                                .toString(),
-                                            ifscCode:
-                                                ifscController.text.toString(),
-                                            propDocType: ref
-                                                .watch(propDocProvider)
-                                                .toString(),
-                                            propDocNumber:
-                                                gstController.text.toString(),
-                                            firmName:
-                                                firmController.text.toString(),
-                                            panCardImage:
-                                                ref.watch(panImageProvider),
-                                            profileImage:
-                                                ref.watch(panImageProvider),
-                                            adharBackImage: ref
-                                                .watch(adhaBackImageProvider),
-                                            aadharImage:
-                                                ref.watch(adharImageProvider),
-                                            chequeImage:
-                                                ref.watch(chequeImageProvider),
-                                            )
+                                            bankName: ref
+                                                    .watch(
+                                                        sharedUtilityProvider)
+                                                    .getMongoDbUser()
+                                                    ?.bankName ??
+                                                ref
+                                                    .watch(bankProvider)
+                                                    ?.bankName,
+                                            bankBranch: ref
+                                                    .watch(sharedUtilityProvider)
+                                                    .getMongoDbUser()
+                                                    ?.bankBranch ??
+                                                branchController.text.toString(),
+                                            bankAccount: accountController.text.toString(),
+                                            ifscCode: ifscController.text.toString(),
+                                            propDocType: ref.watch(propDocProvider).toString(),
+                                            propDocNumber: gstController.text.toString(),
+                                            firmName: firmController.text.toString(),
+                                            panCardImage: ref.watch(sharedUtilityProvider).getMongoDbUser()?.pancardImage != null && ref.watch(panImageProvider) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.pancardImage : ref.watch(panImageProvider),
+                                            profileImage: ref.watch(sharedUtilityProvider).getMongoDbUser()?.profileImage != null && ref.watch(profileImageProvider) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.profileImage : ref.watch(profileImageProvider),
+                                            adharBackImage: ref.watch(sharedUtilityProvider).getMongoDbUser()?.aadharBackImage != null && ref.watch(adhaBackImageProvider) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.aadharBackImage : ref.watch(adhaBackImageProvider),
+                                            aadharImage: ref.watch(sharedUtilityProvider).getMongoDbUser()?.aadharImage != null && ref.watch(adharImageProvider) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.aadharImage : ref.watch(adharImageProvider),
+                                            chequeImage: ref.watch(sharedUtilityProvider).getMongoDbUser()?.chequeImage != null && ref.watch(chequeImageProvider) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.chequeImage : ref.watch(chequeImageProvider),
+                                            addressProof: ref.watch(sharedUtilityProvider).getMongoDbUser()?.addressProofImage != null && ref.watch(addressProofImageProvider) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.addressProofImage : ref.watch(addressProofImageProvider))
                                         .future)
                                     .then((value) {
                                   ref
@@ -311,12 +376,20 @@ class _IndividualregistrationState
                                       .state = false;
 
                                   if (value['status'].toString() == "1") {
-                                    context.goNamed(
-                                        RoutesStrings.registrationOtp,
-                                        extra: {
-                                          "panCard":
-                                          phoneController.text.toString()
-                                        });
+                                    ref.read(sharedUtilityProvider).setToken(
+                                        value['data']['api_access_token']);
+                                    ref.invalidate(dioProvider);
+                                    ref
+                                        .watch(loginInfoProvider.future)
+                                        .then((data) {
+                                      ref
+                                          .watch(sharedUtilityProvider)
+                                          .setUser(data.data);
+                                      successToast(context, value['message']);
+                                      context.go(
+                                        RoutesStrings.dashboard,
+                                      );
+                                    });
                                   } else {
                                     errorToast(
                                         context, value['message'].toString());
@@ -369,6 +442,9 @@ class _IndividualregistrationState
           TextFormField(
             keyboardType: TextInputType.text,
             controller: nameController,
+            readOnly:
+                ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.fname !=
+                    null,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please input valid name';
@@ -394,6 +470,8 @@ class _IndividualregistrationState
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please input valid email';
+              } else if (!value.isValidEmail()) {
+                return 'Please input valid email';
               }
               return null;
             },
@@ -414,6 +492,9 @@ class _IndividualregistrationState
             keyboardType: TextInputType.number,
             maxLength: 10,
             controller: phoneController,
+            readOnly:
+                ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.phone !=
+                    null,
             validator: (value) {
               if (value == null || value.isEmpty && value.length != 10) {
                 return 'Please input valid phone';
@@ -433,6 +514,173 @@ class _IndividualregistrationState
           const SizedBox(
             height: 10,
           ),
+          CupertinoButton(
+              child: Text(
+                "Profile Image",
+                style: TextStyle(
+                    color: ColorsConstant.primaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: Adaptive.sp(17)),
+              ),
+              onPressed: () {}),
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.profileImage !=
+                      null &&
+                  ref.watch(profileImageProvider) == null
+              ? SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: InkWell(
+                    onTap: () async {
+                      imagePicker
+                          .pickImage(source: ImageSource.gallery)
+                          .then((value) {
+                        if (value != null) {
+                          ref.watch(profileImageProvider.notifier).state =
+                              File(value.path);
+                        }
+                      });
+                    },
+                    child: dottedBorder.DottedBorder(
+                        borderType: dottedBorder.BorderType.RRect,
+                        dashPattern: const [5, 5, 5, 5],
+                        color: ColorsConstant.primaryColor,
+                        child: Padding(
+                          padding: const Pad(all: 20),
+                          child: Center(
+                            child: ref
+                                        .watch(sharedUtilityProvider)
+                                        .getMongoDbUser()
+                                        ?.profileImage !=
+                                    null
+                                ? Stack(
+                                    children: [
+                                      Image.network(ref
+                                          .watch(sharedUtilityProvider)
+                                          .getMongoDbUser()
+                                          ?.profileImage),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.6),
+                                            shape: BoxShape.circle),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              ref.invalidate(
+                                                  adhaBackImageProvider);
+                                            },
+                                            icon: const Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                            )),
+                                      )
+                                    ],
+                                  )
+                                : ColumnSuper(children: [
+                                    Icon(
+                                      LucideIcons.cloud_upload,
+                                      color: ColorsConstant.primaryColor,
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "Select Aadhar Back Image",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: ColorsConstant.primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Adaptive.sp(16)),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: ColorsConstant.primaryColor,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: Adaptive.sp(13)),
+                                    )
+                                  ]),
+                          ),
+                        )),
+                  ),
+                )
+              : SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: InkWell(
+                    onTap: () async {
+                      imagePicker
+                          .pickImage(source: ImageSource.gallery)
+                          .then((value) {
+                        if (value != null) {
+                          ref.watch(profileImageProvider.notifier).state =
+                              File(value.path);
+                        }
+                      });
+                    },
+                    child: dottedBorder.DottedBorder(
+                        borderType: dottedBorder.BorderType.RRect,
+                        dashPattern: const [5, 5, 5, 5],
+                        color: ColorsConstant.primaryColor,
+                        child: Padding(
+                          padding: const Pad(all: 20),
+                          child: Center(
+                            child: ref.watch(profileImageProvider) != null
+                                ? Stack(
+                                    children: [
+                                      Image.file(
+                                          ref.watch(profileImageProvider) ??
+                                              File('path')),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.6),
+                                            shape: BoxShape.circle),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              ref.invalidate(
+                                                  profileImageProvider);
+                                            },
+                                            icon: const Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                            )),
+                                      )
+                                    ],
+                                  )
+                                : ColumnSuper(children: [
+                                    Icon(
+                                      LucideIcons.cloud_upload,
+                                      color: ColorsConstant.primaryColor,
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "Select Profile Image",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: ColorsConstant.primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Adaptive.sp(16)),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: ColorsConstant.primaryColor,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: Adaptive.sp(13)),
+                                    )
+                                  ]),
+                          ),
+                        )),
+                  ),
+                ),
           addressLayout(context, ref),
         ],
       ));
@@ -453,6 +701,9 @@ class _IndividualregistrationState
           controller: panController,
           keyboardType: TextInputType.text,
           textCapitalization: TextCapitalization.words,
+          readOnly:
+              ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.pancardNo !=
+                  null,
           validator: (value) {
             if (value == null || value.isEmpty || !value.isValidPanCardNo()) {
               return 'Please input Valid Pan Number';
@@ -475,81 +726,177 @@ class _IndividualregistrationState
         const SizedBox(
           height: 10,
         ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: InkWell(
-            onTap: () async {
-              imagePicker.pickImage(source: ImageSource.gallery).then((value) {
-                if (value != null) {
-                  ref.watch(panImageProvider.notifier).state = File(value.path);
-                }
-              });
-            },
-            child: dottedBorder.DottedBorder(
-                borderType: dottedBorder.BorderType.RRect,
-                dashPattern: const [5, 5, 5, 5],
-                color: ColorsConstant.primaryColor,
-                child: Padding(
-                  padding: const Pad(all: 20),
-                  child: Center(
-                    child: ref.watch(panImageProvider) != null
-                        ? Stack(
-                            children: [
-                              Image.file(
-                                  ref.watch(panImageProvider) ?? File('path')),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.6),
-                                    shape: BoxShape.circle),
-                                child: IconButton(
-                                    onPressed: () {
-                                      ref.invalidate(panImageProvider);
-                                    },
-                                    icon: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    )),
-                              )
-                            ],
-                          )
-                        : ColumnSuper(children: [
-                            Icon(
-                              LucideIcons.cloud_upload,
-                              color: ColorsConstant.primaryColor,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Select Pan Image",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Adaptive.sp(16)),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Upload Document Image,\n  Supports JPG, JPEG, PNG",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: Adaptive.sp(13)),
-                            )
-                          ]),
-                  ),
-                )),
-          ),
-        ),
+        CupertinoButton(
+            child: Text(
+              "Pancard Image",
+              style: TextStyle(
+                  color: ColorsConstant.primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Adaptive.sp(17)),
+            ),
+            onPressed: () {}),
+        ref.watch(sharedUtilityProvider).getMongoDbUser()?.pancardImage !=
+                    null &&
+                ref.watch(panImageProvider) == null
+            ? SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () async {
+                    imagePicker
+                        .pickImage(source: ImageSource.gallery)
+                        .then((value) {
+                      if (value != null) {
+                        ref.watch(panImageProvider.notifier).state =
+                            File(value.path);
+                      }
+                    });
+                  },
+                  child: dottedBorder.DottedBorder(
+                      borderType: dottedBorder.BorderType.RRect,
+                      dashPattern: const [5, 5, 5, 5],
+                      color: ColorsConstant.primaryColor,
+                      child: Padding(
+                        padding: const Pad(all: 20),
+                        child: Center(
+                          child: ref
+                                      .watch(sharedUtilityProvider)
+                                      .getMongoDbUser()
+                                      ?.pancardImage !=
+                                  null
+                              ? Stack(
+                                  children: [
+                                    Image.network(ref
+                                        .watch(sharedUtilityProvider)
+                                        .getMongoDbUser()
+                                        ?.pancardImage),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(panImageProvider);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : ColumnSuper(children: [
+                                  Icon(
+                                    LucideIcons.cloud_upload,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Select Pan Image",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Adaptive.sp(13)),
+                                  )
+                                ]),
+                        ),
+                      )),
+                ),
+              )
+            : SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () async {
+                    imagePicker
+                        .pickImage(source: ImageSource.gallery)
+                        .then((value) {
+                      if (value != null) {
+                        ref.watch(panImageProvider.notifier).state =
+                            File(value.path);
+                      }
+                    });
+                  },
+                  child: dottedBorder.DottedBorder(
+                      borderType: dottedBorder.BorderType.RRect,
+                      dashPattern: const [5, 5, 5, 5],
+                      color: ColorsConstant.primaryColor,
+                      child: Padding(
+                        padding: const Pad(all: 20),
+                        child: Center(
+                          child: ref.watch(panImageProvider) != null
+                              ? Stack(
+                                  children: [
+                                    Image.file(ref.watch(panImageProvider) ??
+                                        File('path')),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(panImageProvider);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : ColumnSuper(children: [
+                                  Icon(
+                                    LucideIcons.cloud_upload,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Select Pan Image",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Adaptive.sp(13)),
+                                  )
+                                ]),
+                        ),
+                      )),
+                ),
+              ),
         const SizedBox(
           height: 10,
         ),
         TextFormField(
           keyboardType: TextInputType.number,
           controller: adharController,
+          readOnly:
+              ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.aadharNo !=
+                  null,
           validator: (value) {
             if (value == null ||
                 value.isEmpty ||
@@ -571,352 +918,598 @@ class _IndividualregistrationState
         const SizedBox(
           height: 10,
         ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: InkWell(
-            onTap: () async {
-              imagePicker.pickImage(source: ImageSource.gallery).then((value) {
-                if (value != null) {
-                  ref.watch(adharImageProvider.notifier).state =
-                      File(value.path);
-                }
-              });
-            },
-            child: dottedBorder.DottedBorder(
-                borderType: dottedBorder.BorderType.RRect,
-                dashPattern: const [5, 5, 5, 5],
-                color: ColorsConstant.primaryColor,
-                child: Padding(
-                  padding: const Pad(all: 20),
-                  child: Center(
-                    child: ref.watch(adharImageProvider) != null
-                        ? Stack(
-                            children: [
-                              Image.file(ref.watch(adharImageProvider) ??
-                                  File('path')),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.6),
-                                    shape: BoxShape.circle),
-                                child: IconButton(
-                                    onPressed: () {
-                                      ref.invalidate(adharImageProvider);
-                                    },
-                                    icon: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    )),
-                              )
-                            ],
-                          )
-                        : ColumnSuper(children: [
-                            Icon(
-                              LucideIcons.cloud_upload,
-                              color: ColorsConstant.primaryColor,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Select Aadhar Image",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Adaptive.sp(16)),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Upload Document Image,\n  Supports JPG, JPEG, PNG",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: Adaptive.sp(13)),
-                            )
-                          ]),
-                  ),
-                )),
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: InkWell(
-            onTap: () async {
-              imagePicker.pickImage(source: ImageSource.gallery).then((value) {
-                if (value != null) {
-                  ref.watch(adhaBackImageProvider.notifier).state =
-                      File(value.path);
-                }
-              });
-            },
-            child: dottedBorder.DottedBorder(
-                borderType: dottedBorder.BorderType.RRect,
-                dashPattern: const [5, 5, 5, 5],
-                color: ColorsConstant.primaryColor,
-                child: Padding(
-                  padding: const Pad(all: 20),
-                  child: Center(
-                    child: ref.watch(adhaBackImageProvider) != null
-                        ? Stack(
-                            children: [
-                              Image.file(ref.watch(adhaBackImageProvider) ??
-                                  File('path')),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.6),
-                                    shape: BoxShape.circle),
-                                child: IconButton(
-                                    onPressed: () {
-                                      ref.invalidate(adhaBackImageProvider);
-                                    },
-                                    icon: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    )),
-                              )
-                            ],
-                          )
-                        : ColumnSuper(children: [
-                            Icon(
-                              LucideIcons.cloud_upload,
-                              color: ColorsConstant.primaryColor,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Select Aadhar Back Image",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Adaptive.sp(16)),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Upload Document Image,\n  Supports JPG, JPEG, PNG",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: ColorsConstant.primaryColor,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: Adaptive.sp(13)),
-                            )
-                          ]),
-                  ),
-                )),
-          ),
-        ),
+        // CupertinoButton(
+        //     child: Text(
+        //       "Aadhar Image",
+        //       style: TextStyle(
+        //           color: ColorsConstant.primaryColor,
+        //           fontWeight: FontWeight.bold,
+        //           fontSize: Adaptive.sp(17)),
+        //     ),
+        //     onPressed: () {}),
+        // ref.watch(sharedUtilityProvider).getMongoDbUser()?.aadharImage !=
+        //             null &&
+        //         ref.watch(adharImageProvider) == null
+        //     ? SizedBox(
+        //         width: MediaQuery.of(context).size.width,
+        //         child: InkWell(
+        //           onTap: () async {
+        //             imagePicker
+        //                 .pickImage(source: ImageSource.gallery)
+        //                 .then((value) {
+        //               if (value != null) {
+        //                 ref.watch(adharImageProvider.notifier).state =
+        //                     File(value.path);
+        //               }
+        //             });
+        //           },
+        //           child: dottedBorder.DottedBorder(
+        //               borderType: dottedBorder.BorderType.RRect,
+        //               dashPattern: const [5, 5, 5, 5],
+        //               color: ColorsConstant.primaryColor,
+        //               child: Padding(
+        //                 padding: const Pad(all: 20),
+        //                 child: Center(
+        //                   child: ref
+        //                               .watch(sharedUtilityProvider)
+        //                               .getMongoDbUser()
+        //                               ?.aadharImage !=
+        //                           null
+        //                       ? Stack(
+        //                           children: [
+        //                             Image.network(ref
+        //                                 .watch(sharedUtilityProvider)
+        //                                 .getMongoDbUser()
+        //                                 ?.aadharImage),
+        //                             Container(
+        //                               decoration: BoxDecoration(
+        //                                   color: Colors.black.withOpacity(0.6),
+        //                                   shape: BoxShape.circle),
+        //                               child: IconButton(
+        //                                   onPressed: () {
+        //                                     ref.invalidate(adharImageProvider);
+        //                                   },
+        //                                   icon: const Icon(
+        //                                     Icons.close,
+        //                                     color: Colors.white,
+        //                                   )),
+        //                             )
+        //                           ],
+        //                         )
+        //                       : ColumnSuper(children: [
+        //                           Icon(
+        //                             LucideIcons.cloud_upload,
+        //                             color: ColorsConstant.primaryColor,
+        //                           ),
+        //                           SizedBox(
+        //                             height: 5,
+        //                           ),
+        //                           Text(
+        //                             "Select Aadhar Image",
+        //                             textAlign: TextAlign.center,
+        //                             style: TextStyle(
+        //                                 color: ColorsConstant.primaryColor,
+        //                                 fontWeight: FontWeight.bold,
+        //                                 fontSize: Adaptive.sp(16)),
+        //                           ),
+        //                           SizedBox(
+        //                             height: 5,
+        //                           ),
+        //                           Text(
+        //                             "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+        //                             textAlign: TextAlign.center,
+        //                             style: TextStyle(
+        //                                 color: ColorsConstant.primaryColor,
+        //                                 fontWeight: FontWeight.w700,
+        //                                 fontSize: Adaptive.sp(13)),
+        //                           )
+        //                         ]),
+        //                 ),
+        //               )),
+        //         ),
+        //       )
+        //     : SizedBox(
+        //         width: MediaQuery.of(context).size.width,
+        //         child: InkWell(
+        //           onTap: () async {
+        //             imagePicker
+        //                 .pickImage(source: ImageSource.gallery)
+        //                 .then((value) {
+        //               if (value != null) {
+        //                 ref.watch(adharImageProvider.notifier).state =
+        //                     File(value.path);
+        //               }
+        //             });
+        //           },
+        //           child: dottedBorder.DottedBorder(
+        //               borderType: dottedBorder.BorderType.RRect,
+        //               dashPattern: const [5, 5, 5, 5],
+        //               color: ColorsConstant.primaryColor,
+        //               child: Padding(
+        //                 padding: const Pad(all: 20),
+        //                 child: Center(
+        //                   child: ref.watch(adharImageProvider) != null
+        //                       ? Stack(
+        //                           children: [
+        //                             Image.file(ref.watch(adharImageProvider) ??
+        //                                 File('path')),
+        //                             Container(
+        //                               decoration: BoxDecoration(
+        //                                   color: Colors.black.withOpacity(0.6),
+        //                                   shape: BoxShape.circle),
+        //                               child: IconButton(
+        //                                   onPressed: () {
+        //                                     ref.invalidate(adharImageProvider);
+        //                                   },
+        //                                   icon: const Icon(
+        //                                     Icons.close,
+        //                                     color: Colors.white,
+        //                                   )),
+        //                             )
+        //                           ],
+        //                         )
+        //                       : ColumnSuper(children: [
+        //                           Icon(
+        //                             LucideIcons.cloud_upload,
+        //                             color: ColorsConstant.primaryColor,
+        //                           ),
+        //                           SizedBox(
+        //                             height: 5,
+        //                           ),
+        //                           Text(
+        //                             "Select Aadhar Image",
+        //                             textAlign: TextAlign.center,
+        //                             style: TextStyle(
+        //                                 color: ColorsConstant.primaryColor,
+        //                                 fontWeight: FontWeight.bold,
+        //                                 fontSize: Adaptive.sp(16)),
+        //                           ),
+        //                           SizedBox(
+        //                             height: 5,
+        //                           ),
+        //                           Text(
+        //                             "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+        //                             textAlign: TextAlign.center,
+        //                             style: TextStyle(
+        //                                 color: ColorsConstant.primaryColor,
+        //                                 fontWeight: FontWeight.w700,
+        //                                 fontSize: Adaptive.sp(13)),
+        //                           )
+        //                         ]),
+        //                 ),
+        //               )),
+        //         ),
+        //       ),
+        // const SizedBox(
+        //   height: 10,
+        // ),
+        // CupertinoButton(
+        //     child: Text(
+        //       "Aadhar Back Image",
+        //       style: TextStyle(
+        //           color: ColorsConstant.primaryColor,
+        //           fontWeight: FontWeight.bold,
+        //           fontSize: Adaptive.sp(17)),
+        //     ),
+        //     onPressed: () {}),
+        // ref.watch(sharedUtilityProvider).getMongoDbUser()?.aadharBackImage !=
+        //             null &&
+        //         ref.watch(adhaBackImageProvider) == null
+        //     ? SizedBox(
+        //         width: MediaQuery.of(context).size.width,
+        //         child: InkWell(
+        //           onTap: () async {
+        //             imagePicker
+        //                 .pickImage(source: ImageSource.gallery)
+        //                 .then((value) {
+        //               if (value != null) {
+        //                 ref.watch(adhaBackImageProvider.notifier).state =
+        //                     File(value.path);
+        //               }
+        //             });
+        //           },
+        //           child: dottedBorder.DottedBorder(
+        //               borderType: dottedBorder.BorderType.RRect,
+        //               dashPattern: const [5, 5, 5, 5],
+        //               color: ColorsConstant.primaryColor,
+        //               child: Padding(
+        //                 padding: const Pad(all: 20),
+        //                 child: Center(
+        //                   child: ref
+        //                               .watch(sharedUtilityProvider)
+        //                               .getMongoDbUser()
+        //                               ?.aadharBackImage !=
+        //                           null
+        //                       ? Stack(
+        //                           children: [
+        //                             Image.network(ref
+        //                                 .watch(sharedUtilityProvider)
+        //                                 .getMongoDbUser()
+        //                                 ?.aadharBackImage),
+        //                             Container(
+        //                               decoration: BoxDecoration(
+        //                                   color: Colors.black.withOpacity(0.6),
+        //                                   shape: BoxShape.circle),
+        //                               child: IconButton(
+        //                                   onPressed: () {
+        //                                     ref.invalidate(
+        //                                         adhaBackImageProvider);
+        //                                   },
+        //                                   icon: const Icon(
+        //                                     Icons.close,
+        //                                     color: Colors.white,
+        //                                   )),
+        //                             )
+        //                           ],
+        //                         )
+        //                       : ColumnSuper(children: [
+        //                           Icon(
+        //                             LucideIcons.cloud_upload,
+        //                             color: ColorsConstant.primaryColor,
+        //                           ),
+        //                           SizedBox(
+        //                             height: 5,
+        //                           ),
+        //                           Text(
+        //                             "Select Aadhar Back Image",
+        //                             textAlign: TextAlign.center,
+        //                             style: TextStyle(
+        //                                 color: ColorsConstant.primaryColor,
+        //                                 fontWeight: FontWeight.bold,
+        //                                 fontSize: Adaptive.sp(16)),
+        //                           ),
+        //                           SizedBox(
+        //                             height: 5,
+        //                           ),
+        //                           Text(
+        //                             "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+        //                             textAlign: TextAlign.center,
+        //                             style: TextStyle(
+        //                                 color: ColorsConstant.primaryColor,
+        //                                 fontWeight: FontWeight.w700,
+        //                                 fontSize: Adaptive.sp(13)),
+        //                           )
+        //                         ]),
+        //                 ),
+        //               )),
+        //         ),
+        //       )
+        //     : SizedBox(
+        //         width: MediaQuery.of(context).size.width,
+        //         child: InkWell(
+        //           onTap: () async {
+        //             imagePicker
+        //                 .pickImage(source: ImageSource.gallery)
+        //                 .then((value) {
+        //               if (value != null) {
+        //                 ref.watch(adhaBackImageProvider.notifier).state =
+        //                     File(value.path);
+        //               }
+        //             });
+        //           },
+        //           child: dottedBorder.DottedBorder(
+        //               borderType: dottedBorder.BorderType.RRect,
+        //               dashPattern: const [5, 5, 5, 5],
+        //               color: ColorsConstant.primaryColor,
+        //               child: Padding(
+        //                 padding: const Pad(all: 20),
+        //                 child: Center(
+        //                   child: ref.watch(adhaBackImageProvider) != null
+        //                       ? Stack(
+        //                           children: [
+        //                             Image.file(
+        //                                 ref.watch(adhaBackImageProvider) ??
+        //                                     File('path')),
+        //                             Container(
+        //                               decoration: BoxDecoration(
+        //                                   color: Colors.black.withOpacity(0.6),
+        //                                   shape: BoxShape.circle),
+        //                               child: IconButton(
+        //                                   onPressed: () {
+        //                                     ref.invalidate(
+        //                                         adhaBackImageProvider);
+        //                                   },
+        //                                   icon: const Icon(
+        //                                     Icons.close,
+        //                                     color: Colors.white,
+        //                                   )),
+        //                             )
+        //                           ],
+        //                         )
+        //                       : ColumnSuper(children: [
+        //                           Icon(
+        //                             LucideIcons.cloud_upload,
+        //                             color: ColorsConstant.primaryColor,
+        //                           ),
+        //                           SizedBox(
+        //                             height: 5,
+        //                           ),
+        //                           Text(
+        //                             "Select Aadhar Back Image",
+        //                             textAlign: TextAlign.center,
+        //                             style: TextStyle(
+        //                                 color: ColorsConstant.primaryColor,
+        //                                 fontWeight: FontWeight.bold,
+        //                                 fontSize: Adaptive.sp(16)),
+        //                           ),
+        //                           SizedBox(
+        //                             height: 5,
+        //                           ),
+        //                           Text(
+        //                             "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+        //                             textAlign: TextAlign.center,
+        //                             style: TextStyle(
+        //                                 color: ColorsConstant.primaryColor,
+        //                                 fontWeight: FontWeight.w700,
+        //                                 fontSize: Adaptive.sp(13)),
+        //                           )
+        //                         ]),
+        //                 ),
+        //               )),
+        //         ),
+        //       ),
         const SizedBox(
           height: 10,
         ),
       ]));
 
   addressLayout(BuildContext context, WidgetRef ref) => ColumnSuper(children: [
-        ref.watch(stateListProvider).when(
-            data: (states) => DropdownSearch<Datum?>(
-                  popupProps: PopupProps.menu(
-                      searchFieldProps: const TextFieldProps(
-                          autofocus: true,
-                          cursorColor: ColorsConstant.primaryColor,
-                          padding: Pad(left: 10, right: 10),
-                          decoration: InputDecoration(
-                            contentPadding: Pad(left: 10, right: 10),
-                            focusedErrorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                            disabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                            errorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: ColorsConstant.primaryColor)),
-                          )),
-                      menuProps: MenuProps(
-                          shape: RoundedRectangleBorder(
-                              side: const BorderSide(
-                                  color: ColorsConstant.primaryColor),
-                              borderRadius: BorderRadius.circular(8))),
-                      itemBuilder: (context, terminal, isVisible) =>
-                          ColumnSuper(
-                              alignment: Alignment.centerLeft,
-                              children: [
-                                Padding(
-                                  padding: const Pad(all: 10),
-                                  child: Text(
-                                    "${terminal?.name}",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: Adaptive.sp(16)),
-                                  ),
-                                ),
-                                Container(
-                                  height: 1,
-                                  color: Colors.grey.withOpacity(0.3),
-                                ),
-                              ]),
-                      isFilterOnline: true,
-                      title: Padding(
-                        padding: const Pad(all: 10),
-                        child: Text(
-                          'Select State',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: Adaptive.sp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      showSearchBox: true,
-                      searchDelay: const Duration(microseconds: 500)),
-                  filterFn: (user, filter) =>
-                      user?.stateFilterByName(filter) ?? false,
-                  // asyncItems: (String filter) => getData(filter),
+        ref.watch(sharedUtilityProvider).getMongoDbUser()?.state != null
+            ? TextFormField(
+                keyboardType: TextInputType.text,
+                textInputAction: TextInputAction.next,
+                controller: stateController,
+                readOnly:
+                    ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.state !=
+                        null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please input valid state name';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                    hintText: "Enter state name",
+                    label: const Text("Enter state name"),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))),
+              )
+            : ref.watch(stateListProvider).when(
+                data: (states) => DropdownSearch<Datum?>(
+                      popupProps: PopupProps.menu(
+                          searchFieldProps: const TextFieldProps(
+                              autofocus: true,
+                              cursorColor: ColorsConstant.primaryColor,
+                              padding: Pad(left: 10, right: 10),
+                              decoration: InputDecoration(
+                                contentPadding: Pad(left: 10, right: 10),
+                                focusedErrorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color: ColorsConstant.primaryColor)),
+                                disabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color: ColorsConstant.primaryColor)),
+                                errorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color: ColorsConstant.primaryColor)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color: ColorsConstant.primaryColor)),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color: ColorsConstant.primaryColor)),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color: ColorsConstant.primaryColor)),
+                              )),
+                          menuProps: MenuProps(
+                              shape: RoundedRectangleBorder(
+                                  side: const BorderSide(
+                                      color: ColorsConstant.primaryColor),
+                                  borderRadius: BorderRadius.circular(8))),
+                          itemBuilder: (context, terminal, isVisible) =>
+                              ColumnSuper(
+                                  alignment: Alignment.centerLeft,
+                                  children: [
+                                    Padding(
+                                      padding: const Pad(all: 10),
+                                      child: Text(
+                                        "${terminal?.name}",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Adaptive.sp(16)),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 1,
+                                      color: Colors.grey.withOpacity(0.3),
+                                    ),
+                                  ]),
+                          isFilterOnline: true,
+                          title: Padding(
+                            padding: const Pad(all: 10),
+                            child: Text(
+                              'Select State',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(16),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          showSearchBox: true,
+                          searchDelay: const Duration(microseconds: 500)),
+                      filterFn: (user, filter) =>
+                          user?.stateFilterByName(filter) ?? false,
+                      // asyncItems: (String filter) => getData(filter),
 
-                  items: states.data ?? [],
-                  itemAsString: (Datum? u) => "${u?.name}",
-                  onChanged: (Datum? data) =>
-                      ref.watch(statesProvider.notifier).state = data,
-                  dropdownDecoratorProps: const DropDownDecoratorProps(
-                    dropdownSearchDecoration: InputDecoration(
-                        contentPadding: Pad(left: 10, bottom: 5, top: 5),
-                        hintText: "Select State",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            borderSide: BorderSide(
-                                color: ColorsConstant.secondColorUltraDark))),
-                  ),
-                ),
-            error: (e, s) => Container(),
-            loading: () => defaultLoader()),
+                      items: states.data ?? [],
+                      itemAsString: (Datum? u) => "${u?.name}",
+                      onChanged: (Datum? data) =>
+                          ref.watch(statesProvider.notifier).state = data,
+                      dropdownDecoratorProps: const DropDownDecoratorProps(
+                        dropdownSearchDecoration: InputDecoration(
+                            contentPadding: Pad(left: 10, bottom: 5, top: 5),
+                            hintText: "Select State",
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                                borderSide: BorderSide(
+                                    color:
+                                        ColorsConstant.secondColorUltraDark))),
+                      ),
+                    ),
+                error: (e, s) => Container(),
+                loading: () => defaultLoader()),
         const SizedBox(
           height: 10,
         ),
-        ref.watch(statesProvider) == null
-            ? const SizedBox()
-            : ref
-                .watch(districtListProvider(
-                    code: ref.watch(statesProvider)?.code.toString()))
-                .when(
-                    data: (states) => DropdownSearch<StateDatum?>(
-                          popupProps: PopupProps.menu(
-                              searchFieldProps: const TextFieldProps(
-                                  autofocus: true,
-                                  cursorColor: ColorsConstant.primaryColor,
-                                  padding: Pad(left: 10, right: 10),
-                                  decoration: InputDecoration(
-                                    contentPadding: Pad(left: 10, right: 10),
-                                    focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            style: BorderStyle.solid,
-                                            color:
-                                                ColorsConstant.primaryColor)),
-                                    disabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            style: BorderStyle.solid,
-                                            color:
-                                                ColorsConstant.primaryColor)),
-                                    errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            style: BorderStyle.solid,
-                                            color:
-                                                ColorsConstant.primaryColor)),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            style: BorderStyle.solid,
-                                            color:
-                                                ColorsConstant.primaryColor)),
-                                    border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            style: BorderStyle.solid,
-                                            color:
-                                                ColorsConstant.primaryColor)),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            style: BorderStyle.solid,
-                                            color:
-                                                ColorsConstant.primaryColor)),
-                                  )),
-                              menuProps: MenuProps(
-                                  shape: RoundedRectangleBorder(
-                                      side: const BorderSide(
-                                          color: ColorsConstant.primaryColor),
-                                      borderRadius: BorderRadius.circular(8))),
-                              itemBuilder: (context, terminal, isVisible) =>
-                                  ColumnSuper(
-                                      alignment: Alignment.centerLeft,
-                                      children: [
-                                        Padding(
-                                          padding: const Pad(all: 10),
-                                          child: Text(
-                                            "${terminal?.name}",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: Adaptive.sp(16)),
-                                          ),
-                                        ),
-                                        Container(
-                                          height: 1,
-                                          color: Colors.grey.withOpacity(0.3),
-                                        ),
-                                      ]),
-                              isFilterOnline: true,
-                              title: Padding(
-                                padding: const Pad(all: 10),
-                                child: Text(
-                                  'Select District',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: Adaptive.sp(16),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              showSearchBox: true,
-                              searchDelay: const Duration(microseconds: 500)),
-                          filterFn: (user, filter) =>
-                              user?.districtFilterByName(filter) ?? false,
-                          // asyncItems: (String filter) => getData(filter),
+        ref.watch(sharedUtilityProvider).getMongoDbUser()?.district != null
+            ? TextFormField(
+                keyboardType: TextInputType.text,
+                textInputAction: TextInputAction.next,
+                readOnly: ref
+                        .watch(sharedUtilityProvider)
+                        ?.getMongoDbUser()
+                        ?.district !=
+                    null,
+                controller: cityController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please input valid city name';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                    hintText: "Enter city name",
+                    label: const Text("Enter city name"),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))),
+              )
+            : ref.watch(statesProvider) == null
+                ? const SizedBox()
+                : ref
+                    .watch(districtListProvider(
+                        code: ref.watch(statesProvider)?.code.toString()))
+                    .when(
+                        data: (states) => DropdownSearch<StateDatum?>(
+                              popupProps: PopupProps.menu(
+                                  searchFieldProps: const TextFieldProps(
+                                      autofocus: true,
+                                      cursorColor: ColorsConstant.primaryColor,
+                                      padding: Pad(left: 10, right: 10),
+                                      decoration: InputDecoration(
+                                        contentPadding:
+                                            Pad(left: 10, right: 10),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                style: BorderStyle.solid,
+                                                color: ColorsConstant
+                                                    .primaryColor)),
+                                        disabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                style: BorderStyle.solid,
+                                                color: ColorsConstant
+                                                    .primaryColor)),
+                                        errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                style: BorderStyle.solid,
+                                                color: ColorsConstant
+                                                    .primaryColor)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                style: BorderStyle.solid,
+                                                color: ColorsConstant
+                                                    .primaryColor)),
+                                        border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                style: BorderStyle.solid,
+                                                color: ColorsConstant
+                                                    .primaryColor)),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                style: BorderStyle.solid,
+                                                color: ColorsConstant
+                                                    .primaryColor)),
+                                      )),
+                                  menuProps: MenuProps(
+                                      shape: RoundedRectangleBorder(
+                                          side: const BorderSide(
+                                              color:
+                                                  ColorsConstant.primaryColor),
+                                          borderRadius:
+                                              BorderRadius.circular(8))),
+                                  itemBuilder: (context, terminal, isVisible) =>
+                                      ColumnSuper(
+                                          alignment: Alignment.centerLeft,
+                                          children: [
+                                            Padding(
+                                              padding: const Pad(all: 10),
+                                              child: Text(
+                                                "${terminal?.name}",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: Adaptive.sp(16)),
+                                              ),
+                                            ),
+                                            Container(
+                                              height: 1,
+                                              color:
+                                                  Colors.grey.withOpacity(0.3),
+                                            ),
+                                          ]),
+                                  isFilterOnline: true,
+                                  title: Padding(
+                                    padding: const Pad(all: 10),
+                                    child: Text(
+                                      'Select District',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: Adaptive.sp(16),
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  showSearchBox: true,
+                                  searchDelay:
+                                      const Duration(microseconds: 500)),
+                              filterFn: (user, filter) =>
+                                  user?.districtFilterByName(filter) ?? false,
+                              // asyncItems: (String filter) => getData(filter),
 
-                          items: states.data ?? [],
-                          itemAsString: (StateDatum? u) => u?.name ?? "",
-                          onChanged: (StateDatum? data) =>
-                              ref.watch(districtProvider.notifier).state = data,
-                          dropdownDecoratorProps: const DropDownDecoratorProps(
-                            dropdownSearchDecoration: InputDecoration(
-                                contentPadding:
-                                    Pad(left: 10, bottom: 5, top: 5),
-                                hintText: "Select District",
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8)),
-                                    borderSide: BorderSide(
-                                        color: ColorsConstant
-                                            .secondColorUltraDark))),
-                          ),
-                        ),
-                    error: (e, s) => Container(),
-                    loading: () => defaultLoader()),
+                              items: states.data ?? [],
+                              itemAsString: (StateDatum? u) => u?.name ?? "",
+                              onChanged: (StateDatum? data) => ref
+                                  .watch(districtProvider.notifier)
+                                  .state = data,
+                              dropdownDecoratorProps:
+                                  const DropDownDecoratorProps(
+                                dropdownSearchDecoration: InputDecoration(
+                                    contentPadding:
+                                        Pad(left: 10, bottom: 5, top: 5),
+                                    hintText: "Select District",
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8)),
+                                        borderSide: BorderSide(
+                                            color: ColorsConstant
+                                                .secondColorUltraDark))),
+                              ),
+                            ),
+                        error: (e, s) => Container(),
+                        loading: () => defaultLoader()),
         const SizedBox(
           height: 10,
         ),
@@ -924,8 +1517,12 @@ class _IndividualregistrationState
           keyboardType: TextInputType.number,
           textInputAction: TextInputAction.next,
           controller: pinController,
+          readOnly:
+              ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.pincode !=
+                  null,
+          maxLength: 6,
           validator: (value) {
-            if (value == null || value.isEmpty || value.length != 10) {
+            if (value == null || value.isEmpty) {
               return 'Please input Pincode';
             }
             return null;
@@ -947,6 +1544,9 @@ class _IndividualregistrationState
           keyboardType: TextInputType.text,
           controller: addressController,
           textInputAction: TextInputAction.next,
+          readOnly:
+              ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.address !=
+                  null,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please input Valid address';
@@ -963,6 +1563,174 @@ class _IndividualregistrationState
               disabledBorder:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
         ),
+        SizedBox(
+          height: 10,
+        ),
+        CupertinoButton(
+            child: Text(
+              "Address Proof Image",
+              style: TextStyle(
+                  color: ColorsConstant.primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Adaptive.sp(17)),
+            ),
+            onPressed: () {}),
+        ref.watch(sharedUtilityProvider).getMongoDbUser()?.addressProofImage !=
+                    null &&
+                ref.watch(addressProofImageProvider) == null
+            ? SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () async {
+                    imagePicker
+                        .pickImage(source: ImageSource.gallery)
+                        .then((value) {
+                      if (value != null) {
+                        ref.watch(addressProofImageProvider.notifier).state =
+                            File(value.path);
+                      }
+                    });
+                  },
+                  child: dottedBorder.DottedBorder(
+                      borderType: dottedBorder.BorderType.RRect,
+                      dashPattern: const [5, 5, 5, 5],
+                      color: ColorsConstant.primaryColor,
+                      child: Padding(
+                        padding: const Pad(all: 20),
+                        child: Center(
+                          child: ref
+                                      .watch(sharedUtilityProvider)
+                                      .getMongoDbUser()
+                                      ?.addressProofImage !=
+                                  null
+                              ? Stack(
+                                  children: [
+                                    Image.network(ref
+                                        .watch(sharedUtilityProvider)
+                                        .getMongoDbUser()
+                                        ?.addressProofImage),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(
+                                                addressProofImageProvider);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : ColumnSuper(children: [
+                                  Icon(
+                                    LucideIcons.cloud_upload,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Select Address proof Image",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Adaptive.sp(13)),
+                                  )
+                                ]),
+                        ),
+                      )),
+                ),
+              )
+            : SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () async {
+                    imagePicker
+                        .pickImage(source: ImageSource.gallery)
+                        .then((value) {
+                      if (value != null) {
+                        ref.watch(addressProofImageProvider.notifier).state =
+                            File(value.path);
+                      }
+                    });
+                  },
+                  child: dottedBorder.DottedBorder(
+                      borderType: dottedBorder.BorderType.RRect,
+                      dashPattern: const [5, 5, 5, 5],
+                      color: ColorsConstant.primaryColor,
+                      child: Padding(
+                        padding: const Pad(all: 20),
+                        child: Center(
+                          child: ref.watch(addressProofImageProvider) != null
+                              ? Stack(
+                                  children: [
+                                    Image.file(
+                                        ref.watch(addressProofImageProvider) ??
+                                            File('path')),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(
+                                                addressProofImageProvider);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : ColumnSuper(children: [
+                                  Icon(
+                                    LucideIcons.cloud_upload,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Select Address proof Image",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Adaptive.sp(13)),
+                                  )
+                                ]),
+                        ),
+                      )),
+                ),
+              ),
         const SizedBox(
           height: 10,
         ),
@@ -981,103 +1749,130 @@ class _IndividualregistrationState
                     fontSize: Adaptive.sp(17)),
               ),
               onPressed: () {}),
-          ref.watch(bankListProvider).when(
-              data: (states) => DropdownSearch<BankDatum?>(
-                    validator: (value) {
-                      if (value == null || value.bankName.isEmpty) {
-                        return 'Please input valid bank name';
-                      }
-                      return null;
-                    },
-                    popupProps: PopupProps.menu(
-                        searchFieldProps: const TextFieldProps(
-                            autofocus: true,
-                            cursorColor: ColorsConstant.primaryColor,
-                            padding: Pad(left: 10, right: 10),
-                            decoration: InputDecoration(
-                              contentPadding: Pad(left: 10, right: 10),
-                              focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      style: BorderStyle.solid,
-                                      color: ColorsConstant.primaryColor)),
-                              disabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      style: BorderStyle.solid,
-                                      color: ColorsConstant.primaryColor)),
-                              errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      style: BorderStyle.solid,
-                                      color: ColorsConstant.primaryColor)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      style: BorderStyle.solid,
-                                      color: ColorsConstant.primaryColor)),
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      style: BorderStyle.solid,
-                                      color: ColorsConstant.primaryColor)),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      style: BorderStyle.solid,
-                                      color: ColorsConstant.primaryColor)),
-                            )),
-                        menuProps: MenuProps(
-                            shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                    color: ColorsConstant.primaryColor),
-                                borderRadius: BorderRadius.circular(8))),
-                        itemBuilder: (context, terminal, isVisible) =>
-                            ColumnSuper(
-                                alignment: Alignment.centerLeft,
-                                children: [
-                                  Padding(
-                                    padding: const Pad(all: 10),
-                                    child: Text(
-                                      "${terminal?.bankName}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: Adaptive.sp(16)),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 1,
-                                    color: Colors.grey.withOpacity(0.3),
-                                  ),
-                                ]),
-                        isFilterOnline: true,
-                        title: Padding(
-                          padding: const Pad(all: 10),
-                          child: Text(
-                            'Select Bank',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: Adaptive.sp(16),
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        showSearchBox: true,
-                        searchDelay: const Duration(microseconds: 500)),
-                    filterFn: (user, filter) =>
-                        user?.stateFilterByName(filter) ?? false,
-                    // asyncItems: (String filter) => getData(filter),
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.bankName != null
+              ? TextFormField(
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.next,
+                  controller: bankNameController,
+                  readOnly: ref
+                          .watch(sharedUtilityProvider)
+                          ?.getMongoDbUser()
+                          ?.bankName !=
+                      null,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please input valid branch name';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                      hintText: "Enter Bank Name",
+                      label: const Text("Enter Bank Name"),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                )
+              : ref.watch(bankListProvider).when(
+                  data: (states) => DropdownSearch<BankDatum?>(
+                        validator: (value) {
+                          if (value == null || value.bankName.isEmpty) {
+                            return 'Please input valid bank name';
+                          }
+                          return null;
+                        },
+                        popupProps: PopupProps.menu(
+                            searchFieldProps: const TextFieldProps(
+                                autofocus: true,
+                                cursorColor: ColorsConstant.primaryColor,
+                                padding: Pad(left: 10, right: 10),
+                                decoration: InputDecoration(
+                                  contentPadding: Pad(left: 10, right: 10),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          style: BorderStyle.solid,
+                                          color: ColorsConstant.primaryColor)),
+                                  disabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          style: BorderStyle.solid,
+                                          color: ColorsConstant.primaryColor)),
+                                  errorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          style: BorderStyle.solid,
+                                          color: ColorsConstant.primaryColor)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          style: BorderStyle.solid,
+                                          color: ColorsConstant.primaryColor)),
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          style: BorderStyle.solid,
+                                          color: ColorsConstant.primaryColor)),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          style: BorderStyle.solid,
+                                          color: ColorsConstant.primaryColor)),
+                                )),
+                            menuProps: MenuProps(
+                                shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                        color: ColorsConstant.primaryColor),
+                                    borderRadius: BorderRadius.circular(8))),
+                            itemBuilder: (context, terminal, isVisible) =>
+                                ColumnSuper(
+                                    alignment: Alignment.centerLeft,
+                                    children: [
+                                      Padding(
+                                        padding: const Pad(all: 10),
+                                        child: Text(
+                                          "${terminal?.bankName}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: Adaptive.sp(16)),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 1,
+                                        color: Colors.grey.withOpacity(0.3),
+                                      ),
+                                    ]),
+                            isFilterOnline: true,
+                            title: Padding(
+                              padding: const Pad(all: 10),
+                              child: Text(
+                                'Select Bank',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: Adaptive.sp(16),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            showSearchBox: true,
+                            searchDelay: const Duration(microseconds: 500)),
+                        filterFn: (user, filter) =>
+                            user?.stateFilterByName(filter) ?? false,
+                        // asyncItems: (String filter) => getData(filter),
 
-                    items: states.data ?? [],
-                    itemAsString: (BankDatum? u) => "${u?.bankName}",
-                    onChanged: (BankDatum? data) =>
-                        ref.watch(bankProvider.notifier).state = data,
-                    dropdownDecoratorProps: const DropDownDecoratorProps(
-                      dropdownSearchDecoration: InputDecoration(
-                          contentPadding: Pad(left: 10, bottom: 5, top: 5),
-                          hintText: "Select Bank",
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                              borderSide: BorderSide(
-                                  color: ColorsConstant.secondColorUltraDark))),
-                    ),
-                  ),
-              error: (e, s) => Container(),
-              loading: () => defaultLoader()),
+                        items: states.data ?? [],
+                        itemAsString: (BankDatum? u) => "${u?.bankName}",
+                        onChanged: (BankDatum? data) =>
+                            ref.watch(bankProvider.notifier).state = data,
+                        dropdownDecoratorProps: const DropDownDecoratorProps(
+                          dropdownSearchDecoration: InputDecoration(
+                              contentPadding: Pad(left: 10, bottom: 5, top: 5),
+                              hintText: "Select Bank",
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                  borderSide: BorderSide(
+                                      color: ColorsConstant
+                                          .secondColorUltraDark))),
+                        ),
+                      ),
+                  error: (e, s) => Container(),
+                  loading: () => defaultLoader()),
           const SizedBox(
             height: 10,
           ),
@@ -1085,6 +1880,11 @@ class _IndividualregistrationState
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.next,
             controller: branchController,
+            readOnly: ref
+                    .watch(sharedUtilityProvider)
+                    ?.getMongoDbUser()
+                    ?.bankBranch !=
+                null,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please input valid branch name';
@@ -1107,6 +1907,9 @@ class _IndividualregistrationState
           TextFormField(
             keyboardType: TextInputType.number,
             controller: accountController,
+            readOnly:
+                ref.watch(sharedUtilityProvider)?.getMongoDbUser()?.bankAccNo !=
+                    null,
             textInputAction: TextInputAction.next,
             validator: (value) {
               if (value == null ||
@@ -1133,6 +1936,11 @@ class _IndividualregistrationState
             keyboardType: TextInputType.text,
             controller: ifscController,
             textInputAction: TextInputAction.next,
+            readOnly: ref
+                    .watch(sharedUtilityProvider)
+                    ?.getMongoDbUser()
+                    ?.bankIfscCode !=
+                null,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please input valid ifsc code';
@@ -1152,78 +1960,173 @@ class _IndividualregistrationState
           const SizedBox(
             height: 10,
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: InkWell(
-              onTap: () async {
-                imagePicker
-                    .pickImage(source: ImageSource.gallery)
-                    .then((value) {
-                  if (value != null) {
-                    ref.watch(chequeImageProvider.notifier).state =
-                        File(value.path);
-                  }
-                });
-              },
-              child: dottedBorder.DottedBorder(
-                  borderType: dottedBorder.BorderType.RRect,
-                  dashPattern: const [5, 5, 5, 5],
-                  color: ColorsConstant.primaryColor,
-                  child: Padding(
-                    padding: const Pad(all: 20),
-                    child: Center(
-                      child: ref.watch(chequeImageProvider) != null
-                          ? Stack(
-                              children: [
-                                Image.file(ref.watch(chequeImageProvider) ??
-                                    File('path')),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.black.withOpacity(0.6),
-                                      shape: BoxShape.circle),
-                                  child: IconButton(
-                                      onPressed: () {
-                                        ref.invalidate(chequeImageProvider);
-                                      },
-                                      icon: const Icon(
-                                        Icons.close,
-                                        color: Colors.white,
-                                      )),
-                                )
-                              ],
-                            )
-                          : ColumnSuper(children: [
-                              Icon(
-                                LucideIcons.cloud_upload,
-                                color: ColorsConstant.primaryColor,
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                "Select Cheque Image",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: ColorsConstant.primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Adaptive.sp(16)),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                "Upload Document Image,\n  Supports JPG, JPEG, PNG",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: ColorsConstant.primaryColor,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: Adaptive.sp(13)),
-                              )
-                            ]),
-                    ),
-                  )),
-            ),
-          ),
+          CupertinoButton(
+              child: Text(
+                "Cheque Image",
+                style: TextStyle(
+                    color: ColorsConstant.primaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: Adaptive.sp(17)),
+              ),
+              onPressed: () {}),
+          ref.watch(sharedUtilityProvider).getMongoDbUser()?.chequeImage !=
+                      null &&
+                  ref.watch(chequeImageProvider) == null
+              ? SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: InkWell(
+                    onTap: () async {
+                      imagePicker
+                          .pickImage(source: ImageSource.gallery)
+                          .then((value) {
+                        if (value != null) {
+                          ref.watch(chequeImageProvider.notifier).state =
+                              File(value.path);
+                        }
+                      });
+                    },
+                    child: dottedBorder.DottedBorder(
+                        borderType: dottedBorder.BorderType.RRect,
+                        dashPattern: const [5, 5, 5, 5],
+                        color: ColorsConstant.primaryColor,
+                        child: Padding(
+                          padding: const Pad(all: 20),
+                          child: Center(
+                            child: ref
+                                        .watch(sharedUtilityProvider)
+                                        .getMongoDbUser()
+                                        ?.chequeImage !=
+                                    null
+                                ? Stack(
+                                    children: [
+                                      Image.network(ref
+                                          .watch(sharedUtilityProvider)
+                                          .getMongoDbUser()
+                                          ?.chequeImage),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.6),
+                                            shape: BoxShape.circle),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              ref.invalidate(
+                                                  chequeImageProvider);
+                                            },
+                                            icon: const Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                            )),
+                                      )
+                                    ],
+                                  )
+                                : ColumnSuper(children: [
+                                    Icon(
+                                      LucideIcons.cloud_upload,
+                                      color: ColorsConstant.primaryColor,
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "Select Cheque Image",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: ColorsConstant.primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Adaptive.sp(16)),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: ColorsConstant.primaryColor,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: Adaptive.sp(13)),
+                                    )
+                                  ]),
+                          ),
+                        )),
+                  ),
+                )
+              : SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: InkWell(
+                    onTap: () async {
+                      imagePicker
+                          .pickImage(source: ImageSource.gallery)
+                          .then((value) {
+                        if (value != null) {
+                          ref.watch(chequeImageProvider.notifier).state =
+                              File(value.path);
+                        }
+                      });
+                    },
+                    child: dottedBorder.DottedBorder(
+                        borderType: dottedBorder.BorderType.RRect,
+                        dashPattern: const [5, 5, 5, 5],
+                        color: ColorsConstant.primaryColor,
+                        child: Padding(
+                          padding: const Pad(all: 20),
+                          child: Center(
+                            child: ref.watch(chequeImageProvider) != null
+                                ? Stack(
+                                    children: [
+                                      Image.file(
+                                          ref.watch(chequeImageProvider) ??
+                                              File('path')),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.6),
+                                            shape: BoxShape.circle),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              ref.invalidate(
+                                                  chequeImageProvider);
+                                            },
+                                            icon: const Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                            )),
+                                      )
+                                    ],
+                                  )
+                                : ColumnSuper(children: [
+                                    Icon(
+                                      LucideIcons.cloud_upload,
+                                      color: ColorsConstant.primaryColor,
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "Select Cheque Image",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: ColorsConstant.primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Adaptive.sp(16)),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: ColorsConstant.primaryColor,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: Adaptive.sp(13)),
+                                    )
+                                  ]),
+                          ),
+                        )),
+                  ),
+                ),
           const SizedBox(
             height: 10,
           ),
@@ -1300,6 +2203,11 @@ class _IndividualregistrationState
                   keyboardType: TextInputType.text,
                   controller: firmController,
                   textInputAction: TextInputAction.next,
+                  readOnly: ref
+                          .watch(sharedUtilityProvider)
+                          ?.getMongoDbUser()
+                          ?.firmName !=
+                      null,
                   decoration: InputDecoration(
                       hintText: "Enter Firm Name",
                       label: Text("Enter Firm Name"),

@@ -7,12 +7,12 @@ part of 'PartnersDirectorsService.dart';
 // **************************************************************************
 
 String _$directorsPartnersListHash() =>
-    r'd76825882ef6b2d69dc27bea0366d2b973edd93d';
+    r'dc0fee294791f7ef2d0c34eaea486feece96823d';
 
 /// See also [directorsPartnersList].
 @ProviderFor(directorsPartnersList)
 final directorsPartnersListProvider =
-    AutoDisposeStreamProvider<ListOfDirectorsModel>.internal(
+    AutoDisposeFutureProvider<ListOfDirectorsModel>.internal(
   directorsPartnersList,
   name: r'directorsPartnersListProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -23,7 +23,7 @@ final directorsPartnersListProvider =
 );
 
 typedef DirectorsPartnersListRef
-    = AutoDisposeStreamProviderRef<ListOfDirectorsModel>;
+    = AutoDisposeFutureProviderRef<ListOfDirectorsModel>;
 String _$sendVerifyDirectorOtpHash() =>
     r'feea144e3cbde26257ced06d00c4f770fc236aba';
 

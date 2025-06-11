@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swfl/Data/Model/OtpVerifyModel.dart';
 
 import '../Model/AdharVerifyOtpModel.dart';
+import '../Model/MongoDbUserModel.dart';
 
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError();
@@ -28,6 +29,17 @@ class SharedUtility {
 
   void setToken(String token) {
     sharedPreferences.setString('token', token);
+  }
+
+  MongoDbUserModel? getMongoDbUser() {
+    return sharedPreferences.get('mongoUser') != null
+        ? mongoDbUserModelFromJson(
+        sharedPreferences.getString('mongoUser') ?? "")
+        : null;
+  }
+
+  void setMongoDbUser(MongoDbUserModel mongoDbUser) {
+    sharedPreferences.setString('mongoUser', jsonEncode(mongoDbUser.toJson()));
   }
 
   Data? getUser() {

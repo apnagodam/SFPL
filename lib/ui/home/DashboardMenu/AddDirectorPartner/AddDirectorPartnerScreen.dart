@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -12,6 +13,7 @@ import 'package:pinput/pinput.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
 import 'package:swfl/Domain/AuthenticationService/AuthenticationService.dart';
+import 'package:swfl/Domain/PartnersDIrectorsService/PartnersDirectorsService.dart';
 import 'package:swfl/ui/auth/Login/login_screen.dart';
 import 'package:swfl/ui/utils/colors.dart';
 import 'package:swfl/ui/utils/debouncer.dart';
@@ -37,6 +39,15 @@ class _AdddirectorpartnerscreenState
   final profilePicProvider = StateProvider<File?>((ref) => null);
 
   final isOtpSent = StateProvider((ref) => false);
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.watch(loginInfoProvider.future).then(
+          (value) => ref.watch(sharedUtilityProvider).setUser(value.data));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,16 +156,16 @@ class _AdddirectorpartnerscreenState
               SizedBox(
                 height: 10,
               ),
-              Expanded(
-                  child: InkWell(
+              InkWell(
                 onTap: () async {
-                  var result =
-                      await ImagePicker().pickImage(source: ImageSource.camera);
-
-                  if (result != null) {
-                    File file = File(result.path);
-                    ref.watch(profilePicProvider.notifier).state = file;
-                  } else {}
+                  ImagePicker()
+                      .pickImage(source: ImageSource.camera)
+                      .then((value) {
+                    if (value != null) {
+                      File file = File(value.path);
+                      ref.watch(profilePicProvider.notifier).state = file;
+                    }
+                  });
                 },
                 child: DottedBorder(
                     borderType: BorderType.RRect,
@@ -162,42 +173,44 @@ class _AdddirectorpartnerscreenState
                     color: ColorsConstant.primaryColor,
                     child: Padding(
                       padding: const Pad(all: 20),
-                      child: Center(
-                        child: ref.watch(profilePicProvider) != null
-                            ? ColumnSuper(
-                                alignment: Alignment.center,
-                                children: [
-                                    const Icon(
-                                      LucideIcons.file,
-                                      color: ColorsConstant.primaryColor,
+                      child: ref.watch(profilePicProvider) != null
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                  const Icon(
+                                    LucideIcons.file,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      "${basename(ref.watch(profilePicProvider)?.path ?? "")}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Adaptive.sp(14)),
+                                      textAlign: TextAlign.center,
+                                      maxLines: 2,
                                     ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Center(
-                                      child: Text(
-                                        "${basename(ref.watch(profilePicProvider)?.path ?? "")}",
+                                  )
+                                ])
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                  const Icon(LucideIcons.file),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Center(
+                                    child: Text('Select Self Picture',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: Adaptive.sp(14)),
-                                        textAlign: TextAlign.center,
-                                        maxLines: 2,
-                                      ),
-                                    )
-                                  ])
-                            : ColumnSuper(children: [
-                                const Icon(LucideIcons.file),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text('Select Self Picture',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: Adaptive.sp(14)))
-                              ]),
-                      ),
+                                            fontSize: Adaptive.sp(14))),
+                                  )
+                                ]),
                     )),
-              )),
+              ),
               SizedBox(
                 height: 10,
               ),
@@ -207,18 +220,25 @@ class _AdddirectorpartnerscreenState
                   onPressed: () async {
                     if (validationKey.currentState!.validate()) {
                       if (ref.watch(profilePicProvider) != null) {
+                        showloader(context);
                         ref
                             .watch(sendDirectorOtpProvider(
                                     phoneNumber: phoneController.text)
                                 .future)
                             .then((value) {
+                          hideLoader(context);
+
                           if (value['status'].toString() == "1") {
                             ref.watch(isOtpSent.notifier).state = true;
                             successToast(context, value['message'].toString());
                           } else {
                             errorToast(context, value['message'].toString());
                           }
+                        }).onError((e, s) {
+                          hideLoader(context);
                         });
+                      } else {
+                        errorToast(context, "Please select profile picture");
                       }
                     }
                   },
@@ -267,6 +287,7 @@ class _AdddirectorpartnerscreenState
                         if (pin.length == 6) {
                           Debouncer(delay: const Duration(milliseconds: 500))
                               .call(() {
+                            showloader(context);
                             ref
                                 .watch(submitDirectorDetailsProvider(
                                         aadharNo: aadharController.text,
@@ -280,7 +301,9 @@ class _AdddirectorpartnerscreenState
                                                 File(""))
                                     .future)
                                 .then((value) {
+                              hideLoader(context);
                               if (value['status'].toString() == "1") {
+                                ref.invalidate(directorsPartnersListProvider);
                                 if ((ref
                                             .watch(sharedUtilityProvider)
                                             .getUser()
@@ -303,6 +326,8 @@ class _AdddirectorpartnerscreenState
                                 errorToast(
                                     context, value['message'].toString());
                               }
+                            }).onError((e, s) {
+                              hideLoader(context);
                             });
                           });
                         }

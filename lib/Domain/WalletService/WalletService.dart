@@ -37,12 +37,12 @@ Future<Map<String, dynamic>> addMoney(
 }
 
 @riverpod
-Stream<BnplStatementModel> walletStatement(WalletStatementRef ref,
-    {String? pastDate, String? currentDate}) async* {
+Future<BnplStatementModel> walletStatement(WalletStatementRef ref,
+    {String? pastDate, String? currentDate}) async {
   var response = await ref.watch(dioProvider).post(ApiClient.getWalletStatement,
       queryParameters: {'from_date': pastDate, "to_date": currentDate});
 
-  yield bnplStatementModelFromMap(jsonEncode(response.data));
+  return  bnplStatementModelFromMap(jsonEncode(response.data));
 }
 @riverpod
 Future<Map<String, dynamic>> withdrawMoney(

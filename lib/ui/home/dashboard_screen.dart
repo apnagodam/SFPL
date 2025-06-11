@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
@@ -8,15 +10,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Data/Model/TermsModel.dart';
 import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
 import 'package:swfl/Domain/BnplService/BnplService.dart';
+import 'package:swfl/Domain/Dio/DioProvider.dart';
+import 'package:swfl/Domain/PartnersDIrectorsService/PartnersDirectorsService.dart';
 import 'package:swfl/ui/home/home_screen.dart';
 import 'package:swfl/ui/utils/colors.dart';
 import 'package:swfl/ui/utils/routes.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
 import 'package:swfl/ui/utils/widgets.dart';
+import 'package:swfl/ui/verification/AadharVerification.dart';
 
 import '../../Domain/AuthenticationService/AuthenticationService.dart';
 
@@ -35,23 +41,140 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((callBack) {
-      ref.watch(loginInfoProvider.future).then((data) {
+    WidgetsBinding.instance.addPostFrameCallback((callBack) async {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+
+      ref.watch(loginInfoProvider.future).then((data) async {
         if (data.data?.isLogin != false) {
-          if (data.data?.type == "BNPL" && data.data?.aadharVerify == "0") {
-            showVerificationDialog(context,
-                titleText: "Verify Aadhar",
-                messageText: "Your Aadhar verification is pending", action: () {
-              hideLoader(context);
-              context.goNamed(RoutesStrings.bnplAadharRegistration);
+          
+          if (ref.watch(dioProvider).options.baseUrl == ApiClient.testBaseUrl) {
+            Dio dio = Dio(BaseOptions(
+                baseUrl: 'http://localhost:3000/api/v1/users/',
+                connectTimeout: Duration(minutes: 10),
+                sendTimeout: Duration(minutes: 10),
+                receiveTimeout: Duration(minutes: 10)))
+              ..interceptors.addAll([PrettyDioLogger()]);
+
+            await dio.post('update-device-id', data: {
+              "fullName": "${data.data?.firmName}",
+              "phone": "${data.data?.phone ?? "0000000000"}",
+              "loginType": "user",
+              "deviceId": "${androidInfo.id}",
+              "empId": "NULL",
+              "location": "asd",
+              "appType": "finance"
+            });
+          } else {
+            Dio dio = Dio(BaseOptions(
+                baseUrl: 'https://node-backend-oyy4.onrender.com/api/v1/users/',
+                connectTimeout: Duration(minutes: 10),
+                sendTimeout: Duration(minutes: 10),
+                receiveTimeout: Duration(minutes: 10)))
+              ..interceptors.addAll([PrettyDioLogger()]);
+
+            await dio.post('update-device-id', data: {
+              "fullName": "${data.data?.firmName}",
+              "phone": "${data.data?.phone ?? "0000000000"}",
+              "loginType": "user",
+              "deviceId": "${androidInfo.id}",
+              "empId": "NULL",
+              "location": "asd",
+              "appType": "finance"
             });
           }
+          // if (data.data?.type == "BNPL" && data.data?.aadharVerify == "0") {
+          //   showVerificationDialog(context,
+          //       titleText: "Verify Aadhar",
+          //       messageText: "Your Aadhar verification is pending", action: () {
+          //     hideLoader(context);
+          //     context.goNamed(RoutesStrings.bnplAadharRegistration);
+          //   });
+          // }
           ref.watch(sharedUtilityProvider).setUser(data.data);
         } else {
           ref.watch(sharedPreferencesProvider).clear();
           context.go(RoutesStrings.login);
         }
       });
+    });
+  }
+
+  void checkForAadharVerification(void callBack) {
+    ref.watch(loginInfoProvider.future).then((data) {
+      if (data.data?.isLogin != false) {
+        // if (data.data?.type == "BNPL" && data.data?.aadharVerify == "0") {
+        //   showVerificationDialog(context,
+        //       titleText: "Verify Aadhar",
+        //       messageText: "Your Aadhar verification is pending", action: () {
+        //     hideLoader(context);
+        //     context.goNamed(RoutesStrings.bnplAadharRegistration);
+        //   });
+        // }
+        ref.watch(sharedUtilityProvider).setUser(data.data);
+        if (ref
+                    .watch(sharedUtilityProvider)
+                    .getUser()
+                    ?.constitution
+                    .toString() ==
+                "3" ||
+            ref
+                    .watch(sharedUtilityProvider)
+                    .getUser()
+                    ?.constitution
+                    .toString() ==
+                "4") {
+          ref.watch(directorsPartnersListProvider.future).then((value) {
+            if ((value.data ?? []).isEmpty ||
+                value.data?.length.toString() !=
+                    ref
+                        .watch(sharedUtilityProvider)
+                        .getUser()
+                        ?.partnerDirectorCount
+                        .toString()) {
+              ref
+                  .watch(goRouterProvider)
+                  .goNamed(RoutesStrings.addDirectorPartnerHome);
+            } else {
+              callBack;
+            }
+          });
+        }
+
+        // else {
+        //   if (ref
+        //           .watch(sharedUtilityProvider)
+        //           .getUser()
+        //           ?.aadharVerify
+        //           .toString() !=
+        //       "1") {
+        //     showDialog(
+        //         context: context,
+        //         barrierDismissible: false,
+        //         builder: (dialogContext) => Consumer(
+        //             builder: (context, ref, _) => AlertDialog(
+        //                   title: Text(
+        //                     'Verify Your Aadhar',
+        //                     textAlign: TextAlign.center,
+        //                     style: TextStyle(
+        //                         fontSize: Adaptive.sp(18),
+        //                         fontWeight: FontWeight.bold),
+        //                   ),
+        //                   shape: RoundedRectangleBorder(
+        //                       borderRadius: BorderRadius.circular(8)),
+        //                   content: Aadharverification(),
+        //                 )));
+        //   } else {
+        //     if (callback != null) {
+        //       callback.call();
+        //     }
+        //   }
+        // }
+      } else {
+        ref.watch(sharedPreferencesProvider).clear();
+        context.go(RoutesStrings.login);
+      }
     });
   }
 
@@ -289,8 +412,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           Divider(),
                           ListTile(
                               onTap: () {
-                                context.goNamed(
-                                    RoutesStrings.authorisationLetterScreen);
+                                checkForAadharVerification(context.goNamed(
+                                    RoutesStrings.authorisationLetterScreen));
                               },
                               title: Center(
                                 child: Row(
@@ -317,6 +440,74 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 SizedBox(
                   height: 10,
                 ),
+                ExpansionTile(
+                  title: Center(
+                    child: Text(
+                      'My Profiles',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: Adaptive.sp(16)),
+                    ),
+                  ),
+                  backgroundColor: Colors.white,
+                  collapsedBackgroundColor: Colors.white,
+                  collapsedShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side:
+                          const BorderSide(color: ColorsConstant.primaryColor)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(
+                          color: ColorsConstant.secondColorUltraDark)),
+                  children: [
+                    Divider(),
+                    ListTile(
+                        onTap: () {
+                          checkForAadharVerification(
+                              context.goNamed(RoutesStrings.gstProfileScreen));
+                        },
+                        title: Center(
+                          child: Text('GST Profile',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(16),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500)),
+                        )),
+                    Divider(),
+                    ListTile(
+                        onTap: () {
+                          checkForAadharVerification(
+                              context.goNamed(RoutesStrings.businessProfile));
+                        },
+                        title: Center(
+                          child: Text('Business Profile',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(16),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500)),
+                        )),
+                    Divider(),
+                    ListTile(
+                        onTap: () {
+                          checkForAadharVerification(
+                              context.goNamed(RoutesStrings.mandiTaxProfile));
+                        },
+                        title: Center(
+                          child: Text('Mandi Tax Profile',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: Adaptive.sp(16),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500)),
+                        )),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+
                 ExpansionTile(
                   title: Center(
                     child: Text(
@@ -353,10 +544,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               hideLoader(context);
                               context.goNamed(RoutesStrings.verfication);
                             });
-                          } else {
-                            context
-                                .goNamed(RoutesStrings.applyForSanctionLimit);
-                          }
+                          } else {}
+                          checkForAadharVerification(context
+                              .goNamed(RoutesStrings.applyForSanctionLimit));
                         },
                         title: Center(
                           child: Text('Apply',
@@ -383,7 +573,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               context.goNamed(RoutesStrings.verfication);
                             });
                           } else {
-                            context.goNamed(RoutesStrings.sanctionedAmount);
+                            checkForAadharVerification(context
+                                .goNamed(RoutesStrings.sanctionedAmount));
                           }
                         },
                         title: Center(
@@ -410,9 +601,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               hideLoader(context);
                               context.goNamed(RoutesStrings.verfication);
                             });
-                          } else {
-                            context.goNamed(RoutesStrings.holdStatement);
-                          }
+                          } else {}
+                          checkForAadharVerification(
+                              context.goNamed(RoutesStrings.holdStatement));
                         },
                         title: Center(
                           child: Text('Hold Statement',
@@ -465,7 +656,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             context.goNamed(RoutesStrings.verfication);
                           });
                         } else {
-                          context.goNamed(RoutesStrings.applyForCommodityLoan);
+                          checkForAadharVerification(context
+                              .goNamed(RoutesStrings.applyForCommodityLoan));
                         }
                       },
                       title: Center(
@@ -506,7 +698,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               context.goNamed(RoutesStrings.verfication);
                             });
                           } else {
-                            context.goNamed(RoutesStrings.appliedLoanList);
+                            checkForAadharVerification(
+                                context.goNamed(RoutesStrings.appliedLoanList));
                           }
 
                           // if(ref.watch(sharedUtilityProvider).getUser()?.aadharVerify.toString()=="0"){
@@ -567,7 +760,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     Divider(),
                     ListTile(
                         onTap: () {
-                          context.goNamed(RoutesStrings.addMoney);
+                          checkForAadharVerification(
+                              context.goNamed(RoutesStrings.addMoney));
                         },
                         title: Center(
                           child: Text('Add Money',
@@ -580,7 +774,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     Divider(),
                     ListTile(
                         onTap: () {
-                          context.goNamed(RoutesStrings.withdrawMoney);
+                          checkForAadharVerification(
+                              context.goNamed(RoutesStrings.withdrawMoney));
                         },
                         title: Center(
                           child: Text('Withdraw Money',
@@ -593,7 +788,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     Divider(),
                     ListTile(
                         onTap: () {
-                          context.goNamed(RoutesStrings.walletStatement);
+                          checkForAadharVerification(
+                              context.goNamed(RoutesStrings.walletStatement));
                         },
                         title: Center(
                           child: Text('Wallet Statement',

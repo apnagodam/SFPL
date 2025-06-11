@@ -188,7 +188,7 @@ class _AddMoneyProviderElement
   File? get image => (origin as AddMoneyProvider).image;
 }
 
-String _$walletStatementHash() => r'b705a39bfe0303723ceab90020037b1025632d3f';
+String _$walletStatementHash() => r'a4eb8668c5dd81aba98b935cef38eaff2be70424';
 
 /// See also [walletStatement].
 @ProviderFor(walletStatement)
@@ -237,7 +237,7 @@ class WalletStatementFamily extends Family<AsyncValue<BnplStatementModel>> {
 
 /// See also [walletStatement].
 class WalletStatementProvider
-    extends AutoDisposeStreamProvider<BnplStatementModel> {
+    extends AutoDisposeFutureProvider<BnplStatementModel> {
   /// See also [walletStatement].
   WalletStatementProvider({
     String? pastDate,
@@ -277,7 +277,7 @@ class WalletStatementProvider
 
   @override
   Override overrideWith(
-    Stream<BnplStatementModel> Function(WalletStatementRef provider) create,
+    FutureOr<BnplStatementModel> Function(WalletStatementRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -295,7 +295,7 @@ class WalletStatementProvider
   }
 
   @override
-  AutoDisposeStreamProviderElement<BnplStatementModel> createElement() {
+  AutoDisposeFutureProviderElement<BnplStatementModel> createElement() {
     return _WalletStatementProviderElement(this);
   }
 
@@ -316,7 +316,7 @@ class WalletStatementProvider
   }
 }
 
-mixin WalletStatementRef on AutoDisposeStreamProviderRef<BnplStatementModel> {
+mixin WalletStatementRef on AutoDisposeFutureProviderRef<BnplStatementModel> {
   /// The parameter `pastDate` of this provider.
   String? get pastDate;
 
@@ -325,7 +325,7 @@ mixin WalletStatementRef on AutoDisposeStreamProviderRef<BnplStatementModel> {
 }
 
 class _WalletStatementProviderElement
-    extends AutoDisposeStreamProviderElement<BnplStatementModel>
+    extends AutoDisposeFutureProviderElement<BnplStatementModel>
     with WalletStatementRef {
   _WalletStatementProviderElement(super.provider);
 

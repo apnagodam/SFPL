@@ -481,20 +481,11 @@ class _RejectedloanRequestsState extends ConsumerState<RejectedloanRequests> {
                       color: Colors.white,
                       fontSize: Adaptive.sp(12)),
                 )),
-                const VerticalDivider(),
-                Expanded(
-                    child: Text(
-                  "Amount",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: Adaptive.sp(12)),
-                )),
+               
               ]),
             ),
           ),
-          ref.watch(approvedRequestsProvider).when(
+          ref.watch(rejectedRequestsProvider).when(
               data: (data) => (data.data ?? []).isEmpty
                   ? emptyData()
                   : ListView.builder(
@@ -557,16 +548,7 @@ class _RejectedloanRequestsState extends ConsumerState<RejectedloanRequests> {
                                   color: Colors.black,
                                   fontSize: Adaptive.sp(12)),
                             )),
-                            const VerticalDivider(),
-                            Expanded(
-                                child: Text(
-                              "${currencyFormat.format(double.tryParse("${data.data?[index].amount}"))}",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontSize: Adaptive.sp(12)),
-                            )),
+                           
                           ]),
                         ),
                       ),

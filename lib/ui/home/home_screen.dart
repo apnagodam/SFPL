@@ -10,9 +10,12 @@ import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
 import 'package:swfl/Domain/LoanService/LoanService.dart';
+import 'package:swfl/Domain/PartnersDIrectorsService/PartnersDirectorsService.dart';
 import 'package:swfl/ui/utils/LoaderUtils.dart';
 import 'package:swfl/ui/utils/colors.dart';
+import 'package:swfl/ui/utils/routes.dart';
 import 'package:swfl/ui/utils/routes_strings.dart';
+import 'package:swfl/ui/verification/AadharVerification.dart';
 import 'package:tab_container/tab_container.dart';
 
 import '../../Domain/AuthenticationService/AuthenticationService.dart';
@@ -33,12 +36,94 @@ class HomeScreen extends ConsumerStatefulWidget {
 TabController? _controller;
 
 class _HomeScreenState extends ConsumerState<HomeScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
     _controller = TabController(vsync: this, length: 2);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkForAadharVerification(null);
+    });
+  }
+
+  void checkForAadharVerification(void callback) {
+    ref.watch(loginInfoProvider.future).then((data) {
+      if (data.data?.isLogin != false) {
+        ref.watch(sharedUtilityProvider).setUser(data.data);
+
+        if (ref
+                    .watch(sharedUtilityProvider)
+                    .getUser()
+                    ?.constitution
+                    .toString() ==
+                "3" ||
+            ref
+                    .watch(sharedUtilityProvider)
+                    .getUser()
+                    ?.constitution
+                    .toString() ==
+                "4") {
+          ref.watch(directorsPartnersListProvider.future).then((value) {
+            if ((value.data ?? []).isEmpty ||
+                value.data?.length.toString() !=
+                    ref
+                        .watch(sharedUtilityProvider)
+                        .getUser()
+                        ?.partnerDirectorCount
+                        .toString()) {
+              ref
+                  .watch(goRouterProvider)
+                  .goNamed(RoutesStrings.addDirectorPartnerHome);
+            } else {
+              callback;
+            }
+          });
+        }
+
+        // else {
+        //   if (ref
+        //           .watch(sharedUtilityProvider)
+        //           .getUser()
+        //           ?.aadharVerify
+        //           .toString() !=
+        //       "1") {
+        //     showDialog(
+        //         context: context,
+        //         barrierDismissible: false,
+        //         builder: (dialogContext) => Consumer(
+        //             builder: (context, ref, _) => AlertDialog(
+        //                   title: Text(
+        //                     'Verify Your Aadhar',
+        //                     textAlign: TextAlign.center,
+        //                     style: TextStyle(
+        //                         fontSize: Adaptive.sp(18),
+        //                         fontWeight: FontWeight.bold),
+        //                   ),
+        //                   shape: RoundedRectangleBorder(
+        //                       borderRadius: BorderRadius.circular(8)),
+        //                   content: Aadharverification(),
+        //                 )));
+
+        // }
+      } else {
+        ref.watch(sharedPreferencesProvider).clear();
+        context.go(RoutesStrings.login);
+      }
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    checkForAadharVerification(null);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
@@ -52,7 +137,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     height: Adaptive.sh(2),
                   ),
                   Padding(
-                    padding: Pad(all: 10),
+                    padding: const Pad(all: 10),
                     child: TabContainer(
                       controller: _controller,
                       borderRadius: BorderRadius.circular(20),
@@ -165,15 +250,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                     Text(
                                       "BNPL Balance".toUpperCase(),
                                       style: TextStyle(
-                                        shadows: const [
-                                          Shadow(
-                                              color: Colors.black,
-                                              blurRadius: 2.0),
-                                          Shadow(
-                                              color: Colors.black,
-                                              blurRadius: 2.0)
-                                        ],
-                                        color: Colors.white,
+                                        shadows: const [],
+                                        color: ColorsConstant.secondColorDark,
                                         fontWeight: FontWeight.bold,
                                         fontFamily:
                                             GoogleFonts.manrope().fontFamily,
@@ -188,23 +266,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                               currencyFormat.format(double.tryParse(
                                                   "${bnplData.bnpl?.effectiveBalance ?? 0.0}")),
                                               style: TextStyle(
-                                                  shadows: const [
-                                                    Shadow(
-                                                        color: Colors.black,
-                                                        blurRadius: 2.0),
-                                                    Shadow(
-                                                        color: Colors.black,
-                                                        blurRadius: 2.0)
-                                                  ],
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      GoogleFonts.manrope()
-                                                          .fontFamily,
-                                                  fontSize: Adaptive.sp(22),
-                                                  color: Colors.white),
+                                                shadows: const [],
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily:
+                                                    GoogleFonts.manrope()
+                                                        .fontFamily,
+                                                fontSize: Adaptive.sp(22),
+                                                color: ColorsConstant
+                                                    .secondColorDark,
+                                              ),
                                             ),
                                         error: (e, s) => Container(),
-                                        loading: () => Center(
+                                        loading: () => const Center(
                                               child:
                                                   CupertinoActivityIndicator(),
                                             ))
@@ -277,7 +350,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   //             }, icon: Icon(Icons.crop_rotate,color: Colors.white,)),
                   //           )
                   //         ])),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   ref.watch(dashboardDataProvider).when(
@@ -303,8 +376,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                     context.goNamed(RoutesStrings.verfication);
                                   });
                                 } else {
-                                  context.goNamed(
-                                      RoutesStrings.applyForCommodityLoan);
+                                  checkForAadharVerification(context.goNamed(
+                                      RoutesStrings.applyForCommodityLoan));
                                 }
                               }),
                               homeLayoutWidget(
@@ -312,7 +385,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                   imagePath:
                                       'https://static.thenounproject.com/png/4814670-200.png',
                                   callback: () {
-                                context.goNamed(RoutesStrings.repayment);
+                                checkForAadharVerification(
+                                    context.goNamed(RoutesStrings.repayment));
                               }),
                               homeLayoutWidget(
                                   LucideIcons.hand_coins,
@@ -321,14 +395,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                   imagePath:
                                       'https://static.thenounproject.com/png/4814670-200.png',
                                   callback: () {
-                                context.goNamed(RoutesStrings.loansNearExpiry);
+                                checkForAadharVerification(context
+                                    .goNamed(RoutesStrings.loansNearExpiry));
                               }),
                               homeLayoutWidget(LucideIcons.hand_coins,
                                   'Expired Loans', '${data.loanExpiry}',
                                   imagePath:
                                       'https://static.thenounproject.com/png/4814670-200.png',
                                   callback: () {
-                                context.goNamed(RoutesStrings.expiredLoans);
+                                checkForAadharVerification(context
+                                    .goNamed(RoutesStrings.expiredLoans));
                               }),
                               homeLayoutWidget(
                                   LucideIcons.hand_coins,
@@ -337,8 +413,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                   imagePath:
                                       'https://static.thenounproject.com/png/4814670-200.png',
                                   callback: () {
-                                context.goNamed(
-                                    RoutesStrings.totalPledgedCommodity);
+                                checkForAadharVerification(context.goNamed(
+                                    RoutesStrings.totalPledgedCommodity));
                               }),
                               homeLayoutWidget(
                                   LucideIcons.hand_coins,
@@ -348,7 +424,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                   imagePath:
                                       'https://static.thenounproject.com/png/4814670-200.png',
                                   callback: () {
-                                context.goNamed(RoutesStrings.totalLoanAmount);
+                                checkForAadharVerification(context
+                                    .goNamed(RoutesStrings.totalLoanAmount));
                               }),
                               homeLayoutWidget(
                                   LucideIcons.hand_coins,
@@ -358,7 +435,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                   imagePath:
                                       'https://static.thenounproject.com/png/4814670-200.png',
                                   callback: () {
-                                context.goNamed(RoutesStrings.holdStatement);
+                                checkForAadharVerification(context
+                                    .goNamed(RoutesStrings.holdStatement));
                               })
                             ],
                           ),
@@ -367,7 +445,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 ],
               ),
               onRefresh: () =>
-                  Future.delayed(Duration(seconds: 1)).then((value) {
+                  Future.delayed(const Duration(seconds: 1)).then((value) {
                     ref.invalidate(dashboardDataProvider);
                     ref.watch(loginInfoProvider.future).then((data) {
                       if (data.data?.isLogin != false) {
@@ -387,10 +465,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         onTap: callback,
         child: Card(
           color: Colors.white,
-          margin: Pad(all: 10),
+          margin: const Pad(all: 10),
           elevation: 10,
           shape: RoundedRectangleBorder(
-              side: BorderSide(color: ColorsConstant.secondColorSuperDark),
+              side:
+                  const BorderSide(color: ColorsConstant.secondColorSuperDark),
               borderRadius: BorderRadius.circular(10)),
           surfaceTintColor: Colors.white,
           child: Row(children: [
@@ -408,7 +487,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   color: const Color.fromARGB(255, 28, 42, 25),
                   borderRadius: BorderRadius.circular(10)),
               child: Padding(
-                  padding: Pad(all: 20),
+                  padding: const Pad(all: 20),
                   child: Image.network(
                     imagePath ?? "",
                     fit: BoxFit.contain,
@@ -416,7 +495,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     color: Colors.white,
                   )),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             ColumnSuper(alignment: Alignment.centerLeft, children: [

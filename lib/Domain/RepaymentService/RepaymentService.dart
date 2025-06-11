@@ -16,7 +16,7 @@ Stream<RepaymentTerminalData> repaymentTerminalData(
   var response = await ref.watch(dioProvider).get(
         ApiClient.getRepaymentTerminal,
       );
-  yield repaymentTerminalDataFromMap(jsonEncode(response.data));
+  yield repaymentTerminalDataFromJson(jsonEncode(response.data));
 }
 
 @riverpod
@@ -49,10 +49,15 @@ Stream<RepaymentSettlementList> repaymentSettlementList(
 
 @riverpod
 Future<Map<String, dynamic>> repayGatepass(RepayGatepassRef ref,
-    {List<String>? financeId, String? finalAmount}) async {
-  FormData formData = new FormData.fromMap({
+    {List<String>? financeId,
+    String? finalAmount,
+    String? paymentType,
+    String? partPaymentAmount}) async {
+  FormData formData = FormData.fromMap({
     "finance_ids[]": financeId,
-    "final_amount": "finalAmount",
+    "final_amount": finalAmount,
+    "payment_type": paymentType,
+    "pay_amount": partPaymentAmount
   });
   var response = await ref
       .watch(dioProvider)

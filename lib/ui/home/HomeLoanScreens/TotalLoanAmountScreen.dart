@@ -324,6 +324,8 @@ class Totalloanamountscreen extends ConsumerWidget {
                                                   ),
                                                   TextButton(
                                                       onPressed: () {
+                                                        showloader(context);
+
                                                         ref
                                                             .watch(drfLinkProvider(
                                                                     financeId:
@@ -341,6 +343,8 @@ class Totalloanamountscreen extends ConsumerWidget {
                                                                             "${value['data']}")
                                                                     .future)
                                                                 .then((file) {
+                                                              hideLoader(
+                                                                  context);
                                                               if (file !=
                                                                   null) {
                                                                 Navigator.of(
