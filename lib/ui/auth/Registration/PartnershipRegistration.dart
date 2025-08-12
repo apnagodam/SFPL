@@ -1260,13 +1260,9 @@ class _PartnershipregistrationState
                   width: MediaQuery.of(context).size.width,
                   child: InkWell(
                     onTap: () async {
-                      imagePicker
-                          .pickImage(source: ImageSource.gallery)
-                          .then((value) {
-                        if (value != null) {
-                          ref.watch(chequeImageProvider.notifier).state =
-                              File(value.path);
-                        }
+                      showImageSourceFilePickerDialog(context, (value) {
+                        ref.watch(chequeImageProvider.notifier).state =
+                            File(value.path);
                       });
                     },
                     child: dottedBorder.DottedBorder(
@@ -1340,13 +1336,9 @@ class _PartnershipregistrationState
                   width: MediaQuery.of(context).size.width,
                   child: InkWell(
                     onTap: () async {
-                      imagePicker
-                          .pickImage(source: ImageSource.gallery)
-                          .then((value) {
-                        if (value != null) {
-                          ref.watch(chequeImageProvider.notifier).state =
-                              File(value.path);
-                        }
+                      showImageSourceFilePickerDialog(context, (value) {
+                        ref.watch(chequeImageProvider.notifier).state =
+                            File(value.path);
                       });
                     },
                     child: dottedBorder.DottedBorder(
@@ -1487,7 +1479,6 @@ class _PartnershipregistrationState
             ),
             TextFormField(
               keyboardType: TextInputType.emailAddress,
-             
               controller: emailController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -1655,13 +1646,9 @@ class _PartnershipregistrationState
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(propDocImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(propDocImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -1734,13 +1721,9 @@ class _PartnershipregistrationState
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(propDocImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(propDocImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -1853,13 +1836,9 @@ class _PartnershipregistrationState
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(panImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(panImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -1931,13 +1910,9 @@ class _PartnershipregistrationState
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(panImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(panImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -2018,13 +1993,9 @@ class _PartnershipregistrationState
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(moaAoaImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(moaAoaImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -2096,13 +2067,9 @@ class _PartnershipregistrationState
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(moaAoaImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(moaAoaImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -2197,13 +2164,9 @@ class _PartnershipregistrationState
                     width: MediaQuery.of(context).size.width,
                     child: InkWell(
                       onTap: () async {
-                        imagePicker
-                            .pickImage(source: ImageSource.gallery)
-                            .then((value) {
-                          if (value != null) {
-                            ref.watch(boardResolutionImage.notifier).state =
-                                File(value.path);
-                          }
+                        showImageSourceFilePickerDialog(context, (value) {
+                          ref.watch(boardResolutionImage.notifier).state =
+                              File(value.path);
                         });
                       },
                       child: dottedBorder.DottedBorder(
@@ -2277,13 +2240,9 @@ class _PartnershipregistrationState
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(boardResolutionImage.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(boardResolutionImage.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -2397,13 +2356,9 @@ class _PartnershipregistrationState
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(directorProofImage.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(directorProofImage.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -2475,13 +2430,9 @@ class _PartnershipregistrationState
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(directorProofImage.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(directorProofImage.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -2562,13 +2513,9 @@ class _PartnershipregistrationState
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(addressProofImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(addressProofImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -2641,13 +2588,9 @@ class _PartnershipregistrationState
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(addressProofImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(addressProofImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(

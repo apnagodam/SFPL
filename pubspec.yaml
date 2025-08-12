@@ -99,6 +99,8 @@ dependencies:
   firebase_crashlytics: ^3.5.7
   pdf: ^3.11.3
   otp_autofill: ^4.1.0
+  geolocator: 8.2.1
+  file_saver: ^0.2.14
   # pdfrx: ^1.0.101
 
 

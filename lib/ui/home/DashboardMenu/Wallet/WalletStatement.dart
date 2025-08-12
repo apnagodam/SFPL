@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,6 +12,7 @@ import 'package:swfl/Data/Model/BnplStatementModel.dart';
 import 'package:swfl/Domain/WalletService/WalletService.dart';
 import 'package:swfl/ui/home/home_screen.dart';
 import 'package:swfl/ui/utils/PdfCreator.dart';
+import 'package:swfl/ui/utils/Styles.dart';
 import 'package:swfl/ui/utils/colors.dart';
 import 'package:swfl/ui/utils/widgets.dart';
 
@@ -26,6 +30,8 @@ class _WalletstatementState extends ConsumerState<Walletstatement> {
   var endDate = StateProvider<DateTime?>((ref) => null);
   final format = DateFormat("dd-MM-yyyy");
   var localData = StateProvider<List<StatementDatum>>((ref) => []);
+  final _openingBalance = StateProvider<num?>((ref) => null);
+  final _closingBalance = StateProvider<num?>((ref) => null);
   @override
   void initState() {
     super.initState();
@@ -34,41 +40,11 @@ class _WalletstatementState extends ConsumerState<Walletstatement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(onPressed: () async {
-      //   makePdf(
-      //           ref.watch(localData),
-      //           ref.watch(localData).fold<List<StatementDatum>>(
-      //             [],
-      //             (previousList, element) {
-      //               String label = element.label;
-      //               num amount = num.parse(element.amount.toString());
-
-      //               int existingIndex =
-      //                   previousList.indexWhere((item) => item.label == label);
-
-      //               if (existingIndex != -1) {
-      //                 previousList[existingIndex].amount =
-      //                     (num.parse(previousList[existingIndex].amount) +
-      //                             num.parse(amount.toString()))
-      //                         .toString();
-      //               } else {
-      //                 previousList.add(element);
-      //               }
-      //               return previousList;
-      //             },
-      //           ),
-      //           "0",
-      //           '0',
-      //           ref)
-      //       .then((value) {
-      //     if (value != null) OpenFile.open(value.path);
-      //   });
-      // }),
       appBar: AppBar(
         title: const Text('Wallet Statement'),
       ),
       body: ListView(
-        padding: Pad(all: 10),
+        padding: const Pad(all: 10),
         children: [
           const SizedBox(
             height: 10,
@@ -206,6 +182,34 @@ class _WalletstatementState extends ConsumerState<Walletstatement> {
               ),
             ),
           ]),
+          if (ref.watch(localData).isNotEmpty)
+            ElevatedButton(
+              style: buttonStyle,
+              onPressed: () async {
+                makePdf(
+                        ref.watch(localData),
+                        ref.watch(localData),
+                        "${ref.watch(_openingBalance)}",
+                        "${ref.watch(_closingBalance)}",
+                        ref)
+                    .then((value) async {
+                  if (value != null) {
+                    await FileSaver.instance
+                        .saveAs(
+                            name: 'settlement_report_seller',
+                            file: value,
+                            mimeType: MimeType.pdf,
+                            ext: '.pdf');
+                        OpenFile.open(value.path);
+                  }
+                });
+              },
+              child: const Text(
+                'Download Statement',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+            ),
           ref
               .watch(walletStatementProvider(
                   pastDate:
@@ -214,9 +218,13 @@ class _WalletstatementState extends ConsumerState<Walletstatement> {
                       format.format(ref.watch(endDate) ?? DateTime.now())))
               .when(
                   data: (statementData) {
-                    // Future.delayed(Duration.zero).then((_) {
-                    //   ref.watch(localData.notifier).state = statementData.data!;
-                    // });
+                    Future.delayed(Duration.zero).then((_) {
+                      ref.watch(_openingBalance.notifier).state =
+                          num.parse('${statementData.openingBalance ?? 0}');
+                      ref.watch(_closingBalance.notifier).state =
+                          num.parse('${statementData.closingBalance ?? 0}');
+                      ref.watch(localData.notifier).state = statementData.data!;
+                    });
                     return (statementData.data ?? []).isEmpty
                         ? emptyData()
                         : ListView.builder(
@@ -226,7 +234,7 @@ class _WalletstatementState extends ConsumerState<Walletstatement> {
                             itemBuilder: (context, index) {
                               return Card(
                                 color: Colors.white,
-                                margin: Pad(top: 10, bottom: 10),
+                                margin: const Pad(top: 10, bottom: 10),
                                 elevation: 10,
                                 shape: RoundedRectangleBorder(
                                     side: BorderSide(
@@ -239,7 +247,7 @@ class _WalletstatementState extends ConsumerState<Walletstatement> {
                                     borderRadius: BorderRadius.circular(10)),
                                 surfaceTintColor: Colors.white,
                                 child: Padding(
-                                  padding: Pad(all: 10),
+                                  padding: const Pad(all: 10),
                                   child: ColumnSuper(children: [
                                     Row(
                                         mainAxisAlignment:
@@ -262,7 +270,7 @@ class _WalletstatementState extends ConsumerState<Walletstatement> {
                                           ? Colors.red
                                           : Colors.green,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     Row(children: [
@@ -280,7 +288,7 @@ class _WalletstatementState extends ConsumerState<Walletstatement> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ]),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 5,
                                     ),
                                     Row(children: [
@@ -305,7 +313,7 @@ class _WalletstatementState extends ConsumerState<Walletstatement> {
                                                 : Colors.green),
                                       ),
                                     ]),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 5,
                                     ),
                                     Row(children: [
@@ -323,7 +331,7 @@ class _WalletstatementState extends ConsumerState<Walletstatement> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ]),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 5,
                                     ),
                                     Row(children: [
@@ -350,7 +358,7 @@ class _WalletstatementState extends ConsumerState<Walletstatement> {
                                                 : Colors.green),
                                       )
                                     ]),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 5,
                                     ),
                                     Row(children: [

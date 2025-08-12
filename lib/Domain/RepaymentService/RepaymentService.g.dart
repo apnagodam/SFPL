@@ -378,6 +378,170 @@ class _RepaymentSettlementListProviderElement
       (origin as RepaymentSettlementListProvider).stackNumber;
 }
 
+String _$sendWhatsappPdfHash() => r'b17f7a8ca59a76ecb73614a8d79bb0ea7bce443e';
+
+/// See also [sendWhatsappPdf].
+@ProviderFor(sendWhatsappPdf)
+const sendWhatsappPdfProvider = SendWhatsappPdfFamily();
+
+/// See also [sendWhatsappPdf].
+class SendWhatsappPdfFamily extends Family<AsyncValue<Map<String, dynamic>>> {
+  /// See also [sendWhatsappPdf].
+  const SendWhatsappPdfFamily();
+
+  /// See also [sendWhatsappPdf].
+  SendWhatsappPdfProvider call({
+    String? terminal,
+    String? commodityName,
+    String? stackNumber,
+  }) {
+    return SendWhatsappPdfProvider(
+      terminal: terminal,
+      commodityName: commodityName,
+      stackNumber: stackNumber,
+    );
+  }
+
+  @override
+  SendWhatsappPdfProvider getProviderOverride(
+    covariant SendWhatsappPdfProvider provider,
+  ) {
+    return call(
+      terminal: provider.terminal,
+      commodityName: provider.commodityName,
+      stackNumber: provider.stackNumber,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'sendWhatsappPdfProvider';
+}
+
+/// See also [sendWhatsappPdf].
+class SendWhatsappPdfProvider
+    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+  /// See also [sendWhatsappPdf].
+  SendWhatsappPdfProvider({
+    String? terminal,
+    String? commodityName,
+    String? stackNumber,
+  }) : this._internal(
+          (ref) => sendWhatsappPdf(
+            ref as SendWhatsappPdfRef,
+            terminal: terminal,
+            commodityName: commodityName,
+            stackNumber: stackNumber,
+          ),
+          from: sendWhatsappPdfProvider,
+          name: r'sendWhatsappPdfProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$sendWhatsappPdfHash,
+          dependencies: SendWhatsappPdfFamily._dependencies,
+          allTransitiveDependencies:
+              SendWhatsappPdfFamily._allTransitiveDependencies,
+          terminal: terminal,
+          commodityName: commodityName,
+          stackNumber: stackNumber,
+        );
+
+  SendWhatsappPdfProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.terminal,
+    required this.commodityName,
+    required this.stackNumber,
+  }) : super.internal();
+
+  final String? terminal;
+  final String? commodityName;
+  final String? stackNumber;
+
+  @override
+  Override overrideWith(
+    FutureOr<Map<String, dynamic>> Function(SendWhatsappPdfRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SendWhatsappPdfProvider._internal(
+        (ref) => create(ref as SendWhatsappPdfRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        terminal: terminal,
+        commodityName: commodityName,
+        stackNumber: stackNumber,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
+    return _SendWhatsappPdfProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SendWhatsappPdfProvider &&
+        other.terminal == terminal &&
+        other.commodityName == commodityName &&
+        other.stackNumber == stackNumber;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, terminal.hashCode);
+    hash = _SystemHash.combine(hash, commodityName.hashCode);
+    hash = _SystemHash.combine(hash, stackNumber.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin SendWhatsappPdfRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
+  /// The parameter `terminal` of this provider.
+  String? get terminal;
+
+  /// The parameter `commodityName` of this provider.
+  String? get commodityName;
+
+  /// The parameter `stackNumber` of this provider.
+  String? get stackNumber;
+}
+
+class _SendWhatsappPdfProviderElement
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with SendWhatsappPdfRef {
+  _SendWhatsappPdfProviderElement(super.provider);
+
+  @override
+  String? get terminal => (origin as SendWhatsappPdfProvider).terminal;
+  @override
+  String? get commodityName =>
+      (origin as SendWhatsappPdfProvider).commodityName;
+  @override
+  String? get stackNumber => (origin as SendWhatsappPdfProvider).stackNumber;
+}
+
 String _$repayGatepassHash() => r'1647ad993a8df606eafb32f4de1c936d3f06b3d5';
 
 /// See also [repayGatepass].

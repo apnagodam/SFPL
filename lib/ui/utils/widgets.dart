@@ -4,11 +4,14 @@ import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:elevarm_ui/elevarm_ui.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:one_context/one_context.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -370,6 +373,154 @@ var downloadProgressProvider = StateProvider((ref) => "0");
 var isFileDownloading = StateProvider((ref) => false);
 var downloadFilePath = StateProvider<File?>((ref) => null);
 
+class ImagePickerWidget extends ConsumerWidget {
+  ImagePickerWidget(
+      {super.key, required this.onImageSelection, required this.title});
+  Function(XFile) onImageSelection;
+  String title = '';
+  final refImage = StateProvider<XFile?>((ref) => null);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ref.watch(refImage) == null
+        ? ElevarmInputFileCard(
+            onTap: () {
+              showImageSourceFilePickerDialog(context, (result) {
+                ref.read(refImage.notifier).state = result;
+                onImageSelection(result);
+              });
+            },
+            clickToUploadLabel: '$title',
+            orDragAndDropLabel: ', Tap to Upload $title Image',
+            subtitle: 'PNG, JPG, JPEG (maks. 800x400px)',
+            textColor: ColorsConstant.primaryColor,
+          )
+        : ElevarmFileUploadCard(
+            title: '${ref.read(refImage)?.name}',
+            subtitle: '${ref.read(refImage)?.name}',
+            actionIconAssetName: Icons.remove_red_eye,
+            iconColor: ColorsConstant.primaryColor,
+            iconBackgroundColor: ColorsConstant.primaryColor.withOpacity(0.1),
+            onTap: () {
+                 showImageSourceFilePickerDialog(context, (result) {
+                ref.read(refImage.notifier).state = result;
+              });
+            },
+            onTapAction: () {
+              showImagePopup(context, File(ref.watch(refImage)?.path ?? ""));
+            },
+          );
+  }
+}
+
+Future<void> showImageSourceFilePickerDialog(
+    BuildContext context, Function(XFile) onImagePicked) async {
+  final ImagePicker picker = ImagePicker();
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        title: const Text('Select Image Source'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Camera'),
+              onTap: () async {
+                Navigator.of(context, rootNavigator: false)
+                    .pop(); // Close the dialog
+                final XFile? image =
+                    await picker.pickImage(source: ImageSource.camera);
+                if (image != null) {
+                  onImagePicked(image);
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Storage'),
+              onTap: () async {
+                Navigator.of(context, rootNavigator: false)
+                    .pop(); // Close the dialog
+
+                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  type: FileType.custom,
+                  allowedExtensions: ['jpg', 'jpeg', 'png'],
+                );
+                if (result != null) {
+                  onImagePicked(XFile(result.files.single.path!));
+                }
+              },
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+void showImagePopup(BuildContext context, dynamic imageSource) {
+  ImageProvider imageProvider;
+
+  if (imageSource is String) {
+    if (imageSource.startsWith('http')) {
+      imageProvider = NetworkImage(imageSource);
+    } else {
+      imageProvider = AssetImage(imageSource);
+    }
+  } else if (imageSource is File) {
+    imageProvider = FileImage(imageSource);
+  } else if (imageSource is ImageProvider) {
+    imageProvider = imageSource;
+  } else {
+    throw ArgumentError('Unsupported image type: $imageSource');
+  }
+
+  showDialog(
+    context: context,
+    builder: (context) => Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.all(16),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.all(10),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: InteractiveViewer(
+                child: Image(image: imageProvider, fit: BoxFit.contain),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 10,
+            right: 10,
+            child: Container(
+              margin: Pad(all: 5),
+              decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.3), shape: BoxShape.circle),
+              padding: EdgeInsets.all(5),
+              child: IconButton(
+                icon: const Icon(Icons.close, color: Colors.white),
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: false).pop(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 class Downloader extends ConsumerWidget {
   Downloader({super.key, required this.fileName, required this.url});
 
@@ -505,6 +656,40 @@ class Downloader extends ConsumerWidget {
         break;
     }
   }
+}
+
+Future<bool> isLocationPermissionGranted() async {
+  LocationPermission permission = await Geolocator.checkPermission();
+  return permission == LocationPermission.whileInUse ||
+      permission == LocationPermission.always;
+}
+
+Future<bool> requestLocationPermission() async {
+  bool serviceEnabled;
+  LocationPermission permission;
+
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    //Fluttertoast.showToast(msg: "Location Services are disabled.");
+    Geolocator.openLocationSettings();
+    return Future.error('Location services are disabled.');
+  }
+
+  permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+
+    if (permission == LocationPermission.denied) {
+      // Fluttertoast.showToast(msg: "Location permission denied.");
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    Geolocator.openLocationSettings();
+    return false;
+  }
+
+  return true;
 }
 
 Widget buildRichText({

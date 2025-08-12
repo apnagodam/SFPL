@@ -157,7 +157,7 @@ class _PartnersdirectorslistscreenState
                                     text: "Edit",
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        context.go(
+                                        context.goNamed(
                                             RoutesStrings.editDirectorPartner,
                                             extra: data.data![index]);
                                       }),

@@ -24,10 +24,10 @@ class RoutesStrings {
   static const authorisationLetterScreen = "authorisationLetterScreen";
   static const editDirectorPartner = "editDirectorPartner";
 
-  static const individualRegistration = '/individualRegistration';
-  static const propRegistration = '/propRegistration';
-  static const companyRegistration = '/companyRegistration';
-  static const partnershipRegistration = '/partnershipRegistration';
+  static const individualRegistration = 'individualRegistration';
+  static const propRegistration = 'propRegistration';
+  static const companyRegistration = 'companyRegistration';
+  static const partnershipRegistration = 'partnershipRegistration';
 
   static const bnplRegistration = 'bnplRegistration';
   static const bnplAadharRegistration = 'bnplAadharRegistration';

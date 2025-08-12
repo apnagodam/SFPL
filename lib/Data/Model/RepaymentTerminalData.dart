@@ -16,6 +16,7 @@ class RepaymentTerminalData {
   List<Terminal>? terminals;
   dynamic ltv;
   List<LtvDatum>? data;
+  dynamic settlementAmount;
 
   RepaymentTerminalData({
     this.status,
@@ -23,22 +24,23 @@ class RepaymentTerminalData {
     this.terminals,
     this.ltv,
     this.data,
+    this.settlementAmount,
   });
 
   factory RepaymentTerminalData.fromJson(Map<String, dynamic> json) =>
       RepaymentTerminalData(
-        status: json["status"],
-        message: json["message"],
-        terminals: json["terminals"] == null
-            ? []
-            : List<Terminal>.from(
-                json["terminals"]!.map((x) => Terminal.fromJson(x))),
-        ltv: json["ltv"],
-        data: json["data"] == null
-            ? []
-            : List<LtvDatum>.from(
-                json["data"]!.map((x) => LtvDatum.fromJson(x))),
-      );
+          status: json["status"],
+          message: json["message"],
+          terminals: json["terminals"] == null
+              ? []
+              : List<Terminal>.from(
+                  json["terminals"]!.map((x) => Terminal.fromJson(x))),
+          ltv: json["ltv"],
+          data: json["data"] == null
+              ? []
+              : List<LtvDatum>.from(
+                  json["data"]!.map((x) => LtvDatum.fromJson(x))),
+          settlementAmount: json['settlement_amount']);
 
   Map<String, dynamic> toJson() => {
         "status": status,
@@ -50,6 +52,7 @@ class RepaymentTerminalData {
         "data": data == null
             ? []
             : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "settlement_amount": settlementAmount
       };
 }
 
@@ -271,19 +274,21 @@ class LtvDatum {
 
 class Terminal {
   dynamic name;
-
-  Terminal({
-    this.name,
-  });
+  dynamic outStandingLoan;
+  dynamic settlementAmount;
+  Terminal({this.name, this.outStandingLoan, this.settlementAmount});
   bool districtFilterByName(String filter) {
     return name.toString().toLowerCase().trim().contains(filter);
   }
 
   factory Terminal.fromJson(Map<String, dynamic> json) => Terminal(
-        name: json["name"],
-      );
+      name: json["name"],
+      outStandingLoan: json['outstanding_loan'],
+      settlementAmount: json['settlement_amount']);
 
   Map<String, dynamic> toJson() => {
         "name": name,
+        "outstanding_loan": outStandingLoan,
+        "settlement_amount": settlementAmount
       };
 }

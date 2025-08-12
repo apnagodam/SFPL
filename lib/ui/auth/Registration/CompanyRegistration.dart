@@ -48,6 +48,7 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
   var panImageProvider = StateProvider<File?>((ref) => null);
 
   var moaAoaImageProvider = StateProvider<File?>((ref) => null);
+  var profileImageprovider = StateProvider<File?>((ref) => null);
 
   var boardResolutionImage = StateProvider<File?>((ref) => null);
 
@@ -272,34 +273,53 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                                 onPressed: () async {
                                   if (ref.watch(activeStepProvider) == 0) {
                                     if (firmKey.currentState!.validate()) {
-                                      ref
-                                          .watch(activeStepProvider.notifier)
-                                          .state += 1;
-                                    } else {
-                                      // if (ref.watch(panImageProvider) == null) {
-                                      //   errorToast(context,
-                                      //       'Please select PAN card Image');
-                                      // } else if (ref
-                                      //         .watch(moaAoaImageProvider) ==
-                                      //     null) {
-                                      //   errorToast(context,
-                                      //       'Please select MOA/AOA  Image');
-                                      // } else if (ref
-                                      //         .watch(boardResolutionImage) ==
-                                      //     null) {
-                                      //   errorToast(context,
-                                      //       'Please select Board Resolution  Image');
-                                      // } else if (ref
-                                      //         .watch(directorProofImage) ==
-                                      //     null) {
-                                      //   errorToast(context,
-                                      //       'Please select Director Proof  Image');
-                                      // }
-                                      // if (ref.watch(propDocImageProvider) ==
-                                      //     null) {
-                                      //   errorToast(context,
-                                      //       'Please select document Image');
-                                      // }
+                                      if (ref.watch(panImageProvider) == null &&
+                                          ref
+                                                  .watch(sharedUtilityProvider)
+                                                  .getMongoDbUser()
+                                                  ?.pancardImage ==
+                                              null) {
+                                        errorToast(context,
+                                            'Please select PAN card Image');
+                                      } else if (ref.watch(moaAoaImageProvider) == null &&
+                                          ref
+                                                  .watch(sharedUtilityProvider)
+                                                  .getMongoDbUser()
+                                                  ?.moaAoaImage ==
+                                              null) {
+                                        errorToast(context,
+                                            'Please select MOA/AOA  Image');
+                                      } else if (ref.watch(boardResolutionImage) == null &&
+                                          ref
+                                                  .watch(sharedUtilityProvider)
+                                                  .getMongoDbUser()
+                                                  ?.boardResolutionImage ==
+                                              null) {
+                                        errorToast(context,
+                                            'Please select Board Resolution  Image');
+                                      } else if (ref.watch(directorProofImage) ==
+                                              null &&
+                                          ref
+                                                  .watch(sharedUtilityProvider)
+                                                  .getMongoDbUser()
+                                                  ?.directorProofImage ==
+                                              null) {
+                                        errorToast(context,
+                                            'Please select Director Proof');
+                                      } else if (ref.watch(addressProofImageProvider) ==
+                                              null &&
+                                          ref
+                                                  .watch(sharedUtilityProvider)
+                                                  .getMongoDbUser()
+                                                  ?.addressProofImage ==
+                                              null) {
+                                        errorToast(context,
+                                            'Please select document Image');
+                                      } else {
+                                        ref
+                                            .watch(activeStepProvider.notifier)
+                                            .state += 1;
+                                      }
                                     }
                                   }
 
@@ -326,16 +346,20 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                                   else if (ref.watch(activeStepProvider) == 2) {
                                     if (bankDetailsKey.currentState!
                                         .validate()) {
-                                      ref
-                                          .watch(activeStepProvider.notifier)
-                                          .state += 1;
-                                      // if (ref.watch(chequeImageProvider) ==
-                                      //     null) {
-                                      //   errorToast(context,
-                                      //       'Please select cheque Image');
-                                      // } else {
-
-                                      // }
+                                      if (ref.watch(chequeImageProvider) ==
+                                          null && ref
+                                                  .watch(sharedUtilityProvider)
+                                                  .getMongoDbUser()
+                                                  ?.chequeImage
+                                                   ==
+                                              null) {
+                                        errorToast(context,
+                                            'Please select cheque Image');
+                                      } else {
+                                        ref
+                                            .watch(activeStepProvider.notifier)
+                                            .state += 1;
+                                      }
                                     } else {}
                                   }
                                   //
@@ -443,7 +467,7 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                                                     propDocNumber: gstController.text.toString(),
                                                     firmName: firmController.text.toString(),
                                                     panCardImage: ref.watch(sharedUtilityProvider).getMongoDbUser()?.pancardImage != null && ref.watch(panImageProvider) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.pancardImage : ref.watch(panImageProvider),
-                                                    profileImage: ref.watch(sharedUtilityProvider).getMongoDbUser()?.profileImage != null && ref.watch(moaAoaImageProvider) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.moaAoaImage : ref.watch(moaAoaImageProvider),
+                                                    profileImage: ref.watch(sharedUtilityProvider).getMongoDbUser()?.profileImage != null && ref.watch(profileImageprovider) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.profileImage : ref.watch(profileImageprovider),
                                                     aadharImage: ref.watch(sharedUtilityProvider).getMongoDbUser()?.aadharImage != null && ref.watch(authorisedImageProvider) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.aadharImage : ref.watch(authorisedImageProvider),
                                                     chequeImage: ref.watch(sharedUtilityProvider).getMongoDbUser()?.chequeImage != null && ref.watch(chequeImageProvider) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.chequeImage : ref.watch(chequeImageProvider),
                                                     proprietorProof: ref.watch(sharedUtilityProvider).getMongoDbUser()?.moaAoaImage != null && ref.watch(propDocImageProvider) == null ? ref.watch(sharedUtilityProvider).getMongoDbUser()?.propProofDoc : ref.watch(propDocImageProvider),
@@ -1031,8 +1055,11 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
                   controller: bankNameController,
-                            readOnly: ref.watch(sharedUtilityProvider).getMongoDbUser()?.bankName!=null,
-
+                  readOnly: ref
+                          .watch(sharedUtilityProvider)
+                          .getMongoDbUser()
+                          ?.bankName !=
+                      null,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please input valid branch name';
@@ -1153,8 +1180,9 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
           TextFormField(
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.next,
-                      readOnly: ref.watch(sharedUtilityProvider).getMongoDbUser()?.bankBranch!=null,
-
+            readOnly:
+                ref.watch(sharedUtilityProvider).getMongoDbUser()?.bankBranch !=
+                    null,
             controller: branchController,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -1178,8 +1206,10 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
           TextFormField(
             keyboardType: TextInputType.number,
             controller: accountController,
-            textInputAction: TextInputAction.next,          readOnly: ref.watch(sharedUtilityProvider).getMongoDbUser()?.bankAccNo!=null,
-
+            textInputAction: TextInputAction.next,
+            readOnly:
+                ref.watch(sharedUtilityProvider).getMongoDbUser()?.bankAccNo !=
+                    null,
             validator: (value) {
               if (value == null ||
                   value.isEmpty ||
@@ -1205,8 +1235,11 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
             keyboardType: TextInputType.text,
             controller: ifscController,
             textInputAction: TextInputAction.next,
-                      readOnly: ref.watch(sharedUtilityProvider).getMongoDbUser()?.bankIfscCode!=null,
-
+            readOnly: ref
+                    .watch(sharedUtilityProvider)
+                    .getMongoDbUser()
+                    ?.bankIfscCode !=
+                null,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please input valid ifsc code';
@@ -1242,13 +1275,9 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                   width: MediaQuery.of(context).size.width,
                   child: InkWell(
                     onTap: () async {
-                      imagePicker
-                          .pickImage(source: ImageSource.gallery)
-                          .then((value) {
-                        if (value != null) {
-                          ref.watch(chequeImageProvider.notifier).state =
-                              File(value.path);
-                        }
+                      showImageSourceFilePickerDialog(context, (value) {
+                        ref.watch(chequeImageProvider.notifier).state =
+                            File(value.path);
                       });
                     },
                     child: dottedBorder.DottedBorder(
@@ -1322,13 +1351,9 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                   width: MediaQuery.of(context).size.width,
                   child: InkWell(
                     onTap: () async {
-                      imagePicker
-                          .pickImage(source: ImageSource.gallery)
-                          .then((value) {
-                        if (value != null) {
-                          ref.watch(chequeImageProvider.notifier).state =
-                              File(value.path);
-                        }
+                      showImageSourceFilePickerDialog(context, (value) {
+                        ref.watch(chequeImageProvider.notifier).state =
+                            File(value.path);
                       });
                     },
                     child: dottedBorder.DottedBorder(
@@ -1467,7 +1492,6 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
             TextFormField(
               keyboardType: TextInputType.emailAddress,
               controller: emailController,
-            
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please input email';
@@ -1724,6 +1748,166 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
         ),
         CupertinoButton(
             child: Text(
+              "Profile Image",
+              style: TextStyle(
+                  color: ColorsConstant.primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Adaptive.sp(17)),
+            ),
+            onPressed: () {}),
+        ref.watch(sharedUtilityProvider).getMongoDbUser()?.profileImage !=
+                    null &&
+                ref.watch(profileImageprovider) == null
+            ? SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () async {
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(profileImageprovider.notifier).state =
+                          File(value.path);
+                    });
+                  },
+                  child: dottedBorder.DottedBorder(
+                      borderType: dottedBorder.BorderType.RRect,
+                      dashPattern: const [5, 5, 5, 5],
+                      color: ColorsConstant.primaryColor,
+                      child: Padding(
+                        padding: const Pad(all: 20),
+                        child: Center(
+                          child: ref
+                                      .watch(sharedUtilityProvider)
+                                      .getMongoDbUser()
+                                      ?.profileImage !=
+                                  null
+                              ? Stack(
+                                  children: [
+                                    Image.network(ref
+                                        .watch(sharedUtilityProvider)
+                                        .getMongoDbUser()
+                                        ?.profileImage),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(
+                                                profileImageprovider);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : ColumnSuper(children: [
+                                  Icon(
+                                    LucideIcons.cloud_upload,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Select profile Image",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Adaptive.sp(13)),
+                                  )
+                                ]),
+                        ),
+                      )),
+                ),
+              )
+            : SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: () async {
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(profileImageprovider.notifier).state =
+                          File(value.path);
+                    });
+                  },
+                  child: dottedBorder.DottedBorder(
+                      borderType: dottedBorder.BorderType.RRect,
+                      dashPattern: const [5, 5, 5, 5],
+                      color: ColorsConstant.primaryColor,
+                      child: Padding(
+                        padding: const Pad(all: 20),
+                        child: Center(
+                          child: ref.watch(profileImageprovider) != null
+                              ? Stack(
+                                  children: [
+                                    Image.file(
+                                        ref.watch(profileImageprovider) ??
+                                            File('path')),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            ref.invalidate(
+                                                profileImageprovider);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : ColumnSuper(children: [
+                                  Icon(
+                                    LucideIcons.cloud_upload,
+                                    color: ColorsConstant.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Select Profile Image",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Upload Document Image,\n  Supports JPG, JPEG, PNG",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: ColorsConstant.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Adaptive.sp(13)),
+                                  )
+                                ]),
+                        ),
+                      )),
+                ),
+              ),
+        const SizedBox(
+          height: 10,
+        ),
+        CupertinoButton(
+            child: Text(
               "Pancard Image",
               style: TextStyle(
                   color: ColorsConstant.primaryColor,
@@ -1738,13 +1922,9 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(panImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(panImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -1816,13 +1996,9 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(panImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(panImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -1903,13 +2079,9 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(moaAoaImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                 showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(moaAoaImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -1981,13 +2153,9 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(moaAoaImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(moaAoaImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -2150,13 +2318,9 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(boardResolutionImage.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(boardResolutionImage.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -2251,7 +2415,7 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
         ),
         CupertinoButton(
             child: Text(
-              "Director Proof Image",
+              "Director Proof ",
               style: TextStyle(
                   color: ColorsConstant.primaryColor,
                   fontWeight: FontWeight.bold,
@@ -2265,13 +2429,9 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(directorProofImage.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(directorProofImage.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -2317,7 +2477,7 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                                     height: 5,
                                   ),
                                   Text(
-                                    "Select Director Proof Image",
+                                    "Select Director Proof ",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: ColorsConstant.primaryColor,
@@ -2344,13 +2504,9 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(directorProofImage.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(directorProofImage.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -2431,13 +2587,9 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(addressProofImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(addressProofImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -2510,13 +2662,9 @@ class _CompanyregistrationState extends ConsumerState<Companyregistration> {
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(addressProofImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(addressProofImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(

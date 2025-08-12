@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-RepaymentDataModel repaymentDataModelFromMap(String str) => RepaymentDataModel.fromMap(json.decode(str));
+RepaymentDataModel repaymentDataModelFromMap(String str) =>
+    RepaymentDataModel.fromMap(json.decode(str));
 
-String repaymentDataModelToMap(RepaymentDataModel data) => json.encode(data.toMap());
+String repaymentDataModelToMap(RepaymentDataModel data) =>
+    json.encode(data.toMap());
 
 class RepaymentDataModel {
   dynamic status;
@@ -19,27 +21,33 @@ class RepaymentDataModel {
     this.data,
   });
 
-  factory RepaymentDataModel.fromMap(Map<String, dynamic> json) => RepaymentDataModel(
-    status: json["status"],
-    message: json["message"],
-    data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromMap(x))),
-  );
+  factory RepaymentDataModel.fromMap(Map<String, dynamic> json) =>
+      RepaymentDataModel(
+        status: json["status"],
+        message: json["message"],
+        data: json["data"] == null
+            ? []
+            : List<Datum>.from(json["data"]!.map((x) => Datum.fromMap(x))),
+      );
 
   Map<String, dynamic> toMap() => {
-    "status": status,
-    "message": message,
-    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
-  };
+        "status": status,
+        "message": message,
+        "data":
+            data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
+      };
 }
 
 class Datum {
   dynamic commodityName;
   dynamic stackNumber;
-
-  Datum({
-    this.commodityName,
-    this.stackNumber,
-  });
+  dynamic outStandingLoan;
+  dynamic settlementAmount;
+  Datum(
+      {this.commodityName,
+      this.stackNumber,
+      this.outStandingLoan,
+      this.settlementAmount});
   bool commodityByFilter(String filter) {
     return commodityName.toString().toLowerCase().trim().contains(filter);
   }
@@ -47,13 +55,17 @@ class Datum {
   bool stackByFilter(String filter) {
     return stackNumber.toString().toLowerCase().trim().contains(filter);
   }
+
   factory Datum.fromMap(Map<String, dynamic> json) => Datum(
-    commodityName: json["commodity_name"],
-    stackNumber: json["stack_number"],
-  );
+      commodityName: json["commodity_name"],
+      stackNumber: json["stack_number"],
+      outStandingLoan: json['outstanding_loan'],
+      settlementAmount: json['settlement_amount']);
 
   Map<String, dynamic> toMap() => {
-    "commodity_name": commodityName,
-    "stack_number": stackNumber,
-  };
+        "commodity_name": commodityName,
+        "stack_number": stackNumber,
+        "outstanding_loan": outStandingLoan,
+        "settlement_amount": settlementAmount
+      };
 }

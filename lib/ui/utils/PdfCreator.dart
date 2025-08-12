@@ -21,8 +21,9 @@ Future<File?> makePdf(
   final img = await rootBundle.load('assets/swfl.png');
   final imageBytes = img.buffer.asUint8List();
   Image image1 = Image(MemoryImage(imageBytes), width: 80, height: 80);
-
-  
+  num totalDebit = 0;
+  num totalCredit = 0;
+  num totalBalance = 0;
 
   pdf.addPage(
     MultiPage(
@@ -148,83 +149,83 @@ Future<File?> makePdf(
             // ),
             // Divider(),
 
-            Row(children: [
-              Expanded(
-                  child: Text("Summary",
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center)),
-            ]),
-            Divider(),
+            // Row(children: [
+            //   Expanded(
+            //       child: Text("Summary",
+            //           style:
+            //               TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            //           textAlign: TextAlign.center)),
+            // ]),
+            // Divider(),
 
-            Table(border: TableBorder.all(color: PdfColors.black), children: [
-              TableRow(
-                  verticalAlignment: TableCellVerticalAlignment.middle,
-                  decoration: BoxDecoration(color: PdfColors.black),
-                  children: [
-                    Expanded(
-                      child: Text("S.No",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: PdfColors.white),
-                          textAlign: TextAlign.center),
-                    ),
-                    Expanded(
-                      child: Text("Narration",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: PdfColors.white),
-                          textAlign: TextAlign.center),
-                    ),
-                    Expanded(
-                        child: Text("Type",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: PdfColors.white),
-                            textAlign: TextAlign.center)),
-                    Expanded(
-                        child: Text("Amount",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: PdfColors.white),
-                            textAlign: TextAlign.center)),
-                  ]),
-              ...localData!.map((e) {
-                index++;
-                return TableRow(children: [
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '$index',
-                        ),
-                      ]),
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("${e.label.toString().isEmpty ? "--" : e.label}"),
-                      ]),
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          e.type,
-                        ),
-                      ]),
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          num.parse(e.amount.toString()).toStringAsFixed(2),
-                        ),
-                      ]),
-                ]);
-              })
-            ]),
+            // Table(border: TableBorder.all(color: PdfColors.black), children: [
+            //   TableRow(
+            //       verticalAlignment: TableCellVerticalAlignment.middle,
+            //       decoration: BoxDecoration(color: PdfColors.black),
+            //       children: [
+            //         Expanded(
+            //           child: Text("S.No",
+            //               style: TextStyle(
+            //                   fontWeight: FontWeight.bold,
+            //                   color: PdfColors.white),
+            //               textAlign: TextAlign.center),
+            //         ),
+            //         Expanded(
+            //           child: Text("Narration",
+            //               style: TextStyle(
+            //                   fontWeight: FontWeight.bold,
+            //                   color: PdfColors.white),
+            //               textAlign: TextAlign.center),
+            //         ),
+            //         Expanded(
+            //             child: Text("Type",
+            //                 style: TextStyle(
+            //                     fontWeight: FontWeight.bold,
+            //                     color: PdfColors.white),
+            //                 textAlign: TextAlign.center)),
+            //         Expanded(
+            //             child: Text("Amount",
+            //                 style: TextStyle(
+            //                     fontWeight: FontWeight.bold,
+            //                     color: PdfColors.white),
+            //                 textAlign: TextAlign.center)),
+            //       ]),
+            //   ...localData!.map((e) {
+            //     index++;
+            //     return TableRow(children: [
+            //       Column(
+            //           crossAxisAlignment: CrossAxisAlignment.center,
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           children: [
+            //             Text(
+            //               '$index',
+            //             ),
+            //           ]),
+            //       Column(
+            //           crossAxisAlignment: CrossAxisAlignment.center,
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           children: [
+            //             Text("${e.label.toString().isEmpty ? "--" : e.label}"),
+            //           ]),
+            //       Column(
+            //           crossAxisAlignment: CrossAxisAlignment.center,
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           children: [
+            //             Text(
+            //               e.type,
+            //             ),
+            //           ]),
+            //       Column(
+            //           crossAxisAlignment: CrossAxisAlignment.center,
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           children: [
+            //             Text(
+            //               num.parse(e.amount.toString()).toStringAsFixed(2),
+            //             ),
+            //           ]),
+            //     ]);
+            //   })
+            // ]),
 
             // ...summaryDatum!.map((e) {
             //   return Column(
@@ -522,12 +523,17 @@ Future<File?> makePdf(
                           fontWeight: FontWeight.bold, color: PdfColors.white),
                       textAlign: TextAlign.center)),
               Expanded(
-                  child: Text("Closing Balance",
+                  child: Text("Total Balance",
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: PdfColors.white),
                       textAlign: TextAlign.center)),
             ]),
         ...invoice!.map((e) {
+          totalDebit += num.parse(
+              "${e.type.toString().toLowerCase() == "debit" ? e.amount : 0}");
+          totalCredit += num.parse(
+              "${e.type.toString().toLowerCase() == "credit" ? e.amount : 0}");
+          totalBalance += num.parse("${e.balance}");
           DateTime parseDate =
               new DateFormat("yyyy-MM-dd HH:mm:ss").parse(e.date ?? "");
           var inputDate = DateTime.parse(parseDate.toString());
@@ -578,7 +584,51 @@ Future<File?> makePdf(
                   flex: 1,
                 ),
               ]);
-        })
+        }),
+      ]),
+      Table(border: TableBorder.symmetric(inside: BorderSide(color: PdfColors.white)), children: [
+        TableRow(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            decoration: BoxDecoration(color: PdfColors.black),
+            children: [
+              Expanded(
+                child: Text("Total",
+                    style: TextStyle(fontSize: 12,color: PdfColors.white
+                    ),
+                    textAlign: TextAlign.center),
+                flex: 1,
+              ),
+              Expanded(
+                child: Text("${"--"}",
+                    style: TextStyle(fontSize: 12,color: PdfColors.white),
+                    textAlign: TextAlign.center),
+                flex: 1,
+              ),
+              Expanded(
+                child: Text("${"--"}",
+                    style: TextStyle(fontSize: 12,color: PdfColors.white),
+                    textAlign: TextAlign.center),
+                flex: 1,
+              ),
+              Expanded(
+                child: Text("${totalDebit.toStringAsFixed(2)}",
+                    style: TextStyle(fontSize: 12,color: PdfColors.white),
+                    textAlign: TextAlign.center),
+                flex: 1,
+              ),
+              Expanded(
+                child: Text("${totalCredit.toStringAsFixed(2)}",
+                    style: TextStyle(fontSize: 12,color: PdfColors.white),
+                    textAlign: TextAlign.center),
+                flex: 1,
+              ),
+              Expanded(
+                child: Text("${totalBalance.toStringAsFixed(2)}",
+                    style: TextStyle(fontSize: 12,color: PdfColors.white),
+                    textAlign: TextAlign.center),
+                flex: 1,
+              ),
+            ])
       ]),
       // ...invoice!.map((e) {
       //   ++index;
@@ -647,7 +697,7 @@ Future<File?> makePdf(
   ));
   final output = await getTemporaryDirectory();
   final file = File('${output.path}/wallet_statement.pdf');
-  await file.writeAsBytes(await pdf.save());
+  await file.writeAsBytes(await pdf.save(), flush: true);
 
   // Open the generated PDF using a package like `open_file`
   // Make sure to add the open_file package to your pubspec.yaml

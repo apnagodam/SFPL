@@ -48,6 +48,19 @@ Stream<RepaymentSettlementList> repaymentSettlementList(
 }
 
 @riverpod
+Future<Map<String, dynamic>> sendWhatsappPdf(SendWhatsappPdfRef ref,
+    {String? terminal, String? commodityName, String? stackNumber}) async {
+  var response = await ref
+      .watch(dioProvider)
+      .post(ApiClient.sendWhatsAppPdf, queryParameters: {
+    "terminal": terminal,
+    'commodity_name': commodityName,
+    'stack_number': stackNumber
+  });
+  return response.data;
+}
+
+@riverpod
 Future<Map<String, dynamic>> repayGatepass(RepayGatepassRef ref,
     {List<String>? financeId,
     String? finalAmount,

@@ -12,11 +12,11 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../../Domain/LoanService/LoanService.dart';
 
 class Surepasswebviewscreen extends ConsumerStatefulWidget {
-  const Surepasswebviewscreen(
-      {super.key,
-      required this.url,
-      required this.docName,
-   });
+  const Surepasswebviewscreen({
+    super.key,
+    required this.url,
+    required this.docName,
+  });
 
   final String url;
   final String docName;
@@ -56,6 +56,7 @@ class _SurepasswebviewscreenState extends ConsumerState<Surepasswebviewscreen> {
             } else if (url.contains('success')) {}
           },
           onPageFinished: (String url) {
+            ref.invalidate(appliedListProvider);
             if (url.toLowerCase().contains('signature')) {
               successToast(context, url);
               ref
@@ -70,11 +71,10 @@ class _SurepasswebviewscreenState extends ConsumerState<Surepasswebviewscreen> {
                 }
               });
             } else if (url.contains('success')) {
-              ref.invalidate(appliedListProvider);
-
-              successToast(context, 'Document Upload Successfully!');
-
               context.pop();
+              context.push(RoutesStrings.dashboard);
+              context.pushNamed(RoutesStrings.sanctionedAmount);
+              successToast(context, 'Document Upload Successfully!');
             }
             print(url);
           },

@@ -83,9 +83,10 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
         Navigator.of(context, rootNavigator: true).pop('dialog');
 
         if (value.status.toString() == "1") {
-          ref.read(sharedUtilityProvider).setToken(value.data?.token ?? "");
-          ref.read(sharedUtilityProvider).setUser(value.data);
-          ref.invalidate(dioProvider);
+          ref.watch(dioProvider).options.headers.addAll({
+            "Authorization":
+                "Bearer ${ref.watch(sharedUtilityProvider).getToken()}",
+          });
           context.go(RoutesStrings.dashboard);
         } else {
           errorToast(context, value.message ?? "Invalid OTP");
@@ -169,8 +170,7 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
                       borderRadius: BorderRadius.circular(8),
                       color: ColorsConstant.primaryColor.withOpacity(0.1),
                       border: Border.all(
-                        color:
-                            ColorsConstant.primaryColor.withOpacity(0.1),
+                        color: ColorsConstant.primaryColor.withOpacity(0.1),
                       ),
                     ),
                   ),

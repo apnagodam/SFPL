@@ -1,11 +1,16 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:swfl/Data/Model/LoanApplyListModel.dart';
 import 'package:swfl/Data/Model/LoanRequestFormModel.dart';
+import 'package:swfl/Data/SharedPrefs/SharedUtility.dart';
 import 'package:swfl/Domain/BnplService/BnplService.dart';
+import 'package:swfl/Domain/Dio/DioProvider.dart';
 import 'package:swfl/Domain/LoanService/LoanService.dart';
 import 'package:swfl/ui/home/home_screen.dart';
 
@@ -550,14 +555,7 @@ class _StockApplyLoanState extends ConsumerState<StockApplyLoan> {
                                                                     .w800))),
                                                 Expanded(
                                                     child: Text(
-
-                                                    "${data
-                                                        .data
-                                                        ?.scheme?[index]
-                                                        .tenor ??""} ${data
-                                                        .data
-                                                        ?.scheme?[index]
-                                                        .tenorType ??""}",
+                                                        "${data.data?.scheme?[index].tenor ?? ""} ${data.data?.scheme?[index].tenorType ?? ""}",
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: TextStyle(
@@ -592,6 +590,10 @@ class _StockApplyLoanState extends ConsumerState<StockApplyLoan> {
                                                         .data?.scheme?[index].id
                                                         .toString(),
                                                     loanData: data.data,
+                                                    schemeName: data
+                                                        .data
+                                                        ?.scheme?[index]
+                                                        .schemeName,
                                                   ),
                                                 )
                                         ]),
@@ -625,11 +627,13 @@ class LoanDetails extends ConsumerStatefulWidget {
       {super.key,
       required this.data,
       required this.schemeId,
-      required this.loanData});
+      required this.loanData,
+      required this.schemeName});
 
   final Datum? data;
   final String? schemeId;
   final Data? loanData;
+  final String schemeName;
 
   @override
   ConsumerState<LoanDetails> createState() => _LoanDetailsState();
@@ -645,7 +649,8 @@ class _LoanDetailsState extends ConsumerState<LoanDetails> {
               commodityName: "${widget.data?.commodity}",
               quantity: "${widget.data?.quantity}",
               gatePass: "${widget.data?.gatePass}",
-              schemeId: "${widget.schemeId}",bags: "${widget.data?.bags??"0"}"))
+              schemeId: "${widget.schemeId}",
+              bags: "${widget.data?.bags ?? "0"}"))
           .when(
               data: (data) {
                 return data.status.toString() == "0"
@@ -659,14 +664,12 @@ class _LoanDetailsState extends ConsumerState<LoanDetails> {
                         ),
                       )
                     : ColumnSuper(alignment: Alignment.centerLeft, children: [
-
                         Padding(
                           padding: const Pad(all: 10),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                    'Market Rate: ',
+                                Text('Market Rate: ',
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         fontSize: Adaptive.sp(14),
@@ -693,39 +696,39 @@ class _LoanDetailsState extends ConsumerState<LoanDetails> {
                                         fontWeight: FontWeight.w800)),
                               ]),
                         ),
-                  const Divider(),
-                  Padding(
-                    padding: const Pad(all: 10),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                              'Quality Adjusted Market Rate:  ',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  fontSize: Adaptive.sp(14),
-                                  shadows: const [
-                                    Shadow(
-                                        color: Colors.white,
-                                        blurRadius: 1,
-                                        offset: Offset(0.2, 0.2))
-                                  ],
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w800)),
-                          Text('${data.data?.qualityMarketPrice ?? 0.0} Qtl.',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  fontSize: Adaptive.sp(14),
-                                  shadows: const [
-                                    Shadow(
-                                        color: Colors.white,
-                                        blurRadius: 1,
-                                        offset: Offset(0.2, 0.2))
-                                  ],
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w800)),
-                        ]),
-                  ),
+                        const Divider(),
+                        Padding(
+                          padding: const Pad(all: 10),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Quality Adjusted Market Rate:  ',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        fontSize: Adaptive.sp(14),
+                                        shadows: const [
+                                          Shadow(
+                                              color: Colors.white,
+                                              blurRadius: 1,
+                                              offset: Offset(0.2, 0.2))
+                                        ],
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w800)),
+                                Text(
+                                    '${data.data?.qualityMarketPrice ?? 0.0} Qtl.',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        fontSize: Adaptive.sp(14),
+                                        shadows: const [
+                                          Shadow(
+                                              color: Colors.white,
+                                              blurRadius: 1,
+                                              offset: Offset(0.2, 0.2))
+                                        ],
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w800)),
+                              ]),
+                        ),
                         const Divider(),
                         Padding(
                           padding: const Pad(all: 10),
@@ -759,40 +762,38 @@ class _LoanDetailsState extends ConsumerState<LoanDetails> {
                                         fontWeight: FontWeight.w800)),
                               ]),
                         ),
-                  const Divider(),
-                  Padding(
-                    padding: const Pad(all: 10),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                              'Weight: ',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  fontSize: Adaptive.sp(14),
-                                  shadows: const [
-                                    Shadow(
-                                        color: Colors.white,
-                                        blurRadius: 1,
-                                        offset: Offset(0.2, 0.2))
-                                  ],
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w800)),
-                          Text(
-                              '${data.data?.quantity ?? 0.0} Qtl.',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  fontSize: Adaptive.sp(14),
-                                  shadows: const [
-                                    Shadow(
-                                        color: Colors.white,
-                                        blurRadius: 1,
-                                        offset: Offset(0.2, 0.2))
-                                  ],
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w800)),
-                        ]),
-                  ),
+                        const Divider(),
+                        Padding(
+                          padding: const Pad(all: 10),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Weight: ',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        fontSize: Adaptive.sp(14),
+                                        shadows: const [
+                                          Shadow(
+                                              color: Colors.white,
+                                              blurRadius: 1,
+                                              offset: Offset(0.2, 0.2))
+                                        ],
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w800)),
+                                Text('${data.data?.quantity ?? 0.0} Qtl.',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        fontSize: Adaptive.sp(14),
+                                        shadows: const [
+                                          Shadow(
+                                              color: Colors.white,
+                                              blurRadius: 1,
+                                              offset: Offset(0.2, 0.2))
+                                        ],
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w800)),
+                              ]),
+                        ),
                         const Divider(),
                         Padding(
                           padding: const Pad(all: 10),
@@ -961,7 +962,42 @@ class _LoanDetailsState extends ConsumerState<LoanDetails> {
                               // account_no:27840210001226
                               // stack_number:6
                               // terminal:Mohan Cold Storage Pvt. Ltd.
+
                               showloader(context);
+                              Position position =
+                                  await Geolocator.getCurrentPosition();
+                              try {
+                                 Dio dio = Dio(BaseOptions(
+                                      baseUrl:
+                                          'https://swlpl-next.vercel.app/api/v1/location/',
+                                      connectTimeout: Duration(minutes: 10),
+                                      sendTimeout: Duration(minutes: 10),
+                                      receiveTimeout: Duration(minutes: 10)))
+                                    ..interceptors.addAll([PrettyDioLogger()]);
+
+                                  await dio
+                                      .post('update-finance-location', data: {
+                                    "fullName":
+                                        "${ref.watch(sharedUtilityProvider).getUser()?.firmName}",
+                                    "gatePass":
+                                        num.parse("${widget.data?.gatePass}"),
+                                    "terminal": "Sharda devi warehouse",
+                                    "commodity": "${widget.data?.commodity}",
+                                    "quantity":
+                                        num.parse("${widget.data?.quantity}"),
+                                    "stackNo": 0,
+                                    "bags": num.parse(
+                                        "${widget.data?.bags ?? "0"}"),
+                                    "schemeName": widget.schemeName,
+                                    "location": {
+                                      "type": "Point",
+                                      "coordinates": [
+                                        position.longitude,
+                                        position.latitude
+                                      ]
+                                    }
+                                  });
+                              } catch (e) {}
                               ref
                                   .watch(submitLoanRequestProvider(
                                           inventoryId:
@@ -984,7 +1020,7 @@ class _LoanDetailsState extends ConsumerState<LoanDetails> {
                                               "${widget.data?.terminal}")
                                       .future)
                                   .then((value) {
-                                    hideLoader(context);
+                                hideLoader(context);
                                 if (value['status'].toString() == "1") {
                                   ref.invalidate(loanApplyListProvider);
                                   successToast(

@@ -162,7 +162,7 @@ Future<OtpVerifyModel> verifyOtp(VerifyOtpRef ref,
   var body = otpVerifyModelFromMap(jsonEncode(response.data));
   if (body.status.toString() == "1") {
     ref.watch(sharedUtilityProvider).setToken(body.data?.token ?? "");
-    ref.invalidate(dioProvider);
+   
     ref.watch(sharedUtilityProvider).setUser(body.data);
   }
   return body;
@@ -258,11 +258,39 @@ Stream<BankListModel> bankList(BankListRef ref) async* {
 
 @riverpod
 Future<Map<String, dynamic>> sendDirectorOtp(SendDirectorOtpRef ref,
-    {String? phoneNumber}) async {
+    {required String personName,
+    required String phoneNumber,
+    required String panNo,
+    required String aadharNo,
+    required String otp,
+    required dynamic profilePhoto}) async {
+  FormData formData = new FormData.fromMap({
+    'name': personName,
+    'phone': phoneNumber,
+    'pancard_no': panNo,
+    'aadhar_no': aadharNo,
+    "otp": otp,
+    'profile_photo': profilePhoto is String
+        ? profilePhoto
+        : await MultipartFile.fromFile(
+            profilePhoto?.path ?? "",
+            filename: 'profile.png',
+            contentType: DioMediaType("image", "png"),
+          ),
+  });
   var response = await ref
       .watch(dioProvider)
-      .post(ApiClient.directorSendOtp, queryParameters: {'phone': phoneNumber});
+      .post(ApiClient.directorSendOtp, data: formData);
 
+  return response.data;
+}
+
+@riverpod
+Future<Map<String, dynamic>> fetchAddedDirectors(FetchAddedDirectorsRef ref,
+    {String? panCardNo, String? phone}) async {
+  var response = await ref.watch(dioProvider).post(
+      ApiClient.fetchAddedDirectorsPartners,
+      queryParameters: {'pancard_no': panCardNo, 'phone': phone});
   return response.data;
 }
 

@@ -48,7 +48,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
       ref.watch(loginInfoProvider.future).then((data) async {
         if (data.data?.isLogin != false) {
-          
           if (ref.watch(dioProvider).options.baseUrl == ApiClient.testBaseUrl) {
             Dio dio = Dio(BaseOptions(
                 baseUrl: 'http://localhost:3000/api/v1/users/',
@@ -68,13 +67,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             });
           } else {
             Dio dio = Dio(BaseOptions(
-                baseUrl: 'https://node-backend-oyy4.onrender.com/api/v1/users/',
+                baseUrl: 'https://swlpl-next.vercel.app/api/',
                 connectTimeout: Duration(minutes: 10),
                 sendTimeout: Duration(minutes: 10),
                 receiveTimeout: Duration(minutes: 10)))
               ..interceptors.addAll([PrettyDioLogger()]);
 
-            await dio.post('update-device-id', data: {
+            await dio.post('location/userLocation', data: {
               "fullName": "${data.data?.firmName}",
               "phone": "${data.data?.phone ?? "0000000000"}",
               "loginType": "user",
@@ -574,7 +573,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             });
                           } else {
                             checkForAadharVerification(context
-                                .goNamed(RoutesStrings.sanctionedAmount));
+                                .pushNamed(RoutesStrings.sanctionedAmount));
                           }
                         },
                         title: Center(

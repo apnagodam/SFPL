@@ -530,13 +530,9 @@ class _IndividualregistrationState
                   width: MediaQuery.of(context).size.width,
                   child: InkWell(
                     onTap: () async {
-                      imagePicker
-                          .pickImage(source: ImageSource.gallery)
-                          .then((value) {
-                        if (value != null) {
-                          ref.watch(profileImageProvider.notifier).state =
-                              File(value.path);
-                        }
+                      showImageSourceFilePickerDialog(context, (value) {
+                        ref.watch(profileImageProvider.notifier).state =
+                            File(value.path);
                       });
                     },
                     child: dottedBorder.DottedBorder(
@@ -610,13 +606,9 @@ class _IndividualregistrationState
                   width: MediaQuery.of(context).size.width,
                   child: InkWell(
                     onTap: () async {
-                      imagePicker
-                          .pickImage(source: ImageSource.gallery)
-                          .then((value) {
-                        if (value != null) {
-                          ref.watch(profileImageProvider.notifier).state =
-                              File(value.path);
-                        }
+                      showImageSourceFilePickerDialog(context, (value) {
+                        ref.watch(profileImageProvider.notifier).state =
+                            File(value.path);
                       });
                     },
                     child: dottedBorder.DottedBorder(
@@ -742,13 +734,9 @@ class _IndividualregistrationState
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(panImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(panImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -820,13 +808,9 @@ class _IndividualregistrationState
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(panImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                    showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(panImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -1582,13 +1566,9 @@ class _IndividualregistrationState
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(addressProofImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                       showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(addressProofImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -1661,13 +1641,9 @@ class _IndividualregistrationState
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: () async {
-                    imagePicker
-                        .pickImage(source: ImageSource.gallery)
-                        .then((value) {
-                      if (value != null) {
-                        ref.watch(addressProofImageProvider.notifier).state =
-                            File(value.path);
-                      }
+                      showImageSourceFilePickerDialog(context, (value) {
+                      ref.watch(addressProofImageProvider.notifier).state =
+                          File(value.path);
                     });
                   },
                   child: dottedBorder.DottedBorder(
@@ -1976,13 +1952,9 @@ class _IndividualregistrationState
                   width: MediaQuery.of(context).size.width,
                   child: InkWell(
                     onTap: () async {
-                      imagePicker
-                          .pickImage(source: ImageSource.gallery)
-                          .then((value) {
-                        if (value != null) {
-                          ref.watch(chequeImageProvider.notifier).state =
-                              File(value.path);
-                        }
+                      showImageSourceFilePickerDialog(context, (value) {
+                        ref.watch(chequeImageProvider.notifier).state =
+                            File(value.path);
                       });
                     },
                     child: dottedBorder.DottedBorder(
@@ -2056,13 +2028,9 @@ class _IndividualregistrationState
                   width: MediaQuery.of(context).size.width,
                   child: InkWell(
                     onTap: () async {
-                      imagePicker
-                          .pickImage(source: ImageSource.gallery)
-                          .then((value) {
-                        if (value != null) {
-                          ref.watch(chequeImageProvider.notifier).state =
-                              File(value.path);
-                        }
+                      showImageSourceFilePickerDialog(context, (value) {
+                        ref.watch(chequeImageProvider.notifier).state =
+                            File(value.path);
                       });
                     },
                     child: dottedBorder.DottedBorder(

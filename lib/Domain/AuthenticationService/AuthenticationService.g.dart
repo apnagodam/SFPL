@@ -593,7 +593,7 @@ class _RegisterUserProviderElement
   dynamic get addressProof => (origin as RegisterUserProvider).addressProof;
 }
 
-String _$verifyOtpHash() => r'824c292b749ddb3c81039f670998facfe3f9a893';
+String _$verifyOtpHash() => r'83db890c9d4987dc718cb654b0c2ac9177d35a3a';
 
 /// See also [verifyOtp].
 @ProviderFor(verifyOtp)
@@ -1572,7 +1572,7 @@ final bankListProvider = AutoDisposeStreamProvider<BankListModel>.internal(
 );
 
 typedef BankListRef = AutoDisposeStreamProviderRef<BankListModel>;
-String _$sendDirectorOtpHash() => r'66a3c83a48743fbeac01a5d1ff1a48586a399cd5';
+String _$sendDirectorOtpHash() => r'd701f19cb5c727840f44fab94e680dc64754244a';
 
 /// See also [sendDirectorOtp].
 @ProviderFor(sendDirectorOtp)
@@ -1585,10 +1585,20 @@ class SendDirectorOtpFamily extends Family<AsyncValue<Map<String, dynamic>>> {
 
   /// See also [sendDirectorOtp].
   SendDirectorOtpProvider call({
-    String? phoneNumber,
+    required String personName,
+    required String phoneNumber,
+    required String panNo,
+    required String aadharNo,
+    required String otp,
+    required dynamic profilePhoto,
   }) {
     return SendDirectorOtpProvider(
+      personName: personName,
       phoneNumber: phoneNumber,
+      panNo: panNo,
+      aadharNo: aadharNo,
+      otp: otp,
+      profilePhoto: profilePhoto,
     );
   }
 
@@ -1597,7 +1607,12 @@ class SendDirectorOtpFamily extends Family<AsyncValue<Map<String, dynamic>>> {
     covariant SendDirectorOtpProvider provider,
   ) {
     return call(
+      personName: provider.personName,
       phoneNumber: provider.phoneNumber,
+      panNo: provider.panNo,
+      aadharNo: provider.aadharNo,
+      otp: provider.otp,
+      profilePhoto: provider.profilePhoto,
     );
   }
 
@@ -1621,11 +1636,21 @@ class SendDirectorOtpProvider
     extends AutoDisposeFutureProvider<Map<String, dynamic>> {
   /// See also [sendDirectorOtp].
   SendDirectorOtpProvider({
-    String? phoneNumber,
+    required String personName,
+    required String phoneNumber,
+    required String panNo,
+    required String aadharNo,
+    required String otp,
+    required dynamic profilePhoto,
   }) : this._internal(
           (ref) => sendDirectorOtp(
             ref as SendDirectorOtpRef,
+            personName: personName,
             phoneNumber: phoneNumber,
+            panNo: panNo,
+            aadharNo: aadharNo,
+            otp: otp,
+            profilePhoto: profilePhoto,
           ),
           from: sendDirectorOtpProvider,
           name: r'sendDirectorOtpProvider',
@@ -1636,7 +1661,12 @@ class SendDirectorOtpProvider
           dependencies: SendDirectorOtpFamily._dependencies,
           allTransitiveDependencies:
               SendDirectorOtpFamily._allTransitiveDependencies,
+          personName: personName,
           phoneNumber: phoneNumber,
+          panNo: panNo,
+          aadharNo: aadharNo,
+          otp: otp,
+          profilePhoto: profilePhoto,
         );
 
   SendDirectorOtpProvider._internal(
@@ -1646,10 +1676,20 @@ class SendDirectorOtpProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
+    required this.personName,
     required this.phoneNumber,
+    required this.panNo,
+    required this.aadharNo,
+    required this.otp,
+    required this.profilePhoto,
   }) : super.internal();
 
-  final String? phoneNumber;
+  final String personName;
+  final String phoneNumber;
+  final String panNo;
+  final String aadharNo;
+  final String otp;
+  final dynamic profilePhoto;
 
   @override
   Override overrideWith(
@@ -1664,7 +1704,12 @@ class SendDirectorOtpProvider
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
+        personName: personName,
         phoneNumber: phoneNumber,
+        panNo: panNo,
+        aadharNo: aadharNo,
+        otp: otp,
+        profilePhoto: profilePhoto,
       ),
     );
   }
@@ -1676,21 +1721,47 @@ class SendDirectorOtpProvider
 
   @override
   bool operator ==(Object other) {
-    return other is SendDirectorOtpProvider && other.phoneNumber == phoneNumber;
+    return other is SendDirectorOtpProvider &&
+        other.personName == personName &&
+        other.phoneNumber == phoneNumber &&
+        other.panNo == panNo &&
+        other.aadharNo == aadharNo &&
+        other.otp == otp &&
+        other.profilePhoto == profilePhoto;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, personName.hashCode);
     hash = _SystemHash.combine(hash, phoneNumber.hashCode);
+    hash = _SystemHash.combine(hash, panNo.hashCode);
+    hash = _SystemHash.combine(hash, aadharNo.hashCode);
+    hash = _SystemHash.combine(hash, otp.hashCode);
+    hash = _SystemHash.combine(hash, profilePhoto.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
 mixin SendDirectorOtpRef on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
+  /// The parameter `personName` of this provider.
+  String get personName;
+
   /// The parameter `phoneNumber` of this provider.
-  String? get phoneNumber;
+  String get phoneNumber;
+
+  /// The parameter `panNo` of this provider.
+  String get panNo;
+
+  /// The parameter `aadharNo` of this provider.
+  String get aadharNo;
+
+  /// The parameter `otp` of this provider.
+  String get otp;
+
+  /// The parameter `profilePhoto` of this provider.
+  dynamic get profilePhoto;
 }
 
 class _SendDirectorOtpProviderElement
@@ -1699,7 +1770,168 @@ class _SendDirectorOtpProviderElement
   _SendDirectorOtpProviderElement(super.provider);
 
   @override
-  String? get phoneNumber => (origin as SendDirectorOtpProvider).phoneNumber;
+  String get personName => (origin as SendDirectorOtpProvider).personName;
+  @override
+  String get phoneNumber => (origin as SendDirectorOtpProvider).phoneNumber;
+  @override
+  String get panNo => (origin as SendDirectorOtpProvider).panNo;
+  @override
+  String get aadharNo => (origin as SendDirectorOtpProvider).aadharNo;
+  @override
+  String get otp => (origin as SendDirectorOtpProvider).otp;
+  @override
+  dynamic get profilePhoto => (origin as SendDirectorOtpProvider).profilePhoto;
+}
+
+String _$fetchAddedDirectorsHash() =>
+    r'e7b419c42ad61a2b91a784149bdc956b1b246710';
+
+/// See also [fetchAddedDirectors].
+@ProviderFor(fetchAddedDirectors)
+const fetchAddedDirectorsProvider = FetchAddedDirectorsFamily();
+
+/// See also [fetchAddedDirectors].
+class FetchAddedDirectorsFamily
+    extends Family<AsyncValue<Map<String, dynamic>>> {
+  /// See also [fetchAddedDirectors].
+  const FetchAddedDirectorsFamily();
+
+  /// See also [fetchAddedDirectors].
+  FetchAddedDirectorsProvider call({
+    String? panCardNo,
+    String? phone,
+  }) {
+    return FetchAddedDirectorsProvider(
+      panCardNo: panCardNo,
+      phone: phone,
+    );
+  }
+
+  @override
+  FetchAddedDirectorsProvider getProviderOverride(
+    covariant FetchAddedDirectorsProvider provider,
+  ) {
+    return call(
+      panCardNo: provider.panCardNo,
+      phone: provider.phone,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'fetchAddedDirectorsProvider';
+}
+
+/// See also [fetchAddedDirectors].
+class FetchAddedDirectorsProvider
+    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+  /// See also [fetchAddedDirectors].
+  FetchAddedDirectorsProvider({
+    String? panCardNo,
+    String? phone,
+  }) : this._internal(
+          (ref) => fetchAddedDirectors(
+            ref as FetchAddedDirectorsRef,
+            panCardNo: panCardNo,
+            phone: phone,
+          ),
+          from: fetchAddedDirectorsProvider,
+          name: r'fetchAddedDirectorsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$fetchAddedDirectorsHash,
+          dependencies: FetchAddedDirectorsFamily._dependencies,
+          allTransitiveDependencies:
+              FetchAddedDirectorsFamily._allTransitiveDependencies,
+          panCardNo: panCardNo,
+          phone: phone,
+        );
+
+  FetchAddedDirectorsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.panCardNo,
+    required this.phone,
+  }) : super.internal();
+
+  final String? panCardNo;
+  final String? phone;
+
+  @override
+  Override overrideWith(
+    FutureOr<Map<String, dynamic>> Function(FetchAddedDirectorsRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: FetchAddedDirectorsProvider._internal(
+        (ref) => create(ref as FetchAddedDirectorsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        panCardNo: panCardNo,
+        phone: phone,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
+    return _FetchAddedDirectorsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FetchAddedDirectorsProvider &&
+        other.panCardNo == panCardNo &&
+        other.phone == phone;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, panCardNo.hashCode);
+    hash = _SystemHash.combine(hash, phone.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin FetchAddedDirectorsRef
+    on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
+  /// The parameter `panCardNo` of this provider.
+  String? get panCardNo;
+
+  /// The parameter `phone` of this provider.
+  String? get phone;
+}
+
+class _FetchAddedDirectorsProviderElement
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with FetchAddedDirectorsRef {
+  _FetchAddedDirectorsProviderElement(super.provider);
+
+  @override
+  String? get panCardNo => (origin as FetchAddedDirectorsProvider).panCardNo;
+  @override
+  String? get phone => (origin as FetchAddedDirectorsProvider).phone;
 }
 
 String _$submitDirectorDetailsHash() =>

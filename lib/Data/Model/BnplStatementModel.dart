@@ -13,11 +13,15 @@ String bnplStatementModelToMap(BnplStatementModel data) =>
 class BnplStatementModel {
   dynamic status;
   dynamic message;
+  dynamic closingBalance;
+  dynamic openingBalance;
   List<StatementDatum>? data;
 
   BnplStatementModel({
     this.status,
     this.message,
+    this.closingBalance,
+    this.openingBalance,
     this.data,
   });
 
@@ -25,14 +29,19 @@ class BnplStatementModel {
       BnplStatementModel(
         status: json["status"],
         message: json["message"],
+        closingBalance: json['closing_balance'],
+        openingBalance: json['opening_balance'],
         data: json["data"] == null
             ? []
-            : List<StatementDatum>.from(json["data"]!.map((x) => StatementDatum.fromMap(x))),
+            : List<StatementDatum>.from(
+                json["data"]!.map((x) => StatementDatum.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
         "status": status,
         "message": message,
+        "opening_balance": openingBalance,
+        "closing_balance": closingBalance,
         "data":
             data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
       };
@@ -58,7 +67,7 @@ class StatementDatum {
       this.reference,
       this.type,
       this.amount,
-        this.balance,
+      this.balance,
       this.commodityPrice,
       this.weight});
 
@@ -77,12 +86,12 @@ class StatementDatum {
   Map<String, dynamic> toMap() => {
         "date": date,
         "narration": narration,
-    "label":label,
+        "label": label,
         "gatepass": gatepass,
         "reference_no": reference,
         "type": type,
         "amount": amount,
-    "balance":balance,
+        "balance": balance,
         'commodity_price': commodityPrice,
         'weight': weight
       };

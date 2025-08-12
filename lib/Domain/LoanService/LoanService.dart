@@ -353,7 +353,7 @@ Future<Map<String, dynamic>> surepassPdc(SurepassPdcRef ref,
   });
   var response = await ref
       .watch(dioProvider)
-      .post(ApiClient.getSurepassPdcUrl + "$id", data: formData);
+      .post(ApiClient.mergedEsignApis + "$id", data: formData);
   return response.data;
 }
 
@@ -363,7 +363,7 @@ Future<Map<String, dynamic>> surepassSanctionLetter(
     {String? id}) async {
   var response = await ref
       .watch(dioProvider)
-      .get(ApiClient.getSurepassSanctionUrl + "$id");
+      .get(ApiClient.mergedEsignApis + "$id");
   return response.data;
 }
 

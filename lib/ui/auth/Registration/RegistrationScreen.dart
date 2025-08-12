@@ -28,40 +28,45 @@ import '../../utils/colors.dart';
 import '../../utils/enums.dart';
 
 class Registrationscreen extends ConsumerStatefulWidget {
-  const Registrationscreen({super.key});
+  const Registrationscreen({super.key, required this.phoneNumber});
+
+  final String phoneNumber;
 
   @override
   ConsumerState<Registrationscreen> createState() => _RegistrationscreenState();
 }
 
 class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
-  var statesProvider = StateProvider<Datum?>((ref) => null);
-
-  var districtProvider = StateProvider<StateDatum?>((ref) => null);
-  var propProvider = StateProvider<int?>((ref) => null);
-  var propNameProvider = StateProvider((ref) => "Select Constitution");
-  var propTypeList = ['Individual', "Proprietorship Firm", "Partnership Firm"];
-  var regTypeList = ['Commodity Finance', "BNPL"];
-  var regNameProvider = StateProvider((ref) => "Select Registration type");
-  final FocusNode otpNode = FocusNode();
-  var registrationTypeProvider =
-      StateProvider<RegistrationType?>((ref) => null);
   var constitutionTypeProvider =
       StateProvider<ConstitutionType?>((ref) => null);
-  var userDetailsProvider = StateProvider<Map<String, dynamic>?>((ref) => null);
-  final _pancardController = TextEditingController();
-  final _autologinPhoneController = TextEditingController();
-  final _autologinOtpController = TextEditingController();
-  final _autoFormKey = GlobalKey<FormState>();
-  late OTPInteractor _otpInteractor;
+
   OTPTextEditController? controller;
+  var districtProvider = StateProvider<StateDatum?>((ref) => null);
+  final FocusNode otpNode = FocusNode();
+  var propNameProvider = StateProvider((ref) => "Select Constitution");
+  var propProvider = StateProvider<int?>((ref) => null);
+  var propTypeList = ['Individual', "Proprietorship Firm", "Partnership Firm"];
+  var regNameProvider = StateProvider((ref) => "Select Registration type");
+  var regTypeList = ['Commodity Finance', "BNPL"];
+  var registrationTypeProvider =
+      StateProvider<RegistrationType?>((ref) => null);
+
+  var statesProvider = StateProvider<Datum?>((ref) => null);
+  var userDetailsProvider = StateProvider<Map<String, dynamic>?>((ref) => null);
+
+  final _autoFormKey = GlobalKey<FormState>();
+  final _autologinOtpController = TextEditingController();
+  final _autologinPhoneController = TextEditingController();
+  late OTPInteractor _otpInteractor;
+  final _pancardController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _otpInteractor = OTPInteractor();
-    _initializeOtpListener();
+    //_initializeOtpListener();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _autologinPhoneController.text = widget.phoneNumber;
       var db = await mongo.Db.create(
           "mongodb+srv://apnagodam:l2F97uxKZ73eq251@cluster0.humxj.mongodb.net/");
       await db.open();
@@ -134,83 +139,6 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
         },
         strategies: [Smsstrategy()],
       );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.all(10),
-      child: ListView(
-        children: [
-          SizedBox(
-            height: Adaptive.h(5),
-          ),
-          Center(
-            child: Image.asset(
-              'assets/swfl.png',
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Center(
-            child: Text(
-              "Welcome!",
-              style: TextStyle(
-                  color: ColorsConstant.secondaryColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: Adaptive.sp(20)),
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            "Create your account to access Apnagodam's Financial Services",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: Colors.grey.shade500,
-                fontWeight: FontWeight.bold,
-                fontSize: Adaptive.sp(17)),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          _autoLoginUi(),
-          SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: ElevatedButton(
-              onPressed: () async {
-                _autoFetchUserDetails();
-              },
-              style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.all(15),
-                  backgroundColor: ColorsConstant.primaryColor,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10))),
-              child: Text(
-                "Submit",
-                style: TextStyle(
-                    color: Colors.white,
-                    shadows: const [
-                      Shadow(color: Colors.white, blurRadius: 0.3)
-                    ],
-                    fontWeight: FontWeight.w700,
-                    fontSize: Adaptive.sp(16)),
-              ),
-            ),
-          ),
-        ],
-      ),
-    ));
   }
 
   Future<void> _autoFetchUserDetails() async {
@@ -369,27 +297,102 @@ class _RegistrationscreenState extends ConsumerState<Registrationscreen> {
               '1') {
             ref
                 .watch(goRouterProvider)
-                .go(RoutesStrings.individualRegistration);
+                .goNamed(RoutesStrings.individualRegistration);
           } else if (ref
                   .watch(userDetailsProvider)?['constitution']
                   .toString() ==
               '2') {
-            ref.watch(goRouterProvider).go(RoutesStrings.propRegistration);
+            ref.watch(goRouterProvider).goNamed(RoutesStrings.propRegistration);
           } else if (ref
                   .watch(userDetailsProvider)?['constitution']
                   .toString() ==
               '3') {
             ref
                 .watch(goRouterProvider)
-                .go(RoutesStrings.partnershipRegistration);
+                .goNamed(RoutesStrings.partnershipRegistration);
           } else if (ref
                   .watch(userDetailsProvider)?['constitution']
                   .toString() ==
               '4') {
-            ref
-                .watch(goRouterProvider)
-                .go(RoutesStrings.companyRegistration);
+            ref.watch(goRouterProvider).goNamed(RoutesStrings.companyRegistration);
           }
         }
       });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Padding(
+      padding: const EdgeInsets.all(10),
+      child: ListView(
+        children: [
+          SizedBox(
+            height: Adaptive.h(5),
+          ),
+          Center(
+            child: Image.asset(
+              'assets/swfl.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Center(
+            child: Text(
+              "Welcome!",
+              style: TextStyle(
+                  color: ColorsConstant.secondaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Adaptive.sp(20)),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            "Create your account to access Apnagodam's Financial Services",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Colors.grey.shade500,
+                fontWeight: FontWeight.bold,
+                fontSize: Adaptive.sp(17)),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          _autoLoginUi(),
+          SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: ElevatedButton(
+              onPressed: () async {
+                _autoFetchUserDetails();
+              },
+              style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.all(15),
+                  backgroundColor: ColorsConstant.primaryColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10))),
+              child: Text(
+                "Submit",
+                style: TextStyle(
+                    color: Colors.white,
+                    shadows: const [
+                      Shadow(color: Colors.white, blurRadius: 0.3)
+                    ],
+                    fontWeight: FontWeight.w700,
+                    fontSize: Adaptive.sp(16)),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ));
+  }
 }

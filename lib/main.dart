@@ -19,6 +19,7 @@ import 'package:swfl/ui/utils/MyHttpOverrides.dart';
 import 'package:swfl/ui/utils/colors.dart';
 import 'package:swfl/ui/utils/notification_service.dart';
 import 'package:swfl/ui/utils/routes.dart';
+import 'package:swfl/ui/utils/widgets.dart';
 import 'package:toastification/toastification.dart';
 
 import 'Data/SharedPrefs/SharedUtility.dart';
@@ -35,7 +36,9 @@ void main() async {
   ElevarmFontFamilies.init(
     allowRuntimeFetching: true,
   );
-
+  if (!await isLocationPermissionGranted()) {
+    await requestLocationPermission();
+  }
   var token = await FirebaseMessaging.instance.getToken();
   print(token);
   if (Platform.isAndroid) {

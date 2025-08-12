@@ -16,6 +16,7 @@ class Diointerceptor extends InterceptorsWrapper {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) async {
+    String currentMessage = '';
     if (response.data['status'].toString() == '3') {
       showForceLogoutDialog(OneContext().context!,
           titleText: 'You have been Logged out!',
@@ -24,6 +25,8 @@ class Diointerceptor extends InterceptorsWrapper {
         ref.watch(goRouterProvider).go(RoutesStrings.login);
       });
     } else if (response.data['status'] == "0") {
+      currentMessage = response.data['message'].toString();
+
       if (response.data['message']
               .toString()
               .contains('Triparty Agreement Not Verify.') ||
@@ -34,7 +37,7 @@ class Diointerceptor extends InterceptorsWrapper {
             titleText: "Verify Tri-Party Agreement",
             messageText: "tri party agreement pending", action: () {
           hideLoader(OneContext().context!);
-    
+
           ref.watch(goRouterProvider).goNamed(RoutesStrings.verfication);
         });
         // debugPrint(" \x1B[31m${response.data}\x1B[0m");

@@ -213,7 +213,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                 } else {
                                   ref
                                       .watch(goRouterProvider)
-                                      .goNamed(RoutesStrings.register);
+                                      .goNamed(RoutesStrings.register, extra: {
+                                    'phone': panController.text
+                                        .toString()
+                                        .toUpperCase()
+                                  });
                                 }
                               }).onError((e, s) {
                                 ref.watch(isLoading.notifier).state = false;
@@ -379,8 +383,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                           TextSpan(
                             text: " Register",
                             recognizer: TapGestureRecognizer()
-                              ..onTap =
-                                  () => context.goNamed(RoutesStrings.register),
+                              ..onTap = () => context
+                                      .goNamed(RoutesStrings.register, extra: {
+                                    'phone': panController.text
+                                        .toString()
+                                        .toUpperCase()
+                                  }),
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: ColorsConstant.secondColorDark),
@@ -530,7 +538,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                   null) {
                                 ref
                                     .watch(goRouterProvider)
-                                    .goNamed(RoutesStrings.register);
+                                    .goNamed(RoutesStrings.register ,extra: {
+                                    'phone': panController.text
+                                        .toString()
+                                        .toUpperCase()
+                                  });
                               } else if (ref
                                       .watch(
                                           userDetailsProvider)?['constitution']

@@ -11,7 +11,7 @@ String sanctionLimitListModelToMap(SanctionLimitListModel data) =>
     json.encode(data.toMap());
 
 class SanctionLimitListModel {
-  List<Datum>? data;
+  List<SanctionedLimitDatum>? data;
   dynamic status;
   dynamic message;
 
@@ -25,7 +25,7 @@ class SanctionLimitListModel {
       SanctionLimitListModel(
         data: json["data"] == null
             ? []
-            : List<Datum>.from(json["data"]!.map((x) => Datum.fromMap(x))),
+            : List<SanctionedLimitDatum>.from(json["data"]!.map((x) => SanctionedLimitDatum.fromMap(x))),
         status: json["status"],
         message: json["message"],
       );
@@ -38,7 +38,7 @@ class SanctionLimitListModel {
       };
 }
 
-class Datum {
+class SanctionedLimitDatum {
   dynamic id;
   dynamic loanType;
   dynamic userId;
@@ -65,7 +65,7 @@ class Datum {
   dynamic updatedAt;
   dynamic type;
 
-  Datum(
+  SanctionedLimitDatum(
       {this.id,
       this.loanType,
       this.userId,
@@ -92,7 +92,7 @@ class Datum {
       this.updatedAt,
       this.type});
 
-  factory Datum.fromMap(Map<String, dynamic> json) => Datum(
+  factory SanctionedLimitDatum.fromMap(Map<String, dynamic> json) => SanctionedLimitDatum(
       id: json["id"],
       loanType: json["loan_type"],
       userId: json["user_id"],

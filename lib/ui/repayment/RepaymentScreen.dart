@@ -1,4 +1,5 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:elevarm_ui/elevarm_ui.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
   final ltvTypeProvider = StateProvider<LTVType?>((ref) => null);
   final terminalsListProvider = StateProvider<List<Terminal>?>((ref) => null);
   final ltvDataProvider = StateProvider<RepaymentTerminalData?>((ref) => null);
-
+  final _totalSettlementAmount = StateProvider<num>((ref) => 0.0);
   final isLoading = StateProvider<bool>((ref) => false);
   @override
   void initState() {
@@ -52,19 +53,75 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Repayment'),
+        title: Text('Repayment '),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const Pad(all: 10),
           child: ref.watch(isLoading) == true
               ? SizedBox(
+                  height: context.fullHeight,
                   child: Center(
                     child: defaultLoader(),
-                  ),
-                  height: context.fullHeight)
+                  ))
               : ref.watch(ltvTypeProvider) == LTVType.aboveZero
-                  ? _ltvSettlementUi(ref.watch(ltvDataProvider))
+                  ? Column(
+                      children: [
+                        if (num.parse(
+                                    '${ref.watch(ltvDataProvider)?.settlementAmount ?? 0}')
+                                .toString() !=
+                            "0")
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        if (num.parse(
+                                    '${ref.watch(ltvDataProvider)?.settlementAmount ?? 0}')
+                                .toString() !=
+                            "0")
+                          Text(
+                              'Total Settlement Amount \u{20B9}${ref.watch(ltvDataProvider)?.settlementAmount}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: ColorsConstant.primaryColor,
+                                fontSize: Adaptive.sp(16),
+                              )),
+                                TextButton(
+                              onPressed: () {
+                                showloader(context);
+                                ref
+                                    .watch(sendWhatsappPdfProvider(
+                                          
+                                            terminal:
+                                                "${ref.watch(terminalsListProvider)?[0].name}",
+                                           )
+                                        .future)
+                                    .then((value) {
+                                  hideLoader(context);
+                                  if (value['status'].toString() == "1") {
+                                    successToast(
+                                        context, value['message'].toString());
+                                  } else {
+                                    errorToast(
+                                        context, value['message'].toString());
+                                  }
+                                }).onError((e, s) {
+                                  hideLoader(context);
+                                });
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    'Tap to Receive report on whatsapp',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  CachedNetworkImage(imageUrl: 'https://web.whatsapp.com/favicon-64x64.ico',height: Adaptive.sp(20),)
+                                ],
+                              )),
+                        _ltvSettlementUi(ref.watch(ltvDataProvider))
+                      ],
+                    )
                   : Column(
                       children: [
                         DropdownSearch<Terminal?>(
@@ -117,8 +174,8 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
                                       children: [
                                         Padding(
                                           padding: const Pad(all: 10),
-                                          child: Text(
-                                            "${terminal?.name}",
+                                          child: Text.rich(
+                                            TextSpan(text: "${terminal?.name}"),
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: Adaptive.sp(15)),
@@ -146,7 +203,7 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
                               user?.districtFilterByName(filter) ?? false,
                           // asyncItems: (String filter) => getData(filter),
                           items: ref.watch(terminalsListProvider) ?? [],
-                          itemAsString: (Terminal? u) => u?.name ?? "",
+                          itemAsString: (Terminal? u) => "${u?.name}",
                           onChanged: (Terminal? data) =>
                               ref.watch(terminalProvider.notifier).state = data,
                           dropdownDecoratorProps: const DropDownDecoratorProps(
@@ -162,6 +219,24 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
                                             .secondColorUltraDark))),
                           ),
                         ),
+                        if (num.parse(
+                                    '${ref.watch(terminalProvider)?.settlementAmount ?? 0}')
+                                .toString() !=
+                            "0")
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        if (num.parse(
+                                    '${ref.watch(terminalProvider)?.settlementAmount ?? 0}')
+                                .toString() !=
+                            "0")
+                          Text(
+                              'Terminal-wise Settlement Amount \u{20B9}${ref.watch(terminalProvider)?.settlementAmount}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: ColorsConstant.primaryColor,
+                                fontSize: Adaptive.sp(16),
+                              )),
                         const SizedBox(
                           height: 10,
                         ),
@@ -304,6 +379,24 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
                                         child: CircularProgressIndicator
                                             .adaptive(),
                                       )),
+                        if (num.parse(
+                                    '${ref.watch(commodityProvider)?.settlementAmount ?? 0}')
+                                .toString() !=
+                            "0")
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        if (num.parse(
+                                    '${ref.watch(commodityProvider)?.settlementAmount ?? 0}')
+                                .toString() !=
+                            "0")
+                          Text(
+                              'Commodity-wise  Settlement Amount \u{20B9}${ref.watch(commodityProvider)?.settlementAmount}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: ColorsConstant.primaryColor,
+                                fontSize: Adaptive.sp(16),
+                              )),
                         const SizedBox(
                           height: 10,
                         ),
@@ -426,9 +519,40 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
                                         items: data.data ?? [],
                                         itemAsString: (Datum? u) =>
                                             u?.stackNumber.toString() ?? "",
-                                        onChanged: (Datum? data) => ref
-                                            .watch(stackProvider.notifier)
-                                            .state = data,
+                                        onChanged: (Datum? data) async {
+                                          ref
+                                              .watch(stackProvider.notifier)
+                                              .state = data;
+
+                                          ref
+                                              .watch(repaymentSettlementListProvider(
+                                                      terminal: ref
+                                                              .watch(
+                                                                  terminalProvider)
+                                                              ?.name ??
+                                                          "",
+                                                      commodityName: ref
+                                                              .watch(
+                                                                  commodityProvider)
+                                                              ?.commodityName ??
+                                                          "",
+                                                      stackNumber: ref
+                                                          .watch(stackProvider)
+                                                          ?.stackNumber
+                                                          .toString())
+                                                  .future)
+                                              .then((value) {
+                                            value.data?.forEach((value) {
+                                              ref
+                                                      .watch(
+                                                          _totalSettlementAmount
+                                                              .notifier)
+                                                      .state +=
+                                                  num.parse(
+                                                      "${value.totalSettlementAmount}");
+                                            });
+                                          });
+                                        },
                                         dropdownDecoratorProps:
                                             const DropDownDecoratorProps(
                                           dropdownSearchDecoration: InputDecoration(
@@ -451,9 +575,64 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
                                         child: CircularProgressIndicator
                                             .adaptive(),
                                       )),
+                        if (num.parse(
+                                    '${ref.watch(stackProvider)?.settlementAmount ?? 0}')
+                                .toString() !=
+                            "0")
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        if (num.parse(
+                                    '${ref.watch(stackProvider)?.settlementAmount ?? 0}')
+                                .toString() !=
+                            "0")
+                          Text(
+                              'Stack-wise Settlement Amount \u{20B9}${ref.watch(stackProvider)?.settlementAmount}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: ColorsConstant.primaryColor,
+                                fontSize: Adaptive.sp(16),
+                              )),
                         const SizedBox(
                           height: 10,
                         ),
+                        if (ref.watch(stackProvider) != null)
+                          TextButton(
+                              onPressed: () {
+                                showloader(context);
+                                ref
+                                    .watch(sendWhatsappPdfProvider(
+                                            commodityName:
+                                                "${ref.watch(commodityProvider)?.commodityName}",
+                                            terminal:
+                                                "${ref.watch(terminalProvider)?.name}",
+                                            stackNumber:
+                                                "${ref.watch(stackProvider)?.stackNumber}")
+                                        .future)
+                                    .then((value) {
+                                  hideLoader(context);
+                                  if (value['status'].toString() == "1") {
+                                    successToast(
+                                        context, value['message'].toString());
+                                  } else {
+                                    errorToast(
+                                        context, value['message'].toString());
+                                  }
+                                }).onError((e, s) {
+                                  hideLoader(context);
+                                });
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    'Tap to Receive report on whatsapp',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  CachedNetworkImage(imageUrl: 'https://web.whatsapp.com/favicon-64x64.ico',height: Adaptive.sp(20),)
+                                ],
+                              )),
                         ref.watch(terminalProvider) == null ||
                                 ref.watch(commodityProvider) == null ||
                                 ref.watch(stackProvider) == null
@@ -543,289 +722,298 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
     });
   }
 
-  _settlementUi(dynamic data) => ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: data.data?.length ?? 0,
-      itemBuilder: (context, index) {
-        var isSelected = ref.watch(selectedItem) == index;
+  _settlementUi(dynamic data) {
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: data.data?.length ?? 0,
+        itemBuilder: (context, index) {
+          var isSelected = ref.watch(selectedItem) == index;
 
-        // var isSelected = index == 0;
+          // var isSelected = index == 0;
 
-        return InkWell(
-          child: IntrinsicHeight(
-            child: Container(
-                padding: const Pad(all: 10),
-                margin: Pad(bottom: 10),
-                decoration: BoxDecoration(
-                    gradient: !isSelected
-                        ? null
-                        : LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            stops: const [
-                                0,
-                                1,
-                                2,
-                                3
-                              ],
-                            colors: [
-                                ColorsConstant.primaryColor.withOpacity(0.9),
-                                ColorsConstant.secondColorDark.withOpacity(0.9),
-                                ColorsConstant.secondColorSuperDark
-                                    .withOpacity(0.9),
-                                ColorsConstant.primaryColor.withOpacity(0.9),
-                              ]),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: ColorsConstant.primaryColor)),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          buildRichText(
-                              mainText: 'DRF-${data?.data?[index].drfNo ?? 0}',
-                              mainTextStyle: TextStyle(
-                                  height: 2,
-                                  fontWeight: FontWeight.bold,
-                                  color:
-                                      isSelected ? Colors.white : Colors.black,
-                                  fontSize: Adaptive.sp(17))),
-                          buildRichText(
-                              mainText: 'Gatepass:',
-                              mainTextStyle: TextStyle(
-                                  height: 2,
-                                  fontWeight: FontWeight.bold,
-                                  color:
-                                      isSelected ? Colors.white : Colors.black,
-                                  fontSize: Adaptive.sp(17)),
-                              children: [
-                                TextSpan(
-                                    text:
-                                        ' ${data?.data?[index].gatePass ?? 0.0}')
-                              ]),
-                        ],
-                      ),
-                      buildRichText(
-                          mainText: 'Quantity:',
-                          mainTextStyle: TextStyle(
-                              height: 2,
-                              fontWeight: FontWeight.bold,
-                              color: isSelected ? Colors.white : Colors.black,
-                              fontSize: Adaptive.sp(15)),
+          return InkWell(
+            child: IntrinsicHeight(
+              child: Container(
+                  padding: const Pad(all: 10),
+                  margin: Pad(bottom: 10),
+                  decoration: BoxDecoration(
+                      gradient: !isSelected
+                          ? null
+                          : LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              stops: const [
+                                  0,
+                                  1,
+                                  2,
+                                  3
+                                ],
+                              colors: [
+                                  ColorsConstant.primaryColor.withOpacity(0.9),
+                                  ColorsConstant.secondColorDark
+                                      .withOpacity(0.9),
+                                  ColorsConstant.secondColorSuperDark
+                                      .withOpacity(0.9),
+                                  ColorsConstant.primaryColor.withOpacity(0.9),
+                                ]),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: ColorsConstant.primaryColor)),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            TextSpan(
-                                text: ' ${data?.data?[index].quantity ?? 0.0}')
-                          ]),
-                      buildRichText(
-                          mainText: 'Loan Amount:',
-                          mainTextStyle: TextStyle(
-                              height: 2,
-                              fontWeight: FontWeight.bold,
-                              color: isSelected ? Colors.white : Colors.black,
-                              fontSize: Adaptive.sp(15)),
-                          children: [
-                            TextSpan(
-                                text:
-                                    ' ${currencyFormat.format(double.parse("${data?.data?[index].totalLoanAmount ?? 0.0}"))}')
-                          ]),
-                      buildRichText(
-                          mainText: 'Interest Amount:',
-                          mainTextStyle: TextStyle(
-                              height: 2,
-                              fontWeight: FontWeight.bold,
-                              color: isSelected ? Colors.white : Colors.black,
-                              fontSize: Adaptive.sp(15)),
-                          children: [
-                            TextSpan(
-                                text:
-                                    ' ${currencyFormat.format(double.parse("${data?.data?[index].interestAmount ?? 0.0}"))}')
-                          ]),
-                      buildRichText(
-                          mainText: 'Penal Charges:',
-                          mainTextStyle: TextStyle(
-                              height: 2,
-                              fontWeight: FontWeight.bold,
-                              color: isSelected ? Colors.white : Colors.black,
-                              fontSize: Adaptive.sp(15)),
-                          children: [
-                            TextSpan(
-                                text:
-                                    ' ${currencyFormat.format(num.parse("${data?.data?[index].penalCharges}"))}')
-                          ]),
-                      buildRichText(
-                          mainText: 'Settlement Amount:',
-                          mainTextStyle: TextStyle(
-                              height: 2,
-                              fontWeight: FontWeight.bold,
-                              color: isSelected ? Colors.white : Colors.black,
-                              fontSize: Adaptive.sp(15)),
-                          children: [
-                            TextSpan(
-                                text:
-                                    ' ${currencyFormat.format(double.parse("${data?.data?[index].totalSettlementAmount ?? 0.0}"))}')
-                          ]),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      if (isSelected)
-                        ElevarmTwoChoiceRadioCard<PartPaymentType>(
-                          groupValue: ref.watch(paymentType),
-                          onChanged: (PartPaymentType newValue) {
-                            ref.watch(paymentType.notifier).state = newValue;
-                            // on change
-                          },
-                          items: [
-                            ElevarmRadioItemModel(
-                              value: PartPaymentType.part,
-                              title: PartPaymentType.part.label,
-                            ),
-                            ElevarmRadioItemModel(
-                              value: PartPaymentType.full,
-                              title: PartPaymentType.full.label,
-                            ),
+                            buildRichText(
+                                mainText:
+                                    'DRF-${data?.data?[index].drfNo ?? 0}',
+                                mainTextStyle: TextStyle(
+                                    height: 2,
+                                    fontWeight: FontWeight.bold,
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontSize: Adaptive.sp(17))),
+                            buildRichText(
+                                mainText: 'Gatepass:',
+                                mainTextStyle: TextStyle(
+                                    height: 2,
+                                    fontWeight: FontWeight.bold,
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontSize: Adaptive.sp(17)),
+                                children: [
+                                  TextSpan(
+                                      text:
+                                          ' ${data?.data?[index].gatePass ?? 0.0}')
+                                ]),
                           ],
                         ),
-                      if (ref.watch(paymentType) == PartPaymentType.part &&
-                          isSelected)
-                        Form(
-                          key: _formKey,
-                          child: Column(
+                        buildRichText(
+                            mainText: 'Quantity:',
+                            mainTextStyle: TextStyle(
+                                height: 2,
+                                fontWeight: FontWeight.bold,
+                                color: isSelected ? Colors.white : Colors.black,
+                                fontSize: Adaptive.sp(15)),
                             children: [
-                              SizedBox(
-                                height: 10,
+                              TextSpan(
+                                  text:
+                                      ' ${data?.data?[index].quantity ?? 0.0}')
+                            ]),
+                        buildRichText(
+                            mainText: 'Loan Amount:',
+                            mainTextStyle: TextStyle(
+                                height: 2,
+                                fontWeight: FontWeight.bold,
+                                color: isSelected ? Colors.white : Colors.black,
+                                fontSize: Adaptive.sp(15)),
+                            children: [
+                              TextSpan(
+                                  text:
+                                      ' ${currencyFormat.format(double.parse("${data?.data?[index].totalLoanAmount ?? 0.0}"))}')
+                            ]),
+                        buildRichText(
+                            mainText: 'Interest Amount:',
+                            mainTextStyle: TextStyle(
+                                height: 2,
+                                fontWeight: FontWeight.bold,
+                                color: isSelected ? Colors.white : Colors.black,
+                                fontSize: Adaptive.sp(15)),
+                            children: [
+                              TextSpan(
+                                  text:
+                                      ' ${currencyFormat.format(double.parse("${data?.data?[index].interestAmount ?? 0.0}"))}')
+                            ]),
+                        buildRichText(
+                            mainText: 'Penal Charges:',
+                            mainTextStyle: TextStyle(
+                                height: 2,
+                                fontWeight: FontWeight.bold,
+                                color: isSelected ? Colors.white : Colors.black,
+                                fontSize: Adaptive.sp(15)),
+                            children: [
+                              TextSpan(
+                                  text:
+                                      ' ${currencyFormat.format(num.parse("${data?.data?[index].penalCharges}"))}')
+                            ]),
+                        buildRichText(
+                            mainText: 'Settlement Amount:',
+                            mainTextStyle: TextStyle(
+                                height: 2,
+                                fontWeight: FontWeight.bold,
+                                color: isSelected ? Colors.white : Colors.black,
+                                fontSize: Adaptive.sp(15)),
+                            children: [
+                              TextSpan(
+                                  text:
+                                      ' ${currencyFormat.format(double.parse("${data?.data?[index].totalSettlementAmount ?? 0.0}"))}')
+                            ]),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        if (isSelected)
+                          ElevarmTwoChoiceRadioCard<PartPaymentType>(
+                            groupValue: ref.watch(paymentType),
+                            onChanged: (PartPaymentType newValue) {
+                              ref.watch(paymentType.notifier).state = newValue;
+                              // on change
+                            },
+                            items: [
+                              ElevarmRadioItemModel(
+                                value: PartPaymentType.part,
+                                title: PartPaymentType.part.label,
                               ),
-                              ElevarmTextInputField(
-                                controller: paymentAmountController,
-                                isRequired: true,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter amount';
-                                  }
-                                  if (num.parse('${value ?? "0.0"}') >
-                                      num.parse(
-                                          '${ref.watch(sharedUtilityProvider).getUser()?.wallet ?? "0.0"}')) {
-                                    return 'Amount should not be greater than wallet balance';
-                                  }
-                                  if (num.parse('${value ?? "0.0"}') <= 0) {
-                                    return 'Amount should not be 0';
-                                  }
-                                  return null;
-                                },
-                                maxLength: num.parse(
-                                        '${ref.watch(sharedUtilityProvider).getUser()?.wallet ?? "0.0"}')
-                                    .toStringAsFixed(0)
-                                    .length,
-                                onChanged: (value) {
-                                  if (num.parse('${value}') >
-                                      num.parse(
-                                          '${ref.watch(sharedUtilityProvider).getUser()?.wallet ?? "0.0"}')) {
-                                    ref.watch(errorText.notifier).state =
-                                        'Amount should not be greater than wallet balance';
-                                  } else if (num.parse('${value ?? "0.0"}') <=
-                                      0) {
-                                    ref.watch(errorText.notifier).state =
-                                        'Amount should not be 0';
-                                  } else {
-                                    ref.watch(errorText.notifier).state = null;
-                                  }
-                                },
-                                keyboardType: TextInputType.number,
-                                hintText: "Enter Amount",
-                                suffixIconAssetName: Icons.money,
+                              ElevarmRadioItemModel(
+                                value: PartPaymentType.full,
+                                title: PartPaymentType.full.label,
                               ),
-                              if (ref.watch(errorText) != null)
-                                Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      ref.watch(errorText) ?? "",
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          shadows: [
-                                            const Shadow(
-                                                color: Colors.black,
-                                                blurRadius: 0.3)
-                                          ],
-                                          fontSize: Adaptive.sp(14)),
-                                    )
-                                  ],
-                                ),
                             ],
                           ),
-                        ),
-                      Spacer(),
-                      if (isSelected)
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              // _pushRepyamentApi(
-                              //         data.data?[index]);
-                              switch (ref.watch(paymentType)) {
-                                case null:
-                                  errorToast(
-                                      context, 'Please select payment type');
-                                  break;
-                                case PartPaymentType.part:
-                                  if (_formKey.currentState!.validate()) {
-                                    _pushRepyamentApi(data?.data?[index]);
-                                  }
-                                  break;
-                                case PartPaymentType.full:
-                                  _pushRepyamentApi(data.data?[index]);
-                                  break;
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: ColorsConstant.secondColorDark,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10))),
-                            child: Text(
-                              "Pay",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  shadows: [
-                                    const Shadow(
-                                        color: Colors.white, blurRadius: 0.3)
-                                  ],
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: Adaptive.sp(15)),
+                        if (ref.watch(paymentType) == PartPaymentType.part &&
+                            isSelected)
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                ElevarmTextInputField(
+                                  controller: paymentAmountController,
+                                  isRequired: true,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter amount';
+                                    }
+                                    if (num.parse('${value ?? "0.0"}') >
+                                        num.parse(
+                                            '${ref.watch(sharedUtilityProvider).getUser()?.wallet ?? "0.0"}')) {
+                                      return 'Amount should not be greater than wallet balance';
+                                    }
+                                    if (num.parse('${value ?? "0.0"}') <= 0) {
+                                      return 'Amount should not be 0';
+                                    }
+                                    return null;
+                                  },
+                                  maxLength: num.parse(
+                                          '${ref.watch(sharedUtilityProvider).getUser()?.wallet ?? "0.0"}')
+                                      .toStringAsFixed(0)
+                                      .length,
+                                  onChanged: (value) {
+                                    if (num.parse('${value}') >
+                                        num.parse(
+                                            '${ref.watch(sharedUtilityProvider).getUser()?.wallet ?? "0.0"}')) {
+                                      ref.watch(errorText.notifier).state =
+                                          'Amount should not be greater than wallet balance';
+                                    } else if (num.parse('${value ?? "0.0"}') <=
+                                        0) {
+                                      ref.watch(errorText.notifier).state =
+                                          'Amount should not be 0';
+                                    } else {
+                                      ref.watch(errorText.notifier).state =
+                                          null;
+                                    }
+                                  },
+                                  keyboardType: TextInputType.number,
+                                  hintText: "Enter Amount",
+                                  suffixIconAssetName: Icons.money,
+                                ),
+                                if (ref.watch(errorText) != null)
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        ref.watch(errorText) ?? "",
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            shadows: [
+                                              const Shadow(
+                                                  color: Colors.black,
+                                                  blurRadius: 0.3)
+                                            ],
+                                            fontSize: Adaptive.sp(14)),
+                                      )
+                                    ],
+                                  ),
+                              ],
                             ),
                           ),
-                        ),
-                    ])),
-          ),
-          onTap: () {
-            if (num.parse('${data.data?[index].ltv}') >= 90) {
-              ref.watch(selectedItem.notifier).state = data.data?[index].id;
-            }
-            if (ref.watch(selectedItem) == index) {
-              ref.invalidate(selectedItem);
-            } else {
-              ref.watch(selectedItem.notifier).state = index;
-            }
-            // if (!ref
-            //     .watch(gatepassList)
-            //     .contains(data.data?[index].id)) {
-            //   ref.watch(gatepassList.notifier).state = [
-            //     ...ref.watch(gatepassList),
-            //     data.data?[index].id
-            //   ];
-            // } else {
-            //   ref
-            //       .watch(gatepassList)
-            //       .remove(data.data?[index].id);
-            //
-            //   setState(() {});
-            // }
-          },
-        );
-      });
+                        Spacer(),
+                        if (isSelected)
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                // _pushRepyamentApi(
+                                //         data.data?[index]);
+                                switch (ref.watch(paymentType)) {
+                                  case null:
+                                    errorToast(
+                                        context, 'Please select payment type');
+                                    break;
+                                  case PartPaymentType.part:
+                                    if (_formKey.currentState!.validate()) {
+                                      _pushRepyamentApi(data?.data?[index]);
+                                    }
+                                    break;
+                                  case PartPaymentType.full:
+                                    _pushRepyamentApi(data.data?[index]);
+                                    break;
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      ColorsConstant.secondColorDark,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10))),
+                              child: Text(
+                                "Pay",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    shadows: [
+                                      const Shadow(
+                                          color: Colors.white, blurRadius: 0.3)
+                                    ],
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: Adaptive.sp(15)),
+                              ),
+                            ),
+                          ),
+                      ])),
+            ),
+            onTap: () {
+              if (num.parse('${data.data?[index].ltv}') >= 90) {
+                ref.watch(selectedItem.notifier).state = data.data?[index].id;
+              }
+              if (ref.watch(selectedItem) == index) {
+                ref.invalidate(selectedItem);
+              } else {
+                ref.watch(selectedItem.notifier).state = index;
+              }
+              // if (!ref
+              //     .watch(gatepassList)
+              //     .contains(data.data?[index].id)) {
+              //   ref.watch(gatepassList.notifier).state = [
+              //     ...ref.watch(gatepassList),
+              //     data.data?[index].id
+              //   ];
+              // } else {
+              //   ref
+              //       .watch(gatepassList)
+              //       .remove(data.data?[index].id);
+              //
+              //   setState(() {});
+              // }
+            },
+          );
+        });
+  }
 
   _ltvSettlementUi(RepaymentTerminalData? data) => ListView.builder(
       shrinkWrap: true,
@@ -867,6 +1055,7 @@ class _RepaymentscreenState extends ConsumerState<Repaymentscreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      
                       buildRichText(
                           mainText: '${data?.data?[index].terminal}',
                           mainTextStyle: TextStyle(

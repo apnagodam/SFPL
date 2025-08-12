@@ -25,10 +25,30 @@ Future<ListOfDirectorsModel> directorsPartnersList(
 
 @riverpod
 Future<Map<String, dynamic>> sendVerifyDirectorOtp(SendVerifyDirectorOtpRef ref,
-    {String? phoneNumber, String? id}) async {
+    {required String personName,
+    required String id,
+    required String phoneNumber,
+    required String panNo,
+    required String aadharNo,
+    required String otp,
+    File? profilePhoto}) async {
+  FormData formData = FormData.fromMap({
+    'id': id,
+    'name': personName,
+    'phone': phoneNumber,
+    'pancard_no': panNo,
+    'aadhar_no': aadharNo,
+    "otp": otp,
+    if (profilePhoto != null)
+      'profile_photo': await MultipartFile.fromFile(
+        profilePhoto?.path ?? "",
+        filename: 'profile.png',
+        contentType: DioMediaType("image", "png"),
+      ),
+  });
   var response = await ref.watch(dioProvider).post(
       ApiClient.sendDirectorVerifyOtp,
-      queryParameters: {'phone': phoneNumber, 'id': id});
+      data: formData);
 
   return response.data;
 }

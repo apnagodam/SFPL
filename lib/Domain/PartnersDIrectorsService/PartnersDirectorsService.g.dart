@@ -25,7 +25,7 @@ final directorsPartnersListProvider =
 typedef DirectorsPartnersListRef
     = AutoDisposeFutureProviderRef<ListOfDirectorsModel>;
 String _$sendVerifyDirectorOtpHash() =>
-    r'feea144e3cbde26257ced06d00c4f770fc236aba';
+    r'4fb1f0c3268bb67c05338281560a720d795fda00';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -60,12 +60,22 @@ class SendVerifyDirectorOtpFamily
 
   /// See also [sendVerifyDirectorOtp].
   SendVerifyDirectorOtpProvider call({
-    String? phoneNumber,
-    String? id,
+    required String personName,
+    required String id,
+    required String phoneNumber,
+    required String panNo,
+    required String aadharNo,
+    required String otp,
+    File? profilePhoto,
   }) {
     return SendVerifyDirectorOtpProvider(
-      phoneNumber: phoneNumber,
+      personName: personName,
       id: id,
+      phoneNumber: phoneNumber,
+      panNo: panNo,
+      aadharNo: aadharNo,
+      otp: otp,
+      profilePhoto: profilePhoto,
     );
   }
 
@@ -74,8 +84,13 @@ class SendVerifyDirectorOtpFamily
     covariant SendVerifyDirectorOtpProvider provider,
   ) {
     return call(
-      phoneNumber: provider.phoneNumber,
+      personName: provider.personName,
       id: provider.id,
+      phoneNumber: provider.phoneNumber,
+      panNo: provider.panNo,
+      aadharNo: provider.aadharNo,
+      otp: provider.otp,
+      profilePhoto: provider.profilePhoto,
     );
   }
 
@@ -99,13 +114,23 @@ class SendVerifyDirectorOtpProvider
     extends AutoDisposeFutureProvider<Map<String, dynamic>> {
   /// See also [sendVerifyDirectorOtp].
   SendVerifyDirectorOtpProvider({
-    String? phoneNumber,
-    String? id,
+    required String personName,
+    required String id,
+    required String phoneNumber,
+    required String panNo,
+    required String aadharNo,
+    required String otp,
+    File? profilePhoto,
   }) : this._internal(
           (ref) => sendVerifyDirectorOtp(
             ref as SendVerifyDirectorOtpRef,
-            phoneNumber: phoneNumber,
+            personName: personName,
             id: id,
+            phoneNumber: phoneNumber,
+            panNo: panNo,
+            aadharNo: aadharNo,
+            otp: otp,
+            profilePhoto: profilePhoto,
           ),
           from: sendVerifyDirectorOtpProvider,
           name: r'sendVerifyDirectorOtpProvider',
@@ -116,8 +141,13 @@ class SendVerifyDirectorOtpProvider
           dependencies: SendVerifyDirectorOtpFamily._dependencies,
           allTransitiveDependencies:
               SendVerifyDirectorOtpFamily._allTransitiveDependencies,
-          phoneNumber: phoneNumber,
+          personName: personName,
           id: id,
+          phoneNumber: phoneNumber,
+          panNo: panNo,
+          aadharNo: aadharNo,
+          otp: otp,
+          profilePhoto: profilePhoto,
         );
 
   SendVerifyDirectorOtpProvider._internal(
@@ -127,12 +157,22 @@ class SendVerifyDirectorOtpProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.phoneNumber,
+    required this.personName,
     required this.id,
+    required this.phoneNumber,
+    required this.panNo,
+    required this.aadharNo,
+    required this.otp,
+    required this.profilePhoto,
   }) : super.internal();
 
-  final String? phoneNumber;
-  final String? id;
+  final String personName;
+  final String id;
+  final String phoneNumber;
+  final String panNo;
+  final String aadharNo;
+  final String otp;
+  final File? profilePhoto;
 
   @override
   Override overrideWith(
@@ -148,8 +188,13 @@ class SendVerifyDirectorOtpProvider
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        phoneNumber: phoneNumber,
+        personName: personName,
         id: id,
+        phoneNumber: phoneNumber,
+        panNo: panNo,
+        aadharNo: aadharNo,
+        otp: otp,
+        profilePhoto: profilePhoto,
       ),
     );
   }
@@ -162,15 +207,25 @@ class SendVerifyDirectorOtpProvider
   @override
   bool operator ==(Object other) {
     return other is SendVerifyDirectorOtpProvider &&
+        other.personName == personName &&
+        other.id == id &&
         other.phoneNumber == phoneNumber &&
-        other.id == id;
+        other.panNo == panNo &&
+        other.aadharNo == aadharNo &&
+        other.otp == otp &&
+        other.profilePhoto == profilePhoto;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, phoneNumber.hashCode);
+    hash = _SystemHash.combine(hash, personName.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, phoneNumber.hashCode);
+    hash = _SystemHash.combine(hash, panNo.hashCode);
+    hash = _SystemHash.combine(hash, aadharNo.hashCode);
+    hash = _SystemHash.combine(hash, otp.hashCode);
+    hash = _SystemHash.combine(hash, profilePhoto.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -178,11 +233,26 @@ class SendVerifyDirectorOtpProvider
 
 mixin SendVerifyDirectorOtpRef
     on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
-  /// The parameter `phoneNumber` of this provider.
-  String? get phoneNumber;
+  /// The parameter `personName` of this provider.
+  String get personName;
 
   /// The parameter `id` of this provider.
-  String? get id;
+  String get id;
+
+  /// The parameter `phoneNumber` of this provider.
+  String get phoneNumber;
+
+  /// The parameter `panNo` of this provider.
+  String get panNo;
+
+  /// The parameter `aadharNo` of this provider.
+  String get aadharNo;
+
+  /// The parameter `otp` of this provider.
+  String get otp;
+
+  /// The parameter `profilePhoto` of this provider.
+  File? get profilePhoto;
 }
 
 class _SendVerifyDirectorOtpProviderElement
@@ -191,10 +261,21 @@ class _SendVerifyDirectorOtpProviderElement
   _SendVerifyDirectorOtpProviderElement(super.provider);
 
   @override
-  String? get phoneNumber =>
+  String get personName => (origin as SendVerifyDirectorOtpProvider).personName;
+  @override
+  String get id => (origin as SendVerifyDirectorOtpProvider).id;
+  @override
+  String get phoneNumber =>
       (origin as SendVerifyDirectorOtpProvider).phoneNumber;
   @override
-  String? get id => (origin as SendVerifyDirectorOtpProvider).id;
+  String get panNo => (origin as SendVerifyDirectorOtpProvider).panNo;
+  @override
+  String get aadharNo => (origin as SendVerifyDirectorOtpProvider).aadharNo;
+  @override
+  String get otp => (origin as SendVerifyDirectorOtpProvider).otp;
+  @override
+  File? get profilePhoto =>
+      (origin as SendVerifyDirectorOtpProvider).profilePhoto;
 }
 
 String _$editDirectorPartnerHash() =>

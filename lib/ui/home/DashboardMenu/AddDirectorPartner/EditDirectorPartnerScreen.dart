@@ -222,7 +222,18 @@ class _EditdirectorpartnerscreenState
                         ref
                             .watch(sendVerifyDirectorOtpProvider(
                                     id: widget.data.id.toString(),
-                                    phoneNumber: phoneController.text)
+                                        aadharNo: aadharController.text,
+                                        personName: nameController.text,
+                                        panNo: panController.text,
+                                        phoneNumber:
+                                            phoneController.text.toString(),
+                                        otp: '',
+                                        profilePhoto: widget
+                                                    .data.profilePhoto ==
+                                                null
+                                            ? ref.watch(profilePicProvider) ??
+                                                File("")
+                                            : null)
                                 .future)
                             .then((value) {
                           if (value['status'].toString() == "1") {
@@ -237,7 +248,18 @@ class _EditdirectorpartnerscreenState
                           ref
                               .watch(sendVerifyDirectorOtpProvider(
                                       id: widget.data.id.toString(),
-                                      phoneNumber: phoneController.text)
+                                        aadharNo: aadharController.text,
+                                        personName: nameController.text,
+                                        panNo: panController.text,
+                                        phoneNumber:
+                                            phoneController.text.toString(),
+                                        otp: '',
+                                        profilePhoto: widget
+                                                    .data.profilePhoto ==
+                                                null
+                                            ? ref.watch(profilePicProvider) ??
+                                                File("")
+                                            : null)
                                   .future)
                               .then((value) {
                             if (value['status'].toString() == "1") {

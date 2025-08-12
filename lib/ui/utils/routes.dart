@@ -74,35 +74,7 @@ GoRouter goRouter(GoRouterRef ref) {
             path: RoutesStrings.onBoarding,
             name: RoutesStrings.onBoarding,
             builder: (context, state) => const OnBoardingScreen()),
-        GoRoute(
-            path: RoutesStrings.individualRegistration,
-            name: RoutesStrings.individualRegistration,
-            builder: (context, state) => const Individualregistration()),
-        GoRoute(
-            path: RoutesStrings.propRegistration,
-            name: RoutesStrings.propRegistration,
-            builder: (context, state) => const Propregistration()),
-        GoRoute(
-            path: RoutesStrings.companyRegistration,
-            name: RoutesStrings.companyRegistration,
-            builder: (context, state) => const Companyregistration(),
-            routes: [
-              GoRoute(
-                path: RoutesStrings.addDirectorPartnerAutoRegistration,
-                name: RoutesStrings.addDirectorPartnerAutoRegistration,
-                builder: (context, state) {
-                  final data = state.extra! as Map<String, dynamic>;
-                  return Adddirectorpartnerautoregisterscreen(
-                    isLastIndex: data['isLastIndex'],
-                    data: data['data'] as List<Map<String, dynamic>>,
-                  );
-                },
-              )
-            ]),
-        GoRoute(
-            path: RoutesStrings.partnershipRegistration,
-            name: RoutesStrings.partnershipRegistration,
-            builder: (context, state) => const Partnershipregistration()),
+
         GoRoute(
             path: RoutesStrings.dashboard,
             name: RoutesStrings.dashboard,
@@ -127,7 +99,7 @@ GoRouter goRouter(GoRouterRef ref) {
                         path: RoutesStrings.editDirectorPartner,
                         name: RoutesStrings.editDirectorPartner,
                         builder: (context, state) {
-                          final data = state.extra! as DirectorDatum;
+                          final data = (state.extra??{})! as DirectorDatum;
                           return Editdirectorpartnerscreen(
                             data: data,
                           );
@@ -187,11 +159,10 @@ GoRouter goRouter(GoRouterRef ref) {
                         path: RoutesStrings.surepassWebviewScreenVerification,
                         name: RoutesStrings.surepassWebviewScreenVerification,
                         builder: (context, state) {
-                          final data = state.extra! as Map<String, dynamic>;
+                          final data = (state.extra??{})! as Map<String, dynamic>;
                           return Surepasswebviewscreen(
                             url: data['url'],
                             docName: data['docName'],
-                          
                           );
                         }),
                   ]),
@@ -220,10 +191,11 @@ GoRouter goRouter(GoRouterRef ref) {
                         path: RoutesStrings.surepassWebviewScreen,
                         name: RoutesStrings.surepassWebviewScreen,
                         builder: (context, state) {
-                          final data = state.extra! as Map<String, dynamic>;
-                           return Surepasswebviewscreen(
+                          final data = (state.extra??{})! as Map<String, dynamic>;
+                          return Surepasswebviewscreen(
                             url: data['url'],
-                            docName: data['docName'],                          );
+                            docName: data['docName'],
+                          );
                         }),
                   ]),
               GoRoute(
@@ -286,7 +258,7 @@ GoRouter goRouter(GoRouterRef ref) {
                   path: RoutesStrings.verifyOtp,
                   name: RoutesStrings.verifyOtp,
                   builder: (context, state) {
-                    final data = state.extra! as Map<String, dynamic>;
+                    final data = (state.extra??{}) as Map<String, dynamic>;
                     return VerifyOtpScreen(
                       panCard: data['panCard'],
                     );
@@ -294,13 +266,53 @@ GoRouter goRouter(GoRouterRef ref) {
               GoRoute(
                   path: RoutesStrings.register,
                   name: RoutesStrings.register,
-                  builder: (context, state) => const Registrationscreen(),
+                  builder: (context, state) {
+                    final data = (state.extra??{}) as Map<String, dynamic>;
+                    return Registrationscreen(
+                      phoneNumber: data['phone'],
+                    );
+                  },
                   routes: [
+                    GoRoute(
+                        path: RoutesStrings.individualRegistration,
+                        name: RoutesStrings.individualRegistration,
+                        builder: (context, state) =>
+                            const Individualregistration()),
+                    GoRoute(
+                        path: RoutesStrings.propRegistration,
+                        name: RoutesStrings.propRegistration,
+                        builder: (context, state) => const Propregistration()),
+                    GoRoute(
+                        path: RoutesStrings.companyRegistration,
+                        name: RoutesStrings.companyRegistration,
+                        builder: (context, state) =>
+                            const Companyregistration(),
+                        routes: [
+                          GoRoute(
+                            path: RoutesStrings
+                                .addDirectorPartnerAutoRegistration,
+                            name: RoutesStrings
+                                .addDirectorPartnerAutoRegistration,
+                            builder: (context, state) {
+                              final data = (state.extra??{}) as Map<String, dynamic>;
+                              return Adddirectorpartnerautoregisterscreen(
+                                isLastIndex: data['isLastIndex'],
+                                data:
+                                    data['data'] as List<Map<String, dynamic>>,
+                              );
+                            },
+                          )
+                        ]),
+                    GoRoute(
+                        path: RoutesStrings.partnershipRegistration,
+                        name: RoutesStrings.partnershipRegistration,
+                        builder: (context, state) =>
+                            const Partnershipregistration()),
                     GoRoute(
                         path: RoutesStrings.bnplRegistration,
                         name: RoutesStrings.bnplRegistration,
                         builder: (context, state) {
-                          final data = state.extra! as Map<String, dynamic>;
+                          final data = (state.extra??{}) as Map<String, dynamic>;
                           return Bnplregistration(
                             typeOfRegistration: data['reg_type'],
                             constitutiontype: data['cons_type'],
@@ -322,7 +334,7 @@ GoRouter goRouter(GoRouterRef ref) {
                         path: RoutesStrings.registrationOtp,
                         name: RoutesStrings.registrationOtp,
                         builder: (context, state) {
-                          final data = state.extra! as Map<String, dynamic>;
+                          final data = (state.extra??{})! as Map<String, dynamic>;
                           return Registrationverifyotp(
                               panCard: data['panCard']);
                         }),
@@ -346,7 +358,7 @@ GoRouter goRouter(GoRouterRef ref) {
         //           path: RoutesStrings.registrationOtp,
         //           name: RoutesStrings.registrationOtp,
         //           builder: (context, state) {
-        //             final data = state.extra! as Map<String, dynamic>;
+        //             final data = (state.extra??{})! as Map<String, dynamic>;
         //             return Registrationverifyotp(panCard: data['panCard']);
         //           }),
         //     ]),

@@ -466,368 +466,399 @@ class _SanctionedamountscreenState
         });
   }
 
-  downloadUploadAgreementLayout(Datum? appliedData, BuildContext context) =>
-      ColumnSuper(children: [
-        SizedBox(
-          height: 10,
-        ),
-        ElevarmDivider(),
-        SizedBox(
-          height: 10,
-        ),
-        Row(children: [
-          Expanded(
-              child: Text(
-            'Sanction Letter',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                fontSize: Adaptive.sp(15), fontWeight: FontWeight.bold),
-          )),
-          appliedData?.triAgreement != null
-              ? const Icon(
-                  Icons.verified,
-                  color: Colors.green,
-                  size: 15,
-                )
-              : ElevarmLinkPrimaryButton.icon(
-                  text: 'Esign',
-                  onPressed: () async {
-                    showloader(context);
-                    ref
-                        .watch(surepassSanctionLetterProvider(
-                                id: "${appliedData?.id}")
-                            .future)
-                        .then((value) async {
-                      hideLoader(context);
-                      if (value['status'].toString() == "1") {
-                        context.goNamed(RoutesStrings.surepassWebviewScreen,
-                            extra: {
-                              'url': value['data'],
-                              'docName': 'sanction_letter',
-                             
-                            });
-                      } else {
-                        errorToast(context, value['message'].toString());
-                      }
-                    });
-                  },
-                  leadingIconAssetName: null,
-                  trailingIconAssetName: Icons.upload_file_outlined,
-                )
-        ]),
-        const SizedBox(
-          height: 10,
-        ),
-        if (appliedData?.triAgreement != null)
-          Row(children: [
-            Expanded(
-                child: Text(
-              'Loan Agreement',
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                  fontSize: Adaptive.sp(15), fontWeight: FontWeight.bold),
-            )),
-            appliedData?.agreement != null
-                ? const Icon(
-                    Icons.verified,
-                    color: Colors.green,
-                    size: 15,
-                  )
-                : ElevarmLinkPrimaryButton.icon(
-                    text: 'Esign',
-                    onPressed: () async {
-                      showloader(context);
-                      ref
-                          .watch(surepassLoanAgreementProvider(
-                                  id: "${appliedData?.id}")
-                              .future)
-                          .then((value) async {
-                        hideLoader(context);
-                        if (value['status'].toString() == "1") {
-                          context.goNamed(RoutesStrings.surepassWebviewScreen,
-                              extra: {
-                                'url': value['data'],
-                                'docName': 'loan_agreement',
-                                
-                              });
-                        } else {
-                          errorToast(context, value['message']);
-                        }
-
-                        // successToast(context, "${value['data']}");
-                      });
-                    },
-                    leadingIconAssetName: null,
-                    trailingIconAssetName: Icons.upload_file_outlined,
-                  )
-          ]),
-        if ("${appliedData?.type}".toLowerCase() != ('renewal') &&
-            appliedData?.triAgreement != null &&
-            appliedData?.agreement != null)
-          const SizedBox(
-            height: 10,
-          ),
-        if ("${appliedData?.type}".toLowerCase() != ('renewal') &&
-            appliedData?.triAgreement != null &&
-            appliedData?.agreement != null)
-          Row(children: [
-            Expanded(
-                child: Text(
-              'PDC',
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                  fontSize: Adaptive.sp(15), fontWeight: FontWeight.bold),
-            )),
-            ElevarmLinkPrimaryButton.icon(
-              text: 'Esign',
-              onPressed: () async {
-                showDialog(
-                    context: context,
-                    builder: (dialogContext) => AlertDialog(
-                          backgroundColor: Colors.white,
-                          title: Text(
-                            'PDC Form',
-                            style: TextStyle(
-                                color: ColorsConstant.secondColorDark,
-                                fontWeight: FontWeight.bold,
-                                fontSize: Adaptive.sp(17)),
-                          ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
-                          content: pdcPopUpLayout(appliedData, dialogContext),
-                        ));
-              },
-              leadingIconAssetName: null,
-              trailingIconAssetName: Icons.upload_file_outlined,
-            )
-            // Downloader(
-            //     fileName: 'PDC',
-            //     url:
-            //         "${ref.watch(dioProvider).options.baseUrl}pdc_download/${appliedData?.id}"),
-          ]),
-        if ("${appliedData?.type}".toLowerCase() != ('renewal') &&
-            appliedData?.triAgreement != null &&
-            appliedData?.agreement != null)
-          const SizedBox(
-            height: 10,
-          ),
-        Row(children: [
-          // Expanded(
-          //     child: InkWell(
-          //   onTap: () async {
-          //     FilePickerResult? result = await FilePicker.platform.pickFiles(
-          //       type: FileType.custom,
-          //       allowedExtensions: ['pdf'],
-          //     );
-          //
-          //     if (result != null) {
-          //       File file = File(result.files.single.path!);
-          //       ref.watch(itrFile1.notifier).state = file;
-          //     } else {}
-          //   },
-          //   child: DottedBorder(
-          //       borderType: BorderType.RRect,
-          //       dashPattern: const [6, 6, 6, 6],
-          //       color: ColorsConstant.primaryColor,
-          //       child: Padding(
-          //         padding: const Pad(all: 20),
-          //         child: Center(
-          //           child: ref.watch(itrFile1) != null
-          //               ? ColumnSuper(alignment: Alignment.center, children: [
-          //                   const Icon(
-          //                     LucideIcons.file,
-          //                     color: ColorsConstant.primaryColor,
-          //                   ),
-          //                   const SizedBox(
-          //                     height: 10,
-          //                   ),
-          //                   Center(
-          //                     child: Text(
-          //                       "${basename(ref.watch(itrFile1)?.path ?? "")}",
-          //                       style: TextStyle(
-          //                           fontWeight: FontWeight.bold,
-          //                           fontSize: Adaptive.sp(14)),
-          //                       textAlign: TextAlign.center,
-          //                       maxLines: 2,
-          //                     ),
-          //                   )
-          //                 ])
-          //               : ColumnSuper(children: [
-          //                   const Icon(LucideIcons.file),
-          //                   const SizedBox(
-          //                     height: 10,
-          //                   ),
-          //                   TextOneLine('Sanction Letter*',
-          //                       style: TextStyle(
-          //                           fontWeight: FontWeight.bold,
-          //                           fontSize: Adaptive.sp(14)))
-          //                 ]),
-          //         ),
-          //       )),
-          // )),
-          const SizedBox(
-            width: 5,
-          ),
-          // if ("${appliedData?.type}".toLowerCase() != ('renewal') &&
-          //     appliedData?.triAgreement != null &&
-          //     appliedData?.agreement != null)
-          //   Expanded(
-          //       child: InkWell(
-          //     onTap: () async {
-          //       FilePickerResult? result = await FilePicker.platform.pickFiles(
-          //         type: FileType.custom,
-          //         allowedExtensions: ['pdf'],
-          //       );
-
-          //       if (result != null) {
-          //         File file = File(result.files.single.path!);
-          //         ref.watch(itrFile2.notifier).state = file;
-          //       } else {}
-          //     },
-          //     child: DottedBorder(
-          //         borderType: BorderType.RRect,
-          //         dashPattern: const [6, 6, 6, 6],
-          //         color: ColorsConstant.primaryColor,
-          //         child: Padding(
-          //           padding: const Pad(all: 20),
-          //           child: Center(
-          //             child: ref.watch(itrFile2) != null
-          //                 ? ColumnSuper(alignment: Alignment.center, children: [
-          //                     const Icon(
-          //                       LucideIcons.file,
-          //                       color: ColorsConstant.primaryColor,
-          //                     ),
-          //                     const SizedBox(
-          //                       height: 10,
-          //                     ),
-          //                     Center(
-          //                       child: Text(
-          //                         "${basename(ref.watch(itrFile2)?.path ?? "")}",
-          //                         style: TextStyle(
-          //                             fontWeight: FontWeight.bold,
-          //                             fontSize: Adaptive.sp(14)),
-          //                         textAlign: TextAlign.center,
-          //                         maxLines: 2,
-          //                       ),
-          //                     )
-          //                   ])
-          //                 : ColumnSuper(children: [
-          //                     const Icon(LucideIcons.file),
-          //                     const SizedBox(
-          //                       height: 10,
-          //                     ),
-          //                     Text('PDC*',
-          //                         style: TextStyle(
-          //                             fontWeight: FontWeight.bold,
-          //                             fontSize: Adaptive.sp(14)))
-          //                   ]),
-          //           ),
-          //         )),
-          //   )),
-          const SizedBox(
-            width: 5,
-          ),
-          //  Expanded(
-          //     child: InkWell(
-          //   onTap: () async {
-          //     FilePickerResult? result = await FilePicker.platform.pickFiles(
-          //       type: FileType.custom,
-          //       allowedExtensions: ['pdf'],
-          //     );
-          //
-          //     if (result != null) {
-          //       File file = File(result.files.single.path!);
-          //       ref.watch(itrFile3.notifier).state = file;
-          //     } else {}
-          //   },
-          //   child: DottedBorder(
-          //       borderType: BorderType.RRect,
-          //       dashPattern: const [6, 6, 6, 6],
-          //       color: ColorsConstant.primaryColor,
-          //       child: Padding(
-          //         padding: const Pad(all: 20),
-          //         child: Center(
-          //           child: ref.watch(itrFile3) != null
-          //               ? ColumnSuper(alignment: Alignment.center, children: [
-          //                   const Icon(
-          //                     LucideIcons.file,
-          //                     color: ColorsConstant.primaryColor,
-          //                   ),
-          //                   const SizedBox(
-          //                     height: 10,
-          //                   ),
-          //                   Center(
-          //                     child: Text(
-          //                       "${basename(ref.watch(itrFile3)?.path ?? "")}",
-          //                       style: TextStyle(
-          //                           fontWeight: FontWeight.bold,
-          //                           fontSize: Adaptive.sp(14)),
-          //                       textAlign: TextAlign.center,
-          //                       maxLines: 2,
-          //                     ),
-          //                   )
-          //                 ])
-          //               : ColumnSuper(children: [
-          //                   const Icon(LucideIcons.file),
-          //                   const SizedBox(
-          //                     height: 10,
-          //                   ),
-          //                   TextOneLine('Loan agreement*',
-          //                       textAlign: TextAlign.center,
-          //                       style: TextStyle(
-          //                           fontWeight: FontWeight.bold,
-          //                           fontSize: Adaptive.sp(14)))
-          //                 ]),
-          //         ),
-          //       )),
-          // ))
-        ]),
-        const SizedBox(
-          height: 10,
-        ),
-        ref.watch(itrFile2) == null
-            ? SizedBox()
-            : SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    showloader(context);
-                    ref
-                        .watch(submitSanctionDocumentsProvider(
-                                id: "${appliedData?.id}",
-                                triAgreement: ref.watch(itrFile1),
-                                pdc: ref.watch(itrFile2),
-                                agreement: ref.watch(itrFile3))
-                            .future)
-                        .then((value) {
-                      hideLoader(context);
-                      if (value['status'].toString() == "1") {
-                        ref.invalidate(appliedListProvider);
-                        successToast(context, value['message'].toString());
-                      } else {
-                        errorToast(context, value['message'].toString());
-                      }
-                    }).onError((e, s) {
-                      hideLoader(context);
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: ColorsConstant.secondColorDark,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                  child: Text(
-                    "Submit",
-                    style: TextStyle(
-                        color: Colors.white,
-                        shadows: [
-                          const Shadow(color: Colors.white, blurRadius: 0.3)
-                        ],
-                        fontWeight: FontWeight.w700,
-                        fontSize: Adaptive.sp(16)),
-                  ),
+  downloadUploadAgreementLayout(
+          SanctionedLimitDatum? appliedData, BuildContext context) =>
+      Consumer(
+          builder: (context, ref, _) => ColumnSuper(children: [
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-      ]);
+                ElevarmDivider(),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(children: [
+                  Expanded(
+                      child: Text(
+                    'Sanction Letter',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontSize: Adaptive.sp(15), fontWeight: FontWeight.bold),
+                  )),
+                  appliedData?.triAgreement != null
+                      ? const Icon(
+                          Icons.verified,
+                          color: Colors.green,
+                          size: 15,
+                        )
+                      : ElevarmLinkPrimaryButton.icon(
+                          text: 'Esign',
+                          onPressed: () async {
+                            if (appliedData?.type.toString().toLowerCase() !=
+                                'renewal') {
+                              showDialog(
+                                  context: context,
+                                  builder: (dialogContext) => AlertDialog(
+                                        backgroundColor: Colors.white,
+                                        title: Text(
+                                          'PDC Form',
+                                          style: TextStyle(
+                                              color: ColorsConstant
+                                                  .secondColorDark,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: Adaptive.sp(17)),
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        content: pdcPopUpLayout(
+                                            appliedData, dialogContext),
+                                      ));
+                            } else {
+                              showloader(context);
+                              ref
+                                  .watch(surepassSanctionLetterProvider(
+                                          id: "${appliedData?.id}")
+                                      .future)
+                                  .then((value) async {
+                                hideLoader(context);
+                                if (value['status'].toString() == "1") {
+                                  context.goNamed(
+                                      RoutesStrings.surepassWebviewScreen,
+                                      extra: {
+                                        'url': value['data'],
+                                        'docName': 'sanction_letter',
+                                      });
+                                } else {
+                                  errorToast(
+                                      context, value['message'].toString());
+                                }
+                              });
+                            }
+                          },
+                          leadingIconAssetName: null,
+                          trailingIconAssetName: Icons.upload_file_outlined,
+                        )
+                ]),
+                const SizedBox(
+                  height: 10,
+                ),
+                if (appliedData?.triAgreement != null)
+                  Row(children: [
+                    Expanded(
+                        child: Text(
+                      'Loan Agreement',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontSize: Adaptive.sp(15),
+                          fontWeight: FontWeight.bold),
+                    )),
+                    appliedData?.agreement != null
+                        ? const Icon(
+                            Icons.verified,
+                            color: Colors.green,
+                            size: 15,
+                          )
+                        : ElevarmLinkPrimaryButton.icon(
+                            text: 'Esign',
+                            onPressed: () async {
+                              showloader(context);
+                              ref
+                                  .watch(surepassLoanAgreementProvider(
+                                          id: "${appliedData?.id}")
+                                      .future)
+                                  .then((value) async {
+                                hideLoader(context);
+                                if (value['status'].toString() == "1") {
+                                  context.goNamed(
+                                      RoutesStrings.surepassWebviewScreen,
+                                      extra: {
+                                        'url': value['data'],
+                                        'docName': 'loan_agreement',
+                                      });
+                                } else {
+                                  errorToast(context, value['message']);
+                                }
+
+                                // successToast(context, "${value['data']}");
+                              });
+                            },
+                            leadingIconAssetName: null,
+                            trailingIconAssetName: Icons.upload_file_outlined,
+                          )
+                  ]),
+                if ("${appliedData?.type}".toLowerCase() != ('renewal') &&
+                    appliedData?.triAgreement != null &&
+                    appliedData?.agreement != null)
+                  const SizedBox(
+                    height: 10,
+                  ),
+                if ("${appliedData?.type}".toLowerCase() != ('renewal') &&
+                    appliedData?.triAgreement != null &&
+                    appliedData?.agreement != null)
+                  Row(children: [
+                    Expanded(
+                        child: Text(
+                      'PDC',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontSize: Adaptive.sp(15),
+                          fontWeight: FontWeight.bold),
+                    )),
+                    ElevarmLinkPrimaryButton.icon(
+                      text: 'Esign',
+                      onPressed: () async {
+                        showDialog(
+                            context: context,
+                            builder: (dialogContext) => AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  title: Text(
+                                    'PDC Form',
+                                    style: TextStyle(
+                                        color: ColorsConstant.secondColorDark,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(17)),
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8)),
+                                  content: pdcPopUpLayout(
+                                      appliedData, dialogContext),
+                                ));
+                      },
+                      leadingIconAssetName: null,
+                      trailingIconAssetName: Icons.upload_file_outlined,
+                    )
+                    // Downloader(
+                    //     fileName: 'PDC',
+                    //     url:
+                    //         "${ref.watch(dioProvider).options.baseUrl}pdc_download/${appliedData?.id}"),
+                  ]),
+                if ("${appliedData?.type}".toLowerCase() != ('renewal') &&
+                    appliedData?.triAgreement != null &&
+                    appliedData?.agreement != null)
+                  const SizedBox(
+                    height: 10,
+                  ),
+                Row(children: [
+                  // Expanded(
+                  //     child: InkWell(
+                  //   onTap: () async {
+                  //     FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  //       type: FileType.custom,
+                  //       allowedExtensions: ['pdf'],
+                  //     );
+                  //
+                  //     if (result != null) {
+                  //       File file = File(result.files.single.path!);
+                  //       ref.watch(itrFile1.notifier).state = file;
+                  //     } else {}
+                  //   },
+                  //   child: DottedBorder(
+                  //       borderType: BorderType.RRect,
+                  //       dashPattern: const [6, 6, 6, 6],
+                  //       color: ColorsConstant.primaryColor,
+                  //       child: Padding(
+                  //         padding: const Pad(all: 20),
+                  //         child: Center(
+                  //           child: ref.watch(itrFile1) != null
+                  //               ? ColumnSuper(alignment: Alignment.center, children: [
+                  //                   const Icon(
+                  //                     LucideIcons.file,
+                  //                     color: ColorsConstant.primaryColor,
+                  //                   ),
+                  //                   const SizedBox(
+                  //                     height: 10,
+                  //                   ),
+                  //                   Center(
+                  //                     child: Text(
+                  //                       "${basename(ref.watch(itrFile1)?.path ?? "")}",
+                  //                       style: TextStyle(
+                  //                           fontWeight: FontWeight.bold,
+                  //                           fontSize: Adaptive.sp(14)),
+                  //                       textAlign: TextAlign.center,
+                  //                       maxLines: 2,
+                  //                     ),
+                  //                   )
+                  //                 ])
+                  //               : ColumnSuper(children: [
+                  //                   const Icon(LucideIcons.file),
+                  //                   const SizedBox(
+                  //                     height: 10,
+                  //                   ),
+                  //                   TextOneLine('Sanction Letter*',
+                  //                       style: TextStyle(
+                  //                           fontWeight: FontWeight.bold,
+                  //                           fontSize: Adaptive.sp(14)))
+                  //                 ]),
+                  //         ),
+                  //       )),
+                  // )),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  // if ("${appliedData?.type}".toLowerCase() != ('renewal') &&
+                  //     appliedData?.triAgreement != null &&
+                  //     appliedData?.agreement != null)
+                  //   Expanded(
+                  //       child: InkWell(
+                  //     onTap: () async {
+                  //       FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  //         type: FileType.custom,
+                  //         allowedExtensions: ['pdf'],
+                  //       );
+
+                  //       if (result != null) {
+                  //         File file = File(result.files.single.path!);
+                  //         ref.watch(itrFile2.notifier).state = file;
+                  //       } else {}
+                  //     },
+                  //     child: DottedBorder(
+                  //         borderType: BorderType.RRect,
+                  //         dashPattern: const [6, 6, 6, 6],
+                  //         color: ColorsConstant.primaryColor,
+                  //         child: Padding(
+                  //           padding: const Pad(all: 20),
+                  //           child: Center(
+                  //             child: ref.watch(itrFile2) != null
+                  //                 ? ColumnSuper(alignment: Alignment.center, children: [
+                  //                     const Icon(
+                  //                       LucideIcons.file,
+                  //                       color: ColorsConstant.primaryColor,
+                  //                     ),
+                  //                     const SizedBox(
+                  //                       height: 10,
+                  //                     ),
+                  //                     Center(
+                  //                       child: Text(
+                  //                         "${basename(ref.watch(itrFile2)?.path ?? "")}",
+                  //                         style: TextStyle(
+                  //                             fontWeight: FontWeight.bold,
+                  //                             fontSize: Adaptive.sp(14)),
+                  //                         textAlign: TextAlign.center,
+                  //                         maxLines: 2,
+                  //                       ),
+                  //                     )
+                  //                   ])
+                  //                 : ColumnSuper(children: [
+                  //                     const Icon(LucideIcons.file),
+                  //                     const SizedBox(
+                  //                       height: 10,
+                  //                     ),
+                  //                     Text('PDC*',
+                  //                         style: TextStyle(
+                  //                             fontWeight: FontWeight.bold,
+                  //                             fontSize: Adaptive.sp(14)))
+                  //                   ]),
+                  //           ),
+                  //         )),
+                  //   )),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  //  Expanded(
+                  //     child: InkWell(
+                  //   onTap: () async {
+                  //     FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  //       type: FileType.custom,
+                  //       allowedExtensions: ['pdf'],
+                  //     );
+                  //
+                  //     if (result != null) {
+                  //       File file = File(result.files.single.path!);
+                  //       ref.watch(itrFile3.notifier).state = file;
+                  //     } else {}
+                  //   },
+                  //   child: DottedBorder(
+                  //       borderType: BorderType.RRect,
+                  //       dashPattern: const [6, 6, 6, 6],
+                  //       color: ColorsConstant.primaryColor,
+                  //       child: Padding(
+                  //         padding: const Pad(all: 20),
+                  //         child: Center(
+                  //           child: ref.watch(itrFile3) != null
+                  //               ? ColumnSuper(alignment: Alignment.center, children: [
+                  //                   const Icon(
+                  //                     LucideIcons.file,
+                  //                     color: ColorsConstant.primaryColor,
+                  //                   ),
+                  //                   const SizedBox(
+                  //                     height: 10,
+                  //                   ),
+                  //                   Center(
+                  //                     child: Text(
+                  //                       "${basename(ref.watch(itrFile3)?.path ?? "")}",
+                  //                       style: TextStyle(
+                  //                           fontWeight: FontWeight.bold,
+                  //                           fontSize: Adaptive.sp(14)),
+                  //                       textAlign: TextAlign.center,
+                  //                       maxLines: 2,
+                  //                     ),
+                  //                   )
+                  //                 ])
+                  //               : ColumnSuper(children: [
+                  //                   const Icon(LucideIcons.file),
+                  //                   const SizedBox(
+                  //                     height: 10,
+                  //                   ),
+                  //                   TextOneLine('Loan agreement*',
+                  //                       textAlign: TextAlign.center,
+                  //                       style: TextStyle(
+                  //                           fontWeight: FontWeight.bold,
+                  //                           fontSize: Adaptive.sp(14)))
+                  //                 ]),
+                  //         ),
+                  //       )),
+                  // ))
+                ]),
+                const SizedBox(
+                  height: 10,
+                ),
+                ref.watch(itrFile2) == null
+                    ? SizedBox()
+                    : SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            showloader(context);
+                            ref
+                                .watch(submitSanctionDocumentsProvider(
+                                        id: "${appliedData?.id}",
+                                        triAgreement: ref.watch(itrFile1),
+                                        pdc: ref.watch(itrFile2),
+                                        agreement: ref.watch(itrFile3))
+                                    .future)
+                                .then((value) {
+                              hideLoader(context);
+                              if (value['status'].toString() == "1") {
+                                ref.invalidate(appliedListProvider);
+                                successToast(
+                                    context, value['message'].toString());
+                              } else {
+                                errorToast(
+                                    context, value['message'].toString());
+                              }
+                            }).onError((e, s) {
+                              hideLoader(context);
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: ColorsConstant.secondColorDark,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                          child: Text(
+                            "Submit",
+                            style: TextStyle(
+                                color: Colors.white,
+                                shadows: [
+                                  const Shadow(
+                                      color: Colors.white, blurRadius: 0.3)
+                                ],
+                                fontWeight: FontWeight.w700,
+                                fontSize: Adaptive.sp(16)),
+                          ),
+                        ),
+                      ),
+              ]));
 
   Widget pdcPopUpLayout(dynamic appliedData, BuildContext dialogContext) =>
       Consumer(
@@ -1195,7 +1226,6 @@ class _SanctionedamountscreenState
                                                 extra: {
                                                   'url': value['data'],
                                                   'docName': 'pdc',
-                                                 
                                                 })
                                           ]);
                                           successToast(context,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -50,4 +52,19 @@ extension FullWidth on BuildContext {
 
 extension ValidateForm on GlobalKey<FormState> {
   bool checkFormValidtion() => currentState!.validate();
+}
+
+extension SumFieldExtension on List<Map<String, dynamic>> {
+  /// Sums all numeric values of the given key (as double).
+  double sumField(String key) {
+    return fold(0.0, (sum, item) {
+      final value = item[key];
+      final doubleValue = double.tryParse(value?.toString() ?? '0') ?? 0.0;
+      return sum + doubleValue;
+    });
+  }
+}extension FileExtention on FileSystemEntity {
+  String? get name {
+    return path.split(Platform.pathSeparator).last;
+  }
 }

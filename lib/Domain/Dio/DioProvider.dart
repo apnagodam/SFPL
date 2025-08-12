@@ -12,7 +12,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 
 @riverpod
 Dio dio(DioRef ref) {
-  return Dio(BaseOptions(baseUrl: ApiClient.baseUrl, headers: {
+  return Dio(BaseOptions(baseUrl: ApiClient.testBaseUrl, headers: {
     "Authorization": "Bearer ${ref.watch(sharedUtilityProvider).getToken()}",
   }))
     ..interceptors.add(PrettyDioLogger(
@@ -76,6 +76,8 @@ BNPL api
   static const getGstProfiles = 'gst_profile';
 
   static const getListOfPartnersDirectors = 'partenrs_director_list';
+
+  static const fetchAddedDirectorsPartners = 'partners_director_list_get';
   static const getLoanDetails = 'get-loan-details';
   static const getLoanRequestForm = 'loan-request-form';
   static const getLoansNearExpiry = "loan_near_expiry";
@@ -93,6 +95,7 @@ repayment api
 
   static const getSanctionHoldList = 'limit-hold';
   static const getSanctionSchemes = 'sanctiond-limit-schemes';
+  static const sendWhatsAppPdf = 'settlement_report_whatsapp';
   /*
 
 Loan api
@@ -118,7 +121,7 @@ surepass api
 *
 */
   static const getSurepassLoanAgreementUrl = 'loan_agr_download/';
-
+  static const mergedEsignApis = 'sanction_merge_letter/';
   static const getSurepassPdcUrl = 'v1/pdc_download/';
   static const getSurepassSanctionUrl = 'sanction_letter_download/';
   static const getTerms = 'sanction-limit-terms';
