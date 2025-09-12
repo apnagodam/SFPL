@@ -1,0 +1,1452 @@
+import 'dart:io';
+
+import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
+import 'package:dotted_border/dotted_border.dart';
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:elevarm_ui/elevarm_ui.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_lucide/flutter_lucide.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:path/path.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:swfl/Data/Model/TermsRequestModel.dart';
+import 'package:swfl/Domain/LoanService/LoanService.dart';
+import 'package:swfl/ui/utils/Styles.dart';
+import 'package:swfl/ui/utils/debouncer.dart';
+import 'package:swfl/ui/utils/enums.dart';
+import 'package:swfl/ui/utils/routes.dart';
+import 'package:swfl/ui/utils/routes_strings.dart';
+import 'package:swfl/ui/utils/widgets.dart';
+
+import '../../../utils/colors.dart';
+
+class ApplyForSanctionLimit extends ConsumerStatefulWidget {
+  const ApplyForSanctionLimit({super.key});
+
+  @override
+  ConsumerState<ApplyForSanctionLimit> createState() => _ApplyforloanState();
+}
+
+class _ApplyforloanState extends ConsumerState<ApplyForSanctionLimit> {
+  var loanTypeProvider = StateProvider((ref) => "Select Loan Type");
+  var loanTypeList = ['Commodity Finance'];
+  final formKey = GlobalKey<FormState>();
+  TextEditingController amountController = TextEditingController();
+
+  var itrFile1 = StateProvider<File?>((ref) => null);
+  var itrFile2 = StateProvider<File?>((ref) => null);
+  var itrFile3 = StateProvider<File?>((ref) => null);
+
+  var bsFile1 = StateProvider<File?>((ref) => null);
+  var bsFile2 = StateProvider<File?>((ref) => null);
+  var bsFile3 = StateProvider<File?>((ref) => null);
+  var schemeActionProvider = StateProvider<String>((ref) => '');
+  var checkBoxValueProvider = StateProvider((ref) => false);
+  var schemeList = StateProvider<List<int>>((ref) => []);
+  var sanctionTypeProvider = StateProvider<String?>((ref) => null);
+  var sanctionedAmountProvider = StateProvider<String?>((ref) => null);
+  var totalAmountProvider = StateProvider<String?>((ref) => null);
+
+  var sanctionTypeList = StateProvider<List<String>>((ref) => []);
+  var balanceProvider = StateProvider<String>((ref) => '0');
+  var isAmountInvalid = StateProvider((ref) => false);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Apply for Sanction Limit'),
+      ),
+      body: Form(
+          key: formKey,
+          child: Padding(
+            padding: const Pad(all: 10),
+            child: ListView(
+              children: [
+                ref.watch(sanctionHoldProvider).when(
+                    data: (data) {
+                     
+                      Future.delayed(Duration(milliseconds: 100)).then((_) {
+                        ref.watch(sanctionedAmountProvider.notifier).state =
+                            (data?.sanctionLimit ?? "0.0").toString();
+                        ref.watch(balanceProvider.notifier).state =
+                            "${data.balance ?? "0.0"}";
+                        ref.invalidate(sanctionTypeList);
+                        //  ref.watch(sanctionTypeList.notifier).state.addAll([
+                        //     'Fresh Loan',
+                        //     'Renewal',
+                        //     'Renewal Cum Enhancement',
+                        //     'Reduction In Limit',
+                        //     'Closure'
+                        //   ]);
+                        if (num.parse('${data.sanctionLimit ?? "0.0"}')
+                                .toStringAsFixed(0) ==
+                            '0') {
+                          ref.watch(sanctionTypeList.notifier).state.addAll([
+                            'Fresh Loan',
+                          ]);
+                        } else if (num.parse((data.usedLimit??"0.0").toString()) > 0 ||
+                            num.parse((data.totalHoldLimit??"0.0").toString()) > 0) {
+                          if (data.type
+                              .toString()
+                              .toLowerCase()
+                              .contains('renewal')) {
+                            ref.watch(sanctionTypeList.notifier).state.addAll([
+                              'Renewal',
+                              'Renewal Cum Enhancement',
+                              'Reduction In Limit',
+                            ]);
+                          } else {
+                            ref.watch(sanctionTypeList.notifier).state.addAll([
+                              //  'Renewal',
+                              'Renewal Cum Enhancement',
+                              'Reduction In Limit',
+                            ]);
+                          }
+                        } else {
+                          if (data.type
+                              .toString()
+                              .toLowerCase()
+                              .contains('renewal')) {
+                            ref.watch(sanctionTypeList.notifier).state.addAll([
+                              'Renewal',
+                              'Renewal Cum Enhancement',
+                              'Reduction In Limit',
+                              'Closure'
+                            ]);
+                          } else {
+                            ref.watch(sanctionTypeList.notifier).state.addAll([
+                              'Renewal Cum Enhancement',
+                              'Reduction In Limit',
+                              'Closure'
+                            ]);
+                          }
+                        }
+                      });
+                      return ElevarmOutlinedCard(
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  'Previous Sanctioned Limit',
+                                  textAlign: TextAlign.left,
+                                  style: ElevarmFontFamilies.inter(
+                                    color: ElevarmColors.neutral500,
+                                    fontSize: Adaptive.sp(16),
+                                    fontWeight: ElevarmFontWeights.bold,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  '${data.sanctionLimit ?? "0.0"}',
+                                  textAlign: TextAlign.left,
+                                  style: ElevarmFontFamilies.inter(
+                                    color: ElevarmColors.neutral500,
+                                    fontSize: Adaptive.sp(16),
+                                    fontWeight: ElevarmFontWeights.bold,
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  'Used Limit',
+                                  textAlign: TextAlign.left,
+                                  style: ElevarmFontFamilies.inter(
+                                    color: ElevarmColors.neutral500,
+                                    fontSize: Adaptive.sp(16),
+                                    fontWeight: ElevarmFontWeights.bold,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  '${data.usedLimit??"0.0"}',
+                                  textAlign: TextAlign.left,
+                                  style: ElevarmFontFamilies.inter(
+                                    color: ElevarmColors.neutral500,
+                                    fontSize: Adaptive.sp(16),
+                                    fontWeight: ElevarmFontWeights.bold,
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  'Total Hold Limit',
+                                  textAlign: TextAlign.left,
+                                  style: ElevarmFontFamilies.inter(
+                                    color: ElevarmColors.neutral500,
+                                    fontSize: Adaptive.sp(16),
+                                    fontWeight: ElevarmFontWeights.bold,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  '${data.totalHoldLimit ?? "0.0"}',
+                                  textAlign: TextAlign.left,
+                                  style: ElevarmFontFamilies.inter(
+                                    color: ElevarmColors.neutral500,
+                                    fontSize: Adaptive.sp(16),
+                                    fontWeight: ElevarmFontWeights.bold,
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  'Balance',
+                                  textAlign: TextAlign.left,
+                                  style: ElevarmFontFamilies.inter(
+                                    color: ElevarmColors.neutral500,
+                                    fontSize: Adaptive.sp(16),
+                                    fontWeight: ElevarmFontWeights.bold,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  '${data.balance??"0.0"}',
+                                  textAlign: TextAlign.left,
+                                  style: ElevarmFontFamilies.inter(
+                                    color: ElevarmColors.neutral500,
+                                    fontSize: Adaptive.sp(16),
+                                    fontWeight: ElevarmFontWeights.bold,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    error: (e, s) => Container(),
+                    loading: () => Container()),
+                // CupertinoButton(
+                //     child: Text('Loan Type',
+                //         style: TextStyle(
+                //             color: ColorsConstant.primaryColor,
+                //             fontWeight: FontWeight.bold,
+                //             fontSize: Adaptive.sp(17))),
+                //     onPressed: () => null),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+                SizedBox(
+                  height: 10,
+                ),
+                DropdownSearch<String>(
+                  popupProps: PopupProps.menu(
+                      searchFieldProps: const TextFieldProps(
+                          autofocus: true,
+                          cursorColor: ColorsConstant.primaryColor,
+                          padding: Pad(left: 10, right: 10),
+                          decoration: InputDecoration(
+                            contentPadding: Pad(left: 10, right: 10),
+                            focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    style: BorderStyle.solid,
+                                    color: ColorsConstant.primaryColor)),
+                            disabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    style: BorderStyle.solid,
+                                    color: ColorsConstant.primaryColor)),
+                            errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    style: BorderStyle.solid,
+                                    color: ColorsConstant.primaryColor)),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    style: BorderStyle.solid,
+                                    color: ColorsConstant.primaryColor)),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    style: BorderStyle.solid,
+                                    color: ColorsConstant.primaryColor)),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    style: BorderStyle.solid,
+                                    color: ColorsConstant.primaryColor)),
+                          )),
+                      menuProps: MenuProps(
+                          shape: RoundedRectangleBorder(
+                              side: const BorderSide(
+                                  color: ColorsConstant.primaryColor),
+                              borderRadius: BorderRadius.circular(8))),
+                      itemBuilder: (context, terminal, isVisible) =>
+                          ColumnSuper(
+                              alignment: Alignment.centerLeft,
+                              children: [
+                                Padding(
+                                  padding: const Pad(all: 10),
+                                  child: Text(
+                                    "${terminal}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Adaptive.sp(16)),
+                                  ),
+                                ),
+                                Container(
+                                  height: 1,
+                                  color: Colors.grey.withOpacity(0.3),
+                                ),
+                              ]),
+                      isFilterOnline: true,
+                      title: Padding(
+                        padding: const Pad(all: 10),
+                        child: Text(
+                          'Select Loan Type',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: Adaptive.sp(16),
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      showSearchBox: true,
+                      searchDelay: const Duration(microseconds: 500)),
+                  items: ref.watch(sanctionTypeList) ?? [],
+                  itemAsString: (String? u) => u ?? "",
+                  onChanged: (String? data) {
+                    ref.invalidate(totalAmountProvider);
+                    ref.watch(sanctionTypeProvider.notifier).state = data;
+                    amountController.clear();
+                  },
+                  dropdownDecoratorProps: const DropDownDecoratorProps(
+                    dropdownSearchDecoration: InputDecoration(
+                        contentPadding: Pad(left: 10, bottom: 5, top: 5),
+                        hintText: "Select Loan Type",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide: BorderSide(
+                                color: ColorsConstant.secondColorUltraDark))),
+                  ),
+                ),
+                if (ref
+                            .watch(sanctionTypeProvider.notifier)
+                            .state
+                            .toString()
+                            .toLowerCase()
+                            .trim() !=
+                        'renewal' &&
+                    ref.watch(sanctionTypeProvider) != null &&
+                    ref
+                            .watch(sanctionTypeProvider.notifier)
+                            .state
+                            .toString()
+                            .toLowerCase()
+                            .trim() !=
+                        'closure')
+                  Column(
+                    children: [
+                      CupertinoButton(
+                          child: Text('Enter Amount',
+                              style: TextStyle(
+                                  color: ColorsConstant.primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Adaptive.sp(17))),
+                          onPressed: () => null),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        keyboardType: TextInputType.number,
+                        controller: amountController,
+                        maxLength: ref.watch(sanctionTypeProvider) ==
+                                "Reduction In Limit"
+                            ? num.parse("${ref.watch(balanceProvider)}")
+                                .toStringAsFixed(0)
+                                .length
+                            : 10,
+                        validator: (value) {
+                          if (value == null || value.isEmpty || value == "0") {
+                            return 'Please input Valid amount';
+                          } else if (ref.watch(isAmountInvalid)) {
+                            return 'Input amount cant be greater than balance amount';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          Debouncer(delay: const Duration(milliseconds: 500))
+                              .call(() {
+                            try {
+                              if (value.isEmpty) {
+                                ref.invalidate(totalAmountProvider);
+                              }
+
+                              if (num.parse(value).toInt() >
+                                      num.parse("${ref.watch(balanceProvider)}")
+                                          .toInt() &&
+                                  ref.watch(sanctionTypeProvider) ==
+                                      "Reduction In Limit") {
+                                ref.watch(isAmountInvalid.notifier).state =
+                                    true;
+                              } else {
+                                ref.watch(isAmountInvalid.notifier).state =
+                                    false;
+                              }
+
+                              bool doesContainsReduction = false;
+                              if ("${ref.watch(sanctionTypeProvider)}"
+                                  .toLowerCase()
+                                  .toString()
+                                  .contains('reduction')) {
+                                doesContainsReduction = true;
+                              }
+                              if (doesContainsReduction) {
+                                if (num.parse(value).toInt() <=
+                                    num.parse("${ref.watch(balanceProvider)}")
+                                        .toInt()) {
+                                  ref
+                                      .watch(totalAmountProvider.notifier)
+                                      .state = num.parse(
+                                          "${num.parse(ref.watch(sanctionedAmountProvider) ?? "").toInt() - num.parse(value ?? "").toInt()}")
+                                      .toStringAsFixed(0);
+                                }
+                              } else {
+                                ref.watch(totalAmountProvider.notifier).state =
+                                    "${num.parse(ref.watch(sanctionedAmountProvider) ?? "").toInt() + num.parse(value ?? "").toInt()}";
+                              }
+                            } on FormatException catch (e, s) {}
+                          });
+                        },
+                        decoration: InputDecoration(
+                            hintText: "Enter Amount",
+                            label: const Text("Enter Amount"),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                      ),
+                      if (!ref.watch(isAmountInvalid) &&
+                          ref.watch(totalAmountProvider) != null)
+                        Text(
+                            "New Total Sanction Limit ${ref.watch(totalAmountProvider) ?? ""}"),
+                      if (ref.watch(isAmountInvalid))
+                        Text('Please input valid value'),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+                if (ref
+                        .watch(sanctionTypeProvider.notifier)
+                        .state
+                        .toString()
+                        .toLowerCase()
+                        .trim()
+                        .contains('fresh loan') ||
+                    ref
+                            .watch(sanctionTypeProvider.notifier)
+                            .state
+                            .toString()
+                            .toLowerCase()
+                            .trim() ==
+                        'renewal' ||
+                    ref
+                        .watch(sanctionTypeProvider.notifier)
+                        .state
+                        .toString()
+                        .toLowerCase()
+                        .trim()
+                        .contains('Renewal Cum Enhancement'.toLowerCase()))
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      CupertinoButton(
+                          child: Text('ITR last 3 years',
+                              style: TextStyle(
+                                  color: ColorsConstant.primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Adaptive.sp(17))),
+                          onPressed: () async {
+                            FilePickerResult? result = await FilePicker.platform
+                                .pickFiles(
+                                    type: FileType.custom,
+                                    allowedExtensions: ['pdf']);
+
+                            if (result != null) {
+                              File file = File(result.files.single.path!);
+                            } else {}
+                          }),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(children: [
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                            child: InkWell(
+                          onTap: () async {
+                            FilePickerResult? result = await FilePicker.platform
+                                .pickFiles(
+                                    type: FileType.custom,
+                                    allowedExtensions: ['pdf']);
+
+                            if (result != null) {
+                              File file = File(result.files.single.path!);
+                              ref.watch(itrFile1.notifier).state = file;
+                            } else {}
+                          },
+                          child: DottedBorder(
+                              borderType: BorderType.RRect,
+                              dashPattern: const [6, 6, 6, 6],
+                              color: ColorsConstant.primaryColor,
+                              child: Padding(
+                                padding: const Pad(all: 20),
+                                child: Center(
+                                  child: ref.watch(itrFile1) != null
+                                      ? ColumnSuper(
+                                          alignment: Alignment.center,
+                                          children: [
+                                              const Icon(
+                                                LucideIcons.file,
+                                                color:
+                                                    ColorsConstant.primaryColor,
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Center(
+                                                child: Text(
+                                                  "${basename(ref.watch(itrFile1)?.path ?? "")}",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          Adaptive.sp(14)),
+                                                  textAlign: TextAlign.center,
+                                                  maxLines: 2,
+                                                ),
+                                              )
+                                            ])
+                                      : ColumnSuper(children: [
+                                          const Icon(LucideIcons.file),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text('ITR File 1',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: Adaptive.sp(14)))
+                                        ]),
+                                ),
+                              )),
+                        )),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                            child: InkWell(
+                          onTap: () async {
+                            FilePickerResult? result = await FilePicker.platform
+                                .pickFiles(
+                                    type: FileType.custom,
+                                    allowedExtensions: ['pdf']);
+
+                            if (result != null) {
+                              File file = File(result.files.single.path!);
+                              ref.watch(itrFile2.notifier).state = file;
+                            } else {}
+                          },
+                          child: DottedBorder(
+                              borderType: BorderType.RRect,
+                              dashPattern: const [6, 6, 6, 6],
+                              color: ColorsConstant.primaryColor,
+                              child: Padding(
+                                padding: const Pad(all: 20),
+                                child: Center(
+                                  child: ref.watch(itrFile2) != null
+                                      ? ColumnSuper(
+                                          alignment: Alignment.center,
+                                          children: [
+                                              const Icon(
+                                                LucideIcons.file,
+                                                color:
+                                                    ColorsConstant.primaryColor,
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Center(
+                                                child: Text(
+                                                  "${basename(ref.watch(itrFile2)?.path ?? "")}",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          Adaptive.sp(14)),
+                                                  textAlign: TextAlign.center,
+                                                  maxLines: 2,
+                                                ),
+                                              )
+                                            ])
+                                      : ColumnSuper(children: [
+                                          const Icon(
+                                            LucideIcons.file,
+                                            color: ColorsConstant.primaryColor,
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            'ITR File 2',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: Adaptive.sp(14)),
+                                          )
+                                        ]),
+                                ),
+                              )),
+                        )),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                            child: InkWell(
+                          onTap: () async {
+                            FilePickerResult? result = await FilePicker.platform
+                                .pickFiles(
+                                    type: FileType.custom,
+                                    allowedExtensions: ['pdf']);
+
+                            if (result != null) {
+                              File file = File(result.files.single.path!);
+                              ref.watch(itrFile3.notifier).state = file;
+                            } else {}
+                          },
+                          child: DottedBorder(
+                              borderType: BorderType.RRect,
+                              dashPattern: const [6, 6, 6, 6],
+                              color: ColorsConstant.primaryColor,
+                              child: Padding(
+                                padding: const Pad(all: 20),
+                                child: Center(
+                                  child: ref.watch(itrFile3) != null
+                                      ? ColumnSuper(
+                                          alignment: Alignment.center,
+                                          children: [
+                                              const Icon(
+                                                LucideIcons.file,
+                                                color:
+                                                    ColorsConstant.primaryColor,
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Center(
+                                                child: Text(
+                                                  "${basename(ref.watch(itrFile3)?.path ?? "")}",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          Adaptive.sp(14)),
+                                                  textAlign: TextAlign.center,
+                                                  maxLines: 2,
+                                                ),
+                                              )
+                                            ])
+                                      : ColumnSuper(children: [
+                                          const Icon(
+                                            LucideIcons.file,
+                                            color: ColorsConstant.primaryColor,
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            'ITR File 3',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: Adaptive.sp(14)),
+                                          )
+                                        ]),
+                                ),
+                              )),
+                        )),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                      ]),
+                      CupertinoButton(
+                          child: Text('Balance Sheet last 3 years',
+                              style: TextStyle(
+                                  color: ColorsConstant.primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Adaptive.sp(17))),
+                          onPressed: () async {}),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(children: [
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () async {
+                              FilePickerResult? result =
+                                  await FilePicker.platform.pickFiles(
+                                      type: FileType.custom,
+                                      allowedExtensions: ['pdf']);
+
+                              if (result != null) {
+                                File file = File(result.files.single.path!);
+                                ref.watch(bsFile1.notifier).state = file;
+                              } else {}
+                            },
+                            child: DottedBorder(
+                                borderType: BorderType.RRect,
+                                dashPattern: const [6, 6, 6, 6],
+                                color: ColorsConstant.primaryColor,
+                                child: Padding(
+                                  padding: const Pad(all: 20),
+                                  child: Center(
+                                    child: ref.watch(bsFile1) != null
+                                        ? ColumnSuper(
+                                            alignment: Alignment.center,
+                                            children: [
+                                                const Icon(
+                                                  LucideIcons.file,
+                                                  color: ColorsConstant
+                                                      .primaryColor,
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Center(
+                                                  child: Text(
+                                                    "${basename(ref.watch(bsFile1)?.path ?? "")}",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            Adaptive.sp(14)),
+                                                    textAlign: TextAlign.center,
+                                                    maxLines: 2,
+                                                  ),
+                                                )
+                                              ])
+                                        : ColumnSuper(children: [
+                                            const Icon(LucideIcons.file),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text('Balance Sheet File 1',
+                                                maxLines: 2,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: Adaptive.sp(14)))
+                                          ]),
+                                  ),
+                                )),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () async {
+                              FilePickerResult? result =
+                                  await FilePicker.platform.pickFiles(
+                                      type: FileType.custom,
+                                      allowedExtensions: ['pdf']);
+
+                              if (result != null) {
+                                File file = File(result.files.single.path!);
+                                ref.watch(bsFile2.notifier).state = file;
+                              } else {}
+                            },
+                            child: DottedBorder(
+                                borderType: BorderType.RRect,
+                                dashPattern: const [6, 6, 6, 6],
+                                color: ColorsConstant.primaryColor,
+                                child: Padding(
+                                  padding: const Pad(all: 20),
+                                  child: Center(
+                                    child: ref.watch(bsFile2) != null
+                                        ? ColumnSuper(
+                                            alignment: Alignment.center,
+                                            children: [
+                                                const Icon(
+                                                  LucideIcons.file,
+                                                  color: ColorsConstant
+                                                      .primaryColor,
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Center(
+                                                  child: Text(
+                                                    "${basename(ref.watch(bsFile2)?.path ?? "")}",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            Adaptive.sp(14)),
+                                                    textAlign: TextAlign.center,
+                                                    maxLines: 2,
+                                                  ),
+                                                )
+                                              ])
+                                        : ColumnSuper(children: [
+                                            const Icon(
+                                              LucideIcons.file,
+                                              color:
+                                                  ColorsConstant.primaryColor,
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text('Balance Sheet File 2',
+                                                maxLines: 2,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: Adaptive.sp(14)))
+                                          ]),
+                                  ),
+                                )),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () async {
+                              FilePickerResult? result =
+                                  await FilePicker.platform.pickFiles(
+                                      type: FileType.custom,
+                                      allowedExtensions: ['pdf']);
+
+                              if (result != null) {
+                                File file = File(result.files.single.path!);
+                                ref.watch(bsFile3.notifier).state = file;
+                              } else {}
+                            },
+                            child: DottedBorder(
+                                borderType: BorderType.RRect,
+                                dashPattern: const [6, 6, 6, 6],
+                                color: ColorsConstant.primaryColor,
+                                child: Padding(
+                                  padding: const Pad(all: 20),
+                                  child: ref.watch(bsFile3) != null
+                                      ? ColumnSuper(
+                                          alignment: Alignment.center,
+                                          children: [
+                                              const Icon(
+                                                LucideIcons.file,
+                                                color:
+                                                    ColorsConstant.primaryColor,
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Center(
+                                                child: Text(
+                                                  "${basename(ref.watch(bsFile3)?.path ?? "")}",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          Adaptive.sp(14)),
+                                                  textAlign: TextAlign.center,
+                                                  maxLines: 2,
+                                                ),
+                                              )
+                                            ])
+                                      : Center(
+                                          child: ColumnSuper(children: [
+                                            const Icon(
+                                              LucideIcons.file,
+                                              color:
+                                                  ColorsConstant.primaryColor,
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text('Balance Sheet File 3',
+                                                maxLines: 2,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: Adaptive.sp(14)))
+                                          ]),
+                                        ),
+                                )),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                      ]),
+                    ],
+                  ),
+                const SizedBox(
+                  height: 10,
+                ),
+
+                if (ref
+                        .watch(sanctionTypeProvider.notifier)
+                        .state
+                        .toString()
+                        .toLowerCase()
+                        .trim()
+                        .contains('fresh loan') ||
+                    ref
+                            .watch(sanctionTypeProvider.notifier)
+                            .state
+                            .toString()
+                            .toLowerCase()
+                            .trim() ==
+                        'renewal' ||
+                    ref
+                        .watch(sanctionTypeProvider.notifier)
+                        .state
+                        .toString()
+                        .toLowerCase()
+                        .trim()
+                        .contains('Renewal Cum Enhancement'.toLowerCase()) ||
+                    ref
+                        .watch(sanctionTypeProvider.notifier)
+                        .state
+                        .toString()
+                        .toLowerCase()
+                        .trim()
+                        .contains('Reduction in Limit'.toLowerCase()))
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      CupertinoButton(
+                          child: Text('Select Scheme',
+                              style: TextStyle(
+                                  color: ColorsConstant.primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Adaptive.sp(17))),
+                          onPressed: () async {}),
+                      Container(
+                        padding: const Pad(all: 10),
+                        color: ColorsConstant.secondColorDark,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                  child: Text(
+                                "Action",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: Adaptive.sp(14),
+                                    shadows: const [
+                                      Shadow(
+                                          color: Colors.white,
+                                          blurRadius: 1,
+                                          offset: Offset(0.2, 0.2))
+                                    ],
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800),
+                              )),
+                              Expanded(
+                                  child: Text(
+                                "Scheme Name",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: Adaptive.sp(14),
+                                    shadows: const [
+                                      Shadow(
+                                          color: Colors.white,
+                                          blurRadius: 1,
+                                          offset: Offset(0.2, 0.2))
+                                    ],
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800),
+                              )),
+                              Expanded(
+                                  child: Text("Processing Fee(%)",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: Adaptive.sp(14),
+                                          shadows: const [
+                                            Shadow(
+                                                color: Colors.white,
+                                                blurRadius: 1,
+                                                offset: Offset(0.2, 0.2))
+                                          ],
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w800))),
+                              Expanded(
+                                  child: Text("Interest Rate(%)",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: Adaptive.sp(14),
+                                          shadows: const [
+                                            Shadow(
+                                                color: Colors.white,
+                                                blurRadius: 1,
+                                                offset: Offset(0.2, 0.2))
+                                          ],
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w800))),
+                              Expanded(
+                                  child: Text("Loan To Value(%)",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: Adaptive.sp(14),
+                                          shadows: const [
+                                            Shadow(
+                                                color: Colors.white,
+                                                blurRadius: 1,
+                                                offset: Offset(0.2, 0.2))
+                                          ],
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w800))),
+                              Expanded(
+                                  child: Text("Tenor",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: Adaptive.sp(14),
+                                          shadows: const [
+                                            Shadow(
+                                                color: Colors.white,
+                                                blurRadius: 1,
+                                                offset: Offset(0.2, 0.2))
+                                          ],
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w800))),
+                              // Expanded(
+                              //     child: Text("Days",
+                              //         textAlign: TextAlign.center,
+                              //         style: TextStyle(
+                              //             fontSize: Adaptive.sp(13),
+                              //             shadows: const [
+                              //               Shadow(
+                              //                   color: Colors.white,
+                              //                   blurRadius: 1,
+                              //                   offset: Offset(0.2, 0.2))
+                              //             ],
+                              //             color: Colors.white,
+                              //             fontWeight: FontWeight.w800)))
+                            ]),
+                      ),
+                      ref.watch(schemesProvider).when(
+                          data: (data) => ListView.builder(
+                                itemCount: data.data?.length ?? 0,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) => data
+                                            .data?[index].schemeName
+                                            .toString()
+                                            .toLowerCase()
+                                            .trim() ==
+                                        "bnpl takeover"
+                                    ? SizedBox()
+                                    : Container(
+                                        color: index % 2 == 0
+                                            ? Colors.grey.withOpacity(0.1)
+                                            : Colors.white,
+                                        child: Padding(
+                                          padding: const Pad(all: 10),
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Expanded(
+                                                  child: Checkbox(
+                                                      value: ref
+                                                          .watch(schemeList)
+                                                          .contains(data
+                                                              .data?[index].id),
+                                                      onChanged: (isSelected) {
+                                                        if (!ref
+                                                            .watch(schemeList)
+                                                            .contains(data
+                                                                .data?[index]
+                                                                .id)) {
+                                                          ref
+                                                              .watch(schemeList
+                                                                  .notifier)
+                                                              .state = [
+                                                            ...ref.watch(
+                                                                schemeList),
+                                                            data.data?[index].id
+                                                          ];
+                                                        } else {
+                                                          ref
+                                                              .watch(schemeList)
+                                                              .remove(data
+                                                                  .data?[index]
+                                                                  .id);
+
+                                                          setState(() {});
+                                                        }
+                                                      }),
+                                                ),
+                                                Expanded(
+                                                    child: Text(
+                                                        data.data?[index]
+                                                                .schemeName ??
+                                                            "",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                Adaptive.sp(15),
+                                                            shadows: const [
+                                                              Shadow(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  blurRadius: 1,
+                                                                  offset:
+                                                                      Offset(
+                                                                          0.2,
+                                                                          0.2))
+                                                            ],
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w800))),
+                                                Expanded(
+                                                    child: Text(
+                                                        data.data?[index]
+                                                                .processingFee ??
+                                                            "",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                Adaptive.sp(15),
+                                                            shadows: const [
+                                                              Shadow(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  blurRadius: 1,
+                                                                  offset:
+                                                                      Offset(
+                                                                          0.2,
+                                                                          0.2))
+                                                            ],
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w800))),
+                                                Expanded(
+                                                    child: Text(
+                                                        data.data?[index]
+                                                                .interestRate ??
+                                                            "",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                Adaptive.sp(15),
+                                                            shadows: const [
+                                                              Shadow(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  blurRadius: 1,
+                                                                  offset:
+                                                                      Offset(
+                                                                          0.2,
+                                                                          0.2))
+                                                            ],
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w800))),
+                                                Expanded(
+                                                    child: Text(
+                                                        data.data?[index]
+                                                                .loanPerTotalAmount ??
+                                                            "",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                Adaptive.sp(15),
+                                                            shadows: const [
+                                                              Shadow(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  blurRadius: 1,
+                                                                  offset:
+                                                                      Offset(
+                                                                          0.2,
+                                                                          0.2))
+                                                            ],
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w800))),
+                                                Expanded(
+                                                    child: Text(
+                                                        "${data.data?[index].tenor} ${data.data?[index].tenorType}",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                Adaptive.sp(15),
+                                                            shadows: const [
+                                                              Shadow(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  blurRadius: 1,
+                                                                  offset:
+                                                                      Offset(
+                                                                          0.2,
+                                                                          0.2))
+                                                            ],
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w800))),
+                                                // Expanded(
+                                                //     child: Text(
+                                                //         data.data?[index]
+                                                //                 .loanPassDays ??
+                                                //             "",
+                                                //         textAlign: TextAlign.center,
+                                                //         style: TextStyle(
+                                                //             fontSize: Adaptive.sp(15),
+                                                //             shadows: const [
+                                                //               Shadow(
+                                                //                   color: Colors.white,
+                                                //                   blurRadius: 1,
+                                                //                   offset: Offset(
+                                                //                       0.2, 0.2))
+                                                //             ],
+                                                //             color: Colors.black,
+                                                //             fontWeight:
+                                                //                 FontWeight.w800)))
+                                              ]),
+                                        ),
+                                      ),
+                              ),
+                          error: (e, s) => Text(e.toString()),
+                          loading: () => SizedBox(
+                                height: MediaQuery.of(context).size.height,
+                                child: Center(
+                                  child: defaultLoader(),
+                                ),
+                              )),
+                    ],
+                  ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (formKey.currentState!.validate()) {
+                        var data = TermsRequestModel(ref.watch(schemeList));
+                        if (ref.watch(sanctionTypeProvider) == 'Closure') {
+                          showloader(context);
+                          ref
+                              .watch(applyForLoanProvider(
+                                      amount: amountController.text.toString(),
+                                      loanType: "1",
+                                      schemeId: ref.watch(schemeList),
+                                      type: ref.watch(sanctionTypeProvider),
+                                      itr1: ref.watch(itrFile1),
+                                      itr2: ref.watch(itrFile2),
+                                      itr3: ref.watch(itrFile3),
+                                      bs1: ref.watch(bsFile1),
+                                      bs2: ref.watch(bsFile2),
+                                      bs3: ref.watch(bsFile3))
+                                  .future)
+                              .then((value) {
+                            hideLoader(context);
+                            if (value['status'].toString() == "1") {
+                              ref.watch(goRouterProvider).pop();
+                              successToast(
+                                  context, value['message'].toString());
+
+                              ref
+                                  .watch(goRouterProvider)
+                                  .go(RoutesStrings.dashboard);
+                            } else {
+                              errorToast(context, value['message'].toString());
+                            }
+                          }).onError((e, s) {
+                            hideLoader(context);
+                          });
+                        } else {
+                          ref
+                              .watch(termsProvider(model: data).future)
+                              .then((data) {
+                            showBarModalBottomSheet(
+                                context: context,
+                                expand: true,
+                                builder: (context) => Consumer(
+                                      builder: (context, ref, child) =>
+                                          ListView(
+                                        padding: Pad(all: 10),
+                                        children: [
+                                          HtmlWidget(data.view ?? ""),
+                                          RowSuper(children: [
+                                            Checkbox(
+                                                value: ref.watch(
+                                                    checkBoxValueProvider),
+                                                onChanged: (value) {
+                                                  ref
+                                                      .watch(
+                                                          checkBoxValueProvider
+                                                              .notifier)
+                                                      .state = value ?? false;
+                                                }),
+                                            Text(
+                                                'By proceeding, you agree to our Term and Conditions',
+                                                style: TextStyle(
+                                                    fontSize: Adaptive.sp(15),
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.w800)),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                          ]),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: ElevatedButton(
+                                              onPressed: () async {
+                                                showloader(context);
+                                                ref
+                                                    .watch(applyForLoanProvider(
+                                                            amount:
+                                                                amountController
+                                                                    .text
+                                                                    .toString(),
+                                                            loanType: "1",
+                                                            schemeId: ref.watch(
+                                                                schemeList),
+                                                            type: ref.watch(
+                                                                sanctionTypeProvider),
+                                                            itr1: ref.watch(
+                                                                itrFile1),
+                                                            itr2: ref.watch(
+                                                                itrFile2),
+                                                            itr3: ref.watch(
+                                                                itrFile3),
+                                                            bs1: ref
+                                                                .watch(bsFile1),
+                                                            bs2: ref
+                                                                .watch(bsFile2),
+                                                            bs3: ref
+                                                                .watch(bsFile3))
+                                                        .future)
+                                                    .then((value) {
+                                                  hideLoader(context);
+                                                  if (value['status']
+                                                          .toString() ==
+                                                      "1") {
+                                                    ref
+                                                        .watch(goRouterProvider)
+                                                        .pop();
+                                                    successToast(
+                                                        context,
+                                                        value['message']
+                                                            .toString());
+
+                                                    ref
+                                                        .watch(goRouterProvider)
+                                                        .go(RoutesStrings
+                                                            .dashboard);
+                                                  } else {
+                                                    errorToast(
+                                                        context,
+                                                        value['message']
+                                                            .toString());
+                                                  }
+                                                }).onError((e, s) {
+                                                  hideLoader(context);
+                                                });
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      ColorsConstant
+                                                          .secondColorDark,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10))),
+                                              child: Text(
+                                                "Submit",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    shadows: [
+                                                      const Shadow(
+                                                          color: Colors.white,
+                                                          blurRadius: 0.3)
+                                                    ],
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: Adaptive.sp(16)),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ));
+                          });
+                        }
+                        // if (ref.watch(itrFile1) == null) {
+                        //   errorToast(context, 'Select ITR of last 3 year');
+                        // } else if (ref.watch(itrFile2) == null) {
+                        //   errorToast(context, 'Select ITR of last 2 year');
+                        // } else if (ref.watch(itrFile2) == null) {
+                        //   errorToast(context, 'Select ITR of last 1 year');
+                        // } else if (ref.watch(bsFile1) == null) {
+                        //   errorToast(
+                        //       context, 'Select Balance Sheet of last 3 year');
+                        // } else if (ref.watch(bsFile2) == null) {
+                        //   errorToast(
+                        //       context, 'Select Balance Sheet of last 2 year');
+                        // } else if (ref.watch(bsFile3) == null) {
+                        //   errorToast(
+                        //       context, 'Select Balance Sheet of last 1 year');
+                        // } else {
+                        //
+                        // }
+                      }
+                    },
+                    style: buttonStyle,
+                    child: Text(
+                      "Submit",
+                      style: TextStyle(
+                          color: Colors.white,
+                          shadows: [
+                            const Shadow(color: Colors.white, blurRadius: 0.3)
+                          ],
+                          fontWeight: FontWeight.w700,
+                          fontSize: Adaptive.sp(16)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )),
+    );
+  }
+}
